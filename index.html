@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRNtrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-hover: #4338ca;
+            --bg-body: #F3F4F6;
+            --card-bg: #ffffff;
+            --text-main: #1F2937;
+            --text-sub: #6B7280;
+            --dark-bg: #111827;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            -webkit-font-smoothing: antialiased; 
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .site-logo { height: 80px; }
+
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4); }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        /* BOUTON LANGUE (SWITCH) */
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* BOUTON AUTH */
+        .btn-auth-trigger {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
+            transition: 0.2s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7; }
+
+        /* HERO SECTION */
+        .hero-section {
+            padding: 80px 20px; max-width: 1200px; margin: 0 auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(135deg, #1F2937 0%, #4F46E5 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .hero-text p {
+            font-size: 18px; color: var(--text-sub); margin-bottom: 30px;
+            line-height: 1.6; max-width: 500px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary); color: white; padding: 15px 35px;
+            border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
+            transition: transform 0.2s, box-shadow 0.2s; display: inline-block;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-hover); transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+        }
+
+        .hero-image-container { position: relative; }
+        .hero-image {
+            width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transform: perspective(1000px) rotateY(-5deg); transition: transform 0.5s ease;
+            background: white; padding: 10px; border: 1px solid rgba(0,0,0,0.05);
+        }
+        .hero-image:hover { transform: perspective(1000px) rotateY(0deg); }
+
+        /* FEATURES SECTION */
+        .features-section { background: white; padding: 80px 20px; margin-top: 50px; }
+        .features-grid {
+            max-width: 1200px; margin: 0 auto; display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+        }
+
+        .feature-card {
+            padding: 30px; border-radius: 20px; background: #F9FAFB;
+            transition: transform 0.3s; border: 1px solid #E5E7EB;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px); background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--primary);
+        }
+        .feature-icon { font-size: 40px; margin-bottom: 20px; display: block; }
+        .feature-card h3 { margin: 0 0 10px 0; font-size: 20px; color: var(--text-main); }
+        .feature-card p { color: var(--text-sub); line-height: 1.6; font-size: 14px; }
+
+        /* DONATION SECTION */
+        .donation-section {
+            max-width: 900px; margin: 80px auto;
+            background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+            border-radius: 24px; padding: 50px; text-align: center; color: white;
+            position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+        .donation-section::before {
+            content: "☕"; position: absolute; top: -20px; right: -20px;
+            font-size: 200px; opacity: 0.05; transform: rotate(15deg);
+        }
+        .donation-section h2 { margin-top: 0; font-size: 28px; }
+        .donation-section p { 
+            color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7;
+        }
+        .btn-coffee {
+            background: #FFDD00; color: #000; padding: 12px 30px; border-radius: 50px;
+            text-decoration: none; font-weight: 700; font-size: 16px;
+            display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s;
+        }
+        .btn-coffee:hover { transform: scale(1.05); background: #FFEA00; }
+
+        /* MODALS (Login/Register) */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        .btn-save { width: 100%; background: #111827; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-save:hover { background: var(--primary); }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--text-sub); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #111827; }
+        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
+        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+
+         /* FOOTER */
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid #374151; font-size: 13px; }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: #818cf8; }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F2937; font-size: 11px; color: #6B7280; }
+
+        @media (max-width: 768px) {
+            .hero-section { grid-template-columns: 1fr; text-align: center; padding: 40px 20px; }
+            .hero-text h1 { font-size: 36px; }
+            .hero-text p { margin: 0 auto 30px auto; }
+            .nav-center { position: fixed; bottom: 20px; top: auto; background: rgba(17, 24, 39, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; }
+            .site-logo { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+        </div>
+
+        <div class="nav-center">
+            <a href="index.html" class="nav-link active">
+                <span>🏠</span> <span data-t="navHome">Accueil</span>
+            </a>
+            <a href="dashboard.html" class="nav-link">
+                <span>📋</span> <span data-t="navCollection">Collection</span>
+            </a>
+            <a href="statistiques.html" class="nav-link">
+                <span>📊</span> <span data-t="navStats">Stats</span>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>👤</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <div class="hero-text">
+            <h1 data-t="heroTitle">Le compagnon ultime pour votre collection Hirono.</h1>
+            <p data-t="heroDesc">
+                Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. 
+                Une interface simple pensée par un fan, pour les fans.
+            </p>
+            <a href="dashboard.html" class="btn-primary" data-t="heroBtn">Démarrer ma collection</a>
+        </div>
+        <div class="hero-image-container">
+            <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="hero-image" style="background:#111827; object-fit:contain; height:300px;" alt="Aperçu">
+        </div>
+    </div>
+
+    <section class="features-section">
+        <div class="features-grid">
+            <div class="feature-card">
+                <span class="feature-icon">✨</span>
+                <h3 data-t="feat1Title">Tracker Intelligent</h3>
+                <p data-t="feat1Desc">Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries The Other One ou Little Mischief.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">📈</span>
+                <h3 data-t="feat2Title">Statistiques & Valeur</h3>
+                <p data-t="feat2Desc">Visualisez l'évolution de votre collection et estimez le montant total de votre investissement grâce aux graphiques détaillés.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎁</span>
+                <h3 data-t="feat3Title">Wishlist & Doubles</h3>
+                <p data-t="feat3Desc">Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez activement.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="donation-section">
+        <h2 data-t="donateTitle">Soutenir le projet</h2>
+        <p data-t="donateDesc">
+            J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit et sans publicités intrusives. 
+            Si l'outil vous aide à gérer votre collection, vous pouvez m'offrir un café pour participer aux frais d'hébergement !
+        </p>
+        <a href="donateurs.html" class="btn-coffee">
+            <span data-t="btnCoffee">☕ Offrir un café à l'auteur</span>
+        </a>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:#1F2937; border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte
+            </button>
+            
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
+                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerNav">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
+                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
+                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
+                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerAbout">À propos</h4>
+                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // --- I18N DICTIONNAIRE ---
+        const translations = {
+            fr: {
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats",
+                authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                
+                heroTitle: "Le compagnon ultime pour votre collection Hirono.",
+                heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
+                heroBtn: "Démarrer ma collection",
+
+                feat1Title: "Tracker Intelligent",
+                feat1Desc: "Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.",
+                feat2Title: "Statistiques & Valeur",
+                feat2Desc: "Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.",
+                feat3Title: "Wishlist & Doubles",
+                feat3Desc: "Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.",
+
+                donateTitle: "Soutenir le projet",
+                donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit. Si l'outil vous aide, vous pouvez m'offrir un café !",
+                btnCoffee: "☕ Offrir un café à l'auteur",
+
+                footerDesc: "L'outil de référence pour les collectionneurs Hirono.",
+                footerNav: "Navigation",
+                footerAbout: "À propos",
+                footerDisclaimer: "Ce site est un projet Fanmade. Non affilié à POP MART."
+            },
+            en: {
+                navHome: "Home", navCollection: "Collection", navStats: "Stats",
+                authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
+                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+
+                heroTitle: "The ultimate companion for your Hirono collection.",
+                heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
+                heroBtn: "Start my collection",
+
+                feat1Title: "Smart Tracker",
+                feat1Desc: "Mark the figures you own. The tool automatically calculates what you're missing to finish the series.",
+                feat2Title: "Stats & Value",
+                feat2Desc: "Visualize the evolution of your collection and estimate your total investment.",
+                feat3Title: "Wishlist & Duplicates",
+                feat3Desc: "Manage your duplicate figures for trading and keep an eye on the ones you are actively looking for.",
+
+                donateTitle: "Support the project",
+                donateDesc: "I created this tracker for the Hirono community. The site is free. If this tool helps you, feel free to buy me a coffee!",
+                btnCoffee: "☕ Buy me a coffee",
+
+                footerDesc: "The ultimate tool for Hirono collectors.",
+                footerNav: "Navigation",
+                footerAbout: "About",
+                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART."
+            }
+        };
+
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang);
+            updateUIText();
+        };
+
+        function updateUIText() {
+            if(currentLang === 'fr') {
+                document.getElementById('lang-fr').classList.add('active');
+                document.getElementById('lang-en').classList.remove('active');
+            } else {
+                document.getElementById('lang-fr').classList.remove('active');
+                document.getElementById('lang-en').classList.add('active');
+            }
+
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(t[key]) el.innerText = t[key];
+            });
+
+            const user = auth.currentUser;
+            const btnText = document.getElementById('auth-status-text');
+            if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+        }
+
+        // --- AUTH LOGIC ---
+        window.toggleAuthModal = () => {
+            const el = document.getElementById('auth-modal');
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleLogout = async () => {
+            if(confirm("Voulez-vous vraiment vous déconnecter ?")) {
+                await signOut(auth);
+                location.reload(); 
+            }
+        };
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            const btn = document.getElementById('auth-trigger');
+            updateUIText(); // Met à jour les textes et le bouton auth
+
+            if (user) {
+                btn.classList.add('logged-in'); 
+                btn.onclick = () => window.handleLogout();
+            } else {
+                btn.classList.remove('logged-in');
+                btn.onclick = () => window.toggleAuthModal();
+            }
+        });
+    </script>
+</body>
+</html>

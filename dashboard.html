@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRNtrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4F46E5;
+            --primary-dark: #4338ca;
+            --bg-body: #F3F4F6;
+            --card-bg: #ffffff;
+            --text-main: #1F2937;
+            --text-sub: #9CA3AF;
+            --gold: #F59E0B;
+            --gold-light: #FEF3C7;
+            --purple: #8B5CF6;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --dark-bg: #111827;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            -webkit-font-smoothing: antialiased; 
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .site-logo { height: 80px; }
+
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.1); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2000;
+        }
+
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4); }
+
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+
+        /* BOUTON LANGUE (SWITCH) */
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        /* BOUTON AUTH */
+        .btn-auth-trigger {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
+            transition: 0.2s; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7; }
+
+        @media (max-width: 600px) {
+            .site-logo { display: none; } 
+            .nav-center { 
+                position: fixed; bottom: 20px; top: auto; 
+                transform: translateX(-50%); background: rgba(17, 24, 39, 0.95);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+        }
+
+        /* --- CONTAINER --- */
+        .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; /* CACHÉ PAR DÉFAUT */ }
+
+        /* --- ACCESS DENIED SCREEN --- */
+        #access-denied {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 60vh; text-align: center; padding: 20px;
+        }
+        .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
+        .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); }
+        .btn-login-big:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5); }
+
+        /* --- DASHBOARD WIDGETS --- */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-card {
+            background: var(--card-bg); padding: 20px; border-radius: 16px;
+            box-shadow: var(--shadow); position: relative; overflow: hidden;
+            border-left: 4px solid var(--primary); transition: transform 0.3s ease;
+        }
+        .stat-card:hover { transform: translateY(-2px); }
+        .stat-card h3 { margin: 0 0 5px 0; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
+        .stat-card .value { font-size: 24px; font-weight: 700; color: var(--text-main); }
+        
+        .stat-card.progression { border-left-color: var(--primary); grid-column: span 1; }
+        .progress-container { background: #E5E7EB; height: 6px; border-radius: 10px; margin-top: 10px; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #818cf8); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+        
+        .stat-card.doubles { border-left-color: var(--purple); }
+        .stat-card.secrets { border-left-color: var(--gold); background: linear-gradient(to right, #fff, #fffbeb); }
+        .stat-card.secrets .icon { position: absolute; right: 15px; top: 15px; font-size: 24px; opacity: 0.2; }
+
+        /* MODULES BARS */
+        .modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .bar-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 12px; }
+        .bar-bg { flex: 1; height: 6px; background: #E5E7EB; margin: 0 10px; border-radius: 3px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--primary); border-radius: 3px; }
+
+        /* --- FILTRES & RECHERCHE --- */
+        .filters-container { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
+        .filter-btn { 
+            padding: 8px 16px; border-radius: 20px; border: 1px solid #E5E7EB; 
+            background: white; color: var(--text-sub); font-weight: 600; font-size: 12px; 
+            cursor: pointer; transition: 0.3s; white-space: nowrap;
+        }
+        .filter-btn:hover { background: #f9fafb; }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 5px rgba(79, 70, 229, 0.3); }
+
+        .search-container { margin-bottom: 30px; }
+        .search-bar { width: 100%; padding: 14px 20px; border-radius: 14px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-shadow: var(--shadow); transition: 0.3s; box-sizing: border-box; outline: none; }
+        .search-bar:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+
+        /* --- CONTROLES AVANCÉS --- */
+        .controls-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .control-select { 
+            flex: 1; padding: 10px 15px; border-radius: 12px; 
+            border: 1px solid #E5E7EB; background: white; 
+            font-family: inherit; font-size: 13px; color: var(--text-main);
+            cursor: pointer; box-shadow: var(--shadow); outline: none;
+        }
+        .control-select:focus { border-color: var(--primary); }
+
+        @media (max-width: 768px) {
+            .controls-row { flex-direction: column; gap: 10px; }
+        }
+
+        /* GRID */
+        .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
+        .card {
+            background: var(--card-bg); border-radius: 16px; overflow: hidden;
+            box-shadow: var(--shadow); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer; position: relative; border: 2px solid transparent;
+        }
+        .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        .card.owned { border-color: var(--primary); }
+        .card.secret { border-color: var(--gold); background: linear-gradient(to bottom, #fff, var(--gold-light)); }
+        
+        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f3f4f6; }
+        .card img.missing { filter: grayscale(1) opacity(0.5); }
+        .card.owned img { filter: none; opacity: 1; }
+
+        .qty-badge { position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; z-index: 2; }
+        .secret-badge { position: absolute; top: 8px; right: 8px; background: var(--gold); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; z-index: 2; border: 2px solid white; }
+        .card-info { padding: 12px; text-align: center; }
+        .card-name { font-weight: 700; font-size: 12px; margin: 0; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-serie { font-size: 10px; color: var(--text-sub); margin-top: 2px; }
+
+        /* MODALS */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
+        
+        .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+        .btn-save { width: 100%; background: #111827; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-save:hover { background: var(--primary); }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--text-sub); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #111827; }
+        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
+        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+
+        /* FOOTER */
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid #374151; font-size: 13px; }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: #818cf8; }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F2937; font-size: 11px; color: #6B7280; }
+
+        @media (max-width: 768px) {
+            .modules-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { grid-template-columns: 1fr 1fr; }
+            .stat-card.progression { grid-column: span 2; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+        </div>
+
+        <div class="nav-center">
+            <a href="index.html" class="nav-link">
+                <span>🏠</span> <span data-t="navHome">Accueil</span>
+            </a>
+            <a href="dashboard.html" class="nav-link active">
+                <span>📋</span> <span data-t="navCollection">Collection</span>
+            </a>
+            <a href="statistiques.html" class="nav-link">
+                <span>📊</span> <span data-t="navStats">Stats</span>
+            </a>
+        </div>
+
+        <div class="nav-right">
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>👤</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="access-denied">
+        <div class="lock-icon">🔒</div>
+        <h2 style="font-size:24px; margin:0 0 10px 0; color:var(--text-main);" data-t="deniedTitle">Accès Restreint</h2>
+        <p style="color:var(--text-sub); max-width:400px; margin:0 auto;" data-t="deniedMsg">
+            Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.
+        </p>
+        <button class="btn-login-big" onclick="window.toggleAuthModal()" data-t="deniedBtn">Se connecter maintenant</button>
+    </div>
+
+    <div id="main-container" class="container">
+        <div class="dashboard-grid">
+            <div class="stat-card progression">
+                <h3 data-t="kpiCompletion">Complétion</h3>
+                <div style="display:flex; justify-content:space-between; align-items:flex-end;">
+                    <span class="value" id="progression-text">0%</span>
+                </div>
+                <div class="progress-container"><div id="progress-fill" class="progress-bar"></div></div>
+            </div>
+            
+            <div class="stat-card">
+                <h3 data-t="kpiValue">Valeur</h3>
+                <span class="value" id="stat-value">0€</span>
+            </div>
+
+            <div class="stat-card">
+                <h3 data-t="kpiCollection">Collection</h3>
+                <span class="value" id="stat-total">0</span>
+            </div>
+
+            <div class="stat-card doubles">
+                <h3 data-t="kpiDoubles">Doubles</h3>
+                <span class="value" id="stat-doubles-val" style="color:var(--purple)">0</span>
+            </div>
+
+            <div class="stat-card secrets">
+                <div class="icon">★</div>
+                <h3 data-t="kpiSecrets">Secrets</h3>
+                <span class="value" style="color:#b45309" id="stat-secrets">0</span>
+            </div>
+        </div>
+
+        <div class="modules-grid">
+            <div class="stat-card" style="border-left-color: #EC4899;">
+                <h3 data-t="kpiCondition">État</h3>
+                <div id="stat-condition-list" style="margin-top:15px"></div>
+            </div>
+            <div class="stat-card" style="border-left-color: #10B981;">
+                <h3 data-t="kpiSeries">Séries</h3>
+                <div id="stat-series-list" style="margin-top:15px"></div>
+            </div>
+        </div>
+
+        <div class="filters-container">
+            <button class="filter-btn active" onclick="window.setFilter('all')" id="btn-all" data-t="filterAll">Tout voir</button>
+            <button class="filter-btn" onclick="window.setFilter('owned')" id="btn-owned" data-t="filterOwned">Ma Collection</button>
+            <button class="filter-btn" onclick="window.setFilter('wish')" id="btn-wish" data-t="filterWish">Wishlist</button>
+        </div>
+
+        <div class="controls-row">
+            <select id="filter-series" class="control-select" onchange="window.updateGrid()">
+                <option value="all">Toutes les séries</option>
+            </select>
+
+            <select id="sort-order" class="control-select" onchange="window.updateGrid()">
+                <option value="name_asc">Nom (A-Z)</option>
+                <option value="name_desc">Nom (Z-A)</option>
+                <option value="price_asc">Prix d'achat (Croissant)</option>
+                <option value="price_desc">Prix d'achat (Décroissant)</option>
+                <option value="date_desc">Date d'achat (Récent)</option>
+            </select>
+        </div>
+
+        <div class="search-container">
+            <input type="text" class="search-bar" id="searchBar" onkeyup="window.updateGrid()" placeholder="Rechercher une figurine...">
+        </div>
+
+        <div id="hirono-grid" class="collection-grid"></div>
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="text-align:center; margin-bottom:15px;">
+                <img id="edit-img" src="" style="height:120px; object-fit:contain; border-radius:8px;">
+                <br>
+                <span id="edit-secret-badge" style="display:none; background:#F59E0B; color:white; font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:5px; text-transform:uppercase;">✨ Secret Rare</span>
+            </div>
+
+            <h2 id="edit-title" style="margin:0; font-size:1.3rem;"></h2>
+            <p id="edit-subtitle" style="margin:2px 0 20px; color:var(--text-sub); font-size:12px;"></p>
+            
+            <label class="form-label" data-t="lblStatus">Statut</label>
+            <select id="input-status" style="margin-bottom:15px;">
+                <option value="No status" data-t="optNone">Non possédé</option>
+                <option value="Possédé" data-t="optOwned">Dans ma collection ✅</option>
+                <option value="Recherché" data-t="optWish">Wishlist ⭐</option>
+            </select>
+
+            <div class="form-row">
+                <div>
+                    <label class="form-label" data-t="lblCondition">Condition</label>
+                    <select id="input-condition">
+                        <option value="Inconnu" data-t="condUnknown">Inconnu</option>
+                        <option value="Neuf" data-t="condMint">Neuf (Mint)</option>
+                        <option value="Bon" data-t="condGood">Bon</option>
+                        <option value="Moyen" data-t="condFair">Moyen</option>
+                        <option value="Abimé" data-t="condDamaged">Abimé</option>
+                    </select>
+                </div>
+                <div><label class="form-label" data-t="lblQty">Quantité</label><input type="number" id="input-qty" min="0"></div>
+            </div>
+
+            <div class="form-row">
+                <div><label class="form-label" data-t="lblPrice">Prix</label><input type="number" id="input-price" step="0.01"></div>
+                <div><label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date"></div>
+            </div>
+            
+            <label class="form-label" data-t="lblNotes">Notes</label>
+            <textarea id="input-note" rows="2"></textarea>
+
+            <button class="btn-save" onclick="window.sauvegarder()" data-t="btnSave">Enregistrer</button>
+            <button class="btn-cancel" onclick="window.fermer()" data-t="btnClose">Fermer</button>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:#1F2937; border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte
+            </button>
+            
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
+                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerNav">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
+                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
+                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
+                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerAbout">À propos</h4>
+                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- I18N DICTIONNAIRE ---
+        const translations = {
+            fr: {
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats",
+                authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
+                filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist",
+                searchPlaceholder: "Rechercher une figurine...",
+                lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
+                btnSave: "Enregistrer", btnClose: "Fermer",
+                optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
+                condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant"
+            },
+            en: {
+                navHome: "Home", navCollection: "Collection", navStats: "Stats",
+                authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
+                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
+                filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist",
+                searchPlaceholder: "Search for a figure...",
+                lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
+                btnSave: "Save", btnClose: "Close",
+                optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
+                condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
+                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
+                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now"
+            }
+        };
+
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang);
+            updateUIText();
+        };
+
+        function updateUIText() {
+            if(currentLang === 'fr') {
+                document.getElementById('lang-fr').classList.add('active');
+                document.getElementById('lang-en').classList.remove('active');
+            } else {
+                document.getElementById('lang-fr').classList.remove('active');
+                document.getElementById('lang-en').classList.add('active');
+            }
+
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(t[key]) el.innerText = t[key];
+            });
+
+            document.getElementById('searchBar').placeholder = t.searchPlaceholder;
+
+            const user = auth.currentUser;
+            const btnText = document.getElementById('auth-status-text');
+            if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+
+            // Rafraîchir les valeurs (monnaie/date) si les données sont chargées
+            if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') window.updateGrid();
+        }
+
+        // --- BASE DATA ---
+        const baseData = [
+            {"ID":"CIT-BELONG","Name":"Belonging","Serie":"City of Mercy","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/5tn6hRN7/Belonging_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-COMFOR","Name":"Comfortably Numb","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvMXrVQy/Comfortably_Numb_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-ECHO","Name":"Echo","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6QYykm5D/Echo_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-FALLEN","Name":"Fallen Angel","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/YSbh5sqT/Fallen_Angel_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-HEALER","Name":"Healer","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/s2wvkNDq/Healer_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-INSIGH","Name":"Insight","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jjZLpFdp/Insight_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CIT-THE OT","Name":"The Other","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/d04LbxVP/The_Other_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
+            {"ID":"CLO-ALIENE","Name":"Alienegra","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/N0f12Tyv/1733455229163_alienegra.webp"},
+            {"ID":"CLO-CHINES","Name":"Chinese","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/q7M86ntV/1733455238249_chinese.webp"},
+            {"ID":"CLO-KUNG F","Name":"Kung Fu","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6Q5d4R7X/1733455244529_kung_fu.webp"},
+            {"ID":"CLO-NING N","Name":"Ning Ning","Serie":"Clot","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/Xv7wBFZW/1733455250745_secret.webp"},
+            {"ID":"CLO-SILK R","Name":"Silk Royale","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HLsQ85JT/1733455262461_silk_royale.webp"},
+            {"ID":"CLO-TERRAC","Name":"Terracotta Army","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HLsQ85JG/1733455201830_terracotta_army.webp"},
+            {"ID":"CLO-YIN-YA","Name":"Yin-yang","Serie":"Clot","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KYvn3LKx/1733455291595_yin_yang.webp"},
+            {"ID":"ECH-BACK O","Name":"Back Off","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NjGydtQb/1743669305212_back_off.webp"},
+            {"ID":"ECH-BREAKO","Name":"Breakout Plan","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/CxvRt2Kk/1743669352787_breakout_plan.webp"},
+            {"ID":"ECH-CAUGHT","Name":"Caught You","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/y8fD5GNy/1743669382200_caught_you.webp"},
+            {"ID":"ECH-DAYDRE","Name":"Daydreaming","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/W19dKy4Z/1743669334277_daydreaming.webp"},
+            {"ID":"ECH-EATEN","Name":"Eaten","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/GmM4Nfpv/1743669391767_eaten.webp"},
+            {"ID":"ECH-GET LU","Name":"Get Lucky","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/YCXvVPSg/1743669346774_get_lucky.webp"},
+            {"ID":"ECH-HIDING","Name":"Hiding Behing You","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/VksSKwzg/1743669276478_hiding_behind_you.webp"},
+            {"ID":"ECH-JOURNE","Name":"Journey in the Rain","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/W1pD5Vsn/1743669286717_journey_in_the_rain.webp"},
+            {"ID":"ECH-KNIGHT","Name":"Knight","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/GmM4NfpP/1743669376395_knight.webp"},
+            {"ID":"ECH-NEVER","Name":"Never Growing Up","Serie":"Echo","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/XYNZsWnk/1743669268416_secret_never_growing_up.webp"},
+            {"ID":"ECH-PIECES","Name":"Pieces of Memory","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/7ZPCK4qN/1743669316998_pieces_of_memory.webp"},
+            {"ID":"ECH-SOUL C","Name":"Soul Connection","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/pL0m7SdY/1743669367298_soul_connection.webp"},
+            {"ID":"ECH-STAYIN","Name":"Staying Up","Serie":"Echo","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Qd6FPzMT/1743669327227_staying_up.webp"},
+            {"ID":"LIT-BIRDMA","Name":"Birdman","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Ghgr1nk3/1754633786500_birdman.webp"},
+            {"ID":"LIT-BOILIN","Name":"Boiling Frog","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/RVZ98Znq/1754633611937_boiling_frog.webp"},
+            {"ID":"LIT-DESTRO","Name":"Destroyer","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/GhmrNmst/1754633636974_destroyer.webp"},
+            {"ID":"LIT-FLOAT","Name":"Float","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/c4LZjL8H/1754633593163_float.webp"},
+            {"ID":"LIT-LOOSE","Name":"Loose Fish","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/8PXDVghP/1754633835204_loose_fish.webp"},
+            {"ID":"LIT-MANACL","Name":"Manacle","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HsvHC1QT/1754633742065_manacle.webp"},
+            {"ID":"LIT-PERSON","Name":"Persona","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Kv8FV8g1/1754633705994_persona.webp"},
+            {"ID":"LIT-PRETEN","Name":"Pretender","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/VLZ1cPjf/1754633761348_pretender.webp"},
+            {"ID":"LIT-RAGPIC","Name":"Ragpicker","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3Jx76xDd/1754633661998_ragpicker.webp"},
+            {"ID":"LIT-ROBOT","Name":"Robot","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/153PT3Ng/1754633679014_robot.webp"},
+            {"ID":"LIT-THE AV","Name":"The Aviator","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/VLZ1cPjN/1754633812448_the_aviator.webp"},
+            {"ID":"LIT-THE PR","Name":"The Protector","Serie":"Little Mischief","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tCvyHGhp/1754633724030_protector.webp"},
+            {"ID":"LIT-UNKNOW","Name":"Unknown Journey","Serie":"Little Mischief","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/wTjHPjsj/1754633568517_hirono_little_mischief_secret.webp"},
+            {"ID":"LPP-THE BU","Name":"The Businessman","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SRbVwRKf/1729474126689_the_businessman.webp"},
+            {"ID":"LPP-THE CO","Name":"The Conceited","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qqHQ9q7n/1729474080023_the_conceited_man.webp"},
+            {"ID":"LPP-THE FO","Name":"The Fox","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/brfLKrvD/1729474259163_the_fox.webp"},
+            {"ID":"LPP-THE GE","Name":"The Geographer","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/0j1ZLjNC/1729474188946_the_geographer.webp"},
+            {"ID":"LPP-THE KI","Name":"The King","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BbfNdbvH/1729474064212_the_king.webp"},
+            {"ID":"LPP-THE LA","Name":"The Lamplighter","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/zvYp9vfS/1729474175841_the_lamplighter.webp"},
+            {"ID":"LPP-THE LI","Name":"The Little Prince","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/90H1v0fb/1729474205444_the_little_prince.webp"},
+            {"ID":"LPP-THELIV","Name":"The Little Prince (Variant)","Serie":"Le Petit Prince","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/Xq6xTqv9/1729474368353_super_secret.webp"},
+            {"ID":"LPP-THE ME","Name":"The Merchant","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/1X1MLXzg/1729474281535_the_merchant.webp"},
+            {"ID":"LPP-THE PI","Name":"The Pilot","Serie":"Le Petit Prince","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/90H1v0fw/1729474397572_secret.webp"},
+            {"ID":"LPP-THE RO","Name":"The Rose","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/kGYw1ckg/1729474216402_the_rose.webp"},
+            {"ID":"LPP-THE SN","Name":"The Snake","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tJ8Qnvps/1729474247912-the-snake.webp"},
+            {"ID":"LPP-THE SW","Name":"The Switchman","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/GtnzZtpH/1729474269260_the_switchman.webp"},
+            {"ID":"LPP-THE TI","Name":"The Tipper","Serie":"Le Petit Prince","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/4yRwry3v/1729474110699_the_tippler.webp"},
+            {"ID":"MIM-BLIND","Name":"Blind","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bY3ddMxZ/1714395749944_blind.webp"},
+            {"ID":"MIM-DESTRO","Name":"Destroyer","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/28yyWwGj/1714396281799_destroy.webp"},
+            {"ID":"MIM-DEVILR","Name":"Devilry","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/kMfDDZQD/1714396038871_devilry.webp"},
+            {"ID":"MIM-DRIFTE","Name":"Drifter","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/DfBmmDr8/1714396116169_drifter.webp"},
+            {"ID":"MIM-FOOL","Name":"Fool","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SQDjj562/1714396149318_fool.webp"},
+            {"ID":"MIM-GUARDI","Name":"Guardian","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/WpXttKGz/1714395555750_guardian.webp"},
+            {"ID":"MIM-PATIEN","Name":"Patience","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MZdXX47f/1714396221981_patience.webp"},
+            {"ID":"MIM-POEM","Name":"Poem","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/xT88mR5T/1714396309830_poem.webp"},
+            {"ID":"MIM-PRISON","Name":"Prison","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/c1X66jRn/1714396246597_prison.webp"},
+            {"ID":"MIM-SECREC","Name":"Secrecy","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NfFFX4D0/1714396337830_secrecy.webp"},
+            {"ID":"MIM-SEEKER","Name":"Seeker","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/gcNrr5Vw/1714395912611_seeker.webp"},
+            {"ID":"MIM-SILENT","Name":"Silent","Serie":"Mime","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/xT88mR51/1714396366089_secret_silent.webp"},
+            {"ID":"MIM-UNSPOK","Name":"Unspoken","Serie":"Mime","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/v83DDjr6/1714396187287-unspoken.webp"},
+            {"ID":"MON-CREEPY","Name":"Creepy Clown","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fT7sJ0nb/1760067928724_creepy_clown.webp"},
+            {"ID":"MON-DOCTOR","Name":"Doctor Beak","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02GvbJRr/1760067935211_doctor_beak.webp"},
+            {"ID":"MON-GRIM R","Name":"Grim Reaper","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/ZKPmCytW/1760067961879_grim_reaper.webp"},
+            {"ID":"MON-KILLER","Name":"Killer Bunny","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/4NvGmhk4/1760067912198_killer_bunny.webp"},
+            {"ID":"MON-THE DI","Name":"The Disembodied","Serie":"Monsters' Carnival","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/28dYVBRq/1760067967818_secret_the_disembodied.webp"},
+            {"ID":"MON-VAMPIR","Name":"Vampire","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/TYjxpWM3/1760067922341_vampire.webp"},
+            {"ID":"MON-ZOMBIE","Name":"Zombie","Serie":"Monsters' Carnival","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/YqN7hmK9/1760067956097_zombie.webp"},
+            {"ID":"RES-BURST","Name":"Burst","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/YSZZXpBw/1714397170506_气球.webp"},
+            {"ID":"RES-COSTUM","Name":"Costume","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jjmm8sYV/1714397111379_皮衣.webp"},
+            {"ID":"RES-DROWNI","Name":"Drowning","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Pq996ts9/1714396954380_油漆桶.webp"},
+            {"ID":"RES-FADING","Name":"Fading","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/43qq8Jkr/1714397083153_水晶.webp"},
+            {"ID":"RES-HEALIN","Name":"Healing","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/nLggdHfH/1714397243957_炸弹.webp"},
+            {"ID":"RES-PARADI","Name":"Paradise Lost","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/cJ22DsGW/1714397195684_石头.webp"},
+            {"ID":"RES-PARASI","Name":"Parasite","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Pq996tnd/1714397221177_炸弹.webp"},
+            {"ID":"RES-PUPPET","Name":"Puppet","Serie":"Reshape","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/TPFFkRv2/1714397315406_secret.webp"},
+            {"ID":"RES-VOYAGE","Name":"Voyage","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mrJJdbWf/1714397140852_火箭.webp"},
+            {"ID":"RES-WOODCA","Name":"Woodcarving","Serie":"Reshape","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/CKXXvFph/1714397268822_炸弹.webp"},
+            {"ID":"ROA-CITY D","Name":"City Dust Afloat","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/5Ny5t8FT/1765529791611_city_dust_afloat.webp"},
+            {"ID":"ROA-FROSTF","Name":"Frostfall Hour","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Dy0Qz1bN/1765529799195_frostfall_hour.webp"},
+            {"ID":"ROA-GREY G","Name":"Grey Gravel","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Yq0NSQms/1765529804842_grey_gravel.webp"},
+            {"ID":"ROA-HIGHWA","Name":"Highway Imprint","Serie":"Road Journal","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/tCJdgFx0/1765529822105_secret_highway_imprint.webp"},
+            {"ID":"ROA-INTO F","Name":"Into Fogwild","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/8PcdCLr3/1765529811680_into_fogwild.webp"},
+            {"ID":"ROA-LOST I","Name":"Lost In the Night","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/4Nyv3p9k/1765529816912_lost_in_the_night.webp"},
+            {"ID":"ROA-WOVEN","Name":"Woven Woods","Serie":"Road Journal","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jd26jyJg/1765529784528_woven_woods.webp"},
+            {"ID":"SHE-ALIEN","Name":"Alien","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/hjMxDGD3/1721118864571_alien.webp"},
+            {"ID":"SHE-BIRDCA","Name":"Birdcage","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/B6NDSvSy/1721118924293_birdcage.webp"},
+            {"ID":"SHE-BIRDY","Name":"Birdy","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/ZRj3bqbs/1721118847860_birdy.webp"},
+            {"ID":"SHE-CABIN","Name":"Cabin","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mDVMLrLd/1721118829814_cabin.webp"},
+            {"ID":"SHE-CANDLE","Name":"Candleholder","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5RPYfbB/1721118713711_candleholder.webp"},
+            {"ID":"SHE-CIRCUS","Name":"Circus","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tTDPqgqS/1721118811332_circus.webp"},
+            {"ID":"SHE-FORT","Name":"Fort","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/63BnxZKJ/1721118784841_fort.webp"},
+            {"ID":"SHE-MANDEL","Name":"Mandel Clock","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HxTX1Mgf/1721118731725_mantel_clock.webp"},
+            {"ID":"SHE-POET","Name":"Poet","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/LXmLFPSd/1721118749334_poet.webp"},
+            {"ID":"SHE-STUFFE","Name":"Stuffed Bear","Serie":"Shelter","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/nzT7FLFg/1721118951491_secret.webp"},
+            {"ID":"SHE-SUNNY","Name":"Sunny Doll","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/V64MfNfh/1721118905986_sunny_doll.webp"},
+            {"ID":"SHE-TRAFFI","Name":"Traffic Cone","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5RPYfbp/1721118766980_traffic_cone.webp"},
+            {"ID":"SHE-WARRIO","Name":"Warrior","Serie":"Shelter","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5RPYfbp/1721118766980_traffic_cone.webp"},
+            {"ID":"SPE- SIMPE","Name":"Simper","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/85G98Zsp/20240417_120727_742914_1200x1200_removebg_preview.png"},
+            {"ID":"SPE- SIM200","Name":"Simper","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/85G98Zsp/20240417_120727_742914_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-3, 2,","Name":"3, 2, 1 Boom!","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/B6CyJ21S/Hirono_3_2_1_Boom.png"},
+            {"ID":"SPE-BANGER","Name":"Banger","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/JnQgRjBR/Hirono_Banger_Lang_Studio_Hirono_POP_MART_MT5FUGv_RYpntgg_removebg_preview.png"},
+            {"ID":"SPE-BEAR V","Name":"Bear Vinyl Plush Doll","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/V6FTzXbc/20250808_175931_903538_1_hirono_bear_vinyl_plush_doll_plush_toys_details_pop_mart_us_1200x120.png"},
+            {"ID":"SPE-BEIJIN","Name":"Beijing Swift","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/V6FTzXbw/Beijing_Swift_Lang_Studio_Hirono_POP_MART_Aux_Fn_PDWHdew8O_removebg_preview.png"},
+            {"ID":"SPE-BIRD B","Name":"Bird Black","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrB/Hirono_Bird_Black_Lang_Studio_Hirono_Inner_Flow_b1xfh_Wjy_IR79r5_removebg_preview.png"},
+            {"ID":"SPE-BIRD P","Name":"Bird Pink","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/K80VKvFV/Hirono-Bird-Pink-Lang-Studio-Hirono-trampt-361642o-removebg-preview.png"},
+            {"ID":"SPE-CERFEA","Name":"Ceramic Feather","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MTY4z1fC/20241211_170933_813176_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-CHENG","Name":"Cheng Du","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qRGYp2CB/Hirono_Cheng_Du_Lang_Studio_Hirono_POP_MART_Fj_Atvtx8b_Jcf_X_removebg_preview.png"},
+            {"ID":"SPE-COFFEE","Name":"Coffee Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5h9RyJd/Hirono_Coffee_Figure_Lang_Studio_Hirono_POP_MART_em_Zhzq_YFHqell_D_removebg_preview.png"},
+            {"ID":"SPE-DEAD S","Name":"Dead Silence Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XJghn9yb/20251121_154650_246653_1_hirono_dead_silence_figure_figurine_details_pop_mart_us_1200x1200_re.png"},
+            {"ID":"SPE-DOLL P","Name":"Doll Panda","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y9xVtQmc/20241023_115711_930388_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-ELEPHA","Name":"Elephant in the Room","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fLvFMY0L/Hirono_Elephant_in_the_Room_Hirono_Lang_Studio_Hirono_Inner_Flow_POP_MART_ZQPR98d_9IYZE8_removebg_pr.png"},
+            {"ID":"SPE-ELEPWO","Name":"Elephant in the Room Wood Color","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Cx0RtcpC/pop-mart-hirono-elephant-in-the-room-figure-wood-color-1-removebg-preview.png"},
+            {"ID":"SPE-ELEP99","Name":"Elephant in the Room 99","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fLvFMY0L/Hirono_Elephant_in_the_Room_Hirono_Lang_Studio_Hirono_Inner_Flow_POP_MART_ZQPR98d_9IYZE8_removebg_pr.png"},
+            {"ID":"SPE-ELE500","Name":"Elephant in the Room Wood Color 500","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Cx0RtcpC/pop-mart-hirono-elephant-in-the-room-figure-wood-color-1-removebg-preview.png"},
+            {"ID":"SPE-ENDLES","Name":"Endless Enjoyment","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/1tKTyDN9/Endless_Enjoyment_Hirono_Lang_Studio_Hirono_POP_MART_g_Tso6Z9m42b_Ov_Z.png"},
+            {"ID":"SPE-GARY B","Name":"Gary Baseman","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/PxMcd18s/20241211_171454_221194_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-HIRONO","Name":"Hirono x Qoo","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/C14twbfd/Hirono_x_Qoo_Lang_Studio_Hirono_POP_MART_bfw5tf_Xm_OPAKqk_removebg_preview.png"},
+            {"ID":"SPE-HIRONO","Name":"Hirono Vans Skateboarder","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/0QC397Jj/Hirono_Vans_Skateboarder_Lang_Studio_Hirono_POP_MART_hl_ZOKMR0Z_a_Q7P_removebg_preview.png"},
+            {"ID":"SPE-INTERV","Name":"Intervals of Silence","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/d19XJGTL/Intervals_of_Silence_Lang_Studio_Hirono_POP_MART_jv_Txl_N1e_V8e_J2x_removebg_preview.png"},
+            {"ID":"SPE-KEITH","Name":"Keith Haring","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KjRKmrs7/20240717_142752_671402_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-KEIT2","Name":"Keith Haring","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tJY19tm3/20240717_142644_114823_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-LISTEN","Name":"Listening","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y0h4tfyL/20231102_161740_342057_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-LIVING","Name":"Living Wild-Fight for Joy Plush Doll","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x8ck9yF7/20250624_113916_900182_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-MERRY","Name":"Merry Christmas Mr.Hirono","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVd0/Merry_Christmas_Mr_Hirono_Lang_Studio_Hirono_Inner_Flow_POP_MART_Svn_GSVK1RXS3Kt_removebg_preview.png"},
+            {"ID":"SPE-POLAR","Name":"Polar Symbiosis","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6qy7BL10/20240731_173909_035236_hirono_x_polar_symbiosis_figure_figurine_pop_mart_us_3_1200x1200_remov.png"},
+            {"ID":"SPE-POLAR","Name":"Polar Coexistence","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mkJPkzvR/Hirono_Polar_Coexistence_Lang_Studio_Hirono_POP_MART_x_Pn_VMyk_Z_B1Jfr_removebg_preview.png"},
+            {"ID":"SPE-POPMAR","Name":"Popmart Spotlight Hirono Misfit","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y2sGbZhW/Popmart_Spotlight_Hirono_Misfit_Lang_Studio_Hirono_POP_MART_k1mv6Ol_CRQSM0J_removebg_preview.png"},
+            {"ID":"SPE-PRANKS","Name":"Prankster Loong","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/nrgXrjyp/Hirono_Prankster_Loong_Lang_Studio_Hirono_POP_MART_j_ZS4l2Ew_Il_Uyfe_removebg_preview.png"},
+            {"ID":"SPE-PRANKS","Name":"Prankster Loong Green Variant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fypVytGs/Hirono_Prankster_Loong_Green_Variant_POP_MART_Sweet_Bean_POP_MART_c_Z3ut_Q1t_GCVK7J_removebg_preview.png"},
+            {"ID":"SPE-RESHAP","Name":"Reshape","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SRJXm7tC/20240416_113609_076924_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-SANDRES","Name":"Sand ofReshaping","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XqbzCrPp/Sand-of-reshaping-removebg-preview.png"},
+            {"ID":"SPE-SAD CL","Name":"Sad Clown","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVdG/Sad_Clown_Lang_Studio_Hirono_POP_MART_ohmacqz_AJLu_WOS_removebg_preview.png"},
+            {"ID":"SPE-SAYING","Name":"Saying","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Mpqb7gcW/20231102_161452_044478_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-SEARCH","Name":"Search for Aliens","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/rs3Ds0vj/20250826_135041_137650_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-SEE YO","Name":"See You","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/J72DPvGJ/See_You_Lang_Studio_Hirono_POP_MART_LNVfc1ao_WWMNr_Z_removebg_preview.png"},
+            {"ID":"SPE-SEEING","Name":"Seeing","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Kz9kXsQL/20231102_160831_813396_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-SHANGH","Name":"Shanghai Monster","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/GtV4t8Wb/Hirono_Shanghai_Monster_Lang_Studio_Hirono_Inner_Flow_DZua_Fik_Hc_ntyk_removebg_preview.png"},
+            {"ID":"SPE-SNOOPY","Name":"Snoopy Peanuts","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HnVJT4Ph/20250408_175815_105043_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-SOLITAR","Name":"Solitary Hermit","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HnRrncqp/Hirono_Solarity_Hermit_Lang_Studio_Hirono_POP_MART_5d_NVIKPSQ_Sub8_removebg_preview.png"},
+            {"ID":"SPE-STEFSUN","Name":"Stefanie Sun Weather With You","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/hv6XvzHM/20251017_175042_124758_1_hirono_stefanie_sun_weather_with_you_figurine_figurine_details_pop_mart.png"},
+            {"ID":"SPE-STEFAN","Name":"Stefanie Sun AUT NIHILO","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/90KD0RvJ/20251017_175630_595936_1_hirono_stefanie_sun_aut_nihilo_figure_figurine_details_pop_mart_us_1.png"},
+            {"ID":"SPE-THE FL","Name":"The Fleeting Years","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/yxtDxgwr/Document_removebg_preview.png"},
+            {"ID":"SPE-THE KI","Name":"The King (France Exclusive)","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/ryP0Q3K5/The_King_France_Exclusive_Lang_Studio_Hirono_POP_MART_di_Rwr_Q6We1Yi3W_removebg_preview.png"},
+            {"ID":"SPE-THE LI","Name":"The Little Prince","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tJY19tmr/20241114_151137_055699_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-THE PI","Name":"The Pianist","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/brsGqHF5/20250527_171513_316364_1_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-THE UF","Name":"THE UFO CHASER Hirono x Journey to the West Figure","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/prp9PY19/20240109_180554_342219_1200x1200_removebg_preview.png"},
+            {"ID":"SPE-UFO CH","Name":"UFO Chaser Hirono 100%","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/9XnRJKrG/UFO_Chaser_Hirono_Mini_Lang_Studio_Hirono_Inner_Flow_POP_MART_q_V5Pv_KHDEHX9C6_removebg_preview.png"},
+            {"ID":"SPE-WISH L","Name":"Wish List","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/WpHFXChG/Wish_List_Hirono_Lang_Studio_Hirono_POP_MART_6qvf_TJ2Vmnxc_C.png"},
+            {"ID":"SPE-Wishes","Name":"Wishes Come True","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/QNy90wHg/Wishes_Come_True_(Secret)_Lang_Studio_Hirono_POP_MART_UXVio_Fw_FVrq_AM7.png"},
+            {"ID":"THE-AMNESI","Name":"Amnesia","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QNQ1Ss2V/1732004005165_amnesia.webp"},
+            {"ID":"THE-BEING","Name":"Being Alive","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/v8rfXMJ4/1732004113350_being_alive.webp"},
+            {"ID":"THE-CUCKOO","Name":"Cuckoo","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/T2VgQGzp/1732004132352_cuckoo.webp"},
+            {"ID":"THE-DREAMI","Name":"Dreaming","Serie":"The Other One","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/X7nFzmWV/1732004190662_secret.webp"},
+            {"ID":"THE-MARION","Name":"Marionette","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tR3WDyKC/1732003951303_marionette.webp"},
+            {"ID":"THE-NOWHER","Name":"Nowhere Safe","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mZYCVRvT/1732003756778_nowhere_safe.webp"},
+            {"ID":"THE-RAVING","Name":"Raving","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L4tLvRc4/1732003918689_raving.webp"},
+            {"ID":"THE-STARIN","Name":"Staring","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NG6mbY3s/1732003979811_staring.webp"},
+            {"ID":"THE-THE CR","Name":"The Crow","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/PfWYKhg5/1732004075213_the_crow.webp"},
+            {"ID":"THE-THE FO","Name":"The Fox","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fWcm5ZGS/1732004171097_the_fox.webp"},
+            {"ID":"THE-THE GH","Name":"The Ghost","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/446VwZDs/1732003742204_the_ghost.webp"},
+            {"ID":"THE-THE MO","Name":"The Monster","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/446VwZDK/1732004152872_the_monster.webp"},
+            {"ID":"THE-VAGRAN","Name":"Vagrancy","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/G3FGzrWt/1732004094533_vagrancy.webp"},
+            {"ID":"SPE-PERSON","Name":"Persona","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/pTY3LV6L/images-removebg-preview.png"},
+            {"ID":"SPE-HALO23","Name":"Halloween Special 2023","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sxzQ5mm5/pop-mart-hirono-halloween-special-figure-1-removebg-preview.png"},
+            {"ID":"SPE-HALOCH","Name":"Halloween Special China","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/FHvvmqRP/s-l1200-removebg-preview.png"},
+            {"ID":"SPE-SUMWIND","Name":"Summer Time Wind Blows","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MpX1ts08/687be300e25b9e5510d9c8cc-summer-wind-removebg-preview.png"},
+            {"ID":"SPE-FLOMARK","Name":"Floating Market","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png"},
+            {"ID":"SPE-ORANGE","Name":"Orange Pop","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/dVTLLgmC/20250720-cc3fa10a6eff669b-w800h800-removebg-preview.png"},
+            {"ID":"SPE-BACKTO","Name":"Back to Play","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02Ssmv34/pts-2025-exclusive-hirono-back-1755842172-bcd4434c-progressive-removebg-preview.png"},
+            {"ID":"SPE-SNOWFALL","Name":"Snowfall Alley","Serie":"Special Pop Blocks","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/xCdkT8sj/1734934091955-snowfall-alley.webp"},
+            {"ID":"SPE-EMBRANY","Name":"Embracing New Year","Serie":"Special Pop Blocks","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/hvPkfJ6g/1734934153260-secret-embracing-new-year.webp"},
+            {"ID":"SPE-POPBEAN","Name":"Pop Bean","Serie":"Special Pop Bean","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/D0XMWq6Y/images-1-removebg-preview.png"},
+            {"ID":"SPE-LITPRANK","Name":"Little Prank","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/5y4Xy3fL/images-2-removebg-preview.png"},
+            {"ID":"SPE-SKYWARD","Name":"Skyward","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3xT2QgvK/images-3-removebg-preview.png"},
+            {"ID":"SPE-CHUCKY","Name":"Chucky","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x1zptySz/chuky-removebg-preview.png"},
+            {"ID":"SPE-BEFSNOW","Name":"Before Snow Melts","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/hGJm9pWF/before-snow-removebg-preview.png"},
+            {"ID":"SPE-BEFSNOWS","Name":"Before Snow Melts","Serie":"Special 200%","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/c4Xt2V0X/before-snow-spe-removebg-preview.png"},
+            {"ID":"SPE-SHELTER","Name":"Shelter","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/WzqYCMJ6/23-8-removebg-preview.png"},
+            {"ID":"SPE-LOSTPARA","Name":"Lost Paradise Scilpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02DK2bYC/95928ed881d3f77328b137463f2b9cdf-removebg-preview.png"},
+            {"ID":"SPE-TERRAARMY","Name":"Terracotta Army Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/yNt7ZTBS/images-4-removebg-preview.png"},
+            {"ID":"SPE-STONEFEA","Name":"Stone Feather Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvrX038X/images-6-removebg-preview.png"},
+            {"ID":"SPE-DRIFTBO","Name":"Drift Bottle Ornament","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QC5zyp2C/images-8-removebg-preview.png"},
+            {"ID":"SPE-YYCERAM","Name":"Yin-Yang Ceramic Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrY/CLOT_Yin_Yang_Ceramic_Incense_Burner_Celadon.png"},
+            {"ID":"SPE-YYCEBUR","Name":"Yin-Yang Incense Burner","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jqgYwXXW/m55817971196-1-removebg-preview.png"},
+            {"ID":"SPE-UNKJOUR","Name":"Unknown Journey","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wM9ccLQB/Hirono-Unknown-Journey-Lang-Studio-Hirono-Self-produced-trampt-376190o-removebg-preview.png"},
+            {"ID":"SPE-RESHSCULP","Name":"Reshape Sculpture 399","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/dtkDNDNJ/20240417-120205-872596-1200x1200-removebg-preview.png"},
+            {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP-MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"}
+        ];
+
+        let myCollection = [...baseData];
+        let currentItem = null;
+        let currentFilter = 'all'; 
+
+        // --- AUTH & LOAD ---
+        onAuthStateChanged(auth, async (user) => {
+            const btn = document.getElementById('auth-trigger');
+            updateUIText();
+
+            if (user) {
+                // UI: CONNECTÉ
+                btn.classList.add('logged-in'); 
+                btn.onclick = () => window.handleLogout();
+
+                // Afficher le Dashboard, cacher l'écran verrouillé
+                document.getElementById('access-denied').style.display = 'none';
+                document.getElementById('main-container').style.display = 'block';
+
+                const docRef = doc(db, "users", user.uid);
+                try {
+                    const snap = await getDoc(docRef);
+                    if (snap.exists()) {
+                        const data = snap.data();
+                        const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
+                        myCollection = baseData.map(baseItem => {
+                            const savedItem = cloudData.find(i => i.ID === baseItem.ID);
+                            if (savedItem) {
+                                return {
+                                    ...baseItem,
+                                    Status: savedItem.Status || baseItem.Status,
+                                    Condition: savedItem.Condition,
+                                    Quantity: savedItem.Quantity,
+                                    "Purchase price": savedItem["Purchase price"],
+                                    "Purchase date": savedItem["Purchase date"],
+                                    Note: savedItem.Note
+                                };
+                            }
+                            return baseItem;
+                        });
+                    } else {
+                        // Migration localStorage vers Cloud si c'est la 1ère fois
+                        const localData = localStorage.getItem('HRN_ULTIMATE');
+                        if (localData) {
+                            try {
+                                const parsedLocal = JSON.parse(localData);
+                                myCollection = baseData.map(baseItem => {
+                                    const savedItem = parsedLocal.find(i => i.ID === baseItem.ID);
+                                    return savedItem ? { ...baseItem, ...savedItem } : baseItem;
+                                });
+                                await setDoc(docRef, { collection: myCollection });
+                            } catch (e) { myCollection = [...baseData]; }
+                        } else {
+                            myCollection = [...baseData];
+                        }
+                    }
+                } catch (error) { myCollection = [...baseData]; }
+                
+                // On affiche la grille maintenant que tout est chargé
+                window.updateGrid();
+
+            } else {
+                // UI: DÉCONNECTÉ -> ACCÈS RESTREINT
+                btn.classList.remove('logged-in');
+                btn.onclick = () => window.toggleAuthModal();
+
+                // Cacher le Dashboard, afficher l'écran verrouillé
+                document.getElementById('access-denied').style.display = 'flex';
+                document.getElementById('main-container').style.display = 'none';
+
+                // On ne charge pas le localStorage pour forcer la connexion
+                myCollection = [...baseData]; 
+            }
+        });
+
+        // --- AUTH LOGIC ---
+        window.toggleAuthModal = () => {
+            const el = document.getElementById('auth-modal');
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleLogout = async () => {
+            if(confirm("Voulez-vous vraiment vous déconnecter ?")) {
+                await signOut(auth);
+                location.reload(); 
+            }
+        };
+
+        // --- INIT SERIES DROPDOWN ---
+        const initSeriesFilter = () => {
+            const series = [...new Set(baseData.map(i => i.Serie))].sort();
+            const select = document.getElementById('filter-series');
+            select.innerHTML = `<option value="all">Toutes les séries</option>`;
+            series.forEach(s => {
+                const opt = document.createElement('option');
+                opt.value = s;
+                opt.innerText = s;
+                select.appendChild(opt);
+            });
+        };
+        initSeriesFilter();
+
+        // --- FILTER & SORT ACTIONS ---
+        window.setFilter = (type) => {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            if(type === 'all') document.getElementById('btn-all').classList.add('active');
+            if(type === 'owned') document.getElementById('btn-owned').classList.add('active');
+            if(type === 'wish') document.getElementById('btn-wish').classList.add('active');
+            window.updateGrid();
+        };
+
+        window.updateGrid = () => {
+            let result = [...myCollection];
+
+            // 1. Filtre par Statut
+            if (currentFilter === 'owned') result = result.filter(i => i.Status === 'Possédé');
+            if (currentFilter === 'wish') result = result.filter(i => i.Status === 'Recherché');
+
+            // 2. Filtre par Série
+            const serieVal = document.getElementById('filter-series').value;
+            if (serieVal !== 'all') {
+                result = result.filter(i => i.Serie === serieVal);
+            }
+
+            // 3. Recherche
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            if (searchTerm) {
+                result = result.filter(i => 
+                    i.Name.toLowerCase().includes(searchTerm) || 
+                    i.Serie.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            // 4. Tri
+            const sortMode = document.getElementById('sort-order').value;
+            result.sort((a, b) => {
+                if (sortMode === 'name_asc') return a.Name.localeCompare(b.Name);
+                if (sortMode === 'name_desc') return b.Name.localeCompare(a.Name);
+                
+                if (sortMode === 'price_asc') {
+                    return (parseFloat(a["Purchase price"])||0) - (parseFloat(b["Purchase price"])||0);
+                }
+                if (sortMode === 'price_desc') {
+                    return (parseFloat(b["Purchase price"])||0) - (parseFloat(a["Purchase price"])||0);
+                }
+                if (sortMode === 'date_desc') {
+                     const dateA = a["Purchase date"] ? new Date(a["Purchase date"]) : new Date(0);
+                     const dateB = b["Purchase date"] ? new Date(b["Purchase date"]) : new Date(0);
+                     return dateB - dateA;
+                }
+                return 0;
+            });
+
+            window.render(myCollection, result);
+        };
+
+        // --- RENDER LOGIC ---
+        window.render = (dataForStats, dataForGrid = null) => {
+            if(!dataForGrid) dataForGrid = dataForStats;
+
+            // 1. CALCUL DES KPI (Collection Globale)
+            let stats = { spent: 0, totalItems: 0, ownedUniques: 0, secretsFound: 0, doubles: 0 };
+            let condMap = {}; let serMap = {};
+
+            dataForStats.forEach(item => {
+                const q = parseInt(item.Quantity) || 0;
+                const p = parseFloat(item["Purchase price"]) || 0;
+                const c = item.Condition || "Inconnu";
+                const s = item.Serie || "Inconnue";
+
+                if (!serMap[s]) serMap[s] = { owned: 0, total: 0 };
+                serMap[s].total++;
+
+                if (item.Status === "Possédé") {
+                    stats.ownedUniques++;
+                    stats.totalItems += q;
+                    stats.spent += (p * q);
+                    if (q > 1) stats.doubles += (q - 1);
+                    if (item["Secret Rare"] === "Yes") stats.secretsFound++;
+                    
+                    condMap[c] = (condMap[c] || 0) + q;
+                    serMap[s].owned++;
+                }
+            });
+
+            const percent = dataForStats.length > 0 ? Math.round((stats.ownedUniques / dataForStats.length) * 100) : 0;
+            document.getElementById('progression-text').innerText = percent + "%";
+            document.getElementById('progress-fill').style.width = percent + "%";
+            
+            const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
+            const currency = currentLang === 'fr' ? 'EUR' : 'USD';
+            
+            document.getElementById('stat-value').innerText = stats.spent.toLocaleString(locale, { style: 'currency', currency: currency });
+            document.getElementById('stat-total').innerText = stats.ownedUniques;
+            document.getElementById('stat-doubles-val').innerText = stats.doubles;
+            document.getElementById('stat-secrets').innerText = stats.secretsFound;
+
+            const renderBar = (label, textVal, widthPercent, color) => `
+                <div class="bar-row">
+                    <span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px;">${label}</span>
+                    <span>${textVal}</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width:${widthPercent}%; background:${color}"></div>
+                </div>
+            `;
+            
+            document.getElementById('stat-condition-list').innerHTML = Object.entries(condMap)
+                .sort((a,b)=>b[1]-a[1]).slice(0,3)
+                .map(([k,v]) => {
+                    const pct = stats.totalItems > 0 ? (v / stats.totalItems) * 100 : 0;
+                    return renderBar(k, v, pct, '#EC4899');
+                }).join('');
+
+            document.getElementById('stat-series-list').innerHTML = Object.entries(serMap)
+                .map(([k,v]) => {
+                    const p = v.total > 0 ? Math.round((v.owned/v.total)*100) : 0;
+                    return { name: k, percent: p };
+                })
+                .sort((a,b) => b.percent - a.percent)
+                .filter(s => s.percent > 0)
+                .slice(0,3)
+                .map(s => renderBar(s.name, s.percent + '%', s.percent, '#10B981'))
+                .join('');
+
+
+            // 2. RENDU GRILLE (Liste Filtrée)
+            const grid = document.getElementById('hirono-grid');
+            grid.innerHTML = "";
+            
+            const fragment = document.createDocumentFragment();
+            dataForGrid.forEach(item => {
+                const owned = item.Status === "Possédé";
+                const isSecret = item["Secret Rare"] === "Yes";
+                
+                const card = document.createElement('div');
+                card.className = `card ${owned ? 'owned' : ''} ${isSecret ? 'secret' : ''}`;
+                
+                const imgUrl = (item.Image && item.Image.trim() !== "") ? item.Image : `https://via.placeholder.com/300/e5e7eb/9ca3af?text=${encodeURIComponent(item.Name)}`;
+                
+                card.onclick = () => window.openModal(item);
+                
+                card.innerHTML = `
+                    ${(owned && item.Quantity > 1) ? `<div class="qty-badge">x${item.Quantity}</div>` : ''}
+                    ${isSecret ? `<div class="secret-badge">★</div>` : ''}
+                    <img src="${imgUrl}" class="${owned ? '' : 'missing'}" loading="lazy">
+                    <div class="card-info">
+                        <p class="card-name">${item.Name}</p>
+                        <p class="card-serie">${item.Serie}</p>
+                        ${(owned && item["Purchase price"] > 0) ? `<p style="font-size:10px; color:#10B981; margin:2px 0 0;">${parseFloat(item["Purchase price"]).toFixed(2)}€</p>` : ''}
+                    </div>
+                `;
+                fragment.appendChild(card);
+            });
+            grid.appendChild(fragment);
+
+            if(dataForGrid.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#9CA3AF;">Aucune figurine trouvée.</div>`;
+            }
+        };
+
+        // --- ACTIONS MODAL ---
+        window.openModal = (item) => {
+            currentItem = item;
+            document.getElementById('edit-title').innerText = item.Name;
+            document.getElementById('edit-subtitle').innerText = item.Serie;
+            
+            // LOGIQUE IMAGE & SECRET
+            document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
+            const secretBadge = document.getElementById('edit-secret-badge');
+            if(item["Secret Rare"] === "Yes") {
+                secretBadge.style.display = "inline-block";
+            } else {
+                secretBadge.style.display = "none";
+            }
+
+            document.getElementById('input-status').value = item.Status || "No status";
+            document.getElementById('input-condition').value = item.Condition || "Inconnu";
+            document.getElementById('input-qty').value = item.Quantity || 0;
+            document.getElementById('input-price').value = item["Purchase price"] || "";
+            document.getElementById('input-date').value = item["Purchase date"] || "";
+            document.getElementById('input-note').value = item.Note || "";
+            
+            document.getElementById('modal').style.display = "flex";
+        };
+
+        window.sauvegarder = async () => {
+            try {
+                if (!currentItem) return;
+
+                const newStatus = document.getElementById('input-status').value;
+                const newCond = document.getElementById('input-condition').value;
+                const newQty = parseInt(document.getElementById('input-qty').value) || 0;
+                const rawPrice = document.getElementById('input-price').value;
+                const newPrice = rawPrice ? parseFloat(rawPrice) : 0;
+                const newDate = document.getElementById('input-date').value || "";
+                const newNote = document.getElementById('input-note').value || "";
+
+                const index = myCollection.findIndex(i => i.ID === currentItem.ID);
+                if (index !== -1) {
+                    myCollection[index].Status = newStatus;
+                    myCollection[index].Condition = newCond;
+                    myCollection[index].Quantity = newQty;
+                    myCollection[index]["Purchase price"] = newPrice;
+                    myCollection[index]["Purchase date"] = newDate;
+                    myCollection[index].Note = newNote;
+                }
+
+                const saveBtn = document.querySelector('.btn-save');
+                saveBtn.innerText = "Sauvegarde...";
+                saveBtn.disabled = true;
+
+                const collectionPropre = myCollection.map(item => {
+                    return {
+                        ...item,
+                        Status: item.Status || "No status",
+                        Condition: item.Condition || "Inconnu",
+                        Quantity: item.Quantity || 0,
+                        "Purchase price": item["Purchase price"] || 0,
+                        "Purchase date": item["Purchase date"] || "",
+                        Note: item.Note || "",
+                        "Secret Rare": item["Secret Rare"] || "No"
+                    };
+                });
+
+                if (auth.currentUser) {
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { collection: collectionPropre });
+                } else {
+                    localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre));
+                }
+
+                saveBtn.innerText = "Enregistrer";
+                saveBtn.disabled = false;
+                window.fermer();
+                window.updateGrid();
+
+            } catch (error) {
+                console.error("Erreur de sauvegarde :", error);
+                alert("Erreur : " + error.message);
+                const saveBtn = document.querySelector('.btn-save');
+                if(saveBtn) {
+                    saveBtn.innerText = "Enregistrer";
+                    saveBtn.disabled = false;
+                }
+            }
+        };
+
+        window.fermer = () => document.getElementById('modal').style.display = "none";
+        
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>
