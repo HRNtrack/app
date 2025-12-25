@@ -2,13 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRNtrack</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HRNtrack | Donateurs</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            /* NOUVELLE PALETTE */
+            /* PALETTE */
             --primary: #6A8C47;
             --primary-dark: #557235;
             --bg-body: #F5F5F0;
@@ -16,10 +15,12 @@
             --text-main: #1A1A1A;
             --text-sub: #555555;
             --gold: #C6A875;
+            --gold-light: #F0EAD6;
             --red: #C0392B;
             --dark-bg: #1A1A1A;
             
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --nav-height-mobile: 80px;
         }
 
         body { 
@@ -28,6 +29,7 @@
             font-family: 'Poppins', sans-serif; 
             margin: 0; 
             display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
         }
 
         /* --- HEADER & NAV --- */
@@ -56,7 +58,7 @@
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
         .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
-        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
 
         .lang-toggle {
             display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
@@ -68,23 +70,63 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
+        /* BOUTON AUTH / SUPPORT */
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        @media (max-width: 600px) {
+        /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
+        @media (min-width: 769px) {
+            body { padding-bottom: 0; }
+        }
+
+        @media (max-width: 768px) {
             .site-logo { display: none; } 
-            .nav-center { 
-                position: fixed; bottom: 20px; top: auto; 
-                transform: translateX(-50%); background: rgba(26, 26, 26, 0.95);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                border: 1px solid rgba(255,255,255,0.1);
-                z-index: 1000;
+            
+            /* Le Header du haut ne garde que les boutons de droite */
+            .top-nav {
+                justify-content: flex-end; 
+                padding: 10px 15px;
             }
+
+            /* La barre de navigation devient une App Bar en bas */
+            .nav-center {
+                position: fixed; 
+                bottom: 0; 
+                top: auto; 
+                left: 0; 
+                transform: none; 
+                width: 100%;
+                background: #1A1A1A; 
+                border-radius: 0;
+                border: none;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; 
+                justify-content: space-around; 
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+                box-sizing: border-box;
+                z-index: 2000;
+            }
+
+            /* Style des liens en mode Mobile */
+            .nav-link {
+                flex-direction: column; 
+                padding: 0;
+                gap: 4px;
+                background: transparent !important; 
+                box-shadow: none !important;
+                color: #6B7280; 
+            }
+
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
+
+            .nav-link.active { color: var(--primary); }
+            .nav-link:hover { background: transparent; color: white; }
         }
 
         /* --- CONTAINER & DONATIONS --- */
@@ -102,23 +144,25 @@
         .donors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .donor-card { background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--primary); }
         .donor-name { font-weight: 600; font-size: 14px; }
-        /* Badge vert pâle */
         .donor-amount { font-weight: 700; color: var(--primary); font-size: 16px; background: rgba(106, 140, 71, 0.15); padding: 4px 8px; border-radius: 6px; }
 
         #admin-panel { display: none; background: var(--dark-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; color: white; }
         .admin-row { display: flex; gap: 10px; margin-top: 10px; }
-        .admin-input { flex: 1; padding: 10px; border-radius: 6px; border: none; }
+        .admin-input { flex: 1; padding: 10px; border-radius: 6px; border: none; } /* Pour l'admin panel */
         .btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-add:hover { background: var(--primary-dark); }
 
-        /* MODALS */
+        /* MODALS & INPUTS (STYLE HARMONISÉ) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
         
-        .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        input:focus { outline: none; border-color: var(--primary); }
+        /* STYLE INPUTS IDENTIQUE A LA COLLECTION */
+        input, select, textarea {
+            width: 100%; padding: 12px; border: 1px solid #E5E7EB;
+            border-radius: 10px; font-family: inherit; font-size: 14px;
+            box-sizing: border-box; transition: 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
 
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
@@ -128,7 +172,7 @@
         .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
-
+        
         /* FOOTER */
         .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
@@ -142,7 +186,7 @@
         /* --- STYLES BOUTON KO-FI CUSTOM --- */
         .btn-kofi-custom {
             display: flex; align-items: center; justify-content: center; gap: 10px;
-            background-color: #6a8c47; /* Bleu Ko-fi */
+            background-color: #6a8c47; 
             background: linear-gradient(45deg, #6a8c47, #3e522a);
             color: white; text-decoration: none;
             padding: 12px 25px; border-radius: 50px;
@@ -168,10 +212,19 @@
             15% { transform: rotate(-10deg) scale(1.1); }
             20% { transform: rotate(0) scale(1); }
         }
+        #snow-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Très important : permet de cliquer "à travers" la neige */
+    z-index: 9999; /* Par-dessus tout le reste */
+}
     </style>
 </head>
 <body>
-
+<canvas id="snow-canvas"></canvas>
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
             <a href="index.html">
@@ -186,6 +239,10 @@
             <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
         </div>
         <div class="nav-right">
+             <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
             <div class="lang-toggle" onclick="window.toggleLanguage()">
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
@@ -231,9 +288,21 @@
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Password" style="margin-bottom:20px;">
-            <button class="btn-add" style="width:100%" onclick="window.handleLogin()" data-t="btnLogin">Se connecter</button>
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+            
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte
+            </button>
+            
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>
@@ -264,7 +333,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
@@ -277,15 +346,17 @@
 
         const translations = {
             fr: { 
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Donateurs", navContact: "Contact", 
-                authLogin: "Connexion", authAccount: "Compte", btnLogin: "Se connecter", btnCancel: "Annuler", 
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
+                authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", 
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", 
                 lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien ! ❤️", lblWall: "Mur des Donateurs",
                 btnKofi: "Soutenez-moi sur Ko-fi" 
             },
             en: { 
-                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", 
-                authLogin: "Login", authAccount: "Account", btnLogin: "Log In", btnCancel: "Cancel", 
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", navSupport: "Support",
+                authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
+                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", 
                 footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", 
                 lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support! ❤️", lblWall: "Wall of Donors",
                 btnKofi: "Support me on Ko-fi"
@@ -301,11 +372,42 @@
             document.getElementById('lang-fr').className = currentLang === 'fr' ? 'lang-option active' : 'lang-option';
             document.getElementById('lang-en').className = currentLang === 'en' ? 'lang-option active' : 'lang-option';
             const user = auth.currentUser;
-            document.getElementById('auth-status-text').innerText = user ? t.authAccount : t.authLogin;
+            const btnText = document.getElementById('auth-status-text');
+            if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
         }
 
         window.toggleAuthModal = () => { const el = document.getElementById('auth-modal'); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; };
-        window.handleLogin = async () => { try { await signInWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-pass').value); window.toggleAuthModal(); } catch(e) { alert(e.message); } };
+        
+        // --- MODAL CLICK OUTSIDE ---
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        window.handleLogin = async () => { 
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Veuillez remplir les champs.");
+            
+            try { 
+                await signInWithEmailAndPassword(auth, email, pass); 
+                window.toggleAuthModal(); 
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            } 
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Veuillez remplir les champs.");
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+        
         window.handleLogout = async () => { if(confirm("Déconnexion ?")) { await signOut(auth); location.reload(); } };
 
         async function loadDonations() {
@@ -329,10 +431,14 @@
             updateUIText();
             const btn = document.getElementById('auth-trigger');
             if (user) {
-                btn.classList.add('logged-in'); btn.onclick = () => window.handleLogout();
+                btn.classList.add('logged-in'); 
+                // MODIFICATION ICI : REDIRECTION VERS COMPTE.HTML
+                btn.onclick = () => window.location.href = "compte.html";
+                
                 if(user.email === ADMIN_EMAIL) document.getElementById('admin-panel').style.display = 'block';
             } else {
-                btn.classList.remove('logged-in'); btn.onclick = () => window.toggleAuthModal();
+                btn.classList.remove('logged-in'); 
+                btn.onclick = () => window.toggleAuthModal();
             }
         });
 
@@ -344,15 +450,61 @@
         };
 
         loadDonations();
+
+        const canvas = document.getElementById('snow-canvas');
+const ctx = canvas.getContext('2d');
+
+let width, height, snowflakes;
+
+function initSnow() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    snowflakes = [];
+    // Ajuste le nombre de flocons ici (150 est un bon équilibre)
+    for (let i = 0; i < 150; i++) {
+        snowflakes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3 + 1,
+            speed: Math.random() * 1 + 0.5,
+            wind: Math.random() * 0.5 - 0.25,
+            opacity: Math.random() * 0.5 + 0.3
+        });
+    }
+}
+
+function drawSnow() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "white";
+    
+    snowflakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.globalAlpha = flake.opacity;
+        ctx.fill();
+
+        // Déplacement
+        flake.y += flake.speed;
+        flake.x += flake.wind;
+
+        // Si le flocon sort en bas, il réapparaît en haut
+        if (flake.y > height) {
+            flake.y = -10;
+            flake.x = Math.random() * width;
+        }
+    });
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener('resize', initSnow);
+
+// Lancement
+initSnow();
+drawSnow();
     </script>
-        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('hrntrack', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#323842',
-    'floating-chat.donateButton.text-color': '#fff'
-  });
-</script>
 </body>
 </html>

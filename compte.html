@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HRNtrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6A8C47;
+            --primary-dark: #557235;
+            --bg-body: #F5F5F0;
+            --card-bg: #ffffff;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+            --red: #C0392B;
+            --dark-bg: #1A1A1A;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --nav-height-mobile: 80px;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+        }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .site-logo { height: 80px; }
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2000;
+        }
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+
+        /* LANG TOGGLE */
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+
+        .btn-auth-trigger {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
+
+        /* --- MOBILE NAV --- */
+        @media (min-width: 769px) { body { padding-bottom: 0; } }
+        @media (max-width: 768px) {
+            .site-logo { display: none; } 
+            .top-nav { justify-content: flex-end; padding: 10px 15px; }
+            .nav-center {
+                position: fixed; bottom: 0; top: auto; left: 0; transform: none; width: 100%;
+                background: #1A1A1A; border-radius: 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; justify-content: space-around; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+                box-sizing: border-box; z-index: 2000;
+            }
+            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
+            .nav-link.active { color: var(--primary); }
+            .nav-link:hover { background: transparent; color: white; }
+        }
+
+        /* --- PAGE CONTENT --- */
+        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
+        
+        .account-card { background: white; padding: 30px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
+        .account-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #E5E7EB; padding-bottom: 20px; }
+        .avatar-circle { width: 80px; height: 80px; background: #E5E7EB; border-radius: 50%; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #9CA3AF; }
+        .user-email { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        
+        .section-title { font-size: 14px; font-weight: 700; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .form-group { margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; border: 1px solid #E5E7EB; border-radius: 10px; font-family: inherit; font-size: 14px; box-sizing: border-box; transition: 0.3s; margin-bottom: 10px; }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
+
+        .btn-action { width: 100%; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; transition: 0.2s; }
+        .btn-update { background: var(--dark-bg); color: white; }
+        .btn-update:hover { background: var(--primary); }
+        
+        .btn-logout { background: #fff; border: 1px solid #E5E7EB; color: var(--text-main); margin-top: 10px; }
+        .btn-logout:hover { background: #F3F4F6; }
+
+        .danger-zone { border: 1px solid #FECACA; background: #FEF2F2; padding: 20px; border-radius: 15px; margin-top: 30px; }
+        .btn-delete { background: var(--red); color: white; width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-delete:hover { background: #a93226; }
+
+        /* ACCESS DENIED */
+        #access-denied { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
+        .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
+        .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
+
+        /* FOOTER */
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
+    /* À ajouter dans votre balise <style> */
+body {
+    opacity: 0; /* On cache tout au départ */
+    transition: opacity 0.3s ease-in-out;
+}
+
+body.auth-ready {
+    opacity: 1; /* On affiche une fois fixé */
+}
+
+/* On cache les deux conteneurs par défaut */
+#access-denied, #main-container {
+    display: none !important;
+}
+
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo"></a>
+        </div>
+        <div class="nav-center">
+            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
+        <div class="nav-right">
+             <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+
+            <button class="btn-auth-trigger logged-in">
+                <span>🐼 </span> <span data-t="navAccount">Mon Compte</span>
+            </button>
+        </div>
+    </nav>
+
+    <div id="access-denied">
+        <div class="lock-icon">🔒</div>
+        <h2 style="font-size:24px; margin:0 0 10px 0;" data-t="deniedTitle">Accès Restreint</h2>
+        <p style="color:var(--text-sub); max-width:400px; margin:0 auto;" data-t="deniedMsg">
+            Connectez-vous pour accéder aux paramètres de votre compte.
+        </p>
+        <a href="index.html" class="btn-login-big" data-t="deniedBtn">Retour à l'accueil</a>
+    </div>
+
+    <div id="main-container" class="container">
+        <div class="account-card">
+            <div class="account-header">
+                <div class="avatar-circle">🐼</div>
+                <div id="display-email" class="user-email">Chargement...</div>
+                <div style="font-size:12px; color:#9CA3AF; margin-top:5px;" data-t="lblMember">Membre HRNtrack</div>
+            </div>
+
+            <div class="section-title" data-t="lblSecurity">Sécurité</div>
+            <div class="form-group">
+                <input type="password" id="new-password" placeholder="Nouveau mot de passe">
+                <button class="btn-action btn-update" onclick="window.updateUserPassword()" data-t="btnUpdatePass">Mettre à jour le mot de passe</button>
+            </div>
+
+            <div class="section-title" style="margin-top:30px;" data-t="lblEmailSection">Adresse Email</div>
+            <div class="form-group">
+                <input type="email" id="new-email" placeholder="Nouvel email">
+                <button class="btn-action btn-update" onclick="window.updateUserEmail()" data-t="btnUpdateEmail">Mettre à jour l'email</button>
+            </div>
+
+            <button class="btn-action btn-logout" onclick="window.handleLogout()" data-t="btnLogout">Se déconnecter</button>
+        </div>
+
+        <div class="danger-zone">
+            <div class="section-title" style="color:#C0392B;" data-t="lblDanger">Zone de Danger</div>
+            <p style="font-size:12px; color:#555; margin-bottom:15px;" data-t="lblDangerDesc">
+                La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.
+            </p>
+            <button class="btn-delete" onclick="window.deleteUserAccount()" data-t="btnDelete">Supprimer mon compte définitivement</button>
+        </div>
+    </div>
+
+      <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
+                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerNav">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
+                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
+                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
+                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerAbout">À propos</h4>
+                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
+    </footer>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- I18N DICTIONNAIRE ---
+        const translations = {
+            fr: {
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir", navAccount: "Mon Compte",
+                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Retour à l'accueil",
+                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
+                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
+                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
+                footerBottom: "Fait avec passion.",
+                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",
+                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",
+                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
+                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",
+                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : "
+            },
+            en: {
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", navSupport: "Support", navAccount: "My Account",
+                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Back to Home",
+                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
+                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
+                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
+                footerBottom: "Made with passion.",
+                phNewPass: "New password", phNewEmail: "New email",
+                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",
+                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
+                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",
+                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: "
+            }
+        };
+
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        // Helper pour récupérer le texte
+        function t(key) { return translations[currentLang][key] || key; }
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang);
+            updateUIText();
+        };
+
+        function updateUIText() {
+            if(currentLang === 'fr') {
+                document.getElementById('lang-fr').classList.add('active');
+                document.getElementById('lang-en').classList.remove('active');
+            } else {
+                document.getElementById('lang-fr').classList.remove('active');
+                document.getElementById('lang-en').classList.add('active');
+            }
+
+            const tr = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(tr[key]) el.innerText = tr[key];
+            });
+
+            // Update Placeholders
+            document.getElementById('new-password').placeholder = tr.phNewPass;
+            document.getElementById('new-email').placeholder = tr.phNewEmail;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            updateUIText(); // Init Lang
+            if (user) {
+                document.getElementById('access-denied').style.display = 'none';
+                document.getElementById('main-container').style.display = 'block';
+                document.getElementById('display-email').innerText = user.email;
+            } else {
+                document.getElementById('access-denied').style.display = 'flex';
+                document.getElementById('main-container').style.display = 'none';
+            }
+        });
+
+        window.handleLogout = async () => {
+            if(confirm(t('confirmLogout'))) {
+                await signOut(auth);
+                window.location.href = "index.html";
+            }
+        };
+
+        // Helper pour ré-authentifier
+        async function reauth() {
+            const password = prompt(t('alertReauth'));
+            if (!password) return null;
+            const credential = EmailAuthProvider.credential(auth.currentUser.email, password);
+            try {
+                await reauthenticateWithCredential(auth.currentUser, credential);
+                return true;
+            } catch (error) {
+                alert(t('alertReauthErr'));
+                return false;
+            }
+        }
+
+        window.updateUserPassword = async () => {
+            const newPass = document.getElementById('new-password').value;
+            if (newPass.length < 6) return alert(t('alertPassLength'));
+            
+            try {
+                await updatePassword(auth.currentUser, newPass);
+                alert(t('alertPassUpdated'));
+                document.getElementById('new-password').value = "";
+            } catch (error) {
+                if(error.code === 'auth/requires-recent-login') {
+                    const success = await reauth();
+                    if(success) window.updateUserPassword();
+                } else {
+                    alert(t('alertErr') + error.message);
+                }
+            }
+        };
+
+        window.updateUserEmail = async () => {
+            const newEmail = document.getElementById('new-email').value;
+            if (!newEmail) return alert(t('alertEmailInvalid'));
+
+            try {
+                await updateEmail(auth.currentUser, newEmail);
+                alert(t('alertEmailUpdated'));
+                document.getElementById('display-email').innerText = newEmail;
+            } catch (error) {
+                if(error.code === 'auth/requires-recent-login') {
+                    const success = await reauth();
+                    if(success) window.updateUserEmail();
+                } else {
+                    alert(t('alertErr') + error.message);
+                }
+            }
+        };
+
+        window.deleteUserAccount = async () => {
+            if (!confirm(t('confirmDelete'))) return;
+            
+            try {
+                const user = auth.currentUser;
+                await deleteDoc(doc(db, "users", user.uid));
+                await deleteUser(user);
+                alert(t('alertDeleteSuccess'));
+                window.location.href = "index.html";
+            } catch (error) {
+                if(error.code === 'auth/requires-recent-login') {
+                    const success = await reauth();
+                    if(success) window.deleteUserAccount();
+                } else {
+                    alert(t('alertErr') + error.message);
+                }
+            }
+        };
+        // Dans votre balise <script type="module">
+onAuthStateChanged(auth, async (user) => {
+    const btn = document.getElementById('auth-trigger');
+    updateUIText(); // Met à jour les textes FR/EN
+
+    if (user) {
+        // --- UTILISATEUR CONNECTÉ ---
+        if(btn) {
+            btn.classList.add('logged-in');
+            btn.onclick = () => window.location.href = "compte.html";
+        }
+
+        // 1. Charger les données (seulement si on est sur une page à données)
+        if (typeof loadUserData === "function") {
+            await loadUserData(user); 
+        }
+
+        // 2. Afficher le contenu
+        document.getElementById('main-container').style.setProperty('display', 'block', 'important');
+        document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
+
+    } else {
+        // --- UTILISATEUR DÉCONNECTÉ ---
+        if(btn) {
+            btn.classList.remove('logged-in');
+            btn.onclick = () => window.toggleAuthModal();
+        }
+        
+        document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
+        document.getElementById('main-container').style.setProperty('display', 'none', 'important');
+    }
+
+    // --- FINALISATION ---
+    // Cette ligne est la clé : on ne montre le body qu'ici, 
+    // une fois que le bon bloc a été choisi.
+    document.body.classList.add('auth-ready');
+});
+    </script>
+</body>
+</html>

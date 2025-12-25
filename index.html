@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HRNtrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -16,12 +16,14 @@
 
             /* MAPPING DES VARIABLES */
             --primary: var(--color-green);
-            --primary-hover: #557235; /* Version un peu plus sombre du vert pour le hover */
+            --primary-hover: #557235;
             --bg-body: var(--color-light);
             --card-bg: #ffffff;
             --text-main: var(--color-dark);
             --text-sub: #555555;
             --dark-bg: var(--color-dark);
+            
+            --nav-height-mobile: 80px; /* Hauteur de la barre mobile */
         }
 
         body { 
@@ -31,6 +33,7 @@
             margin: 0; 
             -webkit-font-smoothing: antialiased; 
             display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
         }
 
         /* --- HEADER & NAV --- */
@@ -43,11 +46,13 @@
 
         .site-logo { height: 80px; }
 
+        /* NAVIGATION DESKTOP (PAR DÉFAUT) */
         .nav-center {
             position: absolute; left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.05); padding: 4px;
             border-radius: 12px; display: flex; gap: 4px;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2000;
         }
 
         .nav-link {
@@ -56,10 +61,9 @@
             transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
         }
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        /* Le vert est prédominant sur l'actif */
         .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
-        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
 
         /* BOUTON LANGUE (SWITCH) */
         .lang-toggle {
@@ -76,15 +80,68 @@
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         
-        /* État connecté en Vert (prédominant) */
         .btn-auth-trigger.logged-in { 
             background: rgba(106, 140, 71, 0.2); 
             border-color: var(--primary); 
             color: var(--primary); 
+        }
+
+        /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
+        @media (min-width: 769px) {
+            body { padding-bottom: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .site-logo { display: none; } 
+            
+            .hero-section { grid-template-columns: 1fr !important; text-align: center; padding: 40px 20px !important; }
+            .hero-text h1 { font-size: 36px !important; }
+            .hero-text p { margin: 0 auto 30px auto !important; }
+
+            /* Le Header du haut ne garde que Login/Lang/Soutenir */
+            .top-nav {
+                justify-content: flex-end; 
+                padding: 10px 15px;
+            }
+
+            /* La barre de navigation devient une App Bar en bas */
+            .nav-center {
+                position: fixed; 
+                bottom: 0; 
+                top: auto; 
+                left: 0; 
+                transform: none; 
+                width: 100%;
+                background: #1A1A1A; 
+                border-radius: 0;
+                border: none;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; 
+                justify-content: space-around; 
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+                box-sizing: border-box;
+                z-index: 2000;
+            }
+
+            /* Style des liens en mode Mobile */
+            .nav-link {
+                flex-direction: column; 
+                padding: 0;
+                gap: 4px;
+                background: transparent !important; 
+                box-shadow: none !important;
+                color: #6B7280; 
+            }
+
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; }
+
+            .nav-link.active { color: var(--primary); }
+            .nav-link:hover { background: transparent; color: white; }
         }
 
         /* HERO SECTION */
@@ -95,7 +152,6 @@
 
         .hero-text h1 {
             font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
-            /* Dégradé du Noir vers le Vert */
             background: linear-gradient(135deg, var(--color-dark) 0%, var(--primary) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
@@ -105,7 +161,6 @@
             line-height: 1.6; max-width: 500px;
         }
 
-        /* Bouton Principal en Vert */
         .btn-primary {
             background-color: var(--primary); color: white; padding: 15px 35px;
             border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
@@ -147,7 +202,6 @@
         /* DONATION SECTION */
         .donation-section {
             max-width: 900px; margin: 80px auto;
-            /* Arrière-plan foncé demandé */
             background: linear-gradient(135deg, var(--color-dark) 0%, #2c2c2c 100%);
             border-radius: 24px; padding: 50px; text-align: center; color: white;
             position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
@@ -162,7 +216,6 @@
             color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7;
         }
         
-        /* Bouton Café en OR (#C6A875) car c'est secondaire/premium */
         .btn-coffee {
             background: var(--color-gold); color: white; padding: 12px 30px; border-radius: 50px;
             text-decoration: none; font-weight: 700; font-size: 16px;
@@ -171,14 +224,13 @@
         }
         .btn-coffee:hover { transform: scale(1.05); background: #b59865; }
 
-        /* MODALS (Login/Register) */
+        /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
         
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
         
-        /* Utilisation du ROUGE pour le bouton Annuler */
         .btn-cancel { width: 100%; background: transparent; border: none; color: var(--color-red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
         .btn-cancel:hover { text-decoration: underline; }
         
@@ -189,7 +241,7 @@
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-         /* FOOTER */
+        /* FOOTER */
         .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
         .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
@@ -198,34 +250,40 @@
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--primary); }
         .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-
-        @media (max-width: 768px) {
-            .hero-section { grid-template-columns: 1fr; text-align: center; padding: 40px 20px; }
-            .hero-text h1 { font-size: 36px; }
-            .hero-text p { margin: 0 auto 30px auto; }
-            .nav-center { position: fixed; bottom: 20px; top: auto; background: rgba(26, 26, 26, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; border: 1px solid rgba(255,255,255,0.1); }
-            .site-logo { display: none; }
-        }
+    
+        #snow-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Très important : permet de cliquer "à travers" la neige */
+    z-index: 9999; /* Par-dessus tout le reste */
+}
     </style>
 </head>
 <body>
-
+<canvas id="snow-canvas"></canvas>
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
-    <a href="index.html">
-         <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
-    </a>
-</div>
+            <a href="index.html">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            </a>
+        </div>
 
         <div class="nav-center">
-    <a href="index.html" class="nav-link active"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-    <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-    <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-    <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-    <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
-</div>
+            <a href="index.html" class="nav-link active"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
 
         <div class="nav-right">
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
             <div class="lang-toggle" onclick="window.toggleLanguage()">
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
@@ -247,7 +305,7 @@
             <a href="dashboard.html" class="btn-primary" data-t="heroBtn">Démarrer ma collection</a>
         </div>
         <div class="hero-image-container">
-            <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="hero-image" style="background:#1A1A1A; object-fit:contain; height:300px;" alt="Aperçu">
+            <img src="https://i.postimg.cc/wvg5Wkqt/logo1-noir.png" class="hero-image" style="background:#dbd4c8; object-fit:contain; height:300px;" alt="Aperçu">
         </div>
     </div>
 
@@ -326,7 +384,6 @@
             </div>
         </div>
         <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-        
     </footer>
 
     <script type="module">
@@ -340,7 +397,7 @@
         // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats",
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
                 
@@ -365,7 +422,7 @@
                 footerDisclaimer: "Ce site est un projet Fanmade. Non affilié à POP MART."
             },
             en: {
-                navHome: "Home", navCollection: "Collection", navStats: "Stats",
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
 
@@ -458,29 +515,74 @@
             }
         }
 
-        onAuthStateChanged(auth, (user) => {
+        onAuthStateChanged(auth, async (user) => {
+            updateUIText();
             const btn = document.getElementById('auth-trigger');
-            updateUIText(); // Met à jour les textes et le bouton auth
 
             if (user) {
+                // MODIFICATION : Redirection vers compte.html
                 btn.classList.add('logged-in'); 
-                btn.onclick = () => window.handleLogout();
+                btn.onclick = () => window.location.href = "compte.html"; 
             } else {
                 btn.classList.remove('logged-in');
                 btn.onclick = () => window.toggleAuthModal();
             }
         });
         
-    </script>
+        const canvas = document.getElementById('snow-canvas');
+const ctx = canvas.getContext('2d');
 
-    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('hrntrack', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#323842',
-    'floating-chat.donateButton.text-color': '#fff'
-  });
-</script>
+let width, height, snowflakes;
+
+function initSnow() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    snowflakes = [];
+    // Ajuste le nombre de flocons ici (150 est un bon équilibre)
+    for (let i = 0; i < 150; i++) {
+        snowflakes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3 + 1,
+            speed: Math.random() * 1 + 0.5,
+            wind: Math.random() * 0.5 - 0.25,
+            opacity: Math.random() * 0.5 + 0.3
+        });
+    }
+}
+
+function drawSnow() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "white";
+    
+    snowflakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.globalAlpha = flake.opacity;
+        ctx.fill();
+
+        // Déplacement
+        flake.y += flake.speed;
+        flake.x += flake.wind;
+
+        // Si le flocon sort en bas, il réapparaît en haut
+        if (flake.y > height) {
+            flake.y = -10;
+            flake.x = Math.random() * width;
+        }
+    });
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener('resize', initSnow);
+
+// Lancement
+initSnow();
+drawSnow();
+    </script>
 </body>
 </html>

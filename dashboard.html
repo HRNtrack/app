@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HRNtrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* NOUVELLE PALETTE */
+            /* PALETTE */
             --primary: #6A8C47;
             --primary-dark: #557235;
             --bg-body: #F5F5F0;
@@ -21,6 +21,7 @@
             
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --nav-height-mobile: 80px;
         }
 
         body { 
@@ -30,6 +31,7 @@
             margin: 0; 
             -webkit-font-smoothing: antialiased; 
             display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
         }
 
         /* --- HEADER & NAV --- */
@@ -58,7 +60,7 @@
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
         .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
-        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
 
         /* BOUTON LANGUE (SWITCH) */
         .lang-toggle {
@@ -71,23 +73,69 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* BOUTON AUTH */
+        /* BOUTON AUTH / SUPPORT */
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px;
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        @media (max-width: 600px) {
+        /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
+        @media (min-width: 769px) {
+            body { padding-bottom: 0; }
+        }
+
+        @media (max-width: 768px) {
             .site-logo { display: none; } 
-            .nav-center { 
-                position: fixed; bottom: 20px; top: auto; 
-                transform: translateX(-50%); background: rgba(26, 26, 26, 0.95);
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                border: 1px solid rgba(255,255,255,0.1);
+            
+            /* Le Header du haut ne garde que les boutons de droite */
+            .top-nav {
+                justify-content: flex-end; 
+                padding: 10px 15px;
             }
+
+            /* La barre de navigation devient une App Bar en bas */
+            .nav-center {
+                position: fixed; 
+                bottom: 0; 
+                top: auto; 
+                left: 0; 
+                transform: none; 
+                width: 100%;
+                background: #1A1A1A; 
+                border-radius: 0;
+                border: none;
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; 
+                justify-content: space-around; 
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+                box-sizing: border-box;
+                z-index: 2000;
+            }
+
+            /* Style des liens en mode Mobile */
+            .nav-link {
+                flex-direction: column; 
+                padding: 0;
+                gap: 4px;
+                background: transparent !important; 
+                box-shadow: none !important;
+                color: #6B7280; 
+            }
+
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
+
+            .nav-link.active { color: var(--primary); }
+            .nav-link:hover { background: transparent; color: white; }
+
+            /* Ajustement Grid Dashboard Mobile */
+            .modules-grid { grid-template-columns: 1fr !important; }
+            .dashboard-grid { grid-template-columns: 1fr 1fr !important; }
+            .stat-card.progression { grid-column: span 2 !important; }
+            .controls-row { flex-direction: column; gap: 10px; }
         }
 
         /* --- CONTAINER --- */
@@ -152,10 +200,6 @@
         }
         .control-select:focus { border-color: var(--primary); }
 
-        @media (max-width: 768px) {
-            .controls-row { flex-direction: column; gap: 10px; }
-        }
-
         /* GRID */
         .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
         .card {
@@ -204,32 +248,54 @@
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--primary); }
         .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
+    
+    /* À ajouter dans votre balise <style> */
+body {
+    opacity: 0; /* On cache tout au départ */
+    transition: opacity 0.3s ease-in-out;
+}
 
-        @media (max-width: 768px) {
-            .modules-grid { grid-template-columns: 1fr; }
-            .dashboard-grid { grid-template-columns: 1fr 1fr; }
-            .stat-card.progression { grid-column: span 2; }
-        }
+body.auth-ready {
+    opacity: 1; /* On affiche une fois fixé */
+}
+
+/* On cache les deux conteneurs par défaut */
+#access-denied, #main-container {
+    display: none !important;
+}
+#snow-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Très important : permet de cliquer "à travers" la neige */
+    z-index: 9999; /* Par-dessus tout le reste */
+}
     </style>
 </head>
 <body>
-
+<canvas id="snow-canvas"></canvas>
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
-    <a href="index.html">
-         <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
-    </a>
-</div>
+            <a href="index.html">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            </a>
+        </div>
 
         <div class="nav-center">
-    <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-    <a href="dashboard.html" class="nav-link active"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-    <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-    <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-    <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
-</div>
+            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link active"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
 
         <div class="nav-right">
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
             <div class="lang-toggle" onclick="window.toggleLanguage()">
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
@@ -424,7 +490,7 @@
         // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact",
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
@@ -438,14 +504,13 @@
                 deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
                 alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
                 msgNoResults: "Aucune figurine trouvée.",
-                // NOUVELLES CLES AJOUTÉES
                 sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)",
                 sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)",
                 sortDateDesc: "Date d'achat (Récent)",
                 optAllSeries: "Toutes les séries"
             },
             en: {
-                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact",
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
@@ -459,7 +524,6 @@
                 deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
                 alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
                 msgNoResults: "No figures found.",
-                // NOUVELLES CLES AJOUTÉES
                 sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)",
                 sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)",
                 sortDateDesc: "Purchase Date (Newest)",
@@ -718,7 +782,8 @@
             if (user) {
                 // UI: CONNECTÉ
                 btn.classList.add('logged-in'); 
-                btn.onclick = () => window.handleLogout();
+                // MODIFICATION ICI : REDIRECTION VERS COMPTE.HTML
+                btn.onclick = () => window.location.href = "compte.html";
 
                 // Afficher le Dashboard, cacher l'écran verrouillé
                 document.getElementById('access-denied').style.display = 'none';
@@ -873,9 +938,9 @@
                     return (parseFloat(b["Purchase price"])||0) - (parseFloat(a["Purchase price"])||0);
                 }
                 if (sortMode === 'date_desc') {
-                     const dateA = a["Purchase date"] ? new Date(a["Purchase date"]) : new Date(0);
-                     const dateB = b["Purchase date"] ? new Date(b["Purchase date"]) : new Date(0);
-                     return dateB - dateA;
+                      const dateA = a["Purchase date"] ? new Date(a["Purchase date"]) : new Date(0);
+                      const dateB = b["Purchase date"] ? new Date(b["Purchase date"]) : new Date(0);
+                      return dateB - dateA;
                 }
                 return 0;
             });
@@ -1095,15 +1160,98 @@
                 event.target.style.display = "none";
             }
         }
+
+        // Dans votre balise <script type="module">
+onAuthStateChanged(auth, async (user) => {
+    const btn = document.getElementById('auth-trigger');
+    updateUIText(); // Met à jour les textes FR/EN
+
+    if (user) {
+        // --- UTILISATEUR CONNECTÉ ---
+        if(btn) {
+            btn.classList.add('logged-in');
+            btn.onclick = () => window.location.href = "compte.html";
+        }
+
+        // 1. Charger les données (seulement si on est sur une page à données)
+        if (typeof loadUserData === "function") {
+            await loadUserData(user); 
+        }
+
+        // 2. Afficher le contenu
+        document.getElementById('main-container').style.setProperty('display', 'block', 'important');
+        document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
+
+    } else {
+        // --- UTILISATEUR DÉCONNECTÉ ---
+        if(btn) {
+            btn.classList.remove('logged-in');
+            btn.onclick = () => window.toggleAuthModal();
+        }
+        
+        document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
+        document.getElementById('main-container').style.setProperty('display', 'none', 'important');
+    }
+
+    // --- FINALISATION ---
+    // Cette ligne est la clé : on ne montre le body qu'ici, 
+    // une fois que le bon bloc a été choisi.
+    document.body.classList.add('auth-ready');
+});
+const canvas = document.getElementById('snow-canvas');
+const ctx = canvas.getContext('2d');
+
+let width, height, snowflakes;
+
+function initSnow() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width;
+    canvas.height = height;
+
+    snowflakes = [];
+    // Ajuste le nombre de flocons ici (150 est un bon équilibre)
+    for (let i = 0; i < 150; i++) {
+        snowflakes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 3 + 1,
+            speed: Math.random() * 1 + 0.5,
+            wind: Math.random() * 0.5 - 0.25,
+            opacity: Math.random() * 0.5 + 0.3
+        });
+    }
+}
+
+function drawSnow() {
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "white";
+    
+    snowflakes.forEach(flake => {
+        ctx.beginPath();
+        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+        ctx.globalAlpha = flake.opacity;
+        ctx.fill();
+
+        // Déplacement
+        flake.y += flake.speed;
+        flake.x += flake.wind;
+
+        // Si le flocon sort en bas, il réapparaît en haut
+        if (flake.y > height) {
+            flake.y = -10;
+            flake.x = Math.random() * width;
+        }
+    });
+
+    requestAnimationFrame(drawSnow);
+}
+
+window.addEventListener('resize', initSnow);
+
+// Lancement
+initSnow();
+drawSnow();
     </script>
-        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
-<script>
-  kofiWidgetOverlay.draw('hrntrack', {
-    'type': 'floating-chat',
-    'floating-chat.donateButton.text': 'Support me',
-    'floating-chat.donateButton.background-color': '#323842',
-    'floating-chat.donateButton.text-color': '#fff'
-  });
-</script>
 </body>
 </html>
