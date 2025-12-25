@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HRNtrack | Contact</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6A8C47;
+            --primary-dark: #557235;
+            --bg-body: #F5F5F0;
+            --dark-bg: #1A1A1A;
+            --text-main: #1A1A1A;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .site-logo { height: 80px; }
+
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
+
+        /* --- LANGUE TOGGLE --- */
+        .nav-right { display: flex; align-items: center; gap: 15px; }
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        @media (max-width: 768px) {
+            .site-logo { display: none; } 
+            .nav-center { 
+                position: fixed; bottom: 20px; top: auto; 
+                transform: translateX(-50%); background: rgba(26, 26, 26, 0.95);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border: 1px solid rgba(255,255,255,0.1);
+                width: 90%; justify-content: space-around; z-index: 2000;
+            }
+            .nav-link span:last-child { display: none; }
+            .nav-link { padding: 10px; font-size: 18px; }
+        }
+
+        /* --- FORMULAIRE CONTACT --- */
+        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; flex: 1; }
+        
+        .contact-card {
+            background: white; padding: 40px; border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        h1 { color: var(--primary); margin-bottom: 10px; font-size: 28px; text-align: center; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 30px; font-size: 14px; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 12px; font-weight: 700; color: #555; margin-bottom: 8px; text-transform: uppercase; }
+        input, textarea, select {
+            width: 100%; padding: 12px; border: 1px solid #E5E7EB;
+            border-radius: 10px; font-family: inherit; font-size: 14px;
+            box-sizing: border-box; transition: 0.3s;
+        }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
+        
+        textarea { resize: vertical; min-height: 120px; }
+
+        .btn-send {
+            width: 100%; background: var(--primary); color: white;
+            padding: 15px; border: none; border-radius: 10px;
+            font-weight: 600; cursor: pointer; font-size: 16px;
+            transition: 0.2s;
+        }
+        .btn-send:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 40px 20px; margin-top: auto; text-align: center; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <a href="index.html">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            </a>
+        </div>
+        
+        <div class="nav-center">
+            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link active"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
+
+        <div class="nav-right">
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="contact-card">
+            <h1 data-t="pageTitle">Contactez-nous</h1>
+            <p class="subtitle" data-t="pageSubtitle">Une suggestion pour HRNtrack ? Un bug ? Ou juste un petit coucou ?</p>
+            
+            <form id="contactForm" onsubmit="event.preventDefault(); sendContact();">
+                <div class="form-group">
+                    <label data-t="lblYourName">Votre Nom</label>
+                    <input type="text" id="c-name" name="name" data-t-placeholder="phName" placeholder="Votre pseudo ou nom" required>
+                </div>
+                <div class="form-group">
+                    <label data-t="lblYourEmail">Votre Email</label>
+                    <input type="email" id="c-email" name="email" data-t-placeholder="phEmail" placeholder="Pour vous répondre" required>
+                </div>
+                <div class="form-group">
+                    <label data-t="lblSubject">Sujet</label>
+                    <select id="c-subject" name="_subject">
+                        <option value="Suggestion" id="opt-sugg">💡 Suggestion</option>
+                        <option value="Bug" id="opt-bug">🐛 Signaler un bug</option>
+                        <option value="Autre" id="opt-other">👋 Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label data-t="lblMessage">Message</label>
+                    <textarea id="c-message" name="message" data-t-placeholder="phMessage" placeholder="Dites-nous tout..." required></textarea>
+                </div>
+                
+                <input type="text" name="_honey" style="display:none"> <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                
+                <button type="submit" class="btn-send" data-t="btnSend">Envoyer le message</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        &copy; 2025 HRNtrack. <span data-t="footerMade">Fait avec passion.</span>
+    </footer>
+
+    <script>
+        // --- ⚠️ MODIFIE CECI AVEC TON ADRESSE GMAIL ---
+        const MY_EMAIL = "hironotrack@gmail.com"; 
+
+        const translations = {
+            fr: {
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact",
+                pageTitle: "Contactez-nous",
+                pageSubtitle: "Une suggestion pour HRNtrack ? Un bug ? Ou juste un petit coucou ?",
+                lblYourName: "Votre Nom", phName: "Votre pseudo ou nom",
+                lblYourEmail: "Votre Email", phEmail: "Pour vous répondre",
+                lblSubject: "Sujet",
+                optSugg: "💡 Suggestion", optBug: "🐛 Signaler un bug", optOther: "👋 Autre",
+                lblMessage: "Message", phMessage: "Dites-nous tout...",
+                btnSend: "Envoyer le message", btnSending: "Envoi en cours...",
+                alertSuccess: "Message envoyé avec succès ! Merci.",
+                alertError: "Erreur lors de l'envoi : ",
+                footerMade: "Fait avec passion."
+            },
+            en: {
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact",
+                pageTitle: "Contact Us",
+                pageSubtitle: "A suggestion for HRNtrack? A bug? Or just saying hi?",
+                lblYourName: "Your Name", phName: "Your nickname or name",
+                lblYourEmail: "Your Email", phEmail: "So we can reply",
+                lblSubject: "Subject",
+                optSugg: "💡 Suggestion", optBug: "🐛 Report a bug", optOther: "👋 Other",
+                lblMessage: "Message", phMessage: "Tell us everything...",
+                btnSend: "Send Message", btnSending: "Sending...",
+                alertSuccess: "Message sent successfully! Thanks.",
+                alertError: "Error sending message: ",
+                footerMade: "Made with passion."
+            }
+        };
+
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+        window.toggleLanguage = () => { currentLang = (currentLang === 'fr') ? 'en' : 'fr'; localStorage.setItem('HRN_LANG', currentLang); updateUIText(); };
+
+        function updateUIText() {
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => { const key = el.getAttribute('data-t'); if(t[key]) el.innerText = t[key]; });
+            document.querySelectorAll('[data-t-placeholder]').forEach(el => { const key = el.getAttribute('data-t-placeholder'); if(t[key]) el.placeholder = t[key]; });
+            document.getElementById('opt-sugg').innerText = t.optSugg;
+            document.getElementById('opt-bug').innerText = t.optBug;
+            document.getElementById('opt-other').innerText = t.optOther;
+            document.getElementById('lang-fr').className = currentLang === 'fr' ? 'lang-option active' : 'lang-option';
+            document.getElementById('lang-en').className = currentLang === 'en' ? 'lang-option active' : 'lang-option';
+        }
+        updateUIText();
+
+        // --- ENVOI MAIL UNIQUEMENT (Pas de Firebase) ---
+        window.sendContact = async () => {
+            const t = translations[currentLang];
+            const btn = document.querySelector('.btn-send');
+            
+            const name = document.getElementById('c-name').value;
+            const email = document.getElementById('c-email').value;
+            const subject = document.getElementById('c-subject').value;
+            const message = document.getElementById('c-message').value;
+
+            btn.innerText = t.btnSending;
+            btn.disabled = true;
+
+            try {
+                // Envoi à FormSubmit
+                await fetch(`https://formsubmit.co/ajax/${MY_EMAIL}`, {
+                    method: "POST",
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        _subject: `[HRNtrack] ${subject} de ${name}`,
+                        message: message
+                    })
+                });
+
+                alert(t.alertSuccess);
+                document.getElementById('contactForm').reset();
+
+            } catch (e) {
+                console.error(e);
+                alert(t.alertError + e.message);
+            } finally {
+                btn.innerText = t.btnSend;
+                btn.disabled = false;
+            }
+        };
+    </script>
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('hrntrack', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#323842',
+    'floating-chat.donateButton.text-color': '#fff'
+  });
+</script>
+</body>
+</html>

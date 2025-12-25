@@ -3,19 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HRNtrack | Donateurs</title>
+    <title>HRNtrack</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-dark: #4338ca;
-            --bg-body: #F3F4F6;
-            --text-main: #1F2937;
-            --text-sub: #9CA3AF;
-            --gold: #F59E0B;
-            --dark-bg: #111827;
+            /* NOUVELLE PALETTE */
+            --primary: #6A8C47;
+            --primary-dark: #557235;
+            --bg-body: #F5F5F0;
             --card-bg: #ffffff;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+            --gold: #C6A875;
+            --red: #C0392B;
+            --dark-bg: #1A1A1A;
+            
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
@@ -39,7 +42,7 @@
 
         .nav-center {
             position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.1); padding: 4px;
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
             border-radius: 12px; display: flex; gap: 4px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 2000;
@@ -51,7 +54,7 @@
             transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
         }
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
         .nav-right { display: flex; align-items: center; gap: 15px; }
 
@@ -70,36 +73,43 @@
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
             transition: 0.2s; display: flex; align-items: center; gap: 8px;
         }
-        .btn-auth-trigger.logged-in { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7; }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
         @media (max-width: 600px) {
             .site-logo { display: none; } 
             .nav-center { 
                 position: fixed; bottom: 20px; top: auto; 
-                transform: translateX(-50%); background: rgba(17, 24, 39, 0.95);
+                transform: translateX(-50%); background: rgba(26, 26, 26, 0.95);
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border: 1px solid rgba(255,255,255,0.1);
                 z-index: 1000;
             }
         }
 
         /* --- CONTAINER & DONATIONS --- */
         .container { max-width: 800px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        
         .goal-card { background: white; padding: 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; margin-bottom: 40px; position: relative; overflow: hidden; }
         .goal-title { font-size: 14px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 10px; }
         .goal-amount { font-size: 48px; font-weight: 800; color: var(--primary); margin: 0; }
+        
         .progress-container { height: 24px; background: #E5E7EB; border-radius: 12px; overflow: hidden; margin: 20px auto; max-width: 600px; position: relative; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, #F59E0B, #FBBF24); width: 0%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; box-shadow: 0 0 15px rgba(245, 158, 11, 0.5); }
-        .progress-text { position: absolute; width: 100%; text-align: center; top: 0; line-height: 24px; font-size: 11px; font-weight: 800; color: #374151; z-index: 2; mix-blend-mode: overlay; }
+        /* Gradient Vert Nature */
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #8FBC6B); width: 0%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; box-shadow: 0 0 15px rgba(106, 140, 71, 0.4); }
+        .progress-text { position: absolute; width: 100%; text-align: center; top: 0; line-height: 24px; font-size: 11px; font-weight: 800; color: #1F2937; z-index: 2; mix-blend-mode: overlay; }
 
         .donors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
         .donor-card { background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--primary); }
         .donor-name { font-weight: 600; font-size: 14px; }
-        .donor-amount { font-weight: 700; color: var(--primary); font-size: 16px; background: #EEF2FF; padding: 4px 8px; border-radius: 6px; }
+        /* Badge vert pâle */
+        .donor-amount { font-weight: 700; color: var(--primary); font-size: 16px; background: rgba(106, 140, 71, 0.15); padding: 4px 8px; border-radius: 6px; }
 
-        #admin-panel { display: none; background: #1F2937; padding: 20px; border-radius: 15px; margin-bottom: 30px; color: white; }
+        #admin-panel { display: none; background: var(--dark-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; color: white; }
         .admin-row { display: flex; gap: 10px; margin-top: 10px; }
         .admin-input { flex: 1; padding: 10px; border-radius: 6px; border: none; }
         .btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-add:hover { background: var(--primary-dark); }
 
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
@@ -108,35 +118,72 @@
         .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        .btn-save { width: 100%; background: #111827; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--text-sub); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+        input:focus { outline: none; border-color: var(--primary); }
 
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #111827; }
+        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-save:hover { background: var(--primary); }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
+        .btn-cancel:hover { text-decoration: underline; }
+
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
         /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid #374151; font-size: 13px; }
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
         .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         .footer-links { list-style: none; padding: 0; }
         .footer-links li { margin-bottom: 8px; }
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: #818cf8; }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F2937; font-size: 11px; color: #6B7280; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
+
+        /* --- STYLES BOUTON KO-FI CUSTOM --- */
+        .btn-kofi-custom {
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background-color: #6a8c47; /* Bleu Ko-fi */
+            background: linear-gradient(45deg, #6a8c47, #3e522a);
+            color: white; text-decoration: none;
+            padding: 12px 25px; border-radius: 50px;
+            font-weight: 700; font-size: 14px;
+            box-shadow: 0 4px 15px #2f3e20;
+            transition: all 0.3s ease;
+            margin: 20px auto 0;
+            max-width: 250px;
+            border: 2px solid transparent;
+        }
+
+        .btn-kofi-custom:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(41, 171, 224, 0.6);
+        }
+
+        .kofi-icon { font-size: 18px; animation: kofi-wiggle 3s infinite; }
+
+        @keyframes kofi-wiggle {
+            0%, 100% { transform: rotate(0) scale(1); }
+            5% { transform: rotate(-10deg) scale(1.1); }
+            10% { transform: rotate(10deg) scale(1.1); }
+            15% { transform: rotate(-10deg) scale(1.1); }
+            20% { transform: rotate(0) scale(1); }
+        }
     </style>
 </head>
 <body>
 
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
-             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            <a href="index.html">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            </a>
         </div>
         <div class="nav-center">
             <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
             <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
             <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link active"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
         </div>
         <div class="nav-right">
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -144,7 +191,7 @@
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>👤</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
     </nav>
@@ -168,6 +215,11 @@
                 <div id="progress-percent" class="progress-text">0%</div>
             </div>
             <p style="font-size:12px; color:#9CA3AF;"><span data-t="lblGoalDesc">Merci de votre soutien ! ❤️</span></p>
+
+            <a href="https://ko-fi.com/U7U11QWR1G" target="_blank" class="btn-kofi-custom">
+                <span class="kofi-icon">☕</span>
+                <span data-t="btnKofi">Support me on Ko-fi</span>
+            </a>
         </div>
 
         <h2 style="font-size:18px; border-bottom:2px solid #E5E7EB; padding-bottom:10px; margin-bottom:20px;">
@@ -199,6 +251,7 @@
                     <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
                     <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
                     <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -223,8 +276,20 @@
         const ADMIN_EMAIL = "hironotrack@gmail.com"; 
 
         const translations = {
-            fr: { navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Donateurs", authLogin: "Connexion", authAccount: "Compte", btnLogin: "Se connecter", btnCancel: "Annuler", footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien ! ❤️", lblWall: "Mur des Donateurs" },
-            en: { navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", authLogin: "Login", authAccount: "Account", btnLogin: "Log In", btnCancel: "Cancel", footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support! ❤️", lblWall: "Wall of Donors" }
+            fr: { 
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Donateurs", navContact: "Contact", 
+                authLogin: "Connexion", authAccount: "Compte", btnLogin: "Se connecter", btnCancel: "Annuler", 
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", 
+                lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien ! ❤️", lblWall: "Mur des Donateurs",
+                btnKofi: "Soutenez-moi sur Ko-fi" 
+            },
+            en: { 
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", 
+                authLogin: "Login", authAccount: "Account", btnLogin: "Log In", btnCancel: "Cancel", 
+                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", 
+                lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support! ❤️", lblWall: "Wall of Donors",
+                btnKofi: "Support me on Ko-fi"
+            }
         };
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
@@ -280,5 +345,14 @@
 
         loadDonations();
     </script>
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('hrntrack', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#323842',
+    'floating-chat.donateButton.text-color': '#fff'
+  });
+</script>
 </body>
 </html>

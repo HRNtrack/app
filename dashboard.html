@@ -7,18 +7,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-dark: #4338ca;
-            --bg-body: #F3F4F6;
+            /* NOUVELLE PALETTE */
+            --primary: #6A8C47;
+            --primary-dark: #557235;
+            --bg-body: #F5F5F0;
             --card-bg: #ffffff;
-            --text-main: #1F2937;
-            --text-sub: #9CA3AF;
-            --gold: #F59E0B;
-            --gold-light: #FEF3C7;
-            --purple: #8B5CF6;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+            --gold: #C6A875;
+            --gold-light: #F0EAD6;
+            --red: #C0392B; 
+            --dark-bg: #1A1A1A;
+            
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --dark-bg: #111827;
         }
 
         body { 
@@ -42,7 +44,7 @@
 
         .nav-center {
             position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.1); padding: 4px;
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
             border-radius: 12px; display: flex; gap: 4px;
             border: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 2000;
@@ -54,7 +56,7 @@
             transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
         }
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
         .nav-right { display: flex; align-items: center; gap: 15px; }
 
@@ -76,14 +78,15 @@
             transition: 0.2s; display: flex; align-items: center; gap: 8px;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7; }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
         @media (max-width: 600px) {
             .site-logo { display: none; } 
             .nav-center { 
                 position: fixed; bottom: 20px; top: auto; 
-                transform: translateX(-50%); background: rgba(17, 24, 39, 0.95);
+                transform: translateX(-50%); background: rgba(26, 26, 26, 0.95);
                 box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                border: 1px solid rgba(255,255,255,0.1);
             }
         }
 
@@ -96,8 +99,8 @@
             height: 60vh; text-align: center; padding: 20px;
         }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
-        .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); }
-        .btn-login-big:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(79, 70, 229, 0.5); }
+        .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
+        .btn-login-big:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(106, 140, 71, 0.5); background: var(--primary-dark); }
 
         /* --- DASHBOARD WIDGETS --- */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
@@ -112,11 +115,12 @@
         
         .stat-card.progression { border-left-color: var(--primary); grid-column: span 1; }
         .progress-container { background: #E5E7EB; height: 6px; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #818cf8); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
+        /* Gradient Vert Nature */
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #8FBC6B); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
         
-        .stat-card.doubles { border-left-color: var(--purple); }
-        .stat-card.secrets { border-left-color: var(--gold); background: linear-gradient(to right, #fff, #fffbeb); }
-        .stat-card.secrets .icon { position: absolute; right: 15px; top: 15px; font-size: 24px; opacity: 0.2; }
+        .stat-card.doubles { border-left-color: var(--red); }
+        .stat-card.secrets { border-left-color: var(--gold); background: linear-gradient(to right, #fff, #F9F5EB); }
+        .stat-card.secrets .icon { position: absolute; right: 15px; top: 15px; font-size: 24px; opacity: 0.2; color: var(--gold); }
 
         /* MODULES BARS */
         .modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
@@ -131,12 +135,12 @@
             background: white; color: var(--text-sub); font-weight: 600; font-size: 12px; 
             cursor: pointer; transition: 0.3s; white-space: nowrap;
         }
-        .filter-btn:hover { background: #f9fafb; }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 5px rgba(79, 70, 229, 0.3); }
+        .filter-btn:hover { background: #f9fafb; color: var(--primary); border-color: var(--primary); }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 5px rgba(106, 140, 71, 0.3); }
 
         .search-container { margin-bottom: 30px; }
         .search-bar { width: 100%; padding: 14px 20px; border-radius: 14px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-shadow: var(--shadow); transition: 0.3s; box-sizing: border-box; outline: none; }
-        .search-bar:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        .search-bar:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
 
         /* --- CONTROLES AVANCÉS --- */
         .controls-row { display: flex; gap: 15px; margin-bottom: 15px; }
@@ -159,7 +163,7 @@
             box-shadow: var(--shadow); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer; position: relative; border: 2px solid transparent;
         }
-        .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+        .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(106, 140, 71, 0.3); }
         .card.owned { border-color: var(--primary); }
         .card.secret { border-color: var(--gold); background: linear-gradient(to bottom, #fff, var(--gold-light)); }
         
@@ -180,23 +184,26 @@
         .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        .btn-save { width: 100%; background: #111827; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
+        
+        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--text-sub); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600;}
+        .btn-cancel:hover { text-decoration: underline; }
 
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #111827; }
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
         /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid #374151; font-size: 13px; }
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
         .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         .footer-links { list-style: none; padding: 0; }
         .footer-links li { margin-bottom: 8px; }
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: #818cf8; }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F2937; font-size: 11px; color: #6B7280; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
 
         @media (max-width: 768px) {
             .modules-grid { grid-template-columns: 1fr; }
@@ -209,20 +216,18 @@
 
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
-             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
-        </div>
+    <a href="index.html">
+         <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+    </a>
+</div>
 
         <div class="nav-center">
-            <a href="index.html" class="nav-link">
-                <span>🏠</span> <span data-t="navHome">Accueil</span>
-            </a>
-            <a href="dashboard.html" class="nav-link active">
-                <span>📋</span> <span data-t="navCollection">Collection</span>
-            </a>
-            <a href="statistiques.html" class="nav-link">
-                <span>📊</span> <span data-t="navStats">Stats</span>
-            </a>
-        </div>
+    <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+    <a href="dashboard.html" class="nav-link active"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+    <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+    <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+    <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+</div>
 
         <div class="nav-right">
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -231,7 +236,7 @@
             </div>
 
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>👤</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
     </nav>
@@ -267,22 +272,22 @@
 
             <div class="stat-card doubles">
                 <h3 data-t="kpiDoubles">Doubles</h3>
-                <span class="value" id="stat-doubles-val" style="color:var(--purple)">0</span>
+                <span class="value" id="stat-doubles-val" style="color:var(--red)">0</span>
             </div>
 
             <div class="stat-card secrets">
                 <div class="icon">★</div>
                 <h3 data-t="kpiSecrets">Secrets</h3>
-                <span class="value" style="color:#b45309" id="stat-secrets">0</span>
+                <span class="value" style="color:var(--gold)" id="stat-secrets">0</span>
             </div>
         </div>
 
         <div class="modules-grid">
-            <div class="stat-card" style="border-left-color: #EC4899;">
+            <div class="stat-card" style="border-left-color: var(--red);">
                 <h3 data-t="kpiCondition">État</h3>
                 <div id="stat-condition-list" style="margin-top:15px"></div>
             </div>
-            <div class="stat-card" style="border-left-color: #10B981;">
+            <div class="stat-card" style="border-left-color: var(--primary);">
                 <h3 data-t="kpiSeries">Séries</h3>
                 <div id="stat-series-list" style="margin-top:15px"></div>
             </div>
@@ -300,11 +305,11 @@
             </select>
 
             <select id="sort-order" class="control-select" onchange="window.updateGrid()">
-                <option value="name_asc">Nom (A-Z)</option>
-                <option value="name_desc">Nom (Z-A)</option>
-                <option value="price_asc">Prix d'achat (Croissant)</option>
-                <option value="price_desc">Prix d'achat (Décroissant)</option>
-                <option value="date_desc">Date d'achat (Récent)</option>
+                <option value="name_asc" data-t="sortNameAsc">Nom (A-Z)</option>
+                <option value="name_desc" data-t="sortNameDesc">Nom (Z-A)</option>
+                <option value="price_asc" data-t="sortPriceAsc">Prix d'achat (Croissant)</option>
+                <option value="price_desc" data-t="sortPriceDesc">Prix d'achat (Décroissant)</option>
+                <option value="date_desc" data-t="sortDateDesc">Date d'achat (Récent)</option>
             </select>
         </div>
 
@@ -320,7 +325,7 @@
             <div style="text-align:center; margin-bottom:15px;">
                 <img id="edit-img" src="" style="height:120px; object-fit:contain; border-radius:8px;">
                 <br>
-                <span id="edit-secret-badge" style="display:none; background:#F59E0B; color:white; font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:5px; text-transform:uppercase;">✨ Secret Rare</span>
+                <span id="edit-secret-badge" style="display:none; background:var(--gold); color:white; font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:5px; text-transform:uppercase;">✨ Secret Rare</span>
             </div>
 
             <h2 id="edit-title" style="margin:0; font-size:1.3rem;"></h2>
@@ -374,7 +379,7 @@
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:#1F2937; border:1px solid #E5E7EB;" data-t="btnRegister">
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
                 Créer un compte
             </button>
             
@@ -395,6 +400,7 @@
                     <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
                     <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
                     <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -418,36 +424,55 @@
         // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats",
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
                 filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Rechercher une figurine...",
                 lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
-                btnSave: "Enregistrer", btnClose: "Fermer",
+                btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
                 optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant"
+                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
+                alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
+                msgNoResults: "Aucune figurine trouvée.",
+                // NOUVELLES CLES AJOUTÉES
+                sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)",
+                sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)",
+                sortDateDesc: "Date d'achat (Récent)",
+                optAllSeries: "Toutes les séries"
             },
             en: {
-                navHome: "Home", navCollection: "Collection", navStats: "Stats",
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
                 filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Search for a figure...",
                 lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
-                btnSave: "Save", btnClose: "Close",
+                btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
                 optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
                 footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
-                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now"
+                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
+                alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
+                msgNoResults: "No figures found.",
+                // NOUVELLES CLES AJOUTÉES
+                sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)",
+                sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)",
+                sortDateDesc: "Purchase Date (Newest)",
+                optAllSeries: "All Series"
             }
         };
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        // Helper pour récupérer le texte dynamique
+        function t(key) {
+            return translations[currentLang][key] || key;
+        }
 
         window.toggleLanguage = () => {
             currentLang = (currentLang === 'fr') ? 'en' : 'fr';
@@ -464,19 +489,22 @@
                 document.getElementById('lang-en').classList.add('active');
             }
 
-            const t = translations[currentLang];
+            const tr = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
-                if(t[key]) el.innerText = t[key];
+                if(tr[key]) el.innerText = tr[key];
             });
 
-            document.getElementById('searchBar').placeholder = t.searchPlaceholder;
+            document.getElementById('searchBar').placeholder = tr.searchPlaceholder;
 
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
-            if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+            if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
 
-            // Rafraîchir les valeurs (monnaie/date) si les données sont chargées
+            // Mettre à jour le dropdown des séries
+            initSeriesFilter();
+
+            // Rafraîchir les valeurs (monnaie/date) et la grille pour les textes dynamiques
             if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') window.updateGrid();
         }
 
@@ -675,7 +703,7 @@
             {"ID":"SPE-YYCEBUR","Name":"Yin-Yang Incense Burner","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jqgYwXXW/m55817971196-1-removebg-preview.png"},
             {"ID":"SPE-UNKJOUR","Name":"Unknown Journey","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wM9ccLQB/Hirono-Unknown-Journey-Lang-Studio-Hirono-Self-produced-trampt-376190o-removebg-preview.png"},
             {"ID":"SPE-RESHSCULP","Name":"Reshape Sculpture 399","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/dtkDNDNJ/20240417-120205-872596-1200x1200-removebg-preview.png"},
-            {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP-MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"}
+            {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP_MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"}
         ];
 
         let myCollection = [...baseData];
@@ -761,25 +789,25 @@
         window.handleLogin = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
-            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            if(!email || !pass) return alert(t('alertFill'));
             try {
                 await signInWithEmailAndPassword(auth, email, pass);
                 window.toggleAuthModal();
-            } catch(e) { alert("Erreur: " + e.message); }
+            } catch(e) { alert(t('alertErr') + e.message); }
         };
 
         window.handleRegister = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
-            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            if(!email || !pass) return alert(t('alertFill'));
             try {
                 await createUserWithEmailAndPassword(auth, email, pass);
                 window.toggleAuthModal();
-            } catch(e) { alert("Erreur: " + e.message); }
+            } catch(e) { alert(t('alertErr') + e.message); }
         };
 
         window.handleLogout = async () => {
-            if(confirm("Voulez-vous vraiment vous déconnecter ?")) {
+            if(confirm(t('confirmLogout'))) {
                 await signOut(auth);
                 location.reload(); 
             }
@@ -789,7 +817,8 @@
         const initSeriesFilter = () => {
             const series = [...new Set(baseData.map(i => i.Serie))].sort();
             const select = document.getElementById('filter-series');
-            select.innerHTML = `<option value="all">Toutes les séries</option>`;
+            // Utilisation de la traduction pour "Toutes les séries"
+            select.innerHTML = `<option value="all">${t('optAllSeries')}</option>`;
             series.forEach(s => {
                 const opt = document.createElement('option');
                 opt.value = s;
@@ -905,13 +934,26 @@
                 </div>
             `;
             
+            /* Condition: Rouge (#C0392B) */
+            // MAPPING DES CONDITIONS POUR TRADUCTION
+            const conditionKeys = {
+                "Neuf": "condMint",
+                "Bon": "condGood",
+                "Moyen": "condFair",
+                "Abimé": "condDamaged",
+                "Inconnu": "condUnknown"
+            };
+
             document.getElementById('stat-condition-list').innerHTML = Object.entries(condMap)
                 .sort((a,b)=>b[1]-a[1]).slice(0,3)
                 .map(([k,v]) => {
                     const pct = stats.totalItems > 0 ? (v / stats.totalItems) * 100 : 0;
-                    return renderBar(k, v, pct, '#EC4899');
+                    // Traduction du label de condition
+                    const translatedLabel = t(conditionKeys[k] || 'condUnknown');
+                    return renderBar(translatedLabel, v, pct, '#C0392B');
                 }).join('');
 
+            /* Séries: Vert (#6A8C47) */
             document.getElementById('stat-series-list').innerHTML = Object.entries(serMap)
                 .map(([k,v]) => {
                     const p = v.total > 0 ? Math.round((v.owned/v.total)*100) : 0;
@@ -920,7 +962,7 @@
                 .sort((a,b) => b.percent - a.percent)
                 .filter(s => s.percent > 0)
                 .slice(0,3)
-                .map(s => renderBar(s.name, s.percent + '%', s.percent, '#10B981'))
+                .map(s => renderBar(s.name, s.percent + '%', s.percent, '#6A8C47'))
                 .join('');
 
 
@@ -940,6 +982,7 @@
                 
                 card.onclick = () => window.openModal(item);
                 
+                /* Prix en Vert */
                 card.innerHTML = `
                     ${(owned && item.Quantity > 1) ? `<div class="qty-badge">x${item.Quantity}</div>` : ''}
                     ${isSecret ? `<div class="secret-badge">★</div>` : ''}
@@ -947,7 +990,7 @@
                     <div class="card-info">
                         <p class="card-name">${item.Name}</p>
                         <p class="card-serie">${item.Serie}</p>
-                        ${(owned && item["Purchase price"] > 0) ? `<p style="font-size:10px; color:#10B981; margin:2px 0 0;">${parseFloat(item["Purchase price"]).toFixed(2)}€</p>` : ''}
+                        ${(owned && item["Purchase price"] > 0) ? `<p style="font-size:10px; color:#6A8C47; margin:2px 0 0;">${parseFloat(item["Purchase price"]).toFixed(2)}€</p>` : ''}
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -955,7 +998,7 @@
             grid.appendChild(fragment);
 
             if(dataForGrid.length === 0) {
-                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#9CA3AF;">Aucune figurine trouvée.</div>`;
+                grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#9CA3AF;">${t('msgNoResults')}</div>`;
             }
         };
 
@@ -1007,7 +1050,7 @@
                 }
 
                 const saveBtn = document.querySelector('.btn-save');
-                saveBtn.innerText = "Sauvegarde...";
+                saveBtn.innerText = t('btnSaving');
                 saveBtn.disabled = true;
 
                 const collectionPropre = myCollection.map(item => {
@@ -1029,17 +1072,17 @@
                     localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre));
                 }
 
-                saveBtn.innerText = "Enregistrer";
+                saveBtn.innerText = t('btnSave');
                 saveBtn.disabled = false;
                 window.fermer();
                 window.updateGrid();
 
             } catch (error) {
                 console.error("Erreur de sauvegarde :", error);
-                alert("Erreur : " + error.message);
+                alert(t('alertErr') + error.message);
                 const saveBtn = document.querySelector('.btn-save');
                 if(saveBtn) {
-                    saveBtn.innerText = "Enregistrer";
+                    saveBtn.innerText = t('btnSave');
                     saveBtn.disabled = false;
                 }
             }
@@ -1053,5 +1096,14 @@
             }
         }
     </script>
+        <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('hrntrack', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#323842',
+    'floating-chat.donateButton.text-color': '#fff'
+  });
+</script>
 </body>
 </html>

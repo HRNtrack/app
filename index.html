@@ -7,13 +7,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4F46E5;
-            --primary-hover: #4338ca;
-            --bg-body: #F3F4F6;
+            /* PALETTE IMPOSÉE */
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-gold: #C6A875;
+            --color-red: #C0392B;
+            --color-green: #6A8C47;
+
+            /* MAPPING DES VARIABLES */
+            --primary: var(--color-green);
+            --primary-hover: #557235; /* Version un peu plus sombre du vert pour le hover */
+            --bg-body: var(--color-light);
             --card-bg: #ffffff;
-            --text-main: #1F2937;
-            --text-sub: #6B7280;
-            --dark-bg: #111827;
+            --text-main: var(--color-dark);
+            --text-sub: #555555;
+            --dark-bg: var(--color-dark);
         }
 
         body { 
@@ -37,7 +45,7 @@
 
         .nav-center {
             position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.1); padding: 4px;
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
             border-radius: 12px; display: flex; gap: 4px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
@@ -48,7 +56,8 @@
             transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
         }
         .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(79, 70, 229, 0.4); }
+        /* Le vert est prédominant sur l'actif */
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
         .nav-right { display: flex; align-items: center; gap: 15px; }
 
@@ -70,7 +79,13 @@
             transition: 0.2s; display: flex; align-items: center; gap: 8px;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); color: #6EE7B7; }
+        
+        /* État connecté en Vert (prédominant) */
+        .btn-auth-trigger.logged-in { 
+            background: rgba(106, 140, 71, 0.2); 
+            border-color: var(--primary); 
+            color: var(--primary); 
+        }
 
         /* HERO SECTION */
         .hero-section {
@@ -80,7 +95,8 @@
 
         .hero-text h1 {
             font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
-            background: linear-gradient(135deg, #1F2937 0%, #4F46E5 100%);
+            /* Dégradé du Noir vers le Vert */
+            background: linear-gradient(135deg, var(--color-dark) 0%, var(--primary) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
@@ -89,15 +105,16 @@
             line-height: 1.6; max-width: 500px;
         }
 
+        /* Bouton Principal en Vert */
         .btn-primary {
             background-color: var(--primary); color: white; padding: 15px 35px;
             border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s; display: inline-block;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; display: inline-block;
+            box-shadow: 0 4px 15px rgba(106, 140, 71, 0.3);
         }
         .btn-primary:hover {
             background-color: var(--primary-hover); transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
+            box-shadow: 0 8px 25px rgba(106, 140, 71, 0.4);
         }
 
         .hero-image-container { position: relative; }
@@ -116,7 +133,7 @@
         }
 
         .feature-card {
-            padding: 30px; border-radius: 20px; background: #F9FAFB;
+            padding: 30px; border-radius: 20px; background: var(--bg-body);
             transition: transform 0.3s; border: 1px solid #E5E7EB;
         }
         .feature-card:hover {
@@ -130,9 +147,11 @@
         /* DONATION SECTION */
         .donation-section {
             max-width: 900px; margin: 80px auto;
-            background: linear-gradient(135deg, #111827 0%, #1F2937 100%);
+            /* Arrière-plan foncé demandé */
+            background: linear-gradient(135deg, var(--color-dark) 0%, #2c2c2c 100%);
             border-radius: 24px; padding: 50px; text-align: center; color: white;
             position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
         }
         .donation-section::before {
             content: "☕"; position: absolute; top: -20px; right: -20px;
@@ -142,39 +161,49 @@
         .donation-section p { 
             color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7;
         }
+        
+        /* Bouton Café en OR (#C6A875) car c'est secondaire/premium */
         .btn-coffee {
-            background: #FFDD00; color: #000; padding: 12px 30px; border-radius: 50px;
+            background: var(--color-gold); color: white; padding: 12px 30px; border-radius: 50px;
             text-decoration: none; font-weight: 700; font-size: 16px;
             display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(198, 168, 117, 0.4);
         }
-        .btn-coffee:hover { transform: scale(1.05); background: #FFEA00; }
+        .btn-coffee:hover { transform: scale(1.05); background: #b59865; }
 
         /* MODALS (Login/Register) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
-        .btn-save { width: 100%; background: #111827; color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        
+        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--text-sub); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; }
+        
+        /* Utilisation du ROUGE pour le bouton Annuler */
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--color-red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
+        .btn-cancel:hover { text-decoration: underline; }
+        
         input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: #111827; }
+        input:focus { outline: none; border-color: var(--primary); }
+
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
          /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid #374151; font-size: 13px; }
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
         .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
         .footer-links { list-style: none; padding: 0; }
         .footer-links li { margin-bottom: 8px; }
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: #818cf8; }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #1F2937; font-size: 11px; color: #6B7280; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
 
         @media (max-width: 768px) {
             .hero-section { grid-template-columns: 1fr; text-align: center; padding: 40px 20px; }
             .hero-text h1 { font-size: 36px; }
             .hero-text p { margin: 0 auto 30px auto; }
-            .nav-center { position: fixed; bottom: 20px; top: auto; background: rgba(17, 24, 39, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; }
+            .nav-center { position: fixed; bottom: 20px; top: auto; background: rgba(26, 26, 26, 0.95); box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 2000; border: 1px solid rgba(255,255,255,0.1); }
             .site-logo { display: none; }
         }
     </style>
@@ -183,20 +212,18 @@
 
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
-             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
-        </div>
+    <a href="index.html">
+         <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+    </a>
+</div>
 
         <div class="nav-center">
-            <a href="index.html" class="nav-link active">
-                <span>🏠</span> <span data-t="navHome">Accueil</span>
-            </a>
-            <a href="dashboard.html" class="nav-link">
-                <span>📋</span> <span data-t="navCollection">Collection</span>
-            </a>
-            <a href="statistiques.html" class="nav-link">
-                <span>📊</span> <span data-t="navStats">Stats</span>
-            </a>
-        </div>
+    <a href="index.html" class="nav-link active"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+    <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+    <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+    <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+    <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+</div>
 
         <div class="nav-right">
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -205,7 +232,7 @@
             </div>
 
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>👤</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
     </nav>
@@ -220,7 +247,7 @@
             <a href="dashboard.html" class="btn-primary" data-t="heroBtn">Démarrer ma collection</a>
         </div>
         <div class="hero-image-container">
-            <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="hero-image" style="background:#111827; object-fit:contain; height:300px;" alt="Aperçu">
+            <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="hero-image" style="background:#1A1A1A; object-fit:contain; height:300px;" alt="Aperçu">
         </div>
     </div>
 
@@ -269,7 +296,7 @@
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:#1F2937; border:1px solid #E5E7EB;" data-t="btnRegister">
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
                 Créer un compte
             </button>
             
@@ -290,6 +317,7 @@
                     <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
                     <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
                     <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
                 </ul>
             </div>
             <div class="footer-col">
@@ -298,6 +326,7 @@
             </div>
         </div>
         <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
+        
     </footer>
 
     <script type="module">
@@ -441,6 +470,17 @@
                 btn.onclick = () => window.toggleAuthModal();
             }
         });
+        
     </script>
+
+    <script src='https://storage.ko-fi.com/cdn/scripts/overlay-widget.js'></script>
+<script>
+  kofiWidgetOverlay.draw('hrntrack', {
+    'type': 'floating-chat',
+    'floating-chat.donateButton.text': 'Support me',
+    'floating-chat.donateButton.background-color': '#323842',
+    'floating-chat.donateButton.text-color': '#fff'
+  });
+</script>
 </body>
 </html>
