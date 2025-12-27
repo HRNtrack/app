@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack</title>
+    <title>HRNtrack - Mon Compte</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -27,6 +27,17 @@
             margin: 0; 
             display: flex; flex-direction: column; min-height: 100vh;
             padding-bottom: var(--nav-height-mobile);
+            opacity: 0; /* On cache tout au départ */
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        body.auth-ready {
+            opacity: 1; /* On affiche une fois chargé */
+        }
+
+        /* On cache les deux conteneurs par défaut pour éviter le FOUC */
+        #access-denied, #main-container {
+            display: none !important;
         }
 
         /* --- HEADER & NAV --- */
@@ -64,7 +75,6 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
@@ -92,7 +102,7 @@
         }
 
         /* --- PAGE CONTENT --- */
-        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
+        .container { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
         .account-card { background: white; padding: 30px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
         .account-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #E5E7EB; padding-bottom: 20px; }
@@ -117,7 +127,7 @@
         .btn-delete:hover { background: #a93226; }
 
         /* ACCESS DENIED */
-        #access-denied { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
+        #access-denied { flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
         .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
 
@@ -130,21 +140,6 @@
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--primary); }
         .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-    /* À ajouter dans votre balise <style> */
-body {
-    opacity: 0; /* On cache tout au départ */
-    transition: opacity 0.3s ease-in-out;
-}
-
-body.auth-ready {
-    opacity: 1; /* On affiche une fois fixé */
-}
-
-/* On cache les deux conteneurs par défaut */
-#access-denied, #main-container {
-    display: none !important;
-}
-
     </style>
 </head>
 <body>
@@ -170,7 +165,7 @@ body.auth-ready {
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
 
-            <button class="btn-auth-trigger logged-in">
+            <button id="nav-account-btn" class="btn-auth-trigger logged-in">
                 <span>🐼 </span> <span data-t="navAccount">Mon Compte</span>
             </button>
         </div>
@@ -223,24 +218,22 @@ body.auth-ready {
                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
                 <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
             </div>
-            <div class="footer-col">
-                <h4 data-t="footerNav">Navigation</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
-                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
+<div class="footer-col">
+    <h4 data-t="footerNav">Navigation</h4>
+    <ul class="footer-links"> <li><a href="index.html" data-t="navHome">Accueil</a></li>
+        <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
+        <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
+        <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
+        <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+        <li><a href="contact.html" data-t="navContact">Contact</a></li>
+    </ul>
+</div>            <div class="footer-col">
                 <h4 data-t="footerAbout">À propos</h4>
                 <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
             </div>
         </div>
         <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
     </footer>
-
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -260,7 +253,7 @@ body.auth-ready {
                 lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
                 btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
                 lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
-                footerBottom: "Fait avec passion.",
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",
                 alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",
                 alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
@@ -273,7 +266,7 @@ body.auth-ready {
                 lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
                 btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
                 lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
-                footerBottom: "Made with passion.",
+                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
                 phNewPass: "New password", phNewEmail: "New email",
                 alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",
                 alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
@@ -305,7 +298,10 @@ body.auth-ready {
             const tr = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
-                if(tr[key]) el.innerText = tr[key];
+                if(tr[key]) {
+                    // Utilisation de innerHTML pour supporter les balises comme <br>
+                    el.innerHTML = tr[key];
+                }
             });
 
             // Update Placeholders
@@ -313,16 +309,27 @@ body.auth-ready {
             document.getElementById('new-email').placeholder = tr.phNewEmail;
         }
 
+        // --- AUTH LOGIC & ANTI-FLICKER ---
         onAuthStateChanged(auth, (user) => {
             updateUIText(); // Init Lang
+            
             if (user) {
-                document.getElementById('access-denied').style.display = 'none';
-                document.getElementById('main-container').style.display = 'block';
+                // Utilisateur connecté : On affiche le dashboard
+                document.getElementById('main-container').style.setProperty('display', 'block', 'important');
+                document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
                 document.getElementById('display-email').innerText = user.email;
             } else {
-                document.getElementById('access-denied').style.display = 'flex';
-                document.getElementById('main-container').style.display = 'none';
+                // Utilisateur déconnecté : On affiche l'accès refusé
+                document.getElementById('main-container').style.setProperty('display', 'none', 'important');
+                document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
+                
+                // On met à jour le bouton Mon Compte en "Login" si besoin, ou on le cache
+                const navBtn = document.getElementById('nav-account-btn');
+                if(navBtn) navBtn.classList.remove('logged-in');
             }
+            
+            // On révèle la page en fondu
+            document.body.classList.add('auth-ready');
         });
 
         window.handleLogout = async () => {
@@ -387,7 +394,9 @@ body.auth-ready {
             
             try {
                 const user = auth.currentUser;
+                // Supprimer d'abord les données Firestore
                 await deleteDoc(doc(db, "users", user.uid));
+                // Ensuite supprimer l'utilisateur Auth
                 await deleteUser(user);
                 alert(t('alertDeleteSuccess'));
                 window.location.href = "index.html";
@@ -400,43 +409,6 @@ body.auth-ready {
                 }
             }
         };
-        // Dans votre balise <script type="module">
-onAuthStateChanged(auth, async (user) => {
-    const btn = document.getElementById('auth-trigger');
-    updateUIText(); // Met à jour les textes FR/EN
-
-    if (user) {
-        // --- UTILISATEUR CONNECTÉ ---
-        if(btn) {
-            btn.classList.add('logged-in');
-            btn.onclick = () => window.location.href = "compte.html";
-        }
-
-        // 1. Charger les données (seulement si on est sur une page à données)
-        if (typeof loadUserData === "function") {
-            await loadUserData(user); 
-        }
-
-        // 2. Afficher le contenu
-        document.getElementById('main-container').style.setProperty('display', 'block', 'important');
-        document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-
-    } else {
-        // --- UTILISATEUR DÉCONNECTÉ ---
-        if(btn) {
-            btn.classList.remove('logged-in');
-            btn.onclick = () => window.toggleAuthModal();
-        }
-        
-        document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
-        document.getElementById('main-container').style.setProperty('display', 'none', 'important');
-    }
-
-    // --- FINALISATION ---
-    // Cette ligne est la clé : on ne montre le body qu'ici, 
-    // une fois que le bon bloc a été choisi.
-    document.body.classList.add('auth-ready');
-});
     </script>
 </body>
 </html>

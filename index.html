@@ -8,23 +8,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PALETTE IMPOSÉE */
             --color-dark: #1A1A1A;
             --color-light: #F5F5F0;
             --color-gold: #C6A875;
             --color-red: #C0392B;
             --color-green: #6A8C47;
 
-            /* MAPPING DES VARIABLES */
             --primary: var(--color-green);
             --primary-hover: #557235;
             --bg-body: var(--color-light);
             --card-bg: #ffffff;
-            --text-main: var(--color-dark);
+            --text-main: #1A1A1A;
             --text-sub: #555555;
             --dark-bg: var(--color-dark);
             
-            --nav-height-mobile: 80px; /* Hauteur de la barre mobile */
+            --nav-height-mobile: 80px;
         }
 
         body { 
@@ -34,7 +32,7 @@
             margin: 0; 
             -webkit-font-smoothing: antialiased; 
             display: flex; flex-direction: column; min-height: 100vh;
-            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
+            padding-bottom: var(--nav-height-mobile);
         }
 
         /* --- HEADER & NAV --- */
@@ -47,7 +45,6 @@
 
         .site-logo { height: 80px; }
 
-        /* NAVIGATION DESKTOP (PAR DÉFAUT) */
         .nav-center {
             position: absolute; left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.05); padding: 4px;
@@ -66,7 +63,6 @@
 
         .nav-right { display: flex; align-items: center; gap: 10px; }
 
-        /* BOUTON LANGUE (SWITCH) */
         .lang-toggle {
             display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
             padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
@@ -77,84 +73,73 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* BOUTON AUTH */
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
             transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
         }
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        
-        .btn-auth-trigger.logged-in { 
-            background: rgba(106, 140, 71, 0.2); 
-            border-color: var(--primary); 
-            color: var(--primary); 
-        }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
-        @media (min-width: 769px) {
-            body { padding-bottom: 0; }
-        }
-
+        @media (min-width: 769px) { body { padding-bottom: 0; } }
         @media (max-width: 768px) {
             .site-logo { display: none; } 
+            .top-nav { justify-content: flex-end; padding: 10px 15px; }
             
-            .hero-section { grid-template-columns: 1fr !important; text-align: center; padding: 40px 20px !important; }
-            .hero-text h1 { font-size: 36px !important; }
-            .hero-text p { margin: 0 auto 30px auto !important; }
-
-            /* Le Header du haut ne garde que Login/Lang/Soutenir */
-            .top-nav {
-                justify-content: flex-end; 
-                padding: 10px 15px;
-            }
-
-            /* La barre de navigation devient une App Bar en bas */
             .nav-center {
                 position: fixed; 
                 bottom: 0; 
                 top: auto; 
                 left: 0; 
-                transform: none; 
                 width: 100%;
+                transform: none; 
                 background: #1A1A1A; 
-                border-radius: 0;
-                border: none;
+                border: none; 
                 border-top: 1px solid rgba(255,255,255,0.1);
                 padding: 8px 0 25px 0; 
                 justify-content: space-around; 
                 box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-                box-sizing: border-box;
                 z-index: 2000;
+                box-sizing: border-box; 
             }
 
-            /* Style des liens en mode Mobile */
-            .nav-link {
-                flex-direction: column; 
-                padding: 0;
-                gap: 4px;
-                background: transparent !important; 
-                box-shadow: none !important;
-                color: #6B7280; 
-            }
-
+            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
             .nav-link span:first-child { font-size: 20px; }
             .nav-link span:last-child { font-size: 10px; font-weight: 500; }
-
             .nav-link.active { color: var(--primary); }
-            .nav-link:hover { background: transparent; color: white; }
+            
+            /* Ajustement Hero Mobile */
+            .hero-section { grid-template-columns: 1fr !important; text-align: center; padding: 40px 20px 80px 20px !important; }
+            .hero-text h1 { font-size: 36px !important; }
+            .hero-text p { margin: 0 auto 30px auto !important; }
+
+            /* --- CORRECTIF IMAGE MOBILE (AVEC 3D) --- */
+            .hero-image-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+                padding: 0 10px;
+            }
+            .hero-image {
+                max-width: 200px; /* Taille réduite pour mobile */
+                height: auto !important;
+                margin: 0 auto;
+                /* On garde l'effet 3D hérité du desktop */
+            }
         }
 
-        /* HERO SECTION */
+        /* HERO SECTION - Ajustée pour l'intégration */
         .hero-section {
-            padding: 80px 20px; max-width: 1200px; margin: 0 auto;
+            padding: 80px 20px 100px 20px; /* Plus d'espace en bas pour le chevauchement */
+            max-width: 1200px; margin: 0 auto;
             display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+            position: relative;
         }
 
         .hero-text h1 {
             font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
             background: linear-gradient(135deg, var(--color-dark) 0%, var(--primary) 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
         .hero-text p {
@@ -181,8 +166,65 @@
         }
         .hero-image:hover { transform: perspective(1000px) rotateY(0deg); }
 
+        /* --- NOUVEAUTÉ SECTION (INTEGRÉE) --- */
+        .news-banner {
+            max-width: 1000px;
+            margin: -60px auto 40px auto; /* Marge négative pour remonter sur le Hero */
+            padding: 0 20px;
+            position: relative;
+            z-index: 10; /* Au-dessus du hero */
+        }
+        .news-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-left: 5px solid var(--primary); /* Bordure latérale élégante */
+            border-radius: 12px;
+            padding: 25px 35px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Ombre douce pour l'effet flottant */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .news-card:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        }
+        
+        .news-content { flex: 1; }
+        
+        .badge-new {
+            background: var(--color-red); color: white;
+            font-size: 10px; font-weight: 800; padding: 3px 8px;
+            border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
+            display: inline-block; margin-bottom: 8px; vertical-align: middle;
+        }
+
+        .news-card h3 { 
+            margin: 0 0 5px 0; font-size: 18px; color: var(--text-main); font-weight: 700;
+            display: inline-block; vertical-align: middle; margin-left: 8px;
+        }
+        .news-card p { margin: 0 0 0 0; font-size: 13px; color: var(--text-sub); }
+
+        .btn-news-arrow {
+            background: #F3F4F6; color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; transition: 0.2s; font-size: 18px;
+            margin-left: 20px; flex-shrink: 0;
+        }
+        .btn-news-arrow:hover { background: var(--primary); color: white; }
+
+        @media (max-width: 768px) {
+            .news-banner { margin-top: -40px; } /* Moins de chevauchement sur mobile */
+            .news-card { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
+            .news-card h3 { display: block; margin-left: 0; margin-top: 5px; }
+            .btn-news-arrow { width: 100%; border-radius: 8px; height: auto; padding: 10px; margin-left: 0; font-size: 14px; font-weight: 600; }
+            .btn-news-arrow::after { content: " Voir"; margin-left: 5px; }
+        }
+
         /* FEATURES SECTION */
-        .features-section { background: white; padding: 80px 20px; margin-top: 50px; }
+        .features-section { background: white; padding: 60px 20px 80px 20px; }
         .features-grid {
             max-width: 1200px; margin: 0 auto; display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
@@ -200,49 +242,44 @@
         .feature-card h3 { margin: 0 0 10px 0; font-size: 20px; color: var(--text-main); }
         .feature-card p { color: var(--text-sub); line-height: 1.6; font-size: 14px; }
 
-        /* DONATION SECTION */
-        .donation-section {
-            max-width: 900px; margin: 80px auto;
-            background: linear-gradient(135deg, var(--color-dark) 0%, #2c2c2c 100%);
-            border-radius: 24px; padding: 50px; text-align: center; color: white;
-            position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .donation-section::before {
-            content: "☕"; position: absolute; top: -20px; right: -20px;
-            font-size: 200px; opacity: 0.05; transform: rotate(15deg);
-        }
+        /* SOCIAL & DONATION styles unchanged */
+        .social-section { padding: 60px 20px; background: transparent; text-align: center; }
+        .social-container { max-width: 800px; margin: 0 auto; }
+        .social-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
+        .social-desc { color: var(--text-sub); margin-bottom: 30px; font-size: 14px; }
+        .social-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .social-card { background: white; border-radius: 16px; padding: 15px 25px; display: flex; align-items: center; gap: 15px; text-decoration: none; color: var(--text-main); box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; width: 200px; }
+        .social-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
+        .social-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
+        .social-icon svg { width: 20px; height: 20px; fill: currentColor; }
+        .social-card.insta .social-icon { background: #fdf2f6; color: #E1306C; }
+        .social-card.insta:hover { border-color: #E1306C; }
+        .social-card.insta:hover .social-icon { background: #E1306C; color: white; }
+        .social-card.tiktok .social-icon { background: #eee; color: #000; }
+        .social-card.tiktok:hover { border-color: #000; }
+        .social-card.tiktok:hover .social-icon { background: #000; color: white; }
+        .social-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
+        .social-info span { font-size: 12px; color: var(--text-sub); }
+
+        .donation-section { max-width: 900px; margin: 80px auto; background: linear-gradient(135deg, var(--color-dark) 0%, #2c2c2c 100%); border-radius: 24px; padding: 50px; text-align: center; color: white; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); }
+        .donation-section::before { content: "☕"; position: absolute; top: -20px; right: -20px; font-size: 200px; opacity: 0.05; transform: rotate(15deg); }
         .donation-section h2 { margin-top: 0; font-size: 28px; }
-        .donation-section p { 
-            color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7;
-        }
-        
-        .btn-coffee {
-            background: var(--color-gold); color: white; padding: 12px 30px; border-radius: 50px;
-            text-decoration: none; font-weight: 700; font-size: 16px;
-            display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s;
-            box-shadow: 0 4px 15px rgba(198, 168, 117, 0.4);
-        }
+        .donation-section p { color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7; }
+        .btn-coffee { background: var(--color-gold); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(198, 168, 117, 0.4); }
         .btn-coffee:hover { transform: scale(1.05); background: #b59865; }
 
-        /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
-        
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
-        
         .btn-cancel { width: 100%; background: transparent; border: none; color: var(--color-red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
         .btn-cancel:hover { text-decoration: underline; }
-        
         input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
         input:focus { outline: none; border-color: var(--primary); }
-
         .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-        /* FOOTER */
         .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
         .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
         .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
@@ -251,16 +288,7 @@
         .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
         .footer-links a:hover { color: var(--primary); }
         .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-    
-        #snow-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Très important : permet de cliquer "à travers" la neige */
-    z-index: 9999; /* Par-dessus tout le reste */
-}
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
     </style>
 </head>
 <body>
@@ -310,22 +338,62 @@
         </div>
     </div>
 
+    <section class="news-banner">
+        <div class="news-card">
+            <div class="news-content">
+                <span class="badge-new" data-t="newsBadge">NOUVEAU</span>
+                <h3 data-t="newsTitle">Mise à jour du catalogue</h3>
+                <p data-t="newsDesc">De nouvelles figurines viennent d'être ajoutées à la base de données. Vérifiez si vous les possédez !</p>
+            </div>
+            <a href="nouveautes.html" class="btn-news-arrow">→</a>
+        </div>
+    </section>
+
     <section class="features-section">
         <div class="features-grid">
             <div class="feature-card">
                 <span class="feature-icon">✨</span>
                 <h3 data-t="feat1Title">Tracker Intelligent</h3>
-                <p data-t="feat1Desc">Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries The Other One ou Little Mischief.</p>
+                <p data-t="feat1Desc">Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.</p>
             </div>
             <div class="feature-card">
                 <span class="feature-icon">📈</span>
                 <h3 data-t="feat2Title">Statistiques & Valeur</h3>
-                <p data-t="feat2Desc">Visualisez l'évolution de votre collection et estimez le montant total de votre investissement grâce aux graphiques détaillés.</p>
+                <p data-t="feat2Desc">Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.</p>
             </div>
             <div class="feature-card">
                 <span class="feature-icon">🎁</span>
                 <h3 data-t="feat3Title">Wishlist & Doubles</h3>
-                <p data-t="feat3Desc">Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez activement.</p>
+                <p data-t="feat3Desc">Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="social-section">
+        <div class="social-container">
+            <h2 class="social-title" data-t="socialTitle">Rejoignez la communauté</h2>
+            <p class="social-desc" data-t="socialDesc">Suivez les actualités, les sorties et partagez votre collection avec nous.</p>
+            
+            <div class="social-grid">
+                <a href="https://www.instagram.com/hrntrack/" target="_blank" class="social-card insta">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </div>
+                    <div class="social-info">
+                        <h4>Instagram</h4>
+                        <span>@hrntrack</span>
+                    </div>
+                </a>
+
+                <a href="https://www.tiktok.com/@hrntrack" target="_blank" class="social-card tiktok">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.65-1.53-1.15v8.36c0 4.1-3.38 7.42-7.55 7.42-4.17 0-7.55-3.32-7.55-7.42 0-4.08 3.35-7.42 7.55-7.42.1.03.2.05.3.08l.09 3.91c-.32-.1-.66-.14-.99-.14-1.9 0-3.44 1.54-3.44 3.44s1.54 3.44 3.44 3.44c1.92 0 3.48-1.54 3.48-3.44v-15.7z"/></svg>
+                    </div>
+                    <div class="social-info">
+                        <h4>TikTok</h4>
+                        <span>@hrntrack</span>
+                    </div>
+                </a>
             </div>
         </div>
     </section>
@@ -363,7 +431,7 @@
         </div>
     </div>
 
-    <footer class="site-footer">
+ <footer class="site-footer">
         <div class="footer-content">
             <div class="footer-col">
                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
@@ -386,7 +454,6 @@
         </div>
         <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
     </footer>
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -395,7 +462,6 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
@@ -406,12 +472,20 @@
                 heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
                 heroBtn: "Démarrer ma collection",
 
+                // NOUVEAUX TEXTES GÉNÉRIQUES
+                newsBadge: "NOUVEAU",
+                newsTitle: "Mise à jour du catalogue",
+                newsDesc: "De nouvelles figurines viennent d'être ajoutées à la base de données. Vérifiez si vous les possédez !",
+
                 feat1Title: "Tracker Intelligent",
                 feat1Desc: "Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.",
                 feat2Title: "Statistiques & Valeur",
                 feat2Desc: "Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.",
                 feat3Title: "Wishlist & Doubles",
                 feat3Desc: "Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.",
+
+                socialTitle: "Rejoignez la communauté",
+                socialDesc: "Suivez les actualités, les sorties et partagez votre collection avec nous.",
 
                 donateTitle: "Soutenir le projet",
                 donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit. Si l'outil vous aide, vous pouvez m'offrir un café !",
@@ -420,7 +494,7 @@
                 footerDesc: "L'outil de référence pour les collectionneurs Hirono.",
                 footerNav: "Navigation",
                 footerAbout: "À propos",
-                footerDisclaimer: "Ce site est un projet Fanmade. Non affilié à POP MART."
+                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART."
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -431,12 +505,20 @@
                 heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
                 heroBtn: "Start my collection",
 
+                // NEW GENERIC TEXTS
+                newsBadge: "NEW",
+                newsTitle: "Catalog Update",
+                newsDesc: "New figures have just been added to the database. Check if you own them!",
+
                 feat1Title: "Smart Tracker",
                 feat1Desc: "Mark the figures you own. The tool automatically calculates what you're missing to finish the series.",
                 feat2Title: "Stats & Value",
                 feat2Desc: "Visualize the evolution of your collection and estimate your total investment.",
                 feat3Title: "Wishlist & Duplicates",
                 feat3Desc: "Manage your duplicate figures for trading and keep an eye on the ones you are actively looking for.",
+
+                socialTitle: "Join the community",
+                socialDesc: "Follow news, releases and share your collection with us.",
 
                 donateTitle: "Support the project",
                 donateDesc: "I created this tracker for the Hirono community. The site is free. If this tool helps you, feel free to buy me a coffee!",
@@ -521,7 +603,6 @@
             const btn = document.getElementById('auth-trigger');
 
             if (user) {
-                // MODIFICATION : Redirection vers compte.html
                 btn.classList.add('logged-in'); 
                 btn.onclick = () => window.location.href = "compte.html"; 
             } else {
@@ -531,59 +612,51 @@
         });
         
         const canvas = document.getElementById('snow-canvas');
-const ctx = canvas.getContext('2d');
+        const ctx = canvas.getContext('2d');
 
-let width, height, snowflakes;
+        let width, height, snowflakes;
 
-function initSnow() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
+        function initSnow() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
 
-    snowflakes = [];
-    // Ajuste le nombre de flocons ici (150 est un bon équilibre)
-    for (let i = 0; i < 150; i++) {
-        snowflakes.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: Math.random() * 3 + 1,
-            speed: Math.random() * 1 + 0.5,
-            wind: Math.random() * 0.5 - 0.25,
-            opacity: Math.random() * 0.5 + 0.3
-        });
-    }
-}
-
-function drawSnow() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "white";
-    
-    snowflakes.forEach(flake => {
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        ctx.globalAlpha = flake.opacity;
-        ctx.fill();
-
-        // Déplacement
-        flake.y += flake.speed;
-        flake.x += flake.wind;
-
-        // Si le flocon sort en bas, il réapparaît en haut
-        if (flake.y > height) {
-            flake.y = -10;
-            flake.x = Math.random() * width;
+            snowflakes = [];
+            for (let i = 0; i < 150; i++) {
+                snowflakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    wind: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
         }
-    });
 
-    requestAnimationFrame(drawSnow);
-}
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "white";
+            
+            snowflakes.forEach(flake => {
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                ctx.globalAlpha = flake.opacity;
+                ctx.fill();
+                flake.y += flake.speed;
+                flake.x += flake.wind;
+                if (flake.y > height) {
+                    flake.y = -10;
+                    flake.x = Math.random() * width;
+                }
+            });
+            requestAnimationFrame(drawSnow);
+        }
 
-window.addEventListener('resize', initSnow);
-
-// Lancement
-initSnow();
-drawSnow();
+        window.addEventListener('resize', initSnow);
+        initSnow();
+        drawSnow();
     </script>
 </body>
 </html>

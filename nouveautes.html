@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HRNtrack - Nouveautés</title>
+    <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6A8C47;
+            --primary-dark: #557235;
+            --bg-body: #F5F5F0;
+            --card-bg: #ffffff;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+            --gold: #C6A875;
+            --red: #C0392B;
+            --dark-bg: #1A1A1A;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --border: #e5e7eb;
+            --nav-height-mobile: 80px;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+            opacity: 0; transition: opacity 0.3s ease-in-out;
+        }
+        body.auth-ready { opacity: 1; }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .site-logo { height: 80px; }
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2000;
+        }
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+
+        /* LANG TOGGLE & AUTH BTN */
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        .btn-auth-trigger {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
+
+        /* --- MOBILE NAV --- */
+        @media (min-width: 769px) { body { padding-bottom: 0; } }
+        @media (max-width: 768px) {
+            .site-logo { display: none; } 
+            .top-nav { justify-content: flex-end; padding: 10px 15px; }
+            .nav-center {
+                position: fixed; bottom: 0; top: auto; left: 0; transform: none; width: 100%;
+                background: #1A1A1A; border-radius: 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; justify-content: space-around; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+                box-sizing: border-box; z-index: 2000;
+            }
+            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
+            .nav-link.active { color: var(--primary); }
+            .nav-link:hover { background: transparent; color: white; }
+        }
+
+        /* --- CONTENT STYLE --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+
+        .hero-title {
+            font-size: 28px; font-weight: 800; color: var(--text-main); margin-bottom: 10px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .hero-subtitle { color: var(--text-sub); margin-bottom: 40px; font-size: 14px; }
+
+        .release-section { margin-bottom: 50px; }
+        .section-header { 
+            display: flex; align-items: center; justify-content: space-between; 
+            margin-bottom: 20px; border-bottom: 2px solid #E5E7EB; padding-bottom: 10px;
+        }
+        .section-name { font-size: 18px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 1px; }
+        .section-tag { 
+            background: var(--dark-bg); color: white; padding: 4px 10px; 
+            border-radius: 6px; font-size: 10px; font-weight: 600; 
+        }
+
+        /* GRID */
+        .release-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px;
+        }
+
+        /* CARD */
+        .card {
+            background: white; border-radius: 16px; padding: 10px; position: relative;
+            box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+            border: 1px solid transparent; cursor: pointer;
+        }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-color: var(--primary); }
+        
+        .card-badge {
+            position: absolute; top: 10px; left: 10px; z-index: 2;
+            background: var(--red); color: white; font-size: 9px; font-weight: 700;
+            padding: 3px 8px; border-radius: 4px; text-transform: uppercase;
+        }
+
+        .card-img-wrapper {
+            width: 100%; aspect-ratio: 1/1; overflow: hidden; border-radius: 12px; margin-bottom: 10px;
+            background: #f9f9f9; display: flex; align-items: center; justify-content: center;
+        }
+        .card-img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: multiply; }
+
+        .card-name { font-size: 12px; font-weight: 600; color: var(--text-main); margin-bottom: 4px; line-height: 1.3; height: 32px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; }
+        .card-serie { font-size: 10px; color: var(--text-sub); margin-bottom: 10px; }
+
+        /* ACTION BUTTON ON CARD */
+        .btn-card-action {
+            width: 100%; padding: 8px; border-radius: 8px; border: none; font-size: 12px; font-weight: 600;
+            cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px;
+            background: #F3F4F6; color: var(--text-sub);
+        }
+        .btn-card-action:hover { background: #E5E7EB; }
+        
+        .card.owned .btn-card-action { background: var(--primary); color: white; }
+        .card.owned { border: 1px solid var(--primary); }
+        .card.wished .btn-card-action { background: var(--gold); color: white; }
+        .card.wished { border: 1px dashed var(--gold); }
+
+        /* --- STYLES MODAL --- */
+        .modal-overlay {
+            display: none; 
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            color: var(--text-main);
+            padding: 25px;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .form-label {
+            display: block; margin-bottom: 5px; color: var(--text-sub); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
+        }
+
+        /* Styles spécifiques pour les inputs du nouveau modal */
+        #modal select, #modal input, #modal textarea, #auth-modal input {
+            width: 100%;
+            background: #F3F4F6;
+            border: 1px solid #ddd;
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        #modal select:focus, #modal input:focus, #modal textarea:focus, #auth-modal input:focus {
+            outline: none; border-color: var(--primary); background: white;
+        }
+
+        .form-row {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;
+        }
+
+        .btn-save {
+            width: 100%; padding: 12px; background: var(--dark-bg); color: white;
+            border: none; border-radius: 8px; font-weight: bold; font-size: 1rem;
+            cursor: pointer; margin-top: 15px; transition: 0.2s;
+        }
+        .btn-save:hover { background: var(--primary); }
+
+        .btn-cancel {
+            width: 100%; padding: 10px; background: transparent; color: var(--text-sub);
+            border: none; cursor: pointer; margin-top: 5px; font-size: 0.9rem;
+        }
+        .btn-cancel:hover { color: var(--red); }
+        
+        /* AUTH STYLES */
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
+        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+
+
+        /* Footer */
+        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
+        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .footer-links { list-style: none; padding: 0; }
+        .footer-links li { margin-bottom: 8px; }
+        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
+      
+      
+        #snow-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999;
+        }
+
+    </style>
+</head>
+<body>
+<canvas id="snow-canvas"></canvas>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo"></a>
+        </div>
+        <div class="nav-center">
+            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
+        <div class="nav-right">
+             <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>🐼 </span> <span id="auth-status-text" data-t="navAccount">Mon Compte</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="hero-title">
+            <span>🔥</span> <span data-t="pageTitle">Dernières Sorties</span>
+        </div>
+        <div class="hero-subtitle" data-t="pageSub">Les nouveautés Hirono les plus récentes.</div>
+
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secSpecials">Collaborations & Events</span>
+                <span class="section-tag">LIMITED</span>
+            </div>
+            <div class="release-grid" id="grid-specials"></div>
+        </div>
+
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secXmas">Noël 2024</span>
+                <span class="section-tag">SEASONAL</span>
+            </div>
+            <div class="release-grid" id="grid-xmas"></div>
+        </div>
+
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secRoad">Road Journal Series</span>
+                <span class="section-tag">SERIES</span>
+            </div>
+            <div class="release-grid" id="grid-road"></div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="text-align:center; margin-bottom:15px;">
+                <img id="edit-img" src="" style="height:120px; object-fit:contain; border-radius:8px;">
+                <br>
+                <span id="edit-secret-badge" style="display:none; background:var(--gold); color:white; font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:5px; text-transform:uppercase;">✨ Secret Rare</span>
+            </div>
+
+            <h2 id="edit-title" style="margin:0; font-size:1.3rem;"></h2>
+            <p id="edit-subtitle" style="margin:2px 0 20px; color:var(--text-sub); font-size:12px;"></p>
+            
+            <label class="form-label" data-t="lblStatus">Statut</label>
+            <select id="input-status" style="margin-bottom:15px;">
+                <option value="No status" data-t="optNone">Non possédé</option>
+                <option value="Possédé" data-t="optOwned">Dans ma collection ✅</option>
+                <option value="Recherché" data-t="optWish">Wishlist ⭐</option>
+            </select>
+
+            <div class="form-row">
+                <div>
+                    <label class="form-label" data-t="lblCondition">Condition</label>
+                    <select id="input-condition">
+                        <option value="Inconnu" data-t="condUnknown">Inconnu</option>
+                        <option value="Neuf" data-t="condMint">Neuf (Mint)</option>
+                        <option value="Bon" data-t="condGood">Bon</option>
+                        <option value="Moyen" data-t="condFair">Moyen</option>
+                        <option value="Abimé" data-t="condDamaged">Abimé</option>
+                    </select>
+                </div>
+                <div><label class="form-label" data-t="lblQty">Quantité</label><input type="number" id="input-qty" min="0"></div>
+            </div>
+
+            <div class="form-row">
+                <div><label class="form-label" data-t="lblPrice">Prix</label><input type="number" id="input-price" step="0.01"></div>
+                <div><label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date"></div>
+            </div>
+            
+            <label class="form-label" data-t="lblNotes">Notes</label>
+            <textarea id="input-note" rows="2"></textarea>
+
+            <button class="btn-save" onclick="window.sauvegarder()" data-t="btnSave">Enregistrer</button>
+            <button class="btn-cancel" onclick="window.fermer()" data-t="btnClose">Fermer</button>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte
+            </button>
+            
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnClose">Annuler</button>
+        </div>
+    </div>
+
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-col">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
+                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerNav">Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
+                    <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
+                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
+                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
+                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
+                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4 data-t="footerAbout">À propos</h4>
+                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
+    </footer>
+<script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- DATA DES NOUVEAUTÉS ---
+        const newReleases = [
+            // SPECIALS
+            { id: "SPE-FLOMARK", name: "Floating Market", serie: "Special Blister", cat: "specials", img: "https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png" },
+            { id: "SPE-CHUCKY", name: "Chucky", serie: "Special 200%", cat: "specials", img: "https://i.postimg.cc/x1zptySz/chuky-removebg-preview.png" },
+            // XMAS
+            { id: "SPE-BEFSNOW", name: "Before Snow Melts", serie: "Special 200%", cat: "xmas", img: "https://i.postimg.cc/hGJm9pWF/before-snow-removebg-preview.png" },
+            { id: "SPE-BEFSNOWS", name: "Before Snow Melts (Secret)", serie: "Special 200%", cat: "xmas", img: "https://i.postimg.cc/c4Xt2V0X/before-snow-spe-removebg-preview.png", isSecret: true },
+            // ROAD JOURNAL
+            { id: "ROA-CITY D", name: "City Dust Afloat", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/5Ny5t8FT/1765529791611_city_dust_afloat.webp" },
+            { id: "ROA-FROSTF", name: "Frostfall Hour", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/Dy0Qz1bN/1765529799195_frostfall_hour.webp" },
+            { id: "ROA-GREY G", name: "Grey Gravel", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/Yq0NSQms/1765529804842_grey_gravel.webp" },
+            { id: "ROA-INTO F", name: "Into Fogwild", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/8PcdCLr3/1765529811680_into_fogwild.webp" },
+            { id: "ROA-LOST I", name: "Lost In the Night", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/4Nyv3p9k/1765529816912_lost_in_the_night.webp" },
+            { id: "ROA-WOVEN", name: "Woven Woods", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/jd26jyJg/1765529784528_woven_woods.webp" },
+            { id: "ROA-HIGHWA", name: "Highway Imprint", serie: "Road Journal", cat: "road", img: "https://i.postimg.cc/tCJdgFx0/1765529822105_secret_highway_imprint.webp", isSecret: true },
+        ];
+
+        let userCollection = [];
+        let currentUser = null;
+        let currentModalItem = null;
+
+        // --- I18N (Traductions CORRIGÉES et COMPLÉTÉES) ---
+        const translations = {
+            fr: { 
+                // Navigation & Layout
+                navHome: "Accueil",
+                navCollection: "Collection",
+                navStats: "Stats",
+                navDonors: "Dons",
+                navContact: "Contact",
+                navSupport: "Soutenir",
+                navAccount: "Mon Compte",
+                navNew: "Nouveautés",
+
+                // Auth
+                authLogin: "Connexion",
+                authDesc: "Sauvegardez votre collection dans le cloud.",
+                btnLogin: "Se connecter",
+                btnRegister: "Créer un compte",
+
+                // Page Content
+                pageTitle: "Dernières Sorties",
+                pageSub: "Les nouveautés Hirono les plus récentes.",
+                secSpecials: "Collaborations & Events",
+                secXmas: "Noël 2024",
+                secRoad: "Road Journal Series",
+
+                // Footer
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.",
+                footerNav: "Navigation",
+                footerAbout: "À propos",
+                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+
+                // Buttons & Actions
+                btnAdd: "Ajouter", 
+                btnOwned: "Possédé", 
+                btnWish: "Recherché", 
+                btnSave: "Enregistrer",
+                btnClose: "Fermer",
+                
+                // Modal
+                lblStatus: "Statut",
+                optNone: "Non possédé",
+                optOwned: "Dans ma collection ✅",
+                optWish: "Wishlist ⭐",
+                lblCondition: "Condition",
+                condUnknown: "Inconnu",
+                condMint: "Neuf (Mint)",
+                condGood: "Bon",
+                condFair: "Moyen",
+                condDamaged: "Abimé",
+                lblQty: "Quantité",
+                lblPrice: "Prix",
+                lblDate: "Date d'achat",
+                lblNotes: "Notes"
+            },
+            en: { 
+                // Navigation & Layout
+                navHome: "Home",
+                navCollection: "Collection",
+                navStats: "Stats",
+                navDonors: "Donations",
+                navContact: "Contact",
+                navSupport: "Support",
+                navAccount: "My Account",
+                navNew: "New Releases",
+
+                // Auth
+                authLogin: "Login",
+                authDesc: "Save your collection to the cloud.",
+                btnLogin: "Log In",
+                btnRegister: "Sign Up",
+
+                // Page Content
+                pageTitle: "Latest Releases",
+                pageSub: "The most recent Hirono releases.",
+                secSpecials: "Collabs & Events",
+                secXmas: "Christmas 2024",
+                secRoad: "Road Journal Series",
+
+                // Footer
+                footerDesc: "The ultimate tool for tracking your Hirono collection.",
+                footerNav: "Navigation",
+                footerAbout: "About",
+                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
+
+                // Buttons & Actions
+                btnAdd: "Add", 
+                btnOwned: "Owned", 
+                btnWish: "Wishlist", 
+                btnSave: "Save",
+                btnClose: "Close",
+                
+                // Modal
+                lblStatus: "Status",
+                optNone: "Not owned",
+                optOwned: "In collection ✅",
+                optWish: "Wishlist ⭐",
+                lblCondition: "Condition",
+                condUnknown: "Unknown",
+                condMint: "Mint",
+                condGood: "Good",
+                condFair: "Fair",
+                condDamaged: "Damaged",
+                lblQty: "Quantity",
+                lblPrice: "Price",
+                lblDate: "Purchase Date",
+                lblNotes: "Notes"
+            }
+        };
+        
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+        function t(key) { return translations[currentLang]?.[key] || key; }
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang);
+            updateUI();
+        };
+
+        function updateUI() {
+            if(currentLang === 'fr') { document.getElementById('lang-fr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); }
+            else { document.getElementById('lang-fr').classList.remove('active'); document.getElementById('lang-en').classList.add('active'); }
+            
+            // Mise à jour de tous les éléments avec data-t
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(translations[currentLang][key]) el.innerText = translations[currentLang][key];
+            });
+
+            const btnText = document.getElementById('auth-status-text');
+            if(btnText) btnText.innerText = currentUser ? t('navAccount') : t('authLogin');
+
+            renderGrids();
+        }
+
+        // --- AUTH LOGIC (AJOUTÉE) ---
+        window.toggleAuthModal = () => {
+            const el = document.getElementById('auth-modal');
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        // --- FIREBASE AUTH LISTENER ---
+        onAuthStateChanged(auth, async (user) => {
+            currentUser = user;
+            const btn = document.getElementById('auth-trigger');
+            
+            if (user) {
+                btn.classList.add('logged-in');
+                btn.onclick = () => window.location.href = "compte.html";
+                
+                // Chargement de la collection
+                const docRef = doc(db, "users", user.uid);
+                try {
+                    const snap = await getDoc(docRef);
+                    if(snap.exists()) {
+                        userCollection = snap.data().collection || [];
+                    } else {
+                        userCollection = []; // Nouvel utilisateur
+                    }
+                } catch(e) { console.error("Erreur chargement:", e); }
+            } else {
+                btn.classList.remove('logged-in');
+                btn.onclick = () => window.toggleAuthModal(); // <--- CORRECTION ICI
+                userCollection = [];
+            }
+            
+            updateUI();
+            document.body.classList.add('auth-ready');
+        });
+
+        function renderGrids() {
+            renderSection('grid-specials', newReleases.filter(i => i.cat === 'specials'));
+            renderSection('grid-xmas', newReleases.filter(i => i.cat === 'xmas'));
+            renderSection('grid-road', newReleases.filter(i => i.cat === 'road'));
+        }
+
+        function renderSection(elementId, items) {
+            const container = document.getElementById(elementId);
+            if(!container) return; 
+
+            container.innerHTML = items.map(item => {
+                const userItem = userCollection.find(u => u.ID === item.id);
+                const isOwned = userItem && userItem.Status === 'Possédé';
+                const isWished = userItem && userItem.Status === 'Recherché';
+                
+                let btnClass = "btn-card-action";
+                let btnText = "+ " + t('btnAdd');
+                let cardClass = "card";
+
+                if (isOwned) { btnClass += " owned"; cardClass += " owned"; btnText = "✓ " + t('btnOwned'); }
+                else if (isWished) { btnClass += " wished"; cardClass += " wished"; btnText = "★ " + t('btnWish'); }
+
+                const secretStyle = item.isSecret ? 'color:var(--gold);' : '';
+                const badge = item.id.includes('SPE') ? 'NEW' : 'DROP';
+
+                // LOGIQUE AJOUTEE : Masquer le bouton si pas connecté
+                let actionBtnHtml = '';
+                if (currentUser) {
+                    actionBtnHtml = `<button class="${btnClass}">${btnText}</button>`;
+                }
+
+                return `
+                <div class="${cardClass}" onclick="window.ouvrir('${item.id}')">
+                    <span class="card-badge">${badge}</span>
+                    <div class="card-img-wrapper">
+                        <img src="${item.img}" class="card-img" alt="${item.name}" loading="lazy">
+                    </div>
+                    <div class="card-name" style="${secretStyle}">${item.name}</div>
+                    <div class="card-serie">${item.serie}</div>
+                    ${actionBtnHtml}
+                </div>`;
+            }).join('');
+        }
+
+        // --- FONCTIONS MODAL ---
+
+        window.ouvrir = function(id) {
+            if(!currentUser) { 
+                alert("Vous devez être connecté pour gérer votre collection !"); 
+                return; 
+            }
+
+            const item = newReleases.find(i => i.id === id);
+            if(!item) return;
+
+            currentModalItem = item;
+            const existing = userCollection.find(i => i.ID === id);
+
+            // Remplissage visuel
+            document.getElementById('edit-img').src = item.img;
+            document.getElementById('edit-title').innerText = item.name;
+            document.getElementById('edit-subtitle').innerText = item.serie;
+
+            // Badge secret
+            const badge = document.getElementById('edit-secret-badge');
+            if(badge) badge.style.display = item.isSecret ? 'inline-block' : 'none';
+
+            // Remplissage formulaire
+            if (existing) {
+                document.getElementById('input-status').value = existing.Status || 'No status';
+                document.getElementById('input-condition').value = existing.Condition || 'Inconnu';
+                document.getElementById('input-qty').value = existing.Quantity || 1;
+                document.getElementById('input-price').value = existing["Purchase price"] || '';
+                document.getElementById('input-date').value = existing["Purchase date"] || '';
+                document.getElementById('input-note').value = existing.Notes || '';
+            } else {
+                document.getElementById('input-status').value = 'No status';
+                document.getElementById('input-condition').value = 'Inconnu';
+                document.getElementById('input-qty').value = 1;
+                document.getElementById('input-price').value = '';
+                document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('input-note').value = '';
+            }
+
+            document.getElementById('modal').style.display = 'flex';
+        };
+
+        window.fermer = function() {
+            document.getElementById('modal').style.display = 'none';
+        };
+
+        // --- FONCTION SAUVEGARDER ---
+        window.sauvegarder = async function() {
+            if (!currentUser) {
+                alert("Erreur : Vous avez été déconnecté. Veuillez rafraîchir la page.");
+                return;
+            }
+            if (!currentModalItem) {
+                alert("Erreur : Aucun objet sélectionné.");
+                return;
+            }
+
+            // Récupération des valeurs
+            const status = document.getElementById('input-status').value;
+            
+            // Si l'utilisateur choisit "Non possédé", on propose de supprimer
+            if(status === 'No status') {
+                const idx = userCollection.findIndex(i => i.ID === currentModalItem.id);
+                if(idx > -1) {
+                    if(confirm("Voulez-vous retirer cet objet de votre collection ?")) {
+                        userCollection.splice(idx, 1);
+                    } else {
+                        return; // Annulé
+                    }
+                }
+            } else {
+                // Création de l'objet à sauvegarder
+                const newItem = {
+                    ID: currentModalItem.id,
+                    Name: currentModalItem.name,
+                    Serie: currentModalItem.serie,
+                    Status: status,
+                    Condition: document.getElementById('input-condition').value,
+                    Quantity: parseInt(document.getElementById('input-qty').value) || 1,
+                    "Purchase price": parseFloat(document.getElementById('input-price').value) || 0,
+                    "Purchase date": document.getElementById('input-date').value,
+                    "Notes": document.getElementById('input-note').value,
+                    "Secret Rare": currentModalItem.isSecret ? "Yes" : "No"
+                };
+
+                // Mise à jour locale
+                const idx = userCollection.findIndex(i => i.ID === newItem.ID);
+                if(idx > -1) {
+                    userCollection[idx] = newItem;
+                } else {
+                    userCollection.push(newItem);
+                }
+            }
+
+            // Envoi vers Firebase
+            try {
+                await setDoc(doc(db, "users", currentUser.uid), { collection: userCollection }, { merge: true });
+                renderGrids(); // Rafraîchir l'affichage
+                window.fermer(); // Fermer la fenêtre
+
+            } catch(e) {
+                console.error("Erreur Firebase:", e);
+                alert("Une erreur est survenue lors de la sauvegarde : " + e.message);
+            }
+        };
+
+        // Fermeture au clic à l'extérieur
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            const authModal = document.getElementById('auth-modal');
+            if (event.target == modal) window.fermer();
+            if (event.target == authModal) window.toggleAuthModal();
+        }
+
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, snowflakes;
+        function initSnow() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+            snowflakes = [];
+            for (let i = 0; i < 150; i++) {
+                snowflakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    wind: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
+        }
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "white";
+            snowflakes.forEach(flake => {
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                ctx.globalAlpha = flake.opacity;
+                ctx.fill();
+                flake.y += flake.speed;
+                flake.x += flake.wind;
+                if (flake.y > height) {
+                    flake.y = -10;
+                    flake.x = Math.random() * width;
+                }
+            });
+            requestAnimationFrame(drawSnow);
+        }
+        window.addEventListener('resize', initSnow);
+        initSnow();
+        drawSnow();
+
+
+    </script>
+</body>
+</html>

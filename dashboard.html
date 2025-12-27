@@ -33,7 +33,9 @@
             -webkit-font-smoothing: antialiased; 
             display: flex; flex-direction: column; min-height: 100vh;
             padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
+            opacity: 0; transition: opacity 0.3s ease-in-out; /* Transition au chargement */
         }
+        body.auth-ready { opacity: 1; }
 
         /* --- HEADER & NAV --- */
         .top-nav {
@@ -144,7 +146,8 @@
 
         /* --- ACCESS DENIED SCREEN --- */
         #access-denied {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            display: none; /* Caché par défaut, géré par JS */
+            flex-direction: column; align-items: center; justify-content: center;
             height: 60vh; text-align: center; padding: 20px;
         }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
@@ -250,29 +253,10 @@
         .footer-links a:hover { color: var(--primary); }
         .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
     
-    /* À ajouter dans votre balise <style> */
-body {
-    opacity: 0; /* On cache tout au départ */
-    transition: opacity 0.3s ease-in-out;
-}
-
-body.auth-ready {
-    opacity: 1; /* On affiche une fois fixé */
-}
-
-/* On cache les deux conteneurs par défaut */
-#access-denied, #main-container {
-    display: none !important;
-}
-#snow-canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none; /* Très important : permet de cliquer "à travers" la neige */
-    z-index: 9999; /* Par-dessus tout le reste */
-}
+        #snow-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 9999;
+        }
     </style>
 </head>
 <body>
@@ -368,7 +352,7 @@ body.auth-ready {
 
         <div class="controls-row">
             <select id="filter-series" class="control-select" onchange="window.updateGrid()">
-                <option value="all">Toutes les séries</option>
+                <option value="all" data-t="optAllSeries">Toutes les séries</option>
             </select>
 
             <select id="sort-order" class="control-select" onchange="window.updateGrid()">
@@ -464,6 +448,7 @@ body.auth-ready {
                 <h4 data-t="footerNav">Navigation</h4>
                 <ul class="footer-links">
                     <li><a href="index.html" data-t="navHome">Accueil</a></li>
+                    <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
                     <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
                     <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
                     <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
@@ -488,47 +473,63 @@ body.auth-ready {
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- I18N DICTIONNAIRE ---
+        // --- I18N DICTIONNAIRE COMPLET ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
+                
                 filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Rechercher une figurine...",
-                lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
-                btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
-                optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
-                condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
-                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
-                alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
-                msgNoResults: "Aucune figurine trouvée.",
+                
+                optAllSeries: "Toutes les séries",
                 sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)",
                 sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)",
                 sortDateDesc: "Date d'achat (Récent)",
-                optAllSeries: "Toutes les séries"
+
+                lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
+                btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
+                
+                optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
+                condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
+                
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                
+                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
+                
+                alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
+                msgNoResults: "Aucune figurine trouvée."
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
+                
                 filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Search for a figure...",
-                lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
-                btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
-                optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
-                condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
-                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
-                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
-                alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
-                msgNoResults: "No figures found.",
+                
+                optAllSeries: "All Series",
                 sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)",
                 sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)",
                 sortDateDesc: "Purchase Date (Newest)",
-                optAllSeries: "All Series"
+
+                lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
+                btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
+                
+                optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
+                condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
+                
+                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
+                
+                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
+                
+                alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
+                msgNoResults: "No figures found."
             }
         };
 
@@ -566,11 +567,13 @@ body.auth-ready {
             const btnText = document.getElementById('auth-status-text');
             if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
 
-            // Mettre à jour le dropdown des séries
+            // Mettre à jour le dropdown des séries s'il est initialisé
             initSeriesFilter();
-
-            // Rafraîchir les valeurs (monnaie/date) et la grille pour les textes dynamiques
-            if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') window.updateGrid();
+            
+            // Rafraîchir la grille et les stats si chargées
+            if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') {
+                window.updateGrid();
+            }
         }
 
         // --- BASE DATA ---
@@ -748,7 +751,7 @@ body.auth-ready {
             {"ID":"SPE-HALO23","Name":"Halloween Special 2023","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sxzQ5mm5/pop-mart-hirono-halloween-special-figure-1-removebg-preview.png"},
             {"ID":"SPE-HALOCH","Name":"Halloween Special China","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/FHvvmqRP/s-l1200-removebg-preview.png"},
             {"ID":"SPE-SUMWIND","Name":"Summer Time Wind Blows","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MpX1ts08/687be300e25b9e5510d9c8cc-summer-wind-removebg-preview.png"},
-            {"ID":"SPE-FLOMARK","Name":"Floating Market","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png"},
+            {"ID":"SPE-FLOMARK","Name":"Floating Market","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200_removebg_preview.png"},
             {"ID":"SPE-ORANGE","Name":"Orange Pop","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/dVTLLgmC/20250720-cc3fa10a6eff669b-w800h800-removebg-preview.png"},
             {"ID":"SPE-BACKTO","Name":"Back to Play","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02Ssmv34/pts-2025-exclusive-hirono-back-1755842172-bcd4434c-progressive-removebg-preview.png"},
             {"ID":"SPE-SNOWFALL","Name":"Snowfall Alley","Serie":"Special Pop Blocks","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/xCdkT8sj/1734934091955-snowfall-alley.webp"},
@@ -783,12 +786,11 @@ body.auth-ready {
             if (user) {
                 // UI: CONNECTÉ
                 btn.classList.add('logged-in'); 
-                // MODIFICATION ICI : REDIRECTION VERS COMPTE.HTML
                 btn.onclick = () => window.location.href = "compte.html";
 
                 // Afficher le Dashboard, cacher l'écran verrouillé
-                document.getElementById('access-denied').style.display = 'none';
-                document.getElementById('main-container').style.display = 'block';
+                document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
+                document.getElementById('main-container').style.setProperty('display', 'block', 'important');
 
                 const docRef = doc(db, "users", user.uid);
                 try {
@@ -812,24 +814,10 @@ body.auth-ready {
                             return baseItem;
                         });
                     } else {
-                        // Migration localStorage vers Cloud si c'est la 1ère fois
-                        const localData = localStorage.getItem('HRN_ULTIMATE');
-                        if (localData) {
-                            try {
-                                const parsedLocal = JSON.parse(localData);
-                                myCollection = baseData.map(baseItem => {
-                                    const savedItem = parsedLocal.find(i => i.ID === baseItem.ID);
-                                    return savedItem ? { ...baseItem, ...savedItem } : baseItem;
-                                });
-                                await setDoc(docRef, { collection: myCollection });
-                            } catch (e) { myCollection = [...baseData]; }
-                        } else {
-                            myCollection = [...baseData];
-                        }
+                        myCollection = [...baseData];
                     }
                 } catch (error) { myCollection = [...baseData]; }
                 
-                // On affiche la grille maintenant que tout est chargé
                 window.updateGrid();
 
             } else {
@@ -838,12 +826,13 @@ body.auth-ready {
                 btn.onclick = () => window.toggleAuthModal();
 
                 // Cacher le Dashboard, afficher l'écran verrouillé
-                document.getElementById('access-denied').style.display = 'flex';
-                document.getElementById('main-container').style.display = 'none';
+                document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
+                document.getElementById('main-container').style.setProperty('display', 'none', 'important');
 
-                // On ne charge pas le localStorage pour forcer la connexion
                 myCollection = [...baseData]; 
             }
+            // Afficher le body une fois l'auth vérifiée
+            document.body.classList.add('auth-ready');
         });
 
         // --- AUTH LOGIC ---
@@ -883,7 +872,6 @@ body.auth-ready {
         const initSeriesFilter = () => {
             const series = [...new Set(baseData.map(i => i.Serie))].sort();
             const select = document.getElementById('filter-series');
-            // Utilisation de la traduction pour "Toutes les séries"
             select.innerHTML = `<option value="all">${t('optAllSeries')}</option>`;
             series.forEach(s => {
                 const opt = document.createElement('option');
@@ -1161,98 +1149,61 @@ body.auth-ready {
                 event.target.style.display = "none";
             }
         }
-
-        // Dans votre balise <script type="module">
-onAuthStateChanged(auth, async (user) => {
-    const btn = document.getElementById('auth-trigger');
-    updateUIText(); // Met à jour les textes FR/EN
-
-    if (user) {
-        // --- UTILISATEUR CONNECTÉ ---
-        if(btn) {
-            btn.classList.add('logged-in');
-            btn.onclick = () => window.location.href = "compte.html";
-        }
-
-        // 1. Charger les données (seulement si on est sur une page à données)
-        if (typeof loadUserData === "function") {
-            await loadUserData(user); 
-        }
-
-        // 2. Afficher le contenu
-        document.getElementById('main-container').style.setProperty('display', 'block', 'important');
-        document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-
-    } else {
-        // --- UTILISATEUR DÉCONNECTÉ ---
-        if(btn) {
-            btn.classList.remove('logged-in');
-            btn.onclick = () => window.toggleAuthModal();
-        }
         
-        document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
-        document.getElementById('main-container').style.setProperty('display', 'none', 'important');
-    }
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
 
-    // --- FINALISATION ---
-    // Cette ligne est la clé : on ne montre le body qu'ici, 
-    // une fois que le bon bloc a été choisi.
-    document.body.classList.add('auth-ready');
-});
-const canvas = document.getElementById('snow-canvas');
-const ctx = canvas.getContext('2d');
+        let width, height, snowflakes;
 
-let width, height, snowflakes;
+        function initSnow() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
 
-function initSnow() {
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    snowflakes = [];
-    // Ajuste le nombre de flocons ici (150 est un bon équilibre)
-    for (let i = 0; i < 150; i++) {
-        snowflakes.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: Math.random() * 3 + 1,
-            speed: Math.random() * 1 + 0.5,
-            wind: Math.random() * 0.5 - 0.25,
-            opacity: Math.random() * 0.5 + 0.3
-        });
-    }
-}
-
-function drawSnow() {
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "white";
-    
-    snowflakes.forEach(flake => {
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        ctx.globalAlpha = flake.opacity;
-        ctx.fill();
-
-        // Déplacement
-        flake.y += flake.speed;
-        flake.x += flake.wind;
-
-        // Si le flocon sort en bas, il réapparaît en haut
-        if (flake.y > height) {
-            flake.y = -10;
-            flake.x = Math.random() * width;
+            snowflakes = [];
+            // Ajuste le nombre de flocons ici (150 est un bon équilibre)
+            for (let i = 0; i < 150; i++) {
+                snowflakes.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    radius: Math.random() * 3 + 1,
+                    speed: Math.random() * 1 + 0.5,
+                    wind: Math.random() * 0.5 - 0.25,
+                    opacity: Math.random() * 0.5 + 0.3
+                });
+            }
         }
-    });
 
-    requestAnimationFrame(drawSnow);
-}
+        function drawSnow() {
+            ctx.clearRect(0, 0, width, height);
+            ctx.fillStyle = "white";
+            
+            snowflakes.forEach(flake => {
+                ctx.beginPath();
+                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                ctx.globalAlpha = flake.opacity;
+                ctx.fill();
 
-window.addEventListener('resize', initSnow);
+                // Déplacement
+                flake.y += flake.speed;
+                flake.x += flake.wind;
 
-// Lancement
-initSnow();
-drawSnow();
+                // Si le flocon sort en bas, il réapparaît en haut
+                if (flake.y > height) {
+                    flake.y = -10;
+                    flake.x = Math.random() * width;
+                }
+            });
+
+            requestAnimationFrame(drawSnow);
+        }
+
+        window.addEventListener('resize', initSnow);
+
+        // Lancement
+        initSnow();
+        drawSnow();
     </script>
 </body>
 </html>
