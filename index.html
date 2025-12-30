@@ -124,7 +124,6 @@
                 max-width: 200px; /* Taille réduite pour mobile */
                 height: auto !important;
                 margin: 0 auto;
-                /* On garde l'effet 3D hérité du desktop */
             }
         }
 
@@ -219,8 +218,8 @@
             .news-banner { margin-top: -40px; } /* Moins de chevauchement sur mobile */
             .news-card { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
             .news-card h3 { display: block; margin-left: 0; margin-top: 5px; }
-            .btn-news-arrow { width: 100%; border-radius: 8px; height: auto; padding: 10px; margin-left: 0; font-size: 14px; font-weight: 600; }
-            .btn-news-arrow::after { content: " Voir"; margin-left: 5px; }
+            /* Bouton simple flèche sur mobile, mais largeur pleine pour faciliter le clic */
+            .btn-news-arrow { width: 100%; border-radius: 8px; height: auto; padding: 10px; margin-left: 0; }
         }
 
         /* FEATURES SECTION */
@@ -252,12 +251,20 @@
         .social-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
         .social-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
         .social-icon svg { width: 20px; height: 20px; fill: currentColor; }
+        
         .social-card.insta .social-icon { background: #fdf2f6; color: #E1306C; }
         .social-card.insta:hover { border-color: #E1306C; }
         .social-card.insta:hover .social-icon { background: #E1306C; color: white; }
+        
         .social-card.tiktok .social-icon { background: #eee; color: #000; }
         .social-card.tiktok:hover { border-color: #000; }
         .social-card.tiktok:hover .social-icon { background: #000; color: white; }
+
+        /* Style spécifique Discord */
+        .social-card.discord .social-icon { background: #eef0fd; color: #5865F2; }
+        .social-card.discord:hover { border-color: #5865F2; }
+        .social-card.discord:hover .social-icon { background: #5865F2; color: white; }
+
         .social-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
         .social-info span { font-size: 12px; color: var(--text-sub); }
 
@@ -375,6 +382,16 @@
             <p class="social-desc" data-t="socialDesc">Suivez les actualités, les sorties et partagez votre collection avec nous.</p>
             
             <div class="social-grid">
+                <a href="https://discord.gg/Vs9EDf98Uw" target="_blank" class="social-card discord">
+                    <div class="social-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 13.46 13.46 0 0 0-.59 1.227 18.324 18.324 0 0 0-7.398 0c-.191-.424-.399-.83-.594-1.227a.072.072 0 0 0-.079-.037A19.736 19.736 0 0 0 1.685 4.37a.068.068 0 0 0-.03.078c-2.096 7.974-.08 14.82 2.766 18.995a.074.074 0 0 0 .077.025 20.077 20.077 0 0 0 6.075-3.058.077.077 0 0 0 .023-.119 14.07 14.07 0 0 1-2.029-1.558.075.075 0 0 1 .015-.125c.196-.094.39-.193.579-.297a.074.074 0 0 1 .078-.008c4.276 1.948 8.89 1.948 13.116 0a.073.073 0 0 1 .078.008c.191.104.385.203.581.297a.075.075 0 0 1 .015.125 14.28 14.28 0 0 1-2.028 1.558.076.076 0 0 0 .023.119 20.024 20.024 0 0 0 6.078 3.058.075.075 0 0 0 .077-.025c2.908-4.305 4.793-11.021 2.709-18.994a.068.068 0 0 0-.03-.078zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.956 2.419-2.157 2.419zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.419 0 1.334-.956 2.419-2.157 2.419z"/></svg>
+                    </div>
+                    <div class="social-info">
+                        <h4>Discord</h4>
+                        <span data-t="discordBtn">Rejoindre !</span>
+                    </div>
+                </a>
+
                 <a href="https://www.instagram.com/hrntrack/" target="_blank" class="social-card insta">
                     <div class="social-icon">
                         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
@@ -486,6 +503,9 @@
 
                 socialTitle: "Rejoignez la communauté",
                 socialDesc: "Suivez les actualités, les sorties et partagez votre collection avec nous.",
+                
+                // Traduction Discord
+                discordBtn: "Rejoindre !",
 
                 donateTitle: "Soutenir le projet",
                 donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit. Si l'outil vous aide, vous pouvez m'offrir un café !",
@@ -519,6 +539,9 @@
 
                 socialTitle: "Join the community",
                 socialDesc: "Follow news, releases and share your collection with us.",
+
+                // Traduction Discord
+                discordBtn: "Join us!",
 
                 donateTitle: "Support the project",
                 donateDesc: "I created this tracker for the Hirono community. The site is free. If this tool helps you, feel free to buy me a coffee!",
@@ -658,8 +681,7 @@
         initSnow();
         drawSnow();
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
