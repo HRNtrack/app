@@ -127,7 +127,7 @@
             }
         }
 
-        /* HERO SECTION - Ajustée pour l'intégration */
+        /* HERO SECTION */
         .hero-section {
             padding: 80px 20px 100px 20px; /* Plus d'espace en bas pour le chevauchement */
             max-width: 1200px; margin: 0 auto;
@@ -241,7 +241,7 @@
         .feature-card h3 { margin: 0 0 10px 0; font-size: 20px; color: var(--text-main); }
         .feature-card p { color: var(--text-sub); line-height: 1.6; font-size: 14px; }
 
-        /* SOCIAL & DONATION styles unchanged */
+        /* SOCIAL & DONATION styles */
         .social-section { padding: 60px 20px; background: transparent; text-align: center; }
         .social-container { max-width: 800px; margin: 0 auto; }
         .social-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
@@ -287,19 +287,14 @@
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
-        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
+        /* Canvas Neige */
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+        
     </style>
 </head>
 <body>
-<canvas id="snow-canvas"></canvas>
+    <canvas id="snow-canvas"></canvas>
+    
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
             <a href="index.html">
@@ -448,29 +443,12 @@
         </div>
     </div>
 
- <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
-                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerNav">Navigation</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
-                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerAbout">À propos</h4>
-                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-    </footer>
+    <div id="footer-placeholder"></div>
+    <script src="cookie.js"></script>
+
+    </body>
+</html>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -489,7 +467,6 @@
                 heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
                 heroBtn: "Démarrer ma collection",
 
-                // NOUVEAUX TEXTES GÉNÉRIQUES
                 newsBadge: "NOUVEAU",
                 newsTitle: "Mise à jour du catalogue",
                 newsDesc: "De nouvelles figurines viennent d'être ajoutées à la base de données. Vérifiez si vous les possédez !",
@@ -504,17 +481,17 @@
                 socialTitle: "Rejoignez la communauté",
                 socialDesc: "Suivez les actualités, les sorties et partagez votre collection avec nous.",
                 
-                // Traduction Discord
                 discordBtn: "Rejoindre !",
 
                 donateTitle: "Soutenir le projet",
                 donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit. Si l'outil vous aide, vous pouvez m'offrir un café !",
                 btnCoffee: "☕ Offrir un café à l'auteur",
 
-                footerDesc: "L'outil de référence pour les collectionneurs Hirono.",
+                // Footer keys
+                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono.",
                 footerNav: "Navigation",
-                footerAbout: "À propos",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART."
+                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                legalMainTitle: "Mentions Légales"
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -525,7 +502,6 @@
                 heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
                 heroBtn: "Start my collection",
 
-                // NEW GENERIC TEXTS
                 newsBadge: "NEW",
                 newsTitle: "Catalog Update",
                 newsDesc: "New figures have just been added to the database. Check if you own them!",
@@ -540,17 +516,17 @@
                 socialTitle: "Join the community",
                 socialDesc: "Follow news, releases and share your collection with us.",
 
-                // Traduction Discord
                 discordBtn: "Join us!",
 
                 donateTitle: "Support the project",
                 donateDesc: "I created this tracker for the Hirono community. The site is free. If this tool helps you, feel free to buy me a coffee!",
                 btnCoffee: "☕ Buy me a coffee",
 
-                footerDesc: "The ultimate tool for Hirono collectors.",
+                // Footer keys
+                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerNav: "Navigation",
-                footerAbout: "About",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART."
+                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
+                legalMainTitle: "Legal Mentions"
             }
         };
 
@@ -562,7 +538,8 @@
             updateUIText();
         };
 
-        function updateUIText() {
+        // Rendre la fonction accessible globalement pour le fetch
+        window.updateUIText = function() {
             if(currentLang === 'fr') {
                 document.getElementById('lang-fr').classList.add('active');
                 document.getElementById('lang-en').classList.remove('active');
@@ -580,7 +557,7 @@
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
             if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
-        }
+        };
 
         // --- AUTH LOGIC ---
         window.toggleAuthModal = () => {
@@ -634,60 +611,65 @@
             }
         });
         
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur chargement footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                // On relance la traduction pour traduire le footer
+                updateUIText();
+            })
+            .catch(error => console.error('Erreur Footer:', error));
+
+        // --- NEIGE ---
         const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height, snowflakes;
 
-        let width, height, snowflakes;
+            function initSnow() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
 
-        function initSnow() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-
-            snowflakes = [];
-            for (let i = 0; i < 150; i++) {
-                snowflakes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 3 + 1,
-                    speed: Math.random() * 1 + 0.5,
-                    wind: Math.random() * 0.5 - 0.25,
-                    opacity: Math.random() * 0.5 + 0.3
-                });
-            }
-        }
-
-        function drawSnow() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "white";
-            
-            snowflakes.forEach(flake => {
-                ctx.beginPath();
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.globalAlpha = flake.opacity;
-                ctx.fill();
-                flake.y += flake.speed;
-                flake.x += flake.wind;
-                if (flake.y > height) {
-                    flake.y = -10;
-                    flake.x = Math.random() * width;
+                snowflakes = [];
+                for (let i = 0; i < 150; i++) {
+                    snowflakes.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 3 + 1,
+                        speed: Math.random() * 1 + 0.5,
+                        wind: Math.random() * 0.5 - 0.25,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
                 }
-            });
-            requestAnimationFrame(drawSnow);
+            }
+
+            function drawSnow() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = "white";
+                
+                snowflakes.forEach(flake => {
+                    ctx.beginPath();
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                    ctx.globalAlpha = flake.opacity;
+                    ctx.fill();
+                    flake.y += flake.speed;
+                    flake.x += flake.wind;
+                    if (flake.y > height) {
+                        flake.y = -10;
+                        flake.x = Math.random() * width;
+                    }
+                });
+                requestAnimationFrame(drawSnow);
+            }
+
+            window.addEventListener('resize', initSnow);
+            initSnow();
+            drawSnow();
         }
 
-        window.addEventListener('resize', initSnow);
-        initSnow();
-        drawSnow();
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-RFP1HDMW49');
-</script>
-</body>
-</html>

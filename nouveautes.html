@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack</title>
+    <title>HRNtrack - News</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -226,23 +226,11 @@
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-
-        /* Footer */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
-        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-      
-      
+        /* Canvas Neige */
         #snow-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9999;
         }
-
     </style>
 </head>
 <body>
@@ -291,7 +279,7 @@
 
         <div class="release-section">
             <div class="section-header">
-                <span class="section-name" data-t="secXmas">Noël 2025</span>
+                <span class="section-name" data-t="secXmas">Noël 2024</span>
                 <span class="section-tag">SEASONAL</span>
             </div>
             <div class="release-grid" id="grid-xmas"></div>
@@ -373,30 +361,8 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
-                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerNav">Navigation</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
-                    <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
-                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerAbout">À propos</h4>
-                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-    </footer>
+    <div id="footer-placeholder"></div>
+
 <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -429,7 +395,7 @@
         let currentUser = null;
         let currentModalItem = null;
 
-        // --- I18N (Traductions CORRIGÉES et COMPLÉTÉES) ---
+        // --- I18N (TRADUCTIONS) ---
         const translations = {
             fr: { 
                 // Navigation & Layout
@@ -452,7 +418,7 @@
                 pageTitle: "Dernières Sorties",
                 pageSub: "Les nouveautés Hirono les plus récentes.",
                 secSpecials: "Collaborations & Events",
-                secXmas: "Noël 2025",
+                secXmas: "Noël 2024",
                 secRoad: "Road Journal Series",
 
                 // Footer
@@ -460,6 +426,7 @@
                 footerNav: "Navigation",
                 footerAbout: "À propos",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                legalMainTitle: "Mentions Légales",
 
                 // Buttons & Actions
                 btnAdd: "Ajouter", 
@@ -505,7 +472,7 @@
                 pageTitle: "Latest Releases",
                 pageSub: "The most recent Hirono releases.",
                 secSpecials: "Collabs & Events",
-                secXmas: "Christmas 2025",
+                secXmas: "Christmas 2024",
                 secRoad: "Road Journal Series",
 
                 // Footer
@@ -513,6 +480,7 @@
                 footerNav: "Navigation",
                 footerAbout: "About",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
+                legalMainTitle: "Legal Mentions",
 
                 // Buttons & Actions
                 btnAdd: "Add", 
@@ -564,7 +532,7 @@
             renderGrids();
         }
 
-        // --- AUTH LOGIC (AJOUTÉE) ---
+        // --- AUTH LOGIC ---
         window.toggleAuthModal = () => {
             const el = document.getElementById('auth-modal');
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
@@ -611,7 +579,7 @@
                 } catch(e) { console.error("Erreur chargement:", e); }
             } else {
                 btn.classList.remove('logged-in');
-                btn.onclick = () => window.toggleAuthModal(); // <--- CORRECTION ICI
+                btn.onclick = () => window.toggleAuthModal(); 
                 userCollection = [];
             }
             
@@ -644,7 +612,6 @@
                 const secretStyle = item.isSecret ? 'color:var(--gold);' : '';
                 const badge = item.id.includes('SPE') ? 'NEW' : 'DROP';
 
-                // LOGIQUE AJOUTEE : Masquer le bouton si pas connecté
                 let actionBtnHtml = '';
                 if (currentUser) {
                     actionBtnHtml = `<button class="${btnClass}">${btnText}</button>`;
@@ -721,10 +688,8 @@
                 return;
             }
 
-            // Récupération des valeurs
             const status = document.getElementById('input-status').value;
             
-            // Si l'utilisateur choisit "Non possédé", on propose de supprimer
             if(status === 'No status') {
                 const idx = userCollection.findIndex(i => i.ID === currentModalItem.id);
                 if(idx > -1) {
@@ -735,7 +700,6 @@
                     }
                 }
             } else {
-                // Création de l'objet à sauvegarder
                 const newItem = {
                     ID: currentModalItem.id,
                     Name: currentModalItem.name,
@@ -749,7 +713,6 @@
                     "Secret Rare": currentModalItem.isSecret ? "Yes" : "No"
                 };
 
-                // Mise à jour locale
                 const idx = userCollection.findIndex(i => i.ID === newItem.ID);
                 if(idx > -1) {
                     userCollection[idx] = newItem;
@@ -758,11 +721,10 @@
                 }
             }
 
-            // Envoi vers Firebase
             try {
                 await setDoc(doc(db, "users", currentUser.uid), { collection: userCollection }, { merge: true });
-                renderGrids(); // Rafraîchir l'affichage
-                window.fermer(); // Fermer la fenêtre
+                renderGrids();
+                window.fermer();
 
             } catch(e) {
                 console.error("Erreur Firebase:", e);
@@ -770,7 +732,6 @@
             }
         };
 
-        // Fermeture au clic à l'extérieur
         window.onclick = function(event) {
             const modal = document.getElementById('modal');
             const authModal = document.getElementById('auth-modal');
@@ -778,6 +739,19 @@
             if (event.target == authModal) window.toggleAuthModal();
         }
 
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur chargement footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                updateUI();
+            })
+            .catch(error => console.error('Erreur Footer:', error));
+
+        // --- SNOW ---
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, snowflakes;
@@ -818,11 +792,8 @@
         window.addEventListener('resize', initSnow);
         initSnow();
         drawSnow();
-
-
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}

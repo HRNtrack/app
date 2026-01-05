@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack</title>
+    <title>HRNtrack - Stats</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -254,16 +254,6 @@
         
         .story-footer { font-size: 30px; color: #666; border-top: 2px solid #333; padding-top: 40px; width: 100%; }
 
-        /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
-        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-
         #snow-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9999;
@@ -462,29 +452,7 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
-                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerNav">Navigation</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
-                    <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
-                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-                    <li><a href="contact.html" data-t="navContact">Contact</a></li>                </ul>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerAbout">À propos</h4>
-                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -526,7 +494,8 @@
                 tooltipPrestige: "La rareté de votre collection.<br>Pourcentage de Secrets Rares par rapport au total de vos figurines.",
                 
                 statusOwned: "Possédées", statusWish: "Wishlist", statusMissing: "Manquantes",
-                labelExpense: "Dépenses"
+                labelExpense: "Dépenses",
+                legalMainTitle: "Mentions Légales"
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -556,7 +525,8 @@
                 tooltipPrestige: "The rarity of your collection.<br>Percentage of Secret Rares compared to your total figures.",
                 
                 statusOwned: "Owned", statusWish: "Wishlist", statusMissing: "Missing",
-                labelExpense: "Spending"
+                labelExpense: "Spending",
+                legalMainTitle: "Legal Mentions"
             }
         };
 
@@ -594,6 +564,7 @@
             const btnText = document.getElementById('auth-status-text');
             if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
         }
+        window.updateUIText = updateUIText;
 
         window.toggleAuthModal = () => {
             const el = document.getElementById('auth-modal');
@@ -1117,6 +1088,18 @@
             }
         };
 
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur chargement footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                updateUIText(); // On relance la traduction pour traduire le footer
+            })
+            .catch(error => console.error('Erreur Footer:', error));
+
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let width, height, snowflakes;
@@ -1158,14 +1141,13 @@
         initSnow();
         drawSnow();
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-RFP1HDMW49');
-</script>
+      gtag('config', 'G-RFP1HDMW49');
+    </script>
 </body>
 </html>

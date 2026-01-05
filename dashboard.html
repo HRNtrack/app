@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack</title>
+    <title>HRNtrack - Dashboard</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -243,16 +243,7 @@
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-        /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
-        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
-    
+        /* Canvas Neige */
         #snow-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 9999;
@@ -438,30 +429,7 @@
         </div>
     </div>
 
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
-                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerNav">Navigation</h4>
-                <ul class="footer-links">
-                    <li><a href="index.html" data-t="navHome">Accueil</a></li>
-                    <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
-                    <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-                    <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-                    <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-                    <li><a href="contact.html" data-t="navContact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4 data-t="footerAbout">À propos</h4>
-                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -478,7 +446,7 @@
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
-                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", btnShare: "Partager",
                 
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
                 
@@ -496,17 +464,21 @@
                 optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
                 
-                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                
                 deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
                 
                 alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
-                msgNoResults: "Aucune figurine trouvée."
+                msgNoResults: "Aucune figurine trouvée.",
+
+                // --- FOOTER KEYS AJOUTÉES ---
+                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono.",
+                footerNav: "Navigation",
+                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                legalMainTitle: "Mentions Légales"
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
-                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", btnShare: "Share",
                 
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
                 
@@ -524,12 +496,16 @@
                 optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
                 
-                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
-                
                 deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
                 
                 alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
-                msgNoResults: "No figures found."
+                msgNoResults: "No figures found.",
+
+                // --- FOOTER KEYS AJOUTÉES ---
+                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
+                footerNav: "Navigation",
+                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
+                legalMainTitle: "Legal Mentions"
             }
         };
 
@@ -546,7 +522,8 @@
             updateUIText();
         };
 
-        function updateUIText() {
+        // Rendre la fonction accessible globalement pour le fetch
+        window.updateUIText = function() {
             if(currentLang === 'fr') {
                 document.getElementById('lang-fr').classList.add('active');
                 document.getElementById('lang-en').classList.remove('active');
@@ -574,7 +551,7 @@
             if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') {
                 window.updateGrid();
             }
-        }
+        };
 
         // --- BASE DATA ---
         const baseData = [
@@ -777,63 +754,89 @@
         let myCollection = [...baseData];
         let currentItem = null;
         let currentFilter = 'all'; 
+        let isReadOnly = false; // Mode Visiteur
 
         // --- AUTH & LOAD ---
-        onAuthStateChanged(auth, async (user) => {
-            const btn = document.getElementById('auth-trigger');
-            updateUIText();
+        const urlParams = new URLSearchParams(window.location.search);
+        const publicUid = urlParams.get('uid');
 
-            if (user) {
-                // UI: CONNECTÉ
-                btn.classList.add('logged-in'); 
-                btn.onclick = () => window.location.href = "compte.html";
+        if (publicUid) {
+            // MODE VISITEUR : On charge les données de l'UID dans l'URL
+            isReadOnly = true;
+            document.body.classList.add('auth-ready'); 
+            document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
+            document.getElementById('main-container').style.setProperty('display', 'block', 'important');
+            
+            // Masquer les boutons d'admin
+            if(document.getElementById('auth-trigger')) document.getElementById('auth-trigger').style.display = 'none';
+            
+            // Bannière
+            const banner = document.createElement('div');
+            banner.style.cssText = "background:#6A8C47; color:white; text-align:center; padding:10px; font-weight:bold; margin-bottom:20px; border-radius:8px;";
+            banner.innerHTML = "👀 Vous consultez la collection d'un autre collectionneur";
+            document.querySelector('.dashboard-grid').before(banner);
 
-                // Afficher le Dashboard, cacher l'écran verrouillé
-                document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-                document.getElementById('main-container').style.setProperty('display', 'block', 'important');
+            loadUserCollection(publicUid);
 
-                const docRef = doc(db, "users", user.uid);
-                try {
-                    const snap = await getDoc(docRef);
-                    if (snap.exists()) {
-                        const data = snap.data();
-                        const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
-                        myCollection = baseData.map(baseItem => {
-                            const savedItem = cloudData.find(i => i.ID === baseItem.ID);
-                            if (savedItem) {
-                                return {
-                                    ...baseItem,
-                                    Status: savedItem.Status || baseItem.Status,
-                                    Condition: savedItem.Condition,
-                                    Quantity: savedItem.Quantity,
-                                    "Purchase price": savedItem["Purchase price"],
-                                    "Purchase date": savedItem["Purchase date"],
-                                    Note: savedItem.Note
-                                };
-                            }
-                            return baseItem;
-                        });
-                    } else {
-                        myCollection = [...baseData];
-                    }
-                } catch (error) { myCollection = [...baseData]; }
-                
-                window.updateGrid();
+        } else {
+            // MODE STANDARD
+            onAuthStateChanged(auth, async (user) => {
+                const btn = document.getElementById('auth-trigger');
+                updateUIText();
 
-            } else {
-                // UI: DÉCONNECTÉ -> ACCÈS RESTREINT
-                btn.classList.remove('logged-in');
-                btn.onclick = () => window.toggleAuthModal();
+                if (user) {
+                    // UI: CONNECTÉ
+                    btn.classList.add('logged-in'); 
+                    btn.onclick = () => window.location.href = "compte.html"; 
+                    
+                    document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
+                    document.getElementById('main-container').style.setProperty('display', 'block', 'important');
 
-                // Cacher le Dashboard, afficher l'écran verrouillé
-                document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
-                document.getElementById('main-container').style.setProperty('display', 'none', 'important');
+                    loadUserCollection(user.uid);
 
-                myCollection = [...baseData]; 
-            }
-            // Afficher le body une fois l'auth vérifiée
-            document.body.classList.add('auth-ready');
-        });
+                } else {
+                    // UI: DÉCONNECTÉ
+                    btn.classList.remove('logged-in');
+                    btn.onclick = () => window.toggleAuthModal();
+
+                    document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
+                    document.getElementById('main-container').style.setProperty('display', 'none', 'important');
+                    
+                    myCollection = [...baseData]; 
+                }
+                document.body.classList.add('auth-ready');
+            });
+        }
+
+        async function loadUserCollection(targetUid) {
+            const docRef = doc(db, "users", targetUid);
+            try {
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
+                    
+                    myCollection = baseData.map(baseItem => {
+                        const savedItem = cloudData.find(i => i.ID === baseItem.ID);
+                        if (savedItem) {
+                            return {
+                                ...baseItem,
+                                Status: savedItem.Status || baseItem.Status,
+                                Condition: savedItem.Condition,
+                                Quantity: savedItem.Quantity,
+                                "Purchase price": savedItem["Purchase price"],
+                                "Purchase date": savedItem["Purchase date"],
+                                Note: savedItem.Note
+                            };
+                        }
+                        return baseItem;
+                    });
+                } else {
+                    myCollection = [...baseData];
+                }
+            } catch (error) { myCollection = [...baseData]; }
+            window.updateGrid();
+        }
 
         // --- AUTH LOGIC ---
         window.toggleAuthModal = () => {
@@ -1059,7 +1062,7 @@
         // --- ACTIONS MODAL ---
         window.openModal = (item) => {
             currentItem = item;
-            document.getElementById('edit-title').innerText = item.Name;
+            document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
             
             // LOGIQUE IMAGE & SECRET
@@ -1078,10 +1081,20 @@
             document.getElementById('input-date').value = item["Purchase date"] || "";
             document.getElementById('input-note').value = item.Note || "";
             
+            // GESTION LECTURE SEULE
+            if(isReadOnly) {
+                document.querySelector('.btn-save').style.display = 'none';
+                document.querySelectorAll('#modal input, #modal select, #modal textarea').forEach(el => el.disabled = true);
+            } else {
+                document.querySelector('.btn-save').style.display = 'block';
+                document.querySelectorAll('#modal input, #modal select, #modal textarea').forEach(el => el.disabled = false);
+            }
+
             document.getElementById('modal').style.display = "flex";
         };
 
         window.sauvegarder = async () => {
+            if(isReadOnly) return; // Sécurité
             try {
                 if (!currentItem) return;
 
@@ -1150,6 +1163,18 @@
             }
         }
         
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur chargement footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                updateUIText(); // On relance la traduction pour traduire le footer
+            })
+            .catch(error => console.error('Erreur Footer:', error));
+        
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -1205,14 +1230,13 @@
         initSnow();
         drawSnow();
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-RFP1HDMW49');
-</script>
+      gtag('config', 'G-RFP1HDMW49');
+    </script>
 </body>
 </html>

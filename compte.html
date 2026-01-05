@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack</title>
+    <title>HRNtrack - Account</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -130,16 +130,6 @@
         #access-denied { flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
         .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
-
-        /* FOOTER */
-        .site-footer { background-color: var(--dark-bg); color: #9CA3AF; padding: 60px 20px 20px; margin-top: auto; border-top: 1px solid rgba(255,255,255,0.1); font-size: 13px; }
-        .footer-content { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .footer-col h4 { color: white; margin: 0 0 15px 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .footer-links { list-style: none; padding: 0; }
-        .footer-links li { margin-bottom: 8px; }
-        .footer-links a { color: #9CA3AF; text-decoration: none; transition: color 0.2s; }
-        .footer-links a:hover { color: var(--primary); }
-        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); font-size: 11px; color: #6B7280; }
     </style>
 </head>
 <body>
@@ -212,28 +202,7 @@
         </div>
     </div>
 
-      <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-col">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" alt="HRNtrack" style="height: 100px; margin-bottom: 15px; opacity: 0.8;">
-                <p data-t="footerDesc">L'outil ultime pour suivre votre collection Hirono.</p>
-            </div>
-<div class="footer-col">
-    <h4 data-t="footerNav">Navigation</h4>
-    <ul class="footer-links"> <li><a href="index.html" data-t="navHome">Accueil</a></li>
-        <li><a href="nouveautes.html" data-t="navNew">Nouveautés</a></li>
-        <li><a href="dashboard.html" data-t="navCollection">Collection</a></li>
-        <li><a href="statistiques.html" data-t="navStats">Statistiques</a></li>
-        <li><a href="donateurs.html" data-t="navDonors">Donateurs</a></li>
-        <li><a href="contact.html" data-t="navContact">Contact</a></li>
-    </ul>
-</div>            <div class="footer-col">
-                <h4 data-t="footerAbout">À propos</h4>
-                <p data-t="footerDisclaimer">Ce site est un projet de fan (Fanmade).<br>Nous ne sommes pas affiliés à <strong>POP MART</strong>.</p>
-            </div>
-        </div>
-        <div class="footer-bottom">&copy; 2025 HRNtrack. Fait avec passion.</div>
-    </footer>
+    <div id="footer-placeholder"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -253,7 +222,9 @@
                 lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
                 btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
                 lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
-                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                
+                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", legalMainTitle: "Mentions Légales",
+                
                 phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",
                 alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",
                 alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
@@ -266,7 +237,9 @@
                 lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
                 btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
                 lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
-                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
+                
+                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", legalMainTitle: "Legal Mentions",
+                
                 phNewPass: "New password", phNewEmail: "New email",
                 alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",
                 alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
@@ -286,7 +259,8 @@
             updateUIText();
         };
 
-        function updateUIText() {
+        // RENDRE LA FONCTION GLOBALE POUR LE FOOTER SCRIPT
+        window.updateUIText = function() {
             if(currentLang === 'fr') {
                 document.getElementById('lang-fr').classList.add('active');
                 document.getElementById('lang-en').classList.remove('active');
@@ -305,9 +279,12 @@
             });
 
             // Update Placeholders
-            document.getElementById('new-password').placeholder = tr.phNewPass;
-            document.getElementById('new-email').placeholder = tr.phNewEmail;
-        }
+            const passInput = document.getElementById('new-password');
+            if(passInput) passInput.placeholder = tr.phNewPass;
+            
+            const emailInput = document.getElementById('new-email');
+            if(emailInput) emailInput.placeholder = tr.phNewEmail;
+        };
 
         // --- AUTH LOGIC & ANTI-FLICKER ---
         onAuthStateChanged(auth, (user) => {
@@ -409,15 +386,26 @@
                 }
             }
         };
-    </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-RFP1HDMW49');
-</script>
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Erreur chargement footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                updateUIText(); // On relance la traduction pour traduire le footer
+            })
+            .catch(error => console.error('Erreur Footer:', error));
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-RFP1HDMW49');
+    </script>
 </body>
 </html>
