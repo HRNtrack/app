@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Mentions Légales - HRNtrack</title>
+    <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-gold: #C6A875;
+            --color-red: #C0392B;
+            --color-green: #6A8C47;
+
+            --primary: var(--color-green);
+            --primary-hover: #557235;
+            --bg-body: var(--color-light);
+            --card-bg: #ffffff;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+            --dark-bg: var(--color-dark);
+            
+            --nav-height-mobile: 80px;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            -webkit-font-smoothing: antialiased; 
+            display: flex; flex-direction: column; min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+        }
+
+        /* --- HEADER & NAV --- */
+        .top-nav {
+            background: var(--dark-bg); color: white; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: sticky; top: 0; z-index: 100;
+        }
+
+        .site-logo { height: 80px; }
+
+        .nav-center {
+            position: absolute; left: 50%; transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.05); padding: 4px;
+            border-radius: 12px; display: flex; gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 2000;
+        }
+
+        .nav-link {
+            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
+            border-radius: 8px; font-size: 12px; font-weight: 600;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
+
+        .nav-right { display: flex; align-items: center; gap: 10px; }
+
+        .lang-toggle {
+            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .lang-option {
+            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
+            color: #9CA3AF; transition: all 0.3s ease;
+        }
+        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        .btn-auth-trigger {
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
+            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
+            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        }
+        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
+        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
+
+        /* --- STYLE CONTENU LÉGAL --- */
+        .legal-container {
+            max-width: 900px;
+            margin: 40px auto 80px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+            flex: 1; /* Pousse le footer vers le bas */
+        }
+
+        .legal-card {
+            background: white;
+            padding: 40px 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .legal-title-main {
+            font-size: 32px; font-weight: 800; color: var(--text-main);
+            margin-bottom: 40px; text-align: center;
+            background: linear-gradient(135deg, var(--color-dark) 0%, var(--primary) 100%);
+            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .legal-block { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid #eee; }
+        .legal-block:last-child { border-bottom: none; margin-bottom: 0; }
+        .legal-block h2 { font-size: 20px; color: var(--primary); margin-bottom: 15px; font-weight: 700; }
+        .legal-block p, .legal-block li { font-size: 14px; color: var(--text-sub); line-height: 1.8; margin-bottom: 10px; }
+        .legal-block ul { padding-left: 20px; }
+
+        /* --- MODAL AUTH --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .btn-save:hover { background: var(--primary); }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--color-red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
+        .btn-cancel:hover { text-decoration: underline; }
+        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+        input:focus { outline: none; border-color: var(--primary); }
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
+        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+
+        /* Canvas Neige */
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+
+        @media (min-width: 769px) { body { padding-bottom: 0; } }
+        @media (max-width: 768px) {
+            .site-logo { display: none; } 
+            .top-nav { justify-content: flex-end; padding: 10px 15px; }
+            .nav-center {
+                position: fixed; bottom: 0; top: auto; left: 0; width: 100%;
+                transform: none; background: #1A1A1A; border: none; 
+                border-top: 1px solid rgba(255,255,255,0.1);
+                padding: 8px 0 25px 0; justify-content: space-around; 
+                box-shadow: 0 -5px 20px rgba(0,0,0,0.5); z-index: 2000;
+                box-sizing: border-box; 
+            }
+            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
+            .nav-link span:first-child { font-size: 20px; }
+            .nav-link span:last-child { font-size: 10px; font-weight: 500; }
+            .nav-link.active { color: var(--primary); }
+            .legal-card { padding: 30px 20px; }
+            .legal-title-main { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="snow-canvas"></canvas>
+
+    <nav class="top-nav">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <a href="index.html">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+            </a>
+        </div>
+
+        <div class="nav-center">
+            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+        </div>
+
+        <div class="nav-right">
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
+                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <div class="lang-toggle" onclick="window.toggleLanguage()">
+                <div class="lang-option active" id="lang-fr">FR</div>
+                <div class="lang-option" id="lang-en">EN</div>
+            </div>
+
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="legal-container">
+        <div class="legal-card">
+            <h1 class="legal-title-main" data-t="legalMainTitle">Mentions Légales & Confidentialité</h1>
+
+            <div class="legal-block">
+                <h2 data-t="legalEditTitle">1. Éditeur du site</h2>
+                <p data-t="legalEditContent">
+                    Le site <strong>HRNtrack</strong> est édité par un particulier à des fins non commerciales (projet "Fanmade").<br><br>
+                    <strong>Contact :</strong> [À COMPLÉTER : VOTRE EMAIL]<br>
+                    <strong>Directeur de publication :</strong> [À COMPLÉTER : VOTRE NOM/PSEUDO]
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2 data-t="legalHostTitle">2. Hébergement</h2>
+                <p data-t="legalHostContent">
+                    Le site est hébergé par <strong>GitHub, Inc.</strong><br>
+                    Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.<br>
+                    Le site utilise la technologie GitHub Pages.
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2 data-t="legalDataTitle">3. Données personnelles</h2>
+                <p data-t="legalDataContent">
+                    HRNtrack respecte votre vie privée. Voici comment sont gérées vos données :
+                </p>
+                <ul>
+                    <li data-t="legalLi1"><strong>Authentification :</strong> Nous utilisons Google Firebase Auth pour gérer les comptes. Seul votre email et un identifiant unique (UID) sont stockés pour vous permettre de retrouver votre collection.</li>
+                    <li data-t="legalLi2"><strong>Collection :</strong> Les données relatives aux figurines que vous possédez sont stockées dans Google Firebase Firestore (Cloud Database) lié à votre identifiant.</li>
+                    <li data-t="legalLi3"><strong>Suppression :</strong> Vous pouvez demander la suppression intégrale de vos données en nous contactant par email.</li>
+                </ul>
+            </div>
+
+            <div class="legal-block">
+                <h2 data-t="legalCookiesTitle">4. Cookies & Traceurs</h2>
+                <p data-t="legalCookiesContent">
+                    Nous utilisons Google Analytics (GA4) pour mesurer l'audience du site de manière anonyme. Cela nous aide à comprendre quelles pages sont les plus visitées pour améliorer l'outil.<br>
+                    Vous pouvez refuser le suivi via les paramètres de votre navigateur.
+                </p>
+            </div>
+
+            <div class="legal-block">
+                <h2 data-t="legalPropTitle">5. Propriété Intellectuelle</h2>
+                <p data-t="legalPropContent">
+                    HRNtrack est un projet indépendant. Les images des figurines Hirono et la marque "POP MART" sont la propriété exclusive de POP MART. Elles sont utilisées ici à titre informatif (Fair Use) pour aider les collectionneurs.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            <div class="auth-separator">OU</div>
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">Créer un compte</button>
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // --- 1. DEFINIR LES TRADUCTIONS (y compris celles du footer) ---
+        const translations = {
+            fr: {
+                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
+                authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                
+                // Footer keys (pour qu'elles soient traduites une fois le footer chargé)
+                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono.",
+                footerNav: "Navigation",
+                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
+                legalMainTitle: "Mentions Légales",
+
+                // LEGAL SPECIFIC
+                legalMainTitle: "Mentions Légales & Confidentialité",
+                legalEditTitle: "1. Éditeur du site",
+                legalEditContent: "Le site HRNtrack est édité par un particulier à des fins non commerciales (projet 'Fanmade'). Contactez-nous pour toute demande.",
+                legalHostTitle: "2. Hébergement",
+                legalHostContent: "Le site est hébergé par GitHub, Inc. (San Francisco, USA).",
+                legalDataTitle: "3. Données personnelles",
+                legalDataContent: "HRNtrack respecte votre vie privée. Voici comment sont gérées vos données :",
+                legalLi1: "Authentification : Email et UID stockés via Firebase.",
+                legalLi2: "Collection : Vos données de collection stockées via Firestore.",
+                legalLi3: "Suppression : Contactez-nous pour supprimer vos données.",
+                legalCookiesTitle: "4. Cookies & Traceurs",
+                legalCookiesContent: "Nous utilisons Google Analytics de manière anonyme pour améliorer le site.",
+                legalPropTitle: "5. Propriété Intellectuelle",
+                legalPropContent: "Les images sont la propriété de POP MART (Fair Use)."
+            },
+            en: {
+                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
+                authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
+                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                
+                // Footer keys
+                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
+                footerNav: "Navigation",
+                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
+                legalMainTitle: "Legal Mentions",
+
+                // LEGAL SPECIFIC
+                legalMainTitle: "Legal Mentions & Privacy",
+                legalEditTitle: "1. Site Editor",
+                legalEditContent: "HRNtrack is edited by an individual for non-commercial purposes (Fanmade project). Contact us for any request.",
+                legalHostTitle: "2. Hosting",
+                legalHostContent: "This site is hosted by GitHub, Inc. (San Francisco, USA).",
+                legalDataTitle: "3. Personal Data",
+                legalDataContent: "HRNtrack respects your privacy. Here is how your data is handled:",
+                legalLi1: "Auth: Email and UID stored via Firebase.",
+                legalLi2: "Collection: Your collection data stored via Firestore.",
+                legalLi3: "Deletion: Contact us to delete your data.",
+                legalCookiesTitle: "4. Cookies & Trackers",
+                legalCookiesContent: "We use Google Analytics anonymously to improve the website.",
+                legalPropTitle: "5. Intellectual Property",
+                legalPropContent: "Images are property of POP MART (Fair Use)."
+            }
+        };
+
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang);
+            updateUIText();
+        };
+
+        // Fonction globale de mise à jour des textes
+        window.updateUIText = function() {
+            if(currentLang === 'fr') {
+                document.getElementById('lang-fr').classList.add('active');
+                document.getElementById('lang-en').classList.remove('active');
+            } else {
+                document.getElementById('lang-fr').classList.remove('active');
+                document.getElementById('lang-en').classList.add('active');
+            }
+
+            const t = translations[currentLang];
+            // On traduit tout ce qui a l'attribut data-t (y compris dans le footer)
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(t[key]) el.innerHTML = t[key];
+            });
+
+            const user = auth.currentUser;
+            const btnText = document.getElementById('auth-status-text');
+            if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+        }
+
+        // --- 2. CHARGER LE FOOTER ---
+        fetch('footer.html')
+            .then(response => {
+                if (!response.ok) throw new Error("Impossible de charger le footer");
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+                // Important : on lance la traduction une fois le footer inséré
+                updateUIText();
+            })
+            .catch(error => {
+                console.error('Erreur chargement footer:', error);
+                // Si ça échoue (ex: test local sans serveur), on ne bloque pas le reste
+            });
+
+
+        // --- 3. LOGIQUE AUTH & MODAL ---
+        window.toggleAuthModal = () => {
+            const el = document.getElementById('auth-modal');
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        onAuthStateChanged(auth, async (user) => {
+            // On lance la traduction initiale
+            updateUIText();
+            const btn = document.getElementById('auth-trigger');
+            if (btn) {
+                if (user) {
+                    btn.classList.add('logged-in'); 
+                    btn.onclick = () => window.location.href = "compte.html"; 
+                } else {
+                    btn.classList.remove('logged-in');
+                    btn.onclick = () => window.toggleAuthModal();
+                }
+            }
+        });
+        
+        // --- 4. EFFET NEIGE ---
+        const canvas = document.getElementById('snow-canvas');
+        if(canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height, snowflakes;
+            function initSnow() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                snowflakes = [];
+                for (let i = 0; i < 150; i++) {
+                    snowflakes.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 3 + 1,
+                        speed: Math.random() * 1 + 0.5,
+                        wind: Math.random() * 0.5 - 0.25,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+            function drawSnow() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = "white";
+                snowflakes.forEach(flake => {
+                    ctx.beginPath();
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                    ctx.globalAlpha = flake.opacity;
+                    ctx.fill();
+                    flake.y += flake.speed;
+                    flake.x += flake.wind;
+                    if (flake.y > height) {
+                        flake.y = -10;
+                        flake.x = Math.random() * width;
+                    }
+                });
+                requestAnimationFrame(drawSnow);
+            }
+            window.addEventListener('resize', initSnow);
+            initSnow();
+            drawSnow();
+        }
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RFP1HDMW49"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RFP1HDMW49');
+    </script>
+</body>
+</html>
