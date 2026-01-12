@@ -19,7 +19,7 @@
             --gold-light: #F0EAD6;
             --red: #C0392B; 
             --dark-bg: #1A1A1A;
-            
+             
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
             --nav-height-mobile: 80px;
@@ -164,12 +164,12 @@
         .stat-card:hover { transform: translateY(-2px); }
         .stat-card h3 { margin: 0 0 5px 0; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
         .stat-card .value { font-size: 24px; font-weight: 700; color: var(--text-main); }
-        
+         
         .stat-card.progression { border-left-color: var(--primary); grid-column: span 1; }
         .progress-container { background: #E5E7EB; height: 6px; border-radius: 10px; margin-top: 10px; overflow: hidden; }
         /* Gradient Vert Nature */
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #8FBC6B); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
-        
+         
         .stat-card.doubles { border-left-color: var(--red); }
         .stat-card.secrets { border-left-color: var(--gold); background: linear-gradient(to right, #fff, #F9F5EB); }
         .stat-card.secrets .icon { position: absolute; right: 15px; top: 15px; font-size: 24px; opacity: 0.2; color: var(--gold); }
@@ -214,7 +214,7 @@
         .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(106, 140, 71, 0.3); }
         .card.owned { border-color: var(--primary); }
         .card.secret { border-color: var(--gold); background: linear-gradient(to bottom, #fff, var(--gold-light)); }
-        
+         
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f3f4f6; }
         .card img.missing { filter: grayscale(1) opacity(0.5); }
         .card.owned img { filter: none; opacity: 1; }
@@ -228,12 +228,12 @@
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
-        
+         
         .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        
+         
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
         .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600;}
@@ -301,7 +301,7 @@
                 </div>
                 <div class="progress-container"><div id="progress-fill" class="progress-bar"></div></div>
             </div>
-            
+             
             <div class="stat-card">
                 <h3 data-t="kpiValue">Valeur</h3>
                 <span class="value" id="stat-value">0€</span>
@@ -372,7 +372,7 @@
 
             <h2 id="edit-title" style="margin:0; font-size:1.3rem;"></h2>
             <p id="edit-subtitle" style="margin:2px 0 20px; color:var(--text-sub); font-size:12px;"></p>
-            
+             
             <label class="form-label" data-t="lblStatus">Statut</label>
             <select id="input-status" style="margin-bottom:15px;">
                 <option value="No status" data-t="optNone">Non possédé</option>
@@ -398,7 +398,7 @@
                 <div><label class="form-label" data-t="lblPrice">Prix</label><input type="number" id="input-price" step="0.01"></div>
                 <div><label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date"></div>
             </div>
-            
+             
             <label class="form-label" data-t="lblNotes">Notes</label>
             <textarea id="input-note" rows="2"></textarea>
 
@@ -413,23 +413,70 @@
             <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
                 Sauvegardez votre collection dans le cloud.
             </p>
-            
+             
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
             <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
 
             <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
-            
+             
             <div class="auth-separator">OU</div>
-            
+             
             <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
                 Créer un compte
             </button>
-            
+             
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>
 
     <div id="footer-placeholder"></div>
+
+    <script>
+        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
+        const GA_ID = 'G-RFP1HDMW49';
+
+        // Fonction pour charger Analytics
+        function loadAnalytics() {
+            // On vérifie si on n'a pas déjà chargé le script pour éviter les doublons
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+            console.log("Analytics chargé ✅");
+        }
+
+        // Fonction appelée par les boutons (doit être globale/window)
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+                console.log("Analytics bloqué ❌");
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        // Fonction d'initialisation (à lancer après le chargement du footer)
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            
+            if (consent === 'true') {
+                loadAnalytics(); 
+            } else if (consent === null) {
+                if(banner) banner.style.display = 'block'; 
+            }
+        }
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -447,12 +494,12 @@
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", btnShare: "Partager",
-                
+                 
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
-                
+                 
                 filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Rechercher une figurine...",
-                
+                 
                 optAllSeries: "Toutes les séries",
                 sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)",
                 sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)",
@@ -460,12 +507,12 @@
 
                 lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
                 btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
-                
+                 
                 optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Inconnu", condMint: "Neuf (Mint)", condGood: "Bon", condFair: "Moyen", condDamaged: "Abimé",
-                
+                 
                 deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
-                
+                 
                 alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
                 msgNoResults: "Aucune figurine trouvée.",
 
@@ -479,12 +526,12 @@
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", btnShare: "Share",
-                
+                 
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
-                
+                 
                 filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist",
                 searchPlaceholder: "Search for a figure...",
-                
+                 
                 optAllSeries: "All Series",
                 sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)",
                 sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)",
@@ -492,12 +539,12 @@
 
                 lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
                 btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
-                
+                 
                 optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
                 condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
-                
+                 
                 deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
-                
+                 
                 alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
                 msgNoResults: "No figures found.",
 
@@ -546,7 +593,7 @@
 
             // Mettre à jour le dropdown des séries s'il est initialisé
             initSeriesFilter();
-            
+             
             // Rafraîchir la grille et les stats si chargées
             if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') {
                 window.updateGrid();
@@ -769,10 +816,10 @@
             document.body.classList.add('auth-ready'); 
             document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
             document.getElementById('main-container').style.setProperty('display', 'block', 'important');
-            
+             
             // Masquer les boutons d'admin
             if(document.getElementById('auth-trigger')) document.getElementById('auth-trigger').style.display = 'none';
-            
+             
             // Bannière
             const banner = document.createElement('div');
             banner.style.cssText = "background:#6A8C47; color:white; text-align:center; padding:10px; font-weight:bold; margin-bottom:20px; border-radius:8px;";
@@ -791,7 +838,7 @@
                     // UI: CONNECTÉ
                     btn.classList.add('logged-in'); 
                     btn.onclick = () => window.location.href = "compte.html"; 
-                    
+                     
                     document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
                     document.getElementById('main-container').style.setProperty('display', 'block', 'important');
 
@@ -804,7 +851,7 @@
 
                     document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
                     document.getElementById('main-container').style.setProperty('display', 'none', 'important');
-                    
+                     
                     myCollection = [...baseData]; 
                 }
                 document.body.classList.add('auth-ready');
@@ -818,7 +865,7 @@
                 if (snap.exists()) {
                     const data = snap.data();
                     const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
-                    
+                     
                     myCollection = baseData.map(baseItem => {
                         const savedItem = cloudData.find(i => i.ID === baseItem.ID);
                         if (savedItem) {
@@ -925,7 +972,7 @@
             result.sort((a, b) => {
                 if (sortMode === 'name_asc') return a.Name.localeCompare(b.Name);
                 if (sortMode === 'name_desc') return b.Name.localeCompare(a.Name);
-                
+                 
                 if (sortMode === 'price_asc') {
                     return (parseFloat(a["Purchase price"])||0) - (parseFloat(b["Purchase price"])||0);
                 }
@@ -966,7 +1013,7 @@
                     stats.spent += (p * q);
                     if (q > 1) stats.doubles += (q - 1);
                     if (item["Secret Rare"] === "Yes") stats.secretsFound++;
-                    
+                     
                     condMap[c] = (condMap[c] || 0) + q;
                     serMap[s].owned++;
                 }
@@ -975,10 +1022,10 @@
             const percent = dataForStats.length > 0 ? Math.round((stats.ownedUniques / dataForStats.length) * 100) : 0;
             document.getElementById('progression-text').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
-            
+             
             const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
             const currency = currentLang === 'fr' ? 'EUR' : 'USD';
-            
+             
             document.getElementById('stat-value').innerText = stats.spent.toLocaleString(locale, { style: 'currency', currency: currency });
             document.getElementById('stat-total').innerText = stats.ownedUniques;
             document.getElementById('stat-doubles-val').innerText = stats.doubles;
@@ -993,7 +1040,7 @@
                     <div class="bar-fill" style="width:${widthPercent}%; background:${color}"></div>
                 </div>
             `;
-            
+             
             /* Condition: Rouge (#C0392B) */
             // MAPPING DES CONDITIONS POUR TRADUCTION
             const conditionKeys = {
@@ -1029,19 +1076,19 @@
             // 2. RENDU GRILLE (Liste Filtrée)
             const grid = document.getElementById('hirono-grid');
             grid.innerHTML = "";
-            
+             
             const fragment = document.createDocumentFragment();
             dataForGrid.forEach(item => {
                 const owned = item.Status === "Possédé";
                 const isSecret = item["Secret Rare"] === "Yes";
-                
+                 
                 const card = document.createElement('div');
                 card.className = `card ${owned ? 'owned' : ''} ${isSecret ? 'secret' : ''}`;
-                
+                 
                 const imgUrl = (item.Image && item.Image.trim() !== "") ? item.Image : `https://via.placeholder.com/300/e5e7eb/9ca3af?text=${encodeURIComponent(item.Name)}`;
-                
+                 
                 card.onclick = () => window.openModal(item);
-                
+                 
                 /* Prix en Vert */
                 card.innerHTML = `
                     ${(owned && item.Quantity > 1) ? `<div class="qty-badge">x${item.Quantity}</div>` : ''}
@@ -1067,7 +1114,7 @@
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
-            
+             
             // LOGIQUE IMAGE & SECRET
             document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
             const secretBadge = document.getElementById('edit-secret-badge');
@@ -1083,7 +1130,7 @@
             document.getElementById('input-price').value = item["Purchase price"] || "";
             document.getElementById('input-date').value = item["Purchase date"] || "";
             document.getElementById('input-note').value = item.Note || "";
-            
+             
             // GESTION LECTURE SEULE
             if(isReadOnly) {
                 document.querySelector('.btn-save').style.display = 'none';
@@ -1159,13 +1206,13 @@
         };
 
         window.fermer = () => document.getElementById('modal').style.display = "none";
-        
+         
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.style.display = "none";
             }
         }
-        
+         
         // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
         fetch('footer.html')
             .then(response => {
@@ -1174,10 +1221,15 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                updateUIText(); // On relance la traduction pour traduire le footer
+                
+                // 2. On met à jour les traductions
+                if(window.updateUIText) window.updateUIText();
+
+                // 3. CRUCIAL : On lance la logique cookie APRÈS que le footer soit affiché
+                if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
-        
+         
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -1206,7 +1258,7 @@
         function drawSnow() {
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = "white";
-            
+             
             snowflakes.forEach(flake => {
                 ctx.beginPath();
                 ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
@@ -1233,6 +1285,5 @@
         initSnow();
         drawSnow();
     </script>
-
- </body>
+</body>
 </html>

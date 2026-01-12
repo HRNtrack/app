@@ -348,6 +348,47 @@
 
     <div id="footer-placeholder"></div>
 
+<script>
+    // --- 1. FONCTIONS COOKIES & ANALYTICS (GLOBALES) ---
+    const GA_ID = 'G-RFP1HDMW49';
+
+    function loadAnalytics() {
+        if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+        const script = document.createElement('script');
+        script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+        script.async = true;
+        document.head.appendChild(script);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', GA_ID);
+        console.log("Analytics chargé ✅");
+    }
+
+    // Accessible pour les boutons du footer
+    window.handleCookie = function(accept) {
+        const banner = document.getElementById('cookie-banner');
+        if (accept) {
+            localStorage.setItem('cookieConsent', 'true');
+            loadAnalytics();
+        } else {
+            localStorage.setItem('cookieConsent', 'false');
+        }
+        if(banner) banner.style.display = 'none';
+    };
+
+    // Logique d'initialisation
+    window.initCookieLogic = function() {
+        const consent = localStorage.getItem('cookieConsent');
+        const banner = document.getElementById('cookie-banner');
+        if (consent === 'true') {
+            loadAnalytics();
+        } else if (consent === null) {
+            if(banner) banner.style.display = 'block'; 
+        }
+    }
+</script>
+
 <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -508,7 +549,8 @@
             updateUI();
         };
 
-        function updateUI() {
+        // On rend la fonction accessible globalement pour le footer
+        window.updateUI = function() {
             if(currentLang === 'fr') { document.getElementById('lang-fr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); }
             else { document.getElementById('lang-fr').classList.remove('active'); document.getElementById('lang-en').classList.add('active'); }
             
@@ -575,7 +617,7 @@
                 userCollection = [];
             }
             
-            updateUI();
+            window.updateUI();
             document.body.classList.add('auth-ready');
         });
 
@@ -738,7 +780,12 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                updateUI();
+                
+                // On relance la traduction pour traduire le footer
+                if(window.updateUI) window.updateUI();
+
+                // CRUCIAL : On lance la logique cookie APRÈS que le footer soit affiché
+                if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
 

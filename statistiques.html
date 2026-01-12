@@ -454,6 +454,47 @@
 
     <div id="footer-placeholder"></div>
 
+    <script>
+        // --- 1. FONCTIONS COOKIES & ANALYTICS (GLOBALES) ---
+        const GA_ID = 'G-RFP1HDMW49';
+
+        function loadAnalytics() {
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+            console.log("Analytics chargé ✅");
+        }
+
+        // Accessible pour les boutons du footer
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        // Logique d'initialisation
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            if (consent === 'true') {
+                loadAnalytics();
+            } else if (consent === null) {
+                if(banner) banner.style.display = 'block'; 
+            }
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -790,7 +831,6 @@
             {"ID":"SPE-WISHPE","Name":"Wish List Pendant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
             {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"}        
-
         ];
 
         let myCollection = [];
@@ -1101,6 +1141,9 @@
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
                 updateUIText(); // On relance la traduction pour traduire le footer
+                
+                // CRUCIAL : On lance la logique cookie APRÈS que le footer soit affiché
+                if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
 
