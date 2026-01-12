@@ -1,5 +1,5 @@
 <style>
-    /* CSS SPÉCIFIQUE AU FOOTER */
+    /* --- CSS SPÉCIFIQUE AU FOOTER --- */
     .site-footer {
         background-color: #1A1A1A; /* Dark background */
         color: #9CA3AF;
@@ -8,6 +8,8 @@
         border-top: 1px solid rgba(255,255,255,0.1);
         font-size: 14px;
         margin-top: auto; /* Pousse le footer vers le bas */
+        position: relative; /* Pour positionnement */
+        z-index: 10;
     }
 
     .footer-container {
@@ -113,6 +115,40 @@
         gap: 15px;
     }
 
+    /* --- MODERN COOKIE BANNER CSS --- */
+    #cookie-banner {
+        display: none; /* Caché par défaut, activé par le JS de la page principale */
+        position: fixed; 
+        bottom: 20px; 
+        left: 20px; 
+        width: calc(100% - 40px);
+        max-width: 340px;
+        background: rgba(26, 26, 26, 0.95);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: white; 
+        padding: 24px;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
+        z-index: 10000; /* Très haut pour passer au dessus de tout */
+        animation: slideInBanner 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        font-family: 'Poppins', sans-serif;
+    }
+
+    @keyframes slideInBanner {
+        from { transform: translateY(100px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
+
+    .cookie-content { display: flex; flex-direction: column; gap: 15px; }
+    .cookie-title { font-size: 16px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
+    .cookie-btns { display: flex; gap: 10px; margin-top: 10px; }
+    .btn-cookie { padding: 10px 18px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; flex: 1; }
+    .btn-accept { background: #6A8C47; color: white; box-shadow: 0 4px 12px rgba(106, 140, 71, 0.3); }
+    .btn-accept:hover { background: #557235; transform: translateY(-1px); }
+    .btn-decline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; }
+    .btn-decline:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
+
     @media (max-width: 768px) {
         .footer-bottom { flex-direction: column; text-align: center; }
         .footer-links a:hover { transform: none; }
@@ -170,3 +206,17 @@
         <div>Made with ❤️ in France</div>
     </div>
 </footer>
+
+<div id="cookie-banner">
+    <div class="cookie-content">
+        <div class="cookie-title">🍪 Cookies ?</div>
+        <div>
+            <span id="txt-cookie-fr" style="font-size:13px; opacity:0.9;">Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?</span>
+            <span id="txt-cookie-en" style="color:#aaa; font-size:11px; display:block; margin-top:4px;">We use Google Analytics to improve the website. Is it OK?</span>
+        </div>
+        <div class="cookie-btns">
+            <button class="btn-cookie btn-decline" onclick="handleCookie(false)">Non merci / No</button>
+            <button class="btn-cookie btn-accept" onclick="handleCookie(true)">Accepter / Accept</button>
+        </div>
+    </div>
+</div>
