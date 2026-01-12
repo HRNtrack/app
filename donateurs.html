@@ -300,6 +300,52 @@
 
     <div id="footer-placeholder"></div>
 
+    <script>
+        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
+        const GA_ID = 'G-RFP1HDMW49';
+
+        // Fonction pour charger Analytics
+        function loadAnalytics() {
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+            console.log("Analytics chargé ✅");
+        }
+
+        // Fonction appelée par les boutons (doit être globale/window)
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+                console.log("Analytics bloqué ❌");
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        // Fonction d'initialisation (à lancer après le chargement du footer)
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            
+            if (consent === 'true') {
+                loadAnalytics(); 
+            } else if (consent === null) {
+                if(banner) banner.style.display = 'block'; 
+            }
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -428,7 +474,7 @@
 
         loadDonations();
 
-        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
+        // --- CHARGEMENT DU FOOTER DYNAMIQUE ET COOKIES ---
         fetch('footer.html')
             .then(response => {
                 if (!response.ok) throw new Error("Erreur chargement footer");
@@ -436,10 +482,16 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                updateUIText(); // On relance la traduction pour traduire le footer
+                
+                // Traduction du footer
+                if(window.updateUIText) window.updateUIText();
+                
+                // Init Cookies
+                if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
 
+        // --- NEIGE ---
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -452,7 +504,6 @@
             canvas.height = height;
 
             snowflakes = [];
-            // Ajuste le nombre de flocons ici (150 est un bon équilibre)
             for (let i = 0; i < 150; i++) {
                 snowflakes.push({
                     x: Math.random() * width,
@@ -475,11 +526,9 @@
                 ctx.globalAlpha = flake.opacity;
                 ctx.fill();
 
-                // Déplacement
                 flake.y += flake.speed;
                 flake.x += flake.wind;
 
-                // Si le flocon sort en bas, il réapparaît en haut
                 if (flake.y > height) {
                     flake.y = -10;
                     flake.x = Math.random() * width;
@@ -491,10 +540,8 @@
 
         window.addEventListener('resize', initSnow);
 
-        // Lancement
         initSnow();
         drawSnow();
     </script>
-
 </body>
 </html>
