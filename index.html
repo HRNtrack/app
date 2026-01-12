@@ -289,57 +289,6 @@
 
         /* Canvas Neige */
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        
-        /* --- MODERN COOKIE BANNER --- */
-        #cookie-banner {
-            display: none; /* Caché par défaut */
-            position: fixed; 
-            bottom: 20px; 
-            left: 20px; 
-            width: calc(100% - 40px);
-            max-width: 340px;
-            background: rgba(26, 26, 26, 0.95); /* Fond sombre transparent */
-            backdrop-filter: blur(12px); /* Effet de flou "Glass" */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white; 
-            padding: 24px;
-            border-radius: 20px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
-            z-index: 10000;
-            animation: slideInBanner 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @keyframes slideInBanner {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .cookie-content {
-            display: flex; flex-direction: column; gap: 15px;
-        }
-
-        .cookie-title { font-size: 16px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-
-        .cookie-btns { 
-            display: flex; gap: 10px; margin-top: 10px; 
-        }
-
-        .btn-cookie {
-            padding: 10px 18px; border-radius: 12px; border: none; 
-            font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; flex: 1;
-        }
-
-        .btn-accept { 
-            background: #6A8C47; color: white; 
-            box-shadow: 0 4px 12px rgba(106, 140, 71, 0.3);
-        }
-        .btn-accept:hover { background: #557235; transform: translateY(-1px); }
-
-        .btn-decline { 
-            background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; 
-        }
-        .btn-decline:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
-
     </style>
 </head>
 <body>
@@ -495,26 +444,15 @@
 
     <div id="footer-placeholder"></div>
 
-    <div id="cookie-banner">
-        <div class="cookie-content">
-            <div class="cookie-title">🍪 Cookies ?</div>
-            <div>
-                <span id="txt-cookie-fr" style="font-size:13px; opacity:0.9;">Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?</span>
-                <span id="txt-cookie-en" style="color:#aaa; font-size:11px; display:block; margin-top:4px;">We use Google Analytics to improve the website. Is it OK?</span>
-            </div>
-            <div class="cookie-btns">
-                <button class="btn-cookie btn-decline" onclick="handleCookie(false)">Non merci / No</button>
-                <button class="btn-cookie btn-accept" onclick="handleCookie(true)">Accepter / Accept</button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Configuration GA4
+        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
         const GA_ID = 'G-RFP1HDMW49';
 
-        // Fonction pour charger Analytics (uniquement si accepté)
+        // Fonction pour charger Analytics
         function loadAnalytics() {
+            // On vérifie si on n'a pas déjà chargé le script pour éviter les doublons
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+
             const script = document.createElement('script');
             script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
             script.async = true;
@@ -527,8 +465,9 @@
             console.log("Analytics chargé ✅");
         }
 
-        // Gestion du choix
-        function handleCookie(accept) {
+        // Fonction appelée par les boutons (doit être globale/window)
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
             if (accept) {
                 localStorage.setItem('cookieConsent', 'true');
                 loadAnalytics();
@@ -536,17 +475,22 @@
                 localStorage.setItem('cookieConsent', 'false');
                 console.log("Analytics bloqué ❌");
             }
-            document.getElementById('cookie-banner').style.display = 'none';
-        }
+            if(banner) banner.style.display = 'none';
+        };
 
-        // Vérification au démarrage
-        const consent = localStorage.getItem('cookieConsent');
-        if (consent === 'true') {
-            loadAnalytics(); // Déjà accepté avant
-        } else if (consent === null) {
-            document.getElementById('cookie-banner').style.display = 'block'; // Pas encore choisi
+        // Fonction d'initialisation (à lancer après le chargement du footer)
+        function initCookieLogic() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            
+            if (consent === 'true') {
+                loadAnalytics(); // Déjà accepté avant
+            } else if (consent === null) {
+                // Pas encore choisi ET le bandeau existe bien dans le DOM
+                if(banner) banner.style.display = 'block'; 
+            }
+            // Si 'false', on ne fait rien.
         }
-        // Si 'false', on ne fait rien (bloqué)
     </script>
 
     <script type="module">
@@ -584,7 +528,7 @@
                 discordBtn: "Rejoindre !",
 
                 donateTitle: "Soutenir le projet",
-                donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit. Si l'outil vous aide, vous pouvez m'offrir un café !",
+                donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit et sans publicités intrusives. Si l'outil vous aide à gérer votre collection, vous pouvez m'offrir un café pour participer aux frais d'hébergement !",
                 btnCoffee: "☕ Offrir un café à l'auteur",
 
                 // Footer keys
@@ -718,9 +662,14 @@
                 return response.text();
             })
             .then(data => {
+                // A. On insère le HTML du footer
                 document.getElementById('footer-placeholder').innerHTML = data;
-                // On relance la traduction pour traduire le footer
-                updateUIText();
+                
+                // B. On lance la traduction du footer
+                if(window.updateUIText) window.updateUIText();
+
+                // C. On initialise le bandeau cookie (MAINTENANT qu'il existe dans le DOM)
+                initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
 
