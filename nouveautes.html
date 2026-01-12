@@ -271,27 +271,12 @@
 
         <div class="release-section">
             <div class="section-header">
-                <span class="section-name" data-t="secSpecials">Collaborations & Events</span>
-                <span class="section-tag">LIMITED</span>
+                <span class="section-name" data-t="secAll">Toutes les nouveautés</span>
+                <span class="section-tag">2024-2025</span>
             </div>
-            <div class="release-grid" id="grid-specials"></div>
+            <div class="release-grid" id="grid-all"></div>
         </div>
 
-        <div class="release-section">
-            <div class="section-header">
-                <span class="section-name" data-t="secXmas">Noël 2024</span>
-                <span class="section-tag">SEASONAL</span>
-            </div>
-            <div class="release-grid" id="grid-xmas"></div>
-        </div>
-
-        <div class="release-section">
-            <div class="section-header">
-                <span class="section-name" data-t="secRoad">Road Journal Series</span>
-                <span class="section-tag">SERIES</span>
-            </div>
-            <div class="release-grid" id="grid-road"></div>
-        </div>
     </div>
 
     <div id="modal" class="modal-overlay">
@@ -375,6 +360,11 @@
 
         // --- DATA DES NOUVEAUTÉS ---
         const newReleases = [
+            // SPECIALS BLIND BOX
+            { id: "SPE-WISHPE", name: "Wish List Pendant", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
+            { id: "SPE-GOODHEL", name: "Good Health", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
+            { id: "SPE-LUCKON", name: "Luck on the Way", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},
+
             // SPECIALS
             { id: "SPE-FLOMARK", name: "Floating Market", serie: "Special Blister", cat: "specials", img: "https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png" },
             { id: "SPE-CHUCKY", name: "Chucky", serie: "Special 200%", cat: "specials", img: "https://i.postimg.cc/x1zptySz/chuky-removebg-preview.png" },
@@ -418,8 +408,9 @@
                 pageTitle: "Dernières Sorties",
                 pageSub: "Les nouveautés Hirono les plus récentes.",
                 secSpecials: "Collaborations & Events",
-                secXmas: "Noël 2024",
+                secXmas: "Noël 2025",
                 secRoad: "Road Journal Series",
+                secAll: "Toutes les nouveautés", // AJOUTÉ
 
                 // Footer
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.",
@@ -472,8 +463,9 @@
                 pageTitle: "Latest Releases",
                 pageSub: "The most recent Hirono releases.",
                 secSpecials: "Collabs & Events",
-                secXmas: "Christmas 2024",
+                secXmas: "Christmas 2025",
                 secRoad: "Road Journal Series",
+                secAll: "All New Releases", // ADDED
 
                 // Footer
                 footerDesc: "The ultimate tool for tracking your Hirono collection.",
@@ -587,10 +579,9 @@
             document.body.classList.add('auth-ready');
         });
 
+        // MODIFICATION ICI : On ne filtre plus par catégorie, on affiche tout.
         function renderGrids() {
-            renderSection('grid-specials', newReleases.filter(i => i.cat === 'specials'));
-            renderSection('grid-xmas', newReleases.filter(i => i.cat === 'xmas'));
-            renderSection('grid-road', newReleases.filter(i => i.cat === 'road'));
+            renderSection('grid-all', newReleases);
         }
 
         function renderSection(elementId, items) {
