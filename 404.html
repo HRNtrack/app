@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HRNtrack - 404</title>
+    <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6A8C47;
+            --bg-body: #F5F5F0;
+            --text-main: #1A1A1A;
+            --text-sub: #555555;
+        }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; 
+            min-height: 100vh;
+            display: flex; 
+            flex-direction: column;
+            align-items: center; 
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Conteneur principal */
+        .error-container {
+            padding: 20px;
+            z-index: 10;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Styles du bouton de langue (identique au site) */
+        .lang-toggle {
+            display: inline-flex; 
+            background: rgba(0,0,0,0.05); 
+            border-radius: 20px;
+            padding: 2px; 
+            cursor: pointer; 
+            border: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .lang-option {
+            padding: 6px 12px; 
+            border-radius: 16px; 
+            font-size: 11px; 
+            font-weight: 700;
+            color: #9CA3AF; 
+            transition: all 0.3s ease;
+        }
+        .lang-option.active { 
+            background: var(--primary); 
+            color: white; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+        }
+
+        /* Image Hirono "Lost" */
+        .hirono-lost {
+            width: 250px;
+            height: auto;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Animation de flottement */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        h1 {
+            font-size: 80px;
+            margin: 0;
+            line-height: 1;
+            color: var(--primary);
+            opacity: 0.8;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin: 10px 0 20px 0;
+            color: var(--text-main);
+        }
+
+        p {
+            color: var(--text-sub);
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .btn-home {
+            background: var(--text-main);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            background: var(--primary);
+            box-shadow: 0 6px 20px rgba(106, 140, 71, 0.4);
+        }
+
+        /* Canvas Neige */
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
+    </style>
+</head>
+<body>
+
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="error-container">
+        <div class="lang-toggle" onclick="window.toggleLanguage()">
+            <div class="lang-option active" id="lang-fr">FR</div>
+            <div class="lang-option" id="lang-en">EN</div>
+        </div>
+
+        <img src="https://i.postimg.cc/4Nyv3p9k/1765529816912_lost_in_the_night.webp" alt="Lost Hirono" class="hirono-lost">
+        
+        <h1>404</h1>
+        <h2 data-t="title">Oups ! Perdu dans la nuit ?</h2>
+        <p data-t="msg">
+            Il semble que cette figurine n'existe pas encore...<br>
+            Ou alors elle s'est cachée.
+        </p>
+
+        <a href="index.html" class="btn-home">
+            <span data-t="btn">🏠 Retour à l'accueil</span>
+        </a>
+    </div>
+
+    <script>
+        // --- LOGIQUE DE TRADUCTION ---
+        const translations = {
+            fr: {
+                title: "Oups ! Perdu dans la nuit ?",
+                msg: "Il semble que cette page n'existe pas...<br>Ou alors elle s'est bien cachée.",
+                btn: "🏠 Retour à l'accueil"
+            },
+            en: {
+                title: "Oops! Lost in the night?",
+                msg: "It seems this page doesn't exist yet...<br>Or maybe it's hiding very well.",
+                btn: "🏠 Back to Home"
+            }
+        };
+
+        // Récupérer la langue sauvegardée ou FR par défaut
+        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+
+        window.toggleLanguage = () => {
+            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
+            localStorage.setItem('HRN_LANG', currentLang); // Sauvegarde pour les autres pages
+            updateUIText();
+        };
+
+        function updateUIText() {
+            // Mise à jour visuelle des boutons
+            if(currentLang === 'fr') {
+                document.getElementById('lang-fr').classList.add('active');
+                document.getElementById('lang-en').classList.remove('active');
+            } else {
+                document.getElementById('lang-fr').classList.remove('active');
+                document.getElementById('lang-en').classList.add('active');
+            }
+
+            // Mise à jour des textes
+            const t = translations[currentLang];
+            document.querySelectorAll('[data-t]').forEach(el => {
+                const key = el.getAttribute('data-t');
+                if(t[key]) el.innerHTML = t[key];
+            });
+        }
+
+        // Lancer la traduction au chargement
+        updateUIText();
+
+
+        // --- EFFET NEIGE (Léger) ---
+        const canvas = document.getElementById('snow-canvas');
+        if(canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height, snowflakes;
+
+            function initSnow() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+                snowflakes = [];
+                for (let i = 0; i < 80; i++) {
+                    snowflakes.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 3 + 1,
+                        speed: Math.random() * 1 + 0.5,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+
+            function drawSnow() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = "white";
+                snowflakes.forEach(flake => {
+                    ctx.beginPath();
+                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
+                    ctx.globalAlpha = flake.opacity;
+                    ctx.fill();
+                    
+                    flake.y += flake.speed;
+                    if (flake.y > height) {
+                        flake.y = -10;
+                        flake.x = Math.random() * width;
+                    }
+                });
+                requestAnimationFrame(drawSnow);
+            }
+
+            window.addEventListener('resize', initSnow);
+            initSnow();
+            drawSnow();
+        }
+    </script>
+</body>
+</html>

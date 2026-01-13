@@ -19,6 +19,8 @@
             --gold-light: #F0EAD6;
             --red: #C0392B; 
             --dark-bg: #1A1A1A;
+            --info-blue: #2196F3;
+            --info-bg: #E3F2FD;
              
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
@@ -85,6 +87,19 @@
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
+        /* --- TOOLTIP STYLE (DANS MODAL) --- */
+        .tooltip-container { position: relative; display: inline-block; cursor: help; margin-left: 5px; }
+        .info-icon {
+            display: inline-block; width: 14px; height: 14px; background: #ccc; color: white;
+            border-radius: 50%; text-align: center; line-height: 14px; font-size: 10px;
+        }
+        .tooltip-text {
+            display: none; position: absolute; background: #333; color: white; padding: 10px;
+            border-radius: 8px; font-size: 11px; width: 200px; z-index: 3100; bottom: 120%; left: 50%; transform: translateX(-50%);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); pointer-events: none; line-height: 1.4; text-align: left; text-transform: none; font-weight: normal;
+        }
+        .tooltip-container:hover .tooltip-text { display: block; }
+
         /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
         @media (min-width: 769px) {
             body { padding-bottom: 0; }
@@ -92,7 +107,7 @@
 
         @media (max-width: 768px) {
             .site-logo { display: none; } 
-            
+             
             /* Le Header du haut ne garde que les boutons de droite */
             .top-nav {
                 justify-content: flex-end; 
@@ -144,6 +159,31 @@
         /* --- CONTAINER --- */
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; /* CACHÉ PAR DÉFAUT */ }
 
+        /* --- ANNOUNCEMENT BANNER (NOUVEAU) --- */
+        .announcement-box {
+            background: linear-gradient(135deg, var(--info-bg), white);
+            border-left: 5px solid var(--info-blue);
+            color: #0d47a1;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+            animation: slideDown 0.5s ease-out;
+        }
+        .announcement-icon { font-size: 24px; }
+        .announcement-content { flex: 1; font-size: 13px; line-height: 1.5; }
+        .announcement-title { font-weight: 700; font-size: 15px; margin-bottom: 5px; display: block; color: var(--info-blue); }
+        .btn-close-banner {
+            background: transparent; border: none; font-size: 18px; color: #999; cursor: pointer; padding: 0; line-height: 1;
+        }
+        .btn-close-banner:hover { color: var(--red); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+
         /* --- ACCESS DENIED SCREEN --- */
         #access-denied {
             display: none; /* Caché par défaut, géré par JS */
@@ -164,12 +204,12 @@
         .stat-card:hover { transform: translateY(-2px); }
         .stat-card h3 { margin: 0 0 5px 0; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
         .stat-card .value { font-size: 24px; font-weight: 700; color: var(--text-main); }
-         
+          
         .stat-card.progression { border-left-color: var(--primary); grid-column: span 1; }
         .progress-container { background: #E5E7EB; height: 6px; border-radius: 10px; margin-top: 10px; overflow: hidden; }
         /* Gradient Vert Nature */
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #8FBC6B); width: 0%; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 10px; }
-         
+          
         .stat-card.doubles { border-left-color: var(--red); }
         .stat-card.secrets { border-left-color: var(--gold); background: linear-gradient(to right, #fff, #F9F5EB); }
         .stat-card.secrets .icon { position: absolute; right: 15px; top: 15px; font-size: 24px; opacity: 0.2; color: var(--gold); }
@@ -214,7 +254,7 @@
         .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(106, 140, 71, 0.3); }
         .card.owned { border-color: var(--primary); }
         .card.secret { border-color: var(--gold); background: linear-gradient(to bottom, #fff, var(--gold-light)); }
-         
+          
         .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f3f4f6; }
         .card img.missing { filter: grayscale(1) opacity(0.5); }
         .card.owned img { filter: none; opacity: 1; }
@@ -228,12 +268,18 @@
         /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
-         
+          
         .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
         input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-         
+        
+        /* Read Only Field Style for Cote */
+        .read-only-field { 
+            background: #F3F4F6; padding: 10px; border-radius: 8px; 
+            border: 1px solid #E5E7EB; color: #6A8C47; font-weight: 700; font-size: 14px;
+        }
+
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
         .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600;}
@@ -293,6 +339,19 @@
     </div>
 
     <div id="main-container" class="container">
+        
+        <div class="announcement-box">
+            <div class="announcement-icon">📣</div>
+            <div class="announcement-content">
+                <span class="announcement-title" data-t="announcementTitle">Nouveauté : Suivi des Cotes !</span>
+                <span data-t="announcementMsg">
+                    Comparez désormais la cote moyenne avec votre prix d'achat. 
+                    <strong>Attention :</strong> Veuillez bien sélectionner la devise (EUR/USD) de vos achats pour des calculs précis.
+                </span>
+            </div>
+            <button class="btn-close-banner" onclick="this.parentElement.style.display='none'">✕</button>
+        </div>
+
         <div class="dashboard-grid">
             <div class="stat-card progression">
                 <h3 data-t="kpiCompletion">Complétion</h3>
@@ -395,8 +454,35 @@
             </div>
 
             <div class="form-row">
-                <div><label class="form-label" data-t="lblPrice">Prix</label><input type="number" id="input-price" step="0.01"></div>
-                <div><label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date"></div>
+                <div>
+                    <label class="form-label">
+                        <span data-t="lblMarketPrice">Cote Moyenne</span>
+                        <div class="tooltip-container">
+                            <span class="info-icon">?</span>
+                            <div class="tooltip-text" data-t="priceTooltip"></div>
+                        </div>
+                    </label>
+                    <div id="modal-market-price" class="read-only-field">-</div>
+                </div>
+
+                <div>
+                    <label class="form-label" data-t="lblPurchasePrice">Prix d'achat</label>
+                    <div style="display:flex; gap:5px;">
+                        <input type="number" id="modal-price" placeholder="0" step="0.01" style="flex:1;">
+                        <select id="modal-currency" style="width:70px; padding:10px; border-radius:8px; border:1px solid #E5E7EB;">
+                            <option value="EUR">€</option>
+                            <option value="USD">$</option>
+                            <option value="GBP">£</option>
+                            <option value="CNY">¥</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div style="grid-column: span 2;">
+                    <label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date">
+                </div>
             </div>
              
             <label class="form-label" data-t="lblNotes">Notes</label>
@@ -435,11 +521,8 @@
         // --- 1. FONCTIONS COOKIES & ANALYTICS ---
         const GA_ID = 'G-RFP1HDMW49';
 
-        // Fonction pour charger Analytics
         function loadAnalytics() {
-            // On vérifie si on n'a pas déjà chargé le script pour éviter les doublons
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
-
             const script = document.createElement('script');
             script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
             script.async = true;
@@ -449,10 +532,8 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', GA_ID);
-            console.log("Analytics chargé ✅");
         }
 
-        // Fonction appelée par les boutons (doit être globale/window)
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
             if (accept) {
@@ -460,16 +541,13 @@
                 loadAnalytics();
             } else {
                 localStorage.setItem('cookieConsent', 'false');
-                console.log("Analytics bloqué ❌");
             }
             if(banner) banner.style.display = 'none';
         };
 
-        // Fonction d'initialisation (à lancer après le chargement du footer)
         window.initCookieLogic = function() {
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
-            
             if (consent === 'true') {
                 loadAnalytics(); 
             } else if (consent === null) {
@@ -505,7 +583,14 @@
                 sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)",
                 sortDateDesc: "Date d'achat (Récent)",
 
-                lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblPrice: "Prix (€)", lblDate: "Date d'achat", lblNotes: "Notes",
+                lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblDate: "Date d'achat", lblNotes: "Notes",
+                lblMarketPrice: "Cote Moyenne", lblPurchasePrice: "Mon Prix",
+                lblCardCote: "Cote", lblCardPaid: "Achat",
+
+                // BANNER ANNOUNCEMENT
+                announcementTitle: "Nouveauté : Suivi des Cotes !",
+                announcementMsg: "Comparez désormais la cote moyenne avec votre prix d'achat. <br><strong>Important :</strong> Veuillez bien sélectionner la devise (EUR/USD...) lors de vos saisies pour que les calculs soient justes !",
+
                 btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
                  
                 optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
@@ -516,11 +601,13 @@
                 alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?",
                 msgNoResults: "Aucune figurine trouvée.",
 
-                // --- FOOTER KEYS AJOUTÉES ---
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono.",
                 footerNav: "Navigation",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales"
+                legalMainTitle: "Mentions Légales",
+                
+                // TOOLTIP TRANSLATION
+                priceTooltip: "Prix moyen calculé sur les achats déclarés par la communauté.<br>Converti automatiquement depuis plusieurs devises.<br>Ceci est une estimation, pas une valeur officielle."
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -537,7 +624,14 @@
                 sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)",
                 sortDateDesc: "Purchase Date (Newest)",
 
-                lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblPrice: "Price ($)", lblDate: "Purchase Date", lblNotes: "Notes",
+                lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblDate: "Purchase Date", lblNotes: "Notes",
+                lblMarketPrice: "Market Price", lblPurchasePrice: "My Price",
+                lblCardCote: "Est.", lblCardPaid: "Paid",
+
+                // BANNER ANNOUNCEMENT
+                announcementTitle: "New: Market Value Tracking!",
+                announcementMsg: "You can now compare the average market value with your purchase price. <br><strong>Important:</strong> Please select the correct currency (EUR/USD...) when adding items to ensure accurate stats!",
+
                 btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
                  
                 optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
@@ -548,15 +642,18 @@
                 alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?",
                 msgNoResults: "No figures found.",
 
-                // --- FOOTER KEYS AJOUTÉES ---
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerNav: "Navigation",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions"
+                legalMainTitle: "Legal Mentions",
+
+                // TOOLTIP TRANSLATION
+                priceTooltip: "Average price based on community purchases.<br>Automatically converted from multiple currencies.<br>This is an estimate, not an official value."
             }
         };
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
+        let communityPrices = {}; // STOCKAGE PRIX COMMUNAUTAIRES
 
         // Helper pour récupérer le texte dynamique
         function t(key) {
@@ -569,7 +666,6 @@
             updateUIText();
         };
 
-        // Rendre la fonction accessible globalement pour le fetch
         window.updateUIText = function() {
             if(currentLang === 'fr') {
                 document.getElementById('lang-fr').classList.add('active');
@@ -582,7 +678,7 @@
             const tr = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
-                if(tr[key]) el.innerText = tr[key];
+                if(tr[key]) el.innerHTML = tr[key];
             });
 
             document.getElementById('searchBar').placeholder = tr.searchPlaceholder;
@@ -591,14 +687,24 @@
             const btnText = document.getElementById('auth-status-text');
             if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
 
-            // Mettre à jour le dropdown des séries s'il est initialisé
             initSeriesFilter();
              
-            // Rafraîchir la grille et les stats si chargées
             if(myCollection.length > 0 && document.getElementById('main-container').style.display !== 'none') {
                 window.updateGrid();
             }
         };
+
+        // --- CHARGEMENT PRIX COMMUNAUTAIRES ---
+        async function loadCommunityPrices() {
+            try {
+                const docRef = doc(db, "market_prices", "community");
+                const snap = await getDoc(docRef);
+                if (snap.exists()) {
+                    communityPrices = snap.data();
+                    console.log("Prix communautaires chargés ✅");
+                }
+            } catch (e) { console.log("Pas de prix dispos"); }
+        }
 
         // --- BASE DATA ---
         const baseData = [
@@ -811,31 +917,30 @@
         const publicUid = urlParams.get('uid');
 
         if (publicUid) {
-            // MODE VISITEUR : On charge les données de l'UID dans l'URL
+            // MODE VISITEUR
             isReadOnly = true;
             document.body.classList.add('auth-ready'); 
             document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
             document.getElementById('main-container').style.setProperty('display', 'block', 'important');
              
-            // Masquer les boutons d'admin
             if(document.getElementById('auth-trigger')) document.getElementById('auth-trigger').style.display = 'none';
              
-            // Bannière
             const banner = document.createElement('div');
             banner.style.cssText = "background:#6A8C47; color:white; text-align:center; padding:10px; font-weight:bold; margin-bottom:20px; border-radius:8px;";
             banner.innerHTML = "👀 Vous consultez la collection d'un autre collectionneur";
             document.querySelector('.dashboard-grid').before(banner);
 
             loadUserCollection(publicUid);
+            loadCommunityPrices(); // On charge aussi les prix en mode visiteur
 
         } else {
             // MODE STANDARD
             onAuthStateChanged(auth, async (user) => {
                 const btn = document.getElementById('auth-trigger');
                 updateUIText();
+                await loadCommunityPrices(); // CHARGEMENT DES PRIX
 
                 if (user) {
-                    // UI: CONNECTÉ
                     btn.classList.add('logged-in'); 
                     btn.onclick = () => window.location.href = "compte.html"; 
                      
@@ -845,7 +950,6 @@
                     loadUserCollection(user.uid);
 
                 } else {
-                    // UI: DÉCONNECTÉ
                     btn.classList.remove('logged-in');
                     btn.onclick = () => window.toggleAuthModal();
 
@@ -875,6 +979,7 @@
                                 Condition: savedItem.Condition,
                                 Quantity: savedItem.Quantity,
                                 "Purchase price": savedItem["Purchase price"],
+                                Currency: savedItem.Currency, // Charge la devise
                                 "Purchase date": savedItem["Purchase date"],
                                 Note: savedItem.Note
                             };
@@ -933,7 +1038,6 @@
                 select.appendChild(opt);
             });
         };
-        initSeriesFilter();
 
         // --- FILTER & SORT ACTIONS ---
         window.setFilter = (type) => {
@@ -1010,10 +1114,10 @@
                 if (item.Status === "Possédé") {
                     stats.ownedUniques++;
                     stats.totalItems += q;
-                    stats.spent += (p * q);
+                    stats.spent += (p * q); // Simplifié, idéalement on convertirait tout en EUR pour le total
                     if (q > 1) stats.doubles += (q - 1);
                     if (item["Secret Rare"] === "Yes") stats.secretsFound++;
-                     
+                      
                     condMap[c] = (condMap[c] || 0) + q;
                     serMap[s].owned++;
                 }
@@ -1041,7 +1145,6 @@
                 </div>
             `;
              
-            /* Condition: Rouge (#C0392B) */
             // MAPPING DES CONDITIONS POUR TRADUCTION
             const conditionKeys = {
                 "Neuf": "condMint",
@@ -1055,12 +1158,10 @@
                 .sort((a,b)=>b[1]-a[1]).slice(0,3)
                 .map(([k,v]) => {
                     const pct = stats.totalItems > 0 ? (v / stats.totalItems) * 100 : 0;
-                    // Traduction du label de condition
                     const translatedLabel = t(conditionKeys[k] || 'condUnknown');
                     return renderBar(translatedLabel, v, pct, '#C0392B');
                 }).join('');
 
-            /* Séries: Vert (#6A8C47) */
             document.getElementById('stat-series-list').innerHTML = Object.entries(serMap)
                 .map(([k,v]) => {
                     const p = v.total > 0 ? Math.round((v.owned/v.total)*100) : 0;
@@ -1073,9 +1174,12 @@
                 .join('');
 
 
-            // 2. RENDU GRILLE (Liste Filtrée)
+            // 2. RENDU GRILLE
             const grid = document.getElementById('hirono-grid');
             grid.innerHTML = "";
+            
+            // Taux de conversion FIXES (pour affichage grid)
+            const RATES = { "EUR": 1, "USD": 1.08, "GBP": 0.85, "CNY": 7.8 };
              
             const fragment = document.createDocumentFragment();
             dataForGrid.forEach(item => {
@@ -1088,8 +1192,25 @@
                 const imgUrl = (item.Image && item.Image.trim() !== "") ? item.Image : `https://via.placeholder.com/300/e5e7eb/9ca3af?text=${encodeURIComponent(item.Name)}`;
                  
                 card.onclick = () => window.openModal(item);
+                
+                // --- LOGIQUE PRIX MOYEN ---
+                let avgBaseEur = communityPrices[item.ID] || 0;
+                let displayCurrency = (currentLang === 'fr') ? 'EUR' : 'USD'; 
+                let rate = RATES[displayCurrency];
+                let finalPrice = (avgBaseEur * rate).toFixed(0);
+                let symbol = (displayCurrency === 'EUR') ? '€' : '$';
+
+                // AFFICHAGE COTE SIMPLIFIÉ (Avec Traduction Dynamique)
+                let priceHtml = "";
+                if(avgBaseEur > 0) {
+                    priceHtml = `
+                    <div style="font-size:11px; margin-top:5px; color:#555;">
+                        ${t('lblCardCote')} : <span style="font-weight:700; color:#6A8C47;">${finalPrice}${symbol}</span>
+                    </div>`;
+                } else {
+                    priceHtml = `<div style="font-size:10px; color:#ccc; margin-top:5px;">-</div>`;
+                }
                  
-                /* Prix en Vert */
                 card.innerHTML = `
                     ${(owned && item.Quantity > 1) ? `<div class="qty-badge">x${item.Quantity}</div>` : ''}
                     ${isSecret ? `<div class="secret-badge">★</div>` : ''}
@@ -1097,7 +1218,8 @@
                     <div class="card-info">
                         <p class="card-name">${item.Name}</p>
                         <p class="card-serie">${item.Serie}</p>
-                        ${(owned && item["Purchase price"] > 0) ? `<p style="font-size:10px; color:#6A8C47; margin:2px 0 0;">${parseFloat(item["Purchase price"]).toFixed(2)}€</p>` : ''}
+                        ${priceHtml}
+                        ${(owned && item["Purchase price"] > 0) ? `<p style="font-size:10px; color:#333; margin:2px 0 0; font-weight:bold;">${t('lblCardPaid')}: ${parseFloat(item["Purchase price"]).toFixed(2)}${item.Currency === 'USD' ? '$' : '€'}</p>` : ''}
                     </div>
                 `;
                 fragment.appendChild(card);
@@ -1115,7 +1237,6 @@
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
              
-            // LOGIQUE IMAGE & SECRET
             document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
             const secretBadge = document.getElementById('edit-secret-badge');
             if(item["Secret Rare"] === "Yes") {
@@ -1127,11 +1248,28 @@
             document.getElementById('input-status').value = item.Status || "No status";
             document.getElementById('input-condition').value = item.Condition || "Inconnu";
             document.getElementById('input-qty').value = item.Quantity || 0;
-            document.getElementById('input-price').value = item["Purchase price"] || "";
+            
+            // LOAD PRICE & CURRENCY (INPUT USER)
+            document.getElementById('modal-price').value = item["Purchase price"] || "";
+            document.getElementById('modal-currency').value = item.Currency || "EUR"; 
+
+            // CALCUL & AFFICHE COTE MOYENNE (READ ONLY)
+            const RATES = { "EUR": 1, "USD": 1.08, "GBP": 0.85, "CNY": 7.8 };
+            let avgBaseEur = communityPrices[item.ID] || 0;
+            let displayCurrency = (currentLang === 'fr') ? 'EUR' : 'USD'; 
+            let rate = RATES[displayCurrency];
+            let symbol = (displayCurrency === 'EUR') ? '€' : '$';
+            
+            if(avgBaseEur > 0) {
+                let finalPrice = (avgBaseEur * rate).toFixed(0);
+                document.getElementById('modal-market-price').innerText = `${finalPrice} ${symbol}`;
+            } else {
+                document.getElementById('modal-market-price').innerText = "-";
+            }
+
             document.getElementById('input-date').value = item["Purchase date"] || "";
             document.getElementById('input-note').value = item.Note || "";
              
-            // GESTION LECTURE SEULE
             if(isReadOnly) {
                 document.querySelector('.btn-save').style.display = 'none';
                 document.querySelectorAll('#modal input, #modal select, #modal textarea').forEach(el => el.disabled = true);
@@ -1144,15 +1282,19 @@
         };
 
         window.sauvegarder = async () => {
-            if(isReadOnly) return; // Sécurité
+            if(isReadOnly) return;
             try {
                 if (!currentItem) return;
 
                 const newStatus = document.getElementById('input-status').value;
                 const newCond = document.getElementById('input-condition').value;
                 const newQty = parseInt(document.getElementById('input-qty').value) || 0;
-                const rawPrice = document.getElementById('input-price').value;
+                
+                // SAVE PRICE & CURRENCY
+                const rawPrice = document.getElementById('modal-price').value;
                 const newPrice = rawPrice ? parseFloat(rawPrice) : 0;
+                const newCurrency = document.getElementById('modal-currency').value;
+
                 const newDate = document.getElementById('input-date').value || "";
                 const newNote = document.getElementById('input-note').value || "";
 
@@ -1162,6 +1304,7 @@
                     myCollection[index].Condition = newCond;
                     myCollection[index].Quantity = newQty;
                     myCollection[index]["Purchase price"] = newPrice;
+                    myCollection[index].Currency = newCurrency;
                     myCollection[index]["Purchase date"] = newDate;
                     myCollection[index].Note = newNote;
                 }
@@ -1177,6 +1320,7 @@
                         Condition: item.Condition || "Inconnu",
                         Quantity: item.Quantity || 0,
                         "Purchase price": item["Purchase price"] || 0,
+                        Currency: item.Currency || "EUR",
                         "Purchase date": item["Purchase date"] || "",
                         Note: item.Note || "",
                         "Secret Rare": item["Secret Rare"] || "No"
@@ -1221,18 +1365,14 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                
-                // 2. On met à jour les traductions
                 if(window.updateUIText) window.updateUIText();
-
-                // 3. CRUCIAL : On lance la logique cookie APRÈS que le footer soit affiché
                 if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
          
+        // NEIGE
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
-
         let width, height, snowflakes;
 
         function initSnow() {
@@ -1240,9 +1380,7 @@
             height = window.innerHeight;
             canvas.width = width;
             canvas.height = height;
-
             snowflakes = [];
-            // Ajuste le nombre de flocons ici (150 est un bon équilibre)
             for (let i = 0; i < 150; i++) {
                 snowflakes.push({
                     x: Math.random() * width,
@@ -1254,34 +1392,24 @@
                 });
             }
         }
-
         function drawSnow() {
             ctx.clearRect(0, 0, width, height);
             ctx.fillStyle = "white";
-             
             snowflakes.forEach(flake => {
                 ctx.beginPath();
                 ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
                 ctx.globalAlpha = flake.opacity;
                 ctx.fill();
-
-                // Déplacement
                 flake.y += flake.speed;
                 flake.x += flake.wind;
-
-                // Si le flocon sort en bas, il réapparaît en haut
                 if (flake.y > height) {
                     flake.y = -10;
                     flake.x = Math.random() * width;
                 }
             });
-
             requestAnimationFrame(drawSnow);
         }
-
         window.addEventListener('resize', initSnow);
-
-        // Lancement
         initSnow();
         drawSnow();
     </script>
