@@ -1086,23 +1086,23 @@ function renderBadges(context) {
             } catch (err) { alert("Error generating image."); } finally { btn.innerText = originalText; }
         };
 
-        window.copyPublicLink = () => {
+window.copyPublicLink = () => {
             const user = auth.currentUser;
             if (!user) {
                 alert("Vous devez être connecté pour partager votre profil !");
                 return;
             }
+
+            // CORRECTION IMPORTANTE POUR GITHUB PAGES :
+            // On prend l'URL actuelle complète et on enlève le nom du fichier en cours (ex: statistiques.html)
+            // Cela permet de garder le dossier du projet (ex: /hrntrack/) dans le lien.
+            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
             
-            // CORRECTION GITHUB PAGES : 
-            // On récupère l'URL complète actuelle et on retire le nom du fichier courant
-            // pour garder le dossier du repo (ex: /hrntrack/)
-            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
-            
-            // On pointe vers dashboard.html qui gère la vue visiteur avec ?uid=
-            const link = `${baseUrl}/dashboard.html?uid=${user.uid}`;
+            // On ajoute share.html à la suite
+            const link = `${baseUrl}share.html?uid=${user.uid}`;
             
             navigator.clipboard.writeText(link).then(() => {
-                alert("Link copied! Send it to your friends::\n" + link);
+                alert("Link copied! Send it to your friends:\n" + link);
             }).catch(err => {
                 prompt("Copiez ce lien :", link);
             });
@@ -1112,4 +1112,5 @@ function renderBadges(context) {
         fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;if(window.initCookieLogic)window.initCookieLogic();});
     </script>
 </body>
+
 </html>
