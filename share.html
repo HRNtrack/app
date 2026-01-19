@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Collection Publique</title>
+    <title>HRNtrack - Public collection</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -184,6 +184,47 @@
     </div>
 
     <div id="footer-placeholder"></div>
+
+    <script>
+        const GA_ID = 'G-RFP1HDMW49';
+        function loadAnalytics() {
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+        }
+
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            if (consent === 'true') { 
+                loadAnalytics(); 
+                if(banner) banner.style.display = 'none';
+            } 
+            else if (consent === null) { 
+                if(banner) banner.style.display = 'block'; 
+            }
+            else {
+                if(banner) banner.style.display = 'none';
+            }
+        }
+    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -597,7 +638,10 @@
         }
 
         // CHARGER LE FOOTER
-        fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;});
+        fetch('footer.html').then(r=>r.text()).then(d=>{
+            document.getElementById('footer-placeholder').innerHTML=d;
+            if(window.initCookieLogic) window.initCookieLogic();
+        });
 
         init();
     </script>
