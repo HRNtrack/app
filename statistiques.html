@@ -1092,10 +1092,17 @@ function renderBadges(context) {
                 alert("Vous devez être connecté pour partager votre profil !");
                 return;
             }
-            const link = `${window.location.origin}/share.html?uid=${user.uid}`;
+            
+            // CORRECTION GITHUB PAGES : 
+            // On récupère l'URL complète actuelle et on retire le nom du fichier courant
+            // pour garder le dossier du repo (ex: /hrntrack/)
+            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+            
+            // On pointe vers dashboard.html qui gère la vue visiteur avec ?uid=
+            const link = `${baseUrl}/dashboard.html?uid=${user.uid}`;
             
             navigator.clipboard.writeText(link).then(() => {
-                alert("Link copied! Send it to your friends:" + link);
+                alert("Link copied! Send it to your friends::\n" + link);
             }).catch(err => {
                 prompt("Copiez ce lien :", link);
             });
