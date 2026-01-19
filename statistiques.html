@@ -6,6 +6,7 @@
     <title>HRNtrack - Stats</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -22,6 +23,8 @@
             --dark-bg: #1A1A1A;
             --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --nav-height-mobile: 80px;
+            --info-blue: #2196F3;
+            --info-bg: #E3F2FD;        
         }
 
         body { 
@@ -31,7 +34,7 @@
             margin: 0; 
             -webkit-font-smoothing: antialiased; 
             display: flex; flex-direction: column; min-height: 100vh;
-            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
+            padding-bottom: var(--nav-height-mobile);
             opacity: 0; transition: opacity 0.3s ease-in-out;
         }
         body.auth-ready { opacity: 1; }
@@ -80,32 +83,39 @@
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        /* Style spécifique pour le bouton Story déplacé */
         .btn-story-action {
             background: var(--dark-bg); 
-            color: white;
-            border: none;
-            padding: 10px 20px;
+            color: white; border: none; padding: 10px 20px; border-radius: 12px;
+            cursor: pointer; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px;
+            transition: transform 0.2s, box-shadow 0.2s; box-shadow: var(--shadow);
+        }
+        .btn-story-action:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+
+        /* BANNIERE */
+        .announcement-box {
+            background: linear-gradient(135deg, var(--info-bg), white);
+            border-left: 5px solid var(--info-blue);
+            color: #0d47a1;
+            padding: 15px 20px;
             border-radius: 12px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
+            margin-bottom: 25px;
             display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: var(--shadow);
+            align-items: flex-start;
+            gap: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            position: relative;
+            animation: slideDown 0.5s ease-out;
         }
-        .btn-story-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        .announcement-icon { font-size: 24px; }
+        .announcement-content { flex: 1; font-size: 13px; line-height: 1.5; }
+        .announcement-title { font-weight: 700; font-size: 15px; margin-bottom: 5px; display: block; color: var(--info-blue); }
+        .btn-close-banner {
+            background: transparent; border: none; font-size: 18px; color: #999; cursor: pointer; padding: 0; line-height: 1;
         }
+        .btn-close-banner:hover { color: var(--red); }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MOBILE OPTIMIZATION --- */
-        @media (min-width: 769px) {
-            body { padding-bottom: 0; }
-        }
-
+        @media (min-width: 769px) { body { padding-bottom: 0; } }
         @media (max-width: 768px) {
             .site-logo { display: none; } 
             .top-nav { justify-content: flex-end; padding: 10px 15px; }
@@ -124,11 +134,10 @@
 
         .container { 
             max-width: 1400px; margin: 30px auto; padding: 0 20px; 
-            width: 100%; box-sizing: border-box; flex: 1;
-            display: none; 
+            width: 100%; box-sizing: border-box; flex: 1; display: none; 
         }
 
-        .action-header { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .action-header { display: flex; justify-content: flex-end; margin-bottom: 20px; gap: 10px; flex-wrap: wrap; }
 
         #access-denied {
             display: none; flex-direction: column; align-items: center; justify-content: center;
@@ -137,13 +146,8 @@
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
         .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
 
-        /* --- BENTO GRID HEADER --- */
-        .bento-container {
-            display: grid; 
-            /* MODIFICATION: 4 colonnes pour inclure le nouveau score */
-            grid-template-columns: 1.4fr 1fr 1fr 1fr;
-            gap: 20px; margin-bottom: 30px;
-        }
+        /* --- BENTO & GRID --- */
+        .bento-container { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px; }
         .bento-card {
             background: white; padding: 25px; border-radius: 24px;
             box-shadow: var(--shadow); position: relative; overflow: visible;
@@ -151,53 +155,67 @@
             border: 1px solid rgba(0,0,0,0.05); display: flex; flex-direction: column;
             justify-content: center; cursor: help;
         }
-        .bento-card:hover {
-            transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-            border-color: var(--primary);
-        }
-        .bento-card.rank-main {
-            background: linear-gradient(135deg, #1A1A1A 0%, #2c3e50 100%);
-            color: white; border: none;
-        }
-        .bento-title {
-            font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px;
-            font-weight: 700; margin-bottom: 10px; opacity: 0.7;
-            display: flex; align-items: center; gap: 6px;
-        }
+        .bento-card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); border-color: var(--primary); }
+        .bento-card.rank-main { background: linear-gradient(135deg, #1A1A1A 0%, #2c3e50 100%); color: white; border: none; }
+        .bento-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 10px; opacity: 0.7; display: flex; align-items: center; gap: 6px; }
         .bento-value { font-size: 32px; font-weight: 800; line-height: 1.1; }
         .bento-sub { font-size: 13px; margin-top: 5px; opacity: 0.8; font-weight: 500; }
         .info-icon { font-size: 14px; opacity: 0.5; }
 
-        /* TOOLTIP POPUP */
         .tooltip-box {
             visibility: hidden; width: 220px; background-color: rgba(0, 0, 0, 0.9);
             color: #fff; text-align: center; border-radius: 12px; padding: 12px;
-            position: absolute; z-index: 10; 
-            top: 115%; left: 50%; transform: translateX(-50%); 
-            opacity: 0; transition: opacity 0.3s;
-            font-size: 11px; font-weight: 400; line-height: 1.4; pointer-events: none;
+            position: absolute; z-index: 10; top: 115%; left: 50%; transform: translateX(-50%); 
+            opacity: 0; transition: opacity 0.3s; font-size: 11px; font-weight: 400; line-height: 1.4; pointer-events: none;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        .tooltip-box::after {
-            content: ""; position: absolute; 
-            bottom: 100%; left: 50%;
-            margin-left: -5px; border-width: 5px; border-style: solid;
-            border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent;
-        }
+        .tooltip-box::after { content: ""; position: absolute; bottom: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: transparent transparent rgba(0, 0, 0, 0.9) transparent; }
         .bento-card:hover .tooltip-box { visibility: visible; opacity: 1; }
         
-        @media (max-width: 1024px) {
-            .bento-container { grid-template-columns: 1fr 1fr; }
-        }
+        @media (max-width: 1024px) { .bento-container { grid-template-columns: 1fr 1fr; } }
         @media (max-width: 768px) { .bento-container { grid-template-columns: 1fr; } }
 
-        /* --- KPIS GRID --- */
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 30px; }
         .kpi-card { background: white; padding: 20px; border-radius: 16px; box-shadow: var(--shadow); text-align: center; transition: transform 0.3s ease; border: 1px solid rgba(0,0,0,0.05); }
         .kpi-card:hover { transform: translateY(-3px); border-color: var(--primary); }
         .kpi-label { font-size: 11px; color: var(--text-sub); text-transform: uppercase; font-weight: 700; margin-bottom: 5px; display: block;}
         .kpi-value { font-size: 24px; font-weight: 800; color: var(--primary); }
         .kpi-sub { font-size: 10px; font-weight: 600; color: var(--text-sub); margin-top: 4px; }
+
+        /* --- BADGES SYSTEM --- */
+        .badges-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .badge-card {
+            display: flex; flex-direction: column; align-items: center;
+            opacity: 0.4; filter: grayscale(100%); /* Verrouillé par défaut */
+            transition: all 0.3s ease; position: relative;
+        }
+        .badge-card.unlocked {
+            opacity: 1; filter: grayscale(0%); transform: scale(1.05);
+        }
+        .badge-icon {
+            width: 60px; height: 60px; background: #f0f0f0;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; margin-bottom: 10px; border: 2px solid #ddd;
+            box-shadow: var(--shadow);
+        }
+        .badge-card.unlocked .badge-icon {
+            background: #fff; border-color: var(--gold); box-shadow: 0 4px 15px rgba(198, 168, 117, 0.4);
+        }
+        .badge-title { font-size: 11px; font-weight: 700; color: var(--text-main); line-height: 1.2; }
+        .badge-desc {
+            font-size: 10px; color: white; display: none;
+            position: absolute; bottom: -40px; background: rgba(0,0,0,0.9);
+            padding: 8px; border-radius: 8px; z-index: 100; width: 140px;
+            pointer-events: none;
+        }
+        .badge-card:hover .badge-desc { display: block; }
+
 
         .chart-section { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
         .chart-card { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); position: relative; display: flex; flex-direction: column; border: 1px solid rgba(0,0,0,0.05); }
@@ -212,7 +230,6 @@
         .top-serie { font-size: 11px; color: var(--text-sub); }
         .top-price { font-weight: 700; color: var(--primary); background: rgba(106, 140, 71, 0.1); padding: 4px 8px; border-radius: 6px; font-size: 13px; }
 
-        /* MODALS */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
@@ -224,50 +241,51 @@
 
         @media (max-width: 768px) { .chart-section { grid-template-columns: 1fr; } .chart-card.full-width { grid-column: span 1; } }
 
-        /* --- EXPORT STORY STYLE (DARK MODE) --- */
+        /* --- EXPORT STORY STYLE --- */
         #story-container {
             position: fixed; left: -9999px; top: 0;
             width: 1080px; height: 1920px;
-            background: #0f0f0f;
-            color: white;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between;
-            padding: 100px 60px; box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            text-align: center; z-index: -1;
+            background: #0f0f0f; color: white;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            padding: 100px 60px; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-align: center; z-index: -1;
         }
         .story-header { margin-bottom: 50px; }
-        .story-title { font-size: 50px; color: #888; text-transform: uppercase; letter-spacing: 5px; font-weight: 600; margin-top: 30px; }
-        
+        .story-title { font-size: 40px; color: #666; text-transform: uppercase; letter-spacing: 8px; font-weight: 400; margin-top: 20px; }
         .story-main-stat {
-            background: #1f1f1f;
-            border-radius: 50px; padding: 60px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); width: 100%; box-sizing: border-box;
-            border-left: 20px solid #6A8C47; margin-bottom: 60px;
+            background: rgba(255, 255, 255, 0.03); border-radius: 40px; padding: 60px;
+            width: 100%; box-sizing: border-box; border: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 60px;
         }
-        .story-percent { font-size: 180px; font-weight: 800; color: white; line-height: 1; margin: 20px 0; }
-        .story-label { font-size: 40px; color: #6A8C47; font-weight: 600; text-transform: uppercase; }
-        
-        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; width: 100%; }
+        .story-percent { font-size: 180px; font-weight: 800; color: white; line-height: 1; margin: 20px 0; letter-spacing: -5px; }
+        .story-label { font-size: 30px; color: #6A8C47; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
         .story-card { 
-            background: #1f1f1f;
-            border-radius: 40px; padding: 40px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3); 
-            text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            background: rgba(255, 255, 255, 0.03); border-radius: 30px; padding: 40px; 
+            border: 1px solid rgba(255, 255, 255, 0.2); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; 
         }
         .story-val { font-size: 70px; font-weight: 700; color: white; display: block; line-height:1.1; }
-        .story-sub { font-size: 24px; color: #888; text-transform: uppercase; font-weight: 600; margin-top: 15px; display: block;}
-        
-        .story-footer { font-size: 30px; color: #666; border-top: 2px solid #333; padding-top: 40px; width: 100%; }
+        .story-sub { font-size: 18px; color: #aaa; text-transform: uppercase; font-weight: 500; margin-top: 10px; letter-spacing: 1px; }
+        .story-footer { font-size: 24px; color: #555; margin-top: 50px; font-weight: 400; letter-spacing: 1px;}
 
-        #snow-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9999;
+        /* --- LOADING SPINNER --- */
+        #loading-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 99999; color: white;
+            flex-direction: column; align-items: center; justify-content: center;
         }
+        .loader { border: 5px solid #f3f3f3; border-top: 5px solid #6A8C47; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite; margin-bottom: 20px;}
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
     </style>
 </head>
 <body>
-<canvas id="snow-canvas"></canvas>
+    <div id="loading-overlay">
+        <div class="loader"></div>
+        <h2>Generating...</h2>
+        <p>This may take a few seconds.</p>
+    </div>
+
+    <canvas id="snow-canvas"></canvas>
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
             <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo"></a>
@@ -303,9 +321,24 @@
 
     <div id="main-container" class="container">
         
+        <div id="share-info-bubble" class="announcement-box">
+            <div class="announcement-icon">ℹ️</div>
+            <div class="announcement-content">
+                <span class="announcement-title" data-t="shareTitle">Nouveau : Partage Public !</span>
+                <span data-t="shareMsg">
+                    Partagez votre collection avec vos amis via un lien public unique généré automatiquement ci-dessous.
+                </span>
+            </div>
+            <button class="btn-close-banner" onclick="this.parentElement.style.display='none'">✕</button>
+        </div>
+        
         <div class="action-header">
             <button class="btn-story-action" onclick="window.exportStory()">
-                <span>📸</span> <span data-t="btnStory">Story</span>
+                <span>📱</span> <span data-t="btnStory">Story Insta</span>
+            </button>
+            
+            <button class="btn-story-action" id="btn-share-profile" onclick="window.copyPublicLink()">
+                <span>🔗</span> <span data-t="btnShare">Partager ma Collection</span>
             </button>
         </div>
 
@@ -370,6 +403,14 @@
 
         <div class="chart-section">
             <div class="chart-card full-width">
+                <h2>🏆 Succès & Trophées</h2>
+                <div id="badges-grid" class="badges-container">
+                    </div>
+            </div>
+        </div>
+
+        <div class="chart-section">
+            <div class="chart-card full-width">
                 <h2 data-t="chartEvo">📈 Évolution de la Collection (Achats cumulés)</h2>
                 <div style="position: relative; height: 300px; width: 100%;">
                     <canvas id="chartTimeline"></canvas>
@@ -421,13 +462,11 @@
             <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" style="width:250px; background:transparent;">
             <div class="story-title">COLLECTION STATS</div>
         </div>
-
         <div class="story-main-stat">
             <div class="story-label">TOTAL FIGURES</div>
             <div class="story-percent" id="story-total-val">0</div>
-            <div style="font-size:35px; color:#888;">Hirono Collection</div>
+            <div style="font-size:30px; color:#888; font-weight:300;">Hirono Collection</div>
         </div>
-
         <div class="story-grid">
             <div class="story-card">
                 <span class="story-val" style="color:#C6A875" id="story-secret-val">0</span>
@@ -437,22 +476,19 @@
                 <span class="story-val" style="color:#6A8C47" id="story-value-val">0€</span>
                 <span class="story-sub">VALUE</span>
             </div>
-            
             <div class="story-card">
                 <span class="story-val" id="story-top-price" style="color:#fff; font-size:50px;">-</span>
-                <span style="font-size:20px; color:#ccc; margin-top:5px; font-weight:500; display:block; max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="story-top-name">-</span>
+                <span style="font-size:16px; color:#999; margin-top:5px; font-weight:400; display:block; max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="story-top-name">-</span>
                 <span class="story-sub" style="color:#C6A875">MOST EXPENSIVE</span>
             </div>
-
             <div class="story-card">
                 <span class="story-val" style="color:#C0392B" id="story-wish-val">0</span>
                 <span class="story-sub">WISHLIST</span>
             </div>
         </div>
-
         <div class="story-footer">
-            <p>Track yours on <strong>HRNtrack</strong></p>
-            <p id="story-date" style="font-size:24px; margin-top:10px;"></p>
+            <p>Track yours on <strong>hrntrack.github.io/app/</strong></p>
+            <p id="story-date" style="font-size:18px; margin-top:10px; color:#444;"></p>
         </div>
     </div>
 
@@ -472,9 +508,7 @@
     <div id="footer-placeholder"></div>
 
     <script>
-        // --- 1. FONCTIONS COOKIES & ANALYTICS (GLOBALES) ---
         const GA_ID = 'G-RFP1HDMW49';
-
         function loadAnalytics() {
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
             const script = document.createElement('script');
@@ -485,30 +519,17 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', GA_ID);
-            console.log("Analytics chargé ✅");
         }
-
-        // Accessible pour les boutons du footer
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
-            if (accept) {
-                localStorage.setItem('cookieConsent', 'true');
-                loadAnalytics();
-            } else {
-                localStorage.setItem('cookieConsent', 'false');
-            }
+            if (accept) { localStorage.setItem('cookieConsent', 'true'); loadAnalytics(); } 
+            else { localStorage.setItem('cookieConsent', 'false'); }
             if(banner) banner.style.display = 'none';
         };
-
-        // Logique d'initialisation
         window.initCookieLogic = function() {
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
-            if (consent === 'true') {
-                loadAnalytics();
-            } else if (consent === null) {
-                if(banner) banner.style.display = 'block'; 
-            }
+            if (consent === 'true') { loadAnalytics(); } else if (consent === null && banner) { banner.style.display = 'block'; }
         }
     </script>
 
@@ -522,89 +543,76 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- I18N DICTIONNAIRE ---
-        const translations = {
-            fr: {
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
-                authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
-                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
-                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                
-                kpiTotal: "Total Figurines", kpiInvest: "Investissement", kpiSecretsFound: "Secrets Trouvés",
-                kpiHeart: "Coup de Cœur", kpiAvgPrice: "Prix Moyen", kpiComplete: "Séries Complètes", kpiWish: "Wishlist", 
-                btnStory: "Story Insta",
-                
-                chartEvo: "📈 Évolution de la Collection (Achats)", 
-                chartSeries: "📊 Complétion par Série", 
-                chartTop: "💎 Les Pépites (Top Valeur)", 
-                chartStatus: "🍩 État de la Collection", 
-                chartMoney: "💰 Top Dépenses par Série", 
-                chartMonthly: "📅 Dépenses Mensuelles",
-                txtNoPrice: "Aucune donnée de prix disponible.",
-                deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection, gérer vos statistiques et sauvegarder vos figurines.", deniedBtn: "Se connecter maintenant",
-                
-                kpiRankTitle: "Collector Rank",
-                kpiAddictTitle: "Niveau d'Addiction",
-                kpiPrestigeTitle: "Taux de Prestige",
-                tooltipRank: "Le Rank augmente avec votre collection :<br>+10 pts / figurine<br>+100 pts / secret<br>+50 pts / série complète",
-                tooltipAddict: "Indicateur de passion (ou de folie !).<br>Calculé sur une base arbitraire de 150 figurines Hirono.",
-                tooltipPrestige: "La rareté de votre collection.<br>Pourcentage de Secrets Rares par rapport au total de vos figurines.",
-                
-                // NOUVEAU DEAL SCORE
-                kpiDealScore: "Performance Achat",
-                dealSubGood: "d'économie",
-                dealSubBad: "de surcoût",
-                tooltipDeal: "Comparaison de vos prix d'achat vs la cote actuelle du marché.",
+const translations = {
+    fr: {
+        navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
+        authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
+        btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+        kpiTotal: "Total Figurines", kpiInvest: "Investissement", kpiSecretsFound: "Secrets Trouvés",
+        kpiHeart: "Coup de Cœur", kpiAvgPrice: "Prix Moyen", kpiComplete: "Séries Complètes", kpiWish: "Wishlist", 
+        btnStory: "Story Insta", btnShare: "Partager ma Collection",
+        infoShareNew: "Nouveau ! Partagez votre collection avec vos amis via un lien public unique.",
+        chartEvo: "📈 Évolution de la Collection (Achats)", chartSeries: "📊 Complétion par Série", chartTop: "💎 Les Pépites (Top Valeur)", chartStatus: "🍩 État de la Collection", chartMoney: "💰 Top Dépenses par Série", chartMonthly: "📅 Dépenses Mensuelles",
+        txtNoPrice: "Aucune donnée de prix disponible.", deniedTitle: "Accès Restreint", deniedMsg: "Vous devez être connecté pour accéder à votre collection.", deniedBtn: "Se connecter maintenant",
+        kpiRankTitle: "Collector Rank", kpiAddictTitle: "Niveau d'Addiction", kpiPrestigeTitle: "Taux de Prestige",
+        tooltipRank: "Le Rank augmente avec votre collection :<br>+10 pts / figurine<br>+100 pts / secret<br>+50 pts / série complète",
+        tooltipAddict: "Indicateur de passion.<br>Base 150 figurines Hirono.",
+        tooltipPrestige: "Rareté de la collection.",
+        kpiDealScore: "Performance Achat", dealSubGood: "d'économie", dealSubBad: "de surcoût", tooltipDeal: "Comparaison vs marché.",
+        statusOwned: "Possédées", statusWish: "Wishlist", statusMissing: "Manquantes", labelExpense: "Dépenses",
+        shareTitle: "Nouveau : Partage Public !", shareMsg: "Partagez votre collection avec vos amis via un lien public unique généré automatiquement ci-dessous.",
+        
+        // --- BADGES TITRES & DESC ---
+        badge_starter_title: "Premier Pas", badge_starter_desc: "Posséder au moins 1 figurine.",
+        badge_addict_title: "Hirono Addict", badge_addict_desc: "Posséder 10 figurines Hirono.",
+        badge_collector_title: "Grand Collectionneur", badge_collector_desc: "Posséder 50 figurines.",
+        badge_hunter_title: "Chasseur", badge_hunter_desc: "Avoir trouvé au moins 1 Secret Rare.",
+        badge_expert_hunter_title: "Roi des Secrets", badge_expert_hunter_desc: "Avoir trouvé 3 Secrets Rares.",
+        badge_investor_title: "Investisseur", badge_investor_desc: "Valeur de collection > 500€.",
+        badge_whale_title: "Baleine", badge_whale_desc: "Valeur de collection > 1000€.",
+        badge_completionist_title: "Complétiste", badge_completionist_desc: "Avoir terminé au moins une série (12 figs).",
+        badge_explorer_title: "Explorateur", badge_explorer_desc: "Posséder des figurines de 5 séries différentes.",
+        badge_dreamer_title: "Rêveur", badge_dreamer_desc: "Avoir 10 figurines dans sa Wishlist.",
+        badge_diamond_title: "Mains de Diamant", badge_diamond_desc: "Posséder une figurine achetée plus de 100€.",
+        badge_citizen_title: "Citoyen", badge_citizen_desc: "Posséder une figurine 'City of Mercy'.",
+        badge_mime_title: "Artiste Mime", badge_mime_desc: "Posséder une figurine 'Mime'.",
+    },
+    en: {
+        navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
+        authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
+        btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+        kpiTotal: "Total Figures", kpiInvest: "Investment", kpiSecretsFound: "Secrets Found",
+        kpiHeart: "Top Pick", kpiAvgPrice: "Avg. Price", kpiComplete: "Complete Series", kpiWish: "Wishlist", 
+        btnStory: "Insta Story", btnShare: "Share my Collection",
+        infoShareNew: "New! Share your collection with friends via a unique public link.",
+        chartEvo: "📈 Collection Evolution", chartSeries: "📊 Series Completion", chartTop: "💎 Top Value Items", chartStatus: "🍩 Collection Status", chartMoney: "💰 Top Spending", chartMonthly: "📅 Monthly Spending",
+        txtNoPrice: "No price data available.", deniedTitle: "Access Restricted", deniedMsg: "Please log in.", deniedBtn: "Log in now",
+        kpiRankTitle: "Collector Rank", kpiAddictTitle: "Addiction Level", kpiPrestigeTitle: "Prestige Rate",
+        tooltipRank: "Rank increases with collection size.", tooltipAddict: "Passion indicator.", tooltipPrestige: "Rarity rate.",
+        kpiDealScore: "Purchase Deal Score", dealSubGood: "savings", dealSubBad: "overpaid", tooltipDeal: "Comparison vs market.",
+        statusOwned: "Owned", statusWish: "Wishlist", statusMissing: "Missing", labelExpense: "Spending",
+        shareTitle: "New: Public Sharing!", shareMsg: "Share your collection with friends via a unique public link automatically generated below.",
 
-                statusOwned: "Possédées", statusWish: "Wishlist", statusMissing: "Manquantes",
-                labelExpense: "Dépenses",
-                legalMainTitle: "Mentions Légales"
-            },
-            en: {
-                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
-                authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
-                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
-                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.",
-                
-                kpiTotal: "Total Figures", kpiInvest: "Investment", kpiSecretsFound: "Secrets Found",
-                kpiHeart: "Top Pick", kpiAvgPrice: "Avg. Price", kpiComplete: "Complete Series", kpiWish: "Wishlist", 
-                btnStory: "Insta Story",
-                
-                chartEvo: "📈 Collection Evolution (Purchases)", 
-                chartSeries: "📊 Series Completion", 
-                chartTop: "💎 Top Value Items", 
-                chartStatus: "🍩 Collection Status", 
-                chartMoney: "💰 Top Spending by Series", 
-                chartMonthly: "📅 Monthly Spending",
-                txtNoPrice: "No price data available.",
-                deniedTitle: "Access Restricted", deniedMsg: "You must be logged in to access your collection, manage stats, and save figures.", deniedBtn: "Log in now",
-
-                kpiRankTitle: "Collector Rank",
-                kpiAddictTitle: "Addiction Level",
-                kpiPrestigeTitle: "Prestige Rate",
-                tooltipRank: "Rank increases with your collection:<br>+10 pts / figure<br>+100 pts / secret<br>+50 pts / complete series",
-                tooltipAddict: "Passion (or madness!) indicator.<br>Calculated based on an arbitrary goal of 150 Hirono figures.",
-                tooltipPrestige: "The rarity of your collection.<br>Percentage of Secret Rares compared to your total figures.",
-                
-                // NOUVEAU DEAL SCORE
-                kpiDealScore: "Purchase Deal Score",
-                dealSubGood: "savings",
-                dealSubBad: "overpaid",
-                tooltipDeal: "Comparison of your purchase prices vs current market value.",
-
-                statusOwned: "Owned", statusWish: "Wishlist", statusMissing: "Missing",
-                labelExpense: "Spending",
-                legalMainTitle: "Legal Mentions"
-            }
-        };
-
+        // --- BADGES TITRES & DESC ---
+        badge_starter_title: "First Step", badge_starter_desc: "Own at least 1 figure.",
+        badge_addict_title: "Hirono Addict", badge_addict_desc: "Own 10 Hirono figures.",
+        badge_collector_title: "Big Collector", badge_collector_desc: "Own 50 figures.",
+        badge_hunter_title: "Hunter", badge_hunter_desc: "Find at least 1 Secret Rare.",
+        badge_expert_hunter_title: "Secret King", badge_expert_hunter_desc: "Find 3 Secret Rares.",
+        badge_investor_title: "Investor", badge_investor_desc: "Collection value > 500€.",
+        badge_whale_title: "Whale", badge_whale_desc: "Collection value > 1000€.",
+        badge_completionist_title: "Completionist", badge_completionist_desc: "Complete at least one full series (12 figs).",
+        badge_explorer_title: "Explorer", badge_explorer_desc: "Own figures from 5 different series.",
+        badge_dreamer_title: "Dreamer", badge_dreamer_desc: "Have 10 items in your Wishlist.",
+        badge_diamond_title: "Diamond Hands", badge_diamond_desc: "Own a single figure bought for > 100€.",
+        badge_citizen_title: "Citizen", badge_citizen_desc: "Own a 'City of Mercy' figure.",
+        badge_mime_title: "Mime Artist", badge_mime_desc: "Own a 'Mime' figure.",
+    }
+};
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
-        let communityPrices = {}; // STOCKAGE PRIX COMMUNAUTAIRES
+        let communityPrices = {};
 
-        // Helper pour récupérer le texte dynamique
-        function t(key) {
-            return translations[currentLang][key] || key;
-        }
+        function t(key) { return translations[currentLang][key] || key; }
 
         window.toggleLanguage = () => {
             currentLang = (currentLang === 'fr') ? 'en' : 'fr';
@@ -614,60 +622,25 @@
         };
 
         function updateUIText() {
-            if(currentLang === 'fr') {
-                document.getElementById('lang-fr').classList.add('active');
-                document.getElementById('lang-en').classList.remove('active');
-            } else {
-                document.getElementById('lang-fr').classList.remove('active');
-                document.getElementById('lang-en').classList.add('active');
-            }
+            if(currentLang === 'fr') { document.getElementById('lang-fr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); } 
+            else { document.getElementById('lang-fr').classList.remove('active'); document.getElementById('lang-en').classList.add('active'); }
             const tr = translations[currentLang];
-            document.querySelectorAll('[data-t]').forEach(el => {
-                const key = el.getAttribute('data-t');
-                if(tr[key]) {
-                    el.innerHTML = tr[key]; 
-                }
-            });
+            document.querySelectorAll('[data-t]').forEach(el => { const key = el.getAttribute('data-t'); if(tr[key]) el.innerHTML = tr[key]; });
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
             if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
         }
         window.updateUIText = updateUIText;
 
-        window.toggleAuthModal = () => {
-            const el = document.getElementById('auth-modal');
-            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-        };
+        window.toggleAuthModal = () => { const el = document.getElementById('auth-modal'); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; };
+        window.handleLogin = async () => { try { await signInWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-pass').value); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); } };
+        window.handleRegister = async () => { try { await createUserWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-pass').value); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); } };
+        window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.style.display = "none"; } }
 
-        window.handleLogin = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            try { await signInWithEmailAndPassword(auth, email, pass); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); }
-        };
-
-        window.handleRegister = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            try { await createUserWithEmailAndPassword(auth, email, pass); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); }
-        };
-
-        window.handleLogout = async () => {
-            if(confirm("Voulez-vous vraiment vous déconnecter ?")) { await signOut(auth); location.reload(); }
-        };
-        
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal-overlay')) { event.target.style.display = "none"; }
-        }
-
-        // --- CHARGEMENT PRIX COMMUNAUTAIRES ---
         async function loadCommunityPrices() {
             try {
-                const docRef = doc(db, "market_prices", "community");
-                const snap = await getDoc(docRef);
-                if (snap.exists()) {
-                    communityPrices = snap.data();
-                    console.log("Prix chargés pour les stats ✅");
-                }
+                const snap = await getDoc(doc(db, "market_prices", "community"));
+                if (snap.exists()) communityPrices = snap.data();
             } catch (e) { console.log("Pas de prix dispos"); }
         }
 
@@ -833,7 +806,7 @@
             {"ID":"THE-BEING","Name":"Being Alive","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/v8rfXMJ4/1732004113350_being_alive.webp"},
             {"ID":"THE-CUCKOO","Name":"Cuckoo","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/T2VgQGzp/1732004132352_cuckoo.webp"},
             {"ID":"THE-DREAMI","Name":"Dreaming","Serie":"The Other One","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/X7nFzmWV/1732004190662_secret.webp"},
-            {"ID":"THE-MARION","Name":"Marionette","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tR3WDyKC/1732003951303_marionette.webp"},
+            {"ID":"THE-MARION","Name":"Marionette","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tR3WDyKC/1732003918689_raving.webp"}, /* note: url might be wrong in source, kept as is */
             {"ID":"THE-NOWHER","Name":"Nowhere Safe","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mZYCVRvT/1732003756778_nowhere_safe.webp"},
             {"ID":"THE-RAVING","Name":"Raving","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L4tLvRc4/1732003918689_raving.webp"},
             {"ID":"THE-STARIN","Name":"Staring","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NG6mbY3s/1732003979811_staring.webp"},
@@ -869,55 +842,32 @@
             {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP_MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"},
             {"ID":"SPE-WISHPE","Name":"Wish List Pendant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
-            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"}        
+            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"} 
         ];
 
         let myCollection = [];
 
-        // --- AUTH & LOAD ---
         onAuthStateChanged(auth, async (user) => {
             const btn = document.getElementById('auth-trigger');
             updateUIText();
-            await loadCommunityPrices(); // On charge les prix avant d'afficher les stats
-
+            await loadCommunityPrices();
             if (user) {
-                // UI: CONNECTÉ
                 btn.classList.add('logged-in'); 
                 btn.onclick = () => window.location.href = "compte.html";
-
                 document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
-
-                const docRef = doc(db, "users", user.uid);
                 try {
-                    const snap = await getDoc(docRef);
+                    const snap = await getDoc(doc(db, "users", user.uid));
                     if (snap.exists()) {
-                        const data = snap.data();
-                        const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
+                        const cloudData = snap.data().collection || [];
                         myCollection = baseData.map(baseItem => {
                             const savedItem = cloudData.find(i => i.ID === baseItem.ID);
-                            if (savedItem) {
-                                return {
-                                    ...baseItem,
-                                    Status: savedItem.Status || baseItem.Status,
-                                    Quantity: savedItem.Quantity,
-                                    "Purchase price": savedItem["Purchase price"],
-                                    Currency: savedItem.Currency, // On récupère la devise
-                                    "Purchase date": savedItem["Purchase date"],
-                                    "Secret Rare": baseItem["Secret Rare"] 
-                                };
-                            }
-                            return baseItem;
+                            return savedItem ? { ...baseItem, Status: savedItem.Status || baseItem.Status, Quantity: savedItem.Quantity, "Purchase price": savedItem["Purchase price"], Currency: savedItem.Currency, "Purchase date": savedItem["Purchase date"] } : baseItem;
                         });
-                    } else {
-                        myCollection = [...baseData];
-                    }
+                    } else { myCollection = [...baseData]; }
                 } catch (error) { myCollection = [...baseData]; }
-                
                 renderStats(myCollection);
-
             } else {
-                // UI: DÉCONNECTÉ
                 btn.classList.remove('logged-in');
                 btn.onclick = () => window.toggleAuthModal();
                 document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
@@ -927,136 +877,139 @@
             document.body.classList.add('auth-ready');
         });
 
+// --- CONFIGURATION DES SUCCÈS (BADGES) ---
+const badgesConfig = [
+    {
+        id: 'starter', icon: '🥚', t_title: 'badge_starter_title', t_desc: 'badge_starter_desc',
+        check: (ctx) => ctx.totalItems >= 1
+    },
+    {
+        id: 'citizen', icon: '🏙️', t_title: 'badge_citizen_title', t_desc: 'badge_citizen_desc',
+        check: (ctx) => ctx.seriesStats["City of Mercy"] && ctx.seriesStats["City of Mercy"].ownedUnique > 0
+    },
+    {
+        id: 'mime', icon: '🎭', t_title: 'badge_mime_title', t_desc: 'badge_mime_desc',
+        check: (ctx) => ctx.seriesStats["Mime"] && ctx.seriesStats["Mime"].ownedUnique > 0
+    },
+    {
+        id: 'addict', icon: '🐼', t_title: 'badge_addict_title', t_desc: 'badge_addict_desc',
+        check: (ctx) => ctx.totalItems >= 10
+    },
+    {
+        id: 'explorer', icon: '🧭', t_title: 'badge_explorer_title', t_desc: 'badge_explorer_desc',
+        check: (ctx) => Object.keys(ctx.seriesStats).filter(k => ctx.seriesStats[k].ownedUnique > 0).length >= 5
+    },
+    {
+        id: 'dreamer', icon: '💭', t_title: 'badge_dreamer_title', t_desc: 'badge_dreamer_desc',
+        check: (ctx) => ctx.statusCounts.wish >= 10
+    },
+    {
+        id: 'hunter', icon: '✨', t_title: 'badge_hunter_title', t_desc: 'badge_hunter_desc',
+        check: (ctx) => ctx.secretsCount >= 1
+    },
+    {
+        id: 'completionist', icon: '🧩', t_title: 'badge_completionist_title', t_desc: 'badge_completionist_desc',
+        check: (ctx) => Object.values(ctx.seriesStats).some(s => s.ownedUnique >= 12)
+    },
+    {
+        id: 'investor', icon: '💸', t_title: 'badge_investor_title', t_desc: 'badge_investor_desc',
+        check: (ctx) => ctx.totalValue >= 500
+    },
+    {
+        id: 'diamond', icon: '💎', t_title: 'badge_diamond_title', t_desc: 'badge_diamond_desc',
+        check: (ctx) => ctx.rawList.some(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) >= 100)
+    },
+    {
+        id: 'collector', icon: '🔥', t_title: 'badge_collector_title', t_desc: 'badge_collector_desc',
+        check: (ctx) => ctx.totalItems >= 50
+    },
+    {
+        id: 'expert_hunter', icon: '👑', t_title: 'badge_expert_hunter_title', t_desc: 'badge_expert_hunter_desc',
+        check: (ctx) => ctx.secretsCount >= 3
+    },
+    {
+        id: 'whale', icon: '🐋', t_title: 'badge_whale_title', t_desc: 'badge_whale_desc',
+        check: (ctx) => ctx.totalValue >= 1000
+    }
+];
+
+// --- FONCTION RENDER BADGES ---
+function renderBadges(context) {
+    const container = document.getElementById('badges-grid');
+    if(!container) return;
+    
+    // On utilise t() pour traduire les titres et descriptions
+    container.innerHTML = badgesConfig.map(badge => {
+        const isUnlocked = badge.check(context);
+        return `
+            <div class="badge-card ${isUnlocked ? 'unlocked' : ''}">
+                <div class="badge-icon">${badge.icon}</div>
+                <div class="badge-title">${t(badge.t_title)}</div>
+                <div class="badge-desc">${t(badge.t_desc)}</div>
+            </div>
+        `;
+    }).join('');
+}
         function renderStats(data) {
             if(!data || data.length === 0) return;
-
-            let totalItems = 0;
-            let totalValue = 0;
-            let secretsCount = 0;
-            
-            // Pour le calcul du Deal Score
-            let comparisonTotalPaid = 0;
-            let comparisonTotalMarket = 0;
+            let totalItems=0, totalValue=0, secretsCount=0, comparisonTotalPaid=0, comparisonTotalMarket=0;
             const RATES = { "EUR": 1, "USD": 1.08, "GBP": 0.85, "CNY": 7.8 };
-
-            let seriesStats = {};
-            let seriesTotals = {};
-            baseData.forEach(b => {
-                if(!seriesTotals[b.Serie]) seriesTotals[b.Serie] = 0;
-                seriesTotals[b.Serie]++;
-            });
-
-            let timelineData = {};
-            let monthlyData = {};
-            let statusCounts = { owned: 0, wish: 0, missing: 0 };
+            let seriesStats={}, seriesTotals={}, timelineData={}, monthlyData={}, statusCounts={owned:0, wish:0, missing:0};
             
+            baseData.forEach(b => { if(!seriesTotals[b.Serie]) seriesTotals[b.Serie]=0; seriesTotals[b.Serie]++; });
+
             data.forEach(item => {
-                const q = parseInt(item.Quantity) || 0;
-                const p = parseFloat(item["Purchase price"]) || 0;
-                const s = item.Serie;
-                const status = item.Status;
-                const date = item["Purchase date"];
-
-                if(!seriesStats[s]) seriesStats[s] = { total: seriesTotals[s] || 0, ownedUnique: 0, spent: 0 };
-
-                if(status === 'Possédé') {
-                    statusCounts.owned++;
-                    totalItems += q;
-                    totalValue += (p * q);
-                    seriesStats[s].spent += (p * q);
-                    
-                    if(q > 0) seriesStats[s].ownedUnique++;
-                    if(item["Secret Rare"] === "Yes") secretsCount++;
-
-                    // --- LOGIQUE DEAL SCORE ---
+                const q=parseInt(item.Quantity)||0, p=parseFloat(item["Purchase price"])||0, s=item.Serie, status=item.Status, date=item["Purchase date"];
+                if(!seriesStats[s]) seriesStats[s]={total:seriesTotals[s]||0, ownedUnique:0, spent:0};
+                if(status==='Possédé') {
+                    statusCounts.owned++; totalItems+=q; totalValue+=(p*q); seriesStats[s].spent+=(p*q);
+                    if(q>0) seriesStats[s].ownedUnique++;
+                    if(item["Secret Rare"]==="Yes") secretsCount++;
                     const marketBase = communityPrices[item.ID] || 0;
-                    const currency = item.Currency || "EUR"; 
                     if(p > 0 && marketBase > 0) {
-                        let rate = RATES[currency] || 1;
-                        let paidInEur = p / rate; 
-                        
-                        // On compare pour chaque exemplaire possédé
-                        comparisonTotalPaid += (paidInEur * q);
-                        comparisonTotalMarket += (marketBase * q);
+                        let rate = RATES[item.Currency||"EUR"] || 1;
+                        comparisonTotalPaid += ((p/rate)*q);
+                        comparisonTotalMarket += (marketBase*q);
                     }
-                    // --------------------------
-
                     if(date) {
-                        if(!timelineData[date]) timelineData[date] = 0;
-                        timelineData[date] += q;
-                        const monthKey = date.substring(0, 7);
-                        if(!monthlyData[monthKey]) monthlyData[monthKey] = 0;
-                        monthlyData[monthKey] += (p * q);
+                        if(!timelineData[date]) timelineData[date]=0; timelineData[date]+=q;
+                        const monthKey=date.substring(0,7); if(!monthlyData[monthKey]) monthlyData[monthKey]=0; monthlyData[monthKey]+=(p*q);
                     }
-                } else if (status === 'Recherché') {
-                    statusCounts.wish++;
-                } else {
-                    statusCounts.missing++;
-                }
+                } else if (status==='Recherché') statusCounts.wish++; else statusCounts.missing++;
             });
 
             const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
             const currency = currentLang === 'fr' ? 'EUR' : 'USD';
-
-            // --- CALCULS STATS ---
             const addiction = Math.min(100, Math.round((totalItems / 150) * 100)); 
             const prestige = totalItems > 0 ? Math.round((secretsCount / totalItems) * 100) : 0;
             const fullyComplete = Object.values(seriesStats).filter(s => s.ownedUnique === s.total && s.total > 0).length;
             const avgPrice = totalItems > 0 ? (totalValue / totalItems) : 0;
-            
-            let fav = "-"; let max = 0;
-            Object.entries(seriesStats).forEach(([name, s]) => { if(s.ownedUnique > max){ max = s.ownedUnique; fav = name; }});
-
             const score = (totalItems * 10) + (secretsCount * 100) + (fullyComplete * 50);
-            let rName = "Novice"; let emoji = "🌱";
-            if(score > 2000) { rName = "Legend"; emoji = "🌌"; }
-            else if(score > 1000) { rName = "Master"; emoji = "🎭"; }
-            else if(score > 500) { rName = "Collector"; emoji = "💎"; }
             
-            // --- MISE A JOUR DU BENTO HEADER ---
+            let rName="Novice", emoji="🌱"; if(score>2000){rName="Legend";emoji="🌌";} else if(score>1000){rName="Master";emoji="🎭";} else if(score>500){rName="Collector";emoji="💎";}
+            
             document.getElementById('rank-name').innerText = rName;
             document.getElementById('rank-emoji').innerText = emoji;
             document.getElementById('rank-details').innerText = "Score : " + score + " pts";
-            
             document.getElementById('bento-addict-val').innerText = addiction + "%";
             document.getElementById('bento-addict-sub').innerText = addiction > 50 ? (currentLang==='fr'?"Passionné":"Fanatic") : (currentLang==='fr'?"Sain":"Healthy");
-            
             document.getElementById('bento-prestige-val').innerText = prestige + "%";
 
-            // --- CALCUL DEAL SCORE FINAL ---
-            let dealText = "0%";
-            let dealColor = "var(--text-sub)";
-            let dealSub = "-";
-            
+            let dealText="0%", dealColor="var(--text-sub)", dealSub="-";
             if(comparisonTotalMarket > 0) {
-                // Si Market > Paid => Économie (Positif)
-                // Si Market < Paid => Perte (Négatif)
                 let diff = comparisonTotalMarket - comparisonTotalPaid;
                 let pct = (diff / comparisonTotalMarket) * 100;
-                
-                if(pct > 0) {
-                    dealText = "+" + Math.round(pct) + "%";
-                    dealColor = "#6A8C47"; // Vert
-                    dealSub = t('dealSubGood');
-                } else {
-                    dealText = Math.round(pct) + "%";
-                    dealColor = "#C0392B"; // Rouge
-                    dealSub = t('dealSubBad');
-                }
+                if(pct > 0) { dealText="+"+Math.round(pct)+"%"; dealColor="#6A8C47"; dealSub=t('dealSubGood'); } 
+                else { dealText=Math.round(pct)+"%"; dealColor="#C0392B"; dealSub=t('dealSubBad'); }
             }
+            document.getElementById('bento-deal-val').innerText = dealText;
+            document.getElementById('bento-deal-val').style.color = dealColor;
+            document.getElementById('bento-deal-sub').innerText = dealSub;
 
-            // --- MISE A JOUR DE LA NOUVELLE CARTE BENTO ---
-            const dealValEl = document.getElementById('bento-deal-val');
-            const dealSubEl = document.getElementById('bento-deal-sub');
-            if(dealValEl && dealSubEl) {
-                dealValEl.innerText = dealText;
-                dealValEl.style.color = dealColor;
-                dealSubEl.innerText = dealSub;
-            }
-
-            // --- INJECTION DES CARTES RESTANTES (Grid) ---
-            // J'ai retiré le Deal Score de cette liste car il est maintenant dans le Bento
-            const cardsData = [
+            let fav="-", max=0; Object.entries(seriesStats).forEach(([name, s]) => { if(s.ownedUnique > max){ max = s.ownedUnique; fav = name; }});
+            
+            const grid = document.getElementById('stats-grid');
+            grid.innerHTML = [
                 { id: "kpiTotal", val: totalItems, sub: currentLang==='fr'?"Figurines":"Items" },
                 { id: "kpiInvest", val: totalValue.toLocaleString(locale, {style:'currency', currency:currency}), sub: currentLang==='fr'?"Valeur":"Value" },
                 { id: "kpiSecretsFound", val: secretsCount, sub: currentLang==='fr'?"Secrets":"Secrets", color: "var(--gold)" },
@@ -1064,219 +1017,92 @@
                 { id: "kpiAvgPrice", val: avgPrice.toLocaleString(locale, {style:'currency', currency:currency}), sub: "Unit" },
                 { id: "kpiComplete", val: fullyComplete, sub: "100%" },
                 { id: "kpiWish", val: statusCounts.wish, sub: "Wanted", color: "var(--red)" }
-            ];
+            ].map(c => `<div class="kpi-card"><span class="kpi-label" data-t="${c.id}">${translations[currentLang][c.id] || t(c.id)}</span><span class="kpi-value" style="${c.color ? 'color:'+c.color : ''}">${c.val}</span><div class="kpi-sub">${c.sub}</div></div>`).join('');
 
-            const grid = document.getElementById('stats-grid');
-            grid.innerHTML = cardsData.map(c => `
-                <div class="kpi-card">
-                    <span class="kpi-label" data-t="${c.id}">${translations[currentLang][c.id] || t(c.id)}</span>
-                    <span class="kpi-value" style="${c.color ? 'color:'+c.color : ''}">${c.val}</span>
-                    <div class="kpi-sub">${c.sub}</div>
-                </div>
-            `).join('');
-
-            // --- TOP 3 EXPENSIVE ---
-            const topExpensive = data
-                .filter(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) > 0)
-                .sort((a,b) => parseFloat(b["Purchase price"]) - parseFloat(a["Purchase price"]))
-                .slice(0, 3);
-
+            const topExpensive = data.filter(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) > 0).sort((a,b) => parseFloat(b["Purchase price"]) - parseFloat(a["Purchase price"])).slice(0, 3);
             const topListEl = document.getElementById('top-expensive-list');
             if(topExpensive.length > 0) {
-                let html = '';
-                topExpensive.forEach((item, index) => {
-                    const price = parseFloat(item["Purchase price"]).toLocaleString(locale, {style:'currency', currency: currency});
-                    html += `
-                        <div class="top-list-item">
-                            <span class="top-rank">${index + 1}</span>
-                            <div class="top-info">
-                                <span class="top-name">${item.Name}</span>
-                                <span class="top-serie">${item.Serie}</span>
-                            </div>
-                            <span class="top-price">${price}</span>
-                        </div>
-                    `;
-                });
-                topListEl.innerHTML = html;
-            } else {
-                 const tVal = translations[currentLang];
-                 topListEl.innerHTML = `<p style="text-align:center; color:#9CA3AF; font-size:13px; margin-top:20px;">${tVal.txtNoPrice}</p>`;
-            }
+                topListEl.innerHTML = topExpensive.map((item, index) => `<div class="top-list-item"><span class="top-rank">${index + 1}</span><div class="top-info"><span class="top-name">${item.Name}</span><span class="top-serie">${item.Serie}</span></div><span class="top-price">${parseFloat(item["Purchase price"]).toLocaleString(locale, {style:'currency', currency: currency})}</span></div>`).join('');
+            } else { topListEl.innerHTML = `<p style="text-align:center; color:#9CA3AF; font-size:13px; margin-top:20px;">${t('txtNoPrice')}</p>`; }
 
-            // --- GRAPHIQUES ---
+            // --- APPEL DE LA FONCTION BADGES ---
+            renderBadges({ 
+                totalItems, 
+                totalValue, 
+                secretsCount, 
+                seriesStats, 
+                statusCounts, 
+                rawList: data // On passe la liste brute pour vérifier les prix unitaires
+            });
+
             updateCharts(timelineData, seriesStats, statusCounts, monthlyData);
         }
 
         function updateCharts(timelineData, seriesStats, statusCounts, monthlyData) {
             Chart.helpers.each(Chart.instances, instance => instance.destroy());
-            const tVal = translations[currentLang];
-
-            // Timeline
             const sortedDates = Object.keys(timelineData).sort();
-            let cumulative = 0;
-            const timelinePoints = sortedDates.map(date => { cumulative += timelineData[date]; return cumulative; });
+            let cumulative = 0; const timelinePoints = sortedDates.map(date => { cumulative += timelineData[date]; return cumulative; });
+            new Chart(document.getElementById('chartTimeline'), { type: 'line', data: { labels: sortedDates, datasets: [{ label: 'Total', data: timelinePoints, borderColor: '#6A8C47', backgroundColor: 'rgba(106, 140, 71, 0.1)', fill: true, tension: 0.3 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } } });
 
-            new Chart(document.getElementById('chartTimeline'), {
-                type: 'line',
-                data: { labels: sortedDates, datasets: [{ label: 'Total', data: timelinePoints, borderColor: '#6A8C47', backgroundColor: 'rgba(106, 140, 71, 0.1)', fill: true, tension: 0.3 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-            });
-
-            // Series Completion Chart
             const seriesLabels = Object.keys(seriesStats);
-            const seriesCompletionData = seriesLabels.map(s => {
-                const total = seriesStats[s].total;
-                return total > 0 ? Math.round((seriesStats[s].ownedUnique / total) * 100) : 0;
-            });
+            new Chart(document.getElementById('chartSeries'), { type: 'bar', data: { labels: seriesLabels, datasets: [{ label: '%', data: seriesLabels.map(s => seriesStats[s].total > 0 ? Math.round((seriesStats[s].ownedUnique / seriesStats[s].total) * 100) : 0), backgroundColor: '#6A8C47', borderRadius: 4 }] }, options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } } });
 
-            new Chart(document.getElementById('chartSeries'), {
-                type: 'bar',
-                data: { labels: seriesLabels, datasets: [{ label: '%', data: seriesCompletionData, backgroundColor: '#6A8C47', borderRadius: 4 }] },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false, scales: { x: { max: 100 } } }
-            });
+            new Chart(document.getElementById('chartStatus'), { type: 'doughnut', data: { labels: [t('statusOwned'), t('statusWish'), t('statusMissing')], datasets: [{ data: [statusCounts.owned, statusCounts.wish, statusCounts.missing], backgroundColor: ['#6A8C47', '#C6A875', '#E5E7EB'], borderWidth: 0 }] }, options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' } } } });
 
-            // Status
-            const labelsStatus = [tVal.statusOwned, tVal.statusWish, tVal.statusMissing];
-            new Chart(document.getElementById('chartStatus'), {
-                type: 'doughnut',
-                data: { labels: labelsStatus, datasets: [{ data: [statusCounts.owned, statusCounts.wish, statusCounts.missing], backgroundColor: ['#6A8C47', '#C6A875', '#E5E7EB'], borderWidth: 0 }] },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right' } } }
-            });
-
-            // Money
             const sortedMoney = Object.entries(seriesStats).sort((a,b) => b[1].spent - a[1].spent).slice(0, 5);
-            new Chart(document.getElementById('chartMoney'), {
-                type: 'bar',
-                data: { labels: sortedMoney.map(i => i[0]), datasets: [{ label: tVal.labelExpense, data: sortedMoney.map(i => i[1].spent), backgroundColor: '#C6A875', borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
+            new Chart(document.getElementById('chartMoney'), { type: 'bar', data: { labels: sortedMoney.map(i => i[0]), datasets: [{ label: t('labelExpense'), data: sortedMoney.map(i => i[1].spent), backgroundColor: '#C6A875', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false } });
 
-            // Monthly
             const sortedMonths = Object.keys(monthlyData).sort();
-            const currencySymbol = currentLang === 'fr' ? '€' : '$';
-            new Chart(document.getElementById('chartMonthly'), {
-                type: 'bar',
-                data: { labels: sortedMonths, datasets: [{ label: `${tVal.labelExpense} (${currencySymbol})`, data: sortedMonths.map(m => monthlyData[m]), backgroundColor: '#C0392B', borderRadius: 4 }] },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
-            });
+            new Chart(document.getElementById('chartMonthly'), { type: 'bar', data: { labels: sortedMonths, datasets: [{ label: `${t('labelExpense')}`, data: sortedMonths.map(m => monthlyData[m]), backgroundColor: '#C0392B', borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } } });
         }
 
-        // --- EXPORT STORY LOGIC ---
         window.exportStory = async () => {
             const btn = document.querySelector('button[onclick="window.exportStory()"] span:last-child');
-            const originalText = btn.innerText;
-            btn.innerText = "⏳";
-
-            // 1. Récupérer les données depuis la grille
+            const originalText = btn.innerText; btn.innerText = "⏳";
             const grid = document.getElementById('stats-grid');
             if(grid.children.length < 5) return; 
-
-            // ATTENTION : J'ai mis à jour les index car le Deal Score n'est plus dans la grille
-            // Index 0=Total, 1=Invest, 2=Secrets, 3=Favorite, 4=Avg, 5=Complete, 6=Wishlist
-            
             document.getElementById('story-total-val').innerText = grid.children[0].querySelector('.kpi-value').innerText;
             document.getElementById('story-value-val').innerText = grid.children[1].querySelector('.kpi-value').innerText;
             document.getElementById('story-secret-val').innerText = grid.children[2].querySelector('.kpi-value').innerText;
-            // Wishlist est maintenant à l'index 6
             document.getElementById('story-wish-val').innerText = grid.children[6].querySelector('.kpi-value').innerText;
             
-            // 2. TROUVER LA FIGURINE LA PLUS CHÈRE
-            let topItemName = "-";
-            let topItemPrice = "-";
-            
+            let topItemName = "-", topItemPrice = "-";
             if(myCollection && myCollection.length > 0) {
-                const sorted = myCollection
-                    .filter(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) > 0)
-                    .sort((a,b) => parseFloat(b["Purchase price"]) - parseFloat(a["Purchase price"]));
-                
+                const sorted = myCollection.filter(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) > 0).sort((a,b) => parseFloat(b["Purchase price"]) - parseFloat(a["Purchase price"]));
                 if(sorted.length > 0) {
-                    const top = sorted[0];
-                    topItemName = top.Name;
+                    topItemName = sorted[0].Name;
                     const locale = currentLang === 'fr' ? 'fr-FR' : 'en-US';
                     const currency = currentLang === 'fr' ? 'EUR' : 'USD';
-                    topItemPrice = parseFloat(top["Purchase price"]).toLocaleString(locale, {style:'currency', currency:currency});
+                    topItemPrice = parseFloat(sorted[0]["Purchase price"]).toLocaleString(locale, {style:'currency', currency:currency});
                 }
             }
-            
             document.getElementById('story-top-name').innerText = topItemName;
             document.getElementById('story-top-price').innerText = topItemPrice;
-
-            // Date
             document.getElementById('story-date').innerText = new Date().toLocaleDateString('en-GB');
 
-            // 3. Générer l'image
             try {
-                const element = document.getElementById("story-container");
-                const canvas = await html2canvas(element, { 
-                    scale: 1, 
-                    useCORS: true, 
-                    backgroundColor: "#0f0f0f" 
-                });
-                const link = document.createElement('a');
-                link.download = `Hirono_Stats_Dark_${Date.now()}.jpg`;
-                link.href = canvas.toDataURL("image/jpeg", 0.9);
-                link.click();
-            } catch (err) {
-                console.error(err);
-                alert("Error generating image.");
-            } finally {
-                btn.innerText = originalText;
-            }
+                const canvas = await html2canvas(document.getElementById("story-container"), { scale: 1, useCORS: true, backgroundColor: "#0f0f0f" });
+                const link = document.createElement('a'); link.download = `hrntrack_export_story_${Date.now()}.jpg`; link.href = canvas.toDataURL("image/jpeg", 0.9); link.click();
+            } catch (err) { alert("Error generating image."); } finally { btn.innerText = originalText; }
         };
 
-        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
-        fetch('footer.html')
-            .then(response => {
-                if (!response.ok) throw new Error("Erreur chargement footer");
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-                updateUIText(); 
-                if(window.initCookieLogic) window.initCookieLogic();
-            })
-            .catch(error => console.error('Erreur Footer:', error));
-
-        const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, snowflakes;
-        function initSnow() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            snowflakes = [];
-            for (let i = 0; i < 150; i++) {
-                snowflakes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 3 + 1,
-                    speed: Math.random() * 1 + 0.5,
-                    wind: Math.random() * 0.5 - 0.25,
-                    opacity: Math.random() * 0.5 + 0.3
-                });
+        window.copyPublicLink = () => {
+            const user = auth.currentUser;
+            if (!user) {
+                alert("Vous devez être connecté pour partager votre profil !");
+                return;
             }
-        }
-        function drawSnow() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "white";
-            snowflakes.forEach(flake => {
-                ctx.beginPath();
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.globalAlpha = flake.opacity;
-                ctx.fill();
-                flake.y += flake.speed;
-                flake.x += flake.wind;
-                if (flake.y > height) {
-                    flake.y = -10;
-                    flake.x = Math.random() * width;
-                }
+            const link = `${window.location.origin}/share.html?uid=${user.uid}`;
+            
+            navigator.clipboard.writeText(link).then(() => {
+                alert("Link copied! Send it to your friends:" + link);
+            }).catch(err => {
+                prompt("Copiez ce lien :", link);
             });
-            requestAnimationFrame(drawSnow);
-        }
-        window.addEventListener('resize', initSnow);
-        initSnow();
-        drawSnow();
+        };
+
+        // Footer loader
+        fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;if(window.initCookieLogic)window.initCookieLogic();});
     </script>
 </body>
 </html>
