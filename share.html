@@ -3,7 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Public collection</title>
+    
+    <meta property="og:title" content="Ma Collection Hirono - HRNtrack">
+    <meta property="og:description" content="Découvre ma collection de figurines Hirono, mes doubles et mes recherches.">
+    <meta property="og:image" content="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <meta property="og:url" content=""> <meta property="og:type" content="website">
+
+    <title>HRNtrack - Collection Publique</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
@@ -15,8 +21,8 @@
             --gold: #C6A875; 
             --card-bg: #ffffff; 
             --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
-            --accent-double: #E67E22; /* Orange pour les doublons */
-            --accent-secret: #8E44AD; /* Violet pour les secrets */
+            --accent-double: #E67E22; 
+            --accent-secret: #8E44AD; 
         }
         body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
         
@@ -26,16 +32,23 @@
             box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 1000;
             display: flex; justify-content: space-between; align-items: center;
         }
-        .logo-img { height: 60px; } /* Ajusté pour mobile/desktop */
-        @media(min-width: 768px) { .logo-img { height: 80px; } }
+        .logo-img { height: 50px; }
+        @media(min-width: 768px) { .logo-img { height: 70px; } }
         
-        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-right { display: flex; align-items: center; gap: 10px; }
 
         .cta-btn {
             background: var(--primary); color: white; text-decoration: none; padding: 8px 16px; 
             border-radius: 25px; font-size: 12px; font-weight: 600; transition: 0.2s; white-space: nowrap;
         }
         .cta-btn:hover { transform: scale(1.05); }
+
+        .btn-share-link {
+            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-share-link:hover { background: rgba(255,255,255,0.2); }
 
         .lang-toggle {
             display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
@@ -50,16 +63,18 @@
         .profile-summary {
             background: white; padding: 30px; border-radius: 20px; margin-bottom: 25px;
             box-shadow: var(--shadow); text-align: center; display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden;
         }
         .avatar-circle {
             width: 100px; height: 100px; background: #eee; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 10px;
             border: 4px solid var(--primary); overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
         .user-title { font-size: 24px; font-weight: 800; margin: 0 0 20px 0; color: #1A1A1A; line-height: 1.2; }
         
-        /* NOUVEAU BLOC DE STATS */
+        /* STATS */
         .stats-row {
             display: flex; gap: 15px; width: 100%; max-width: 600px; justify-content: center; flex-wrap: wrap;
         }
@@ -113,7 +128,6 @@
         .badge.owned { background: var(--primary); }
         .badge.wish { background: var(--gold); color: black;}
 
-        /* Badge Doublon (Coin haut gauche) */
         .qty-badge {
             position: absolute; top: 10px; left: 10px; background: var(--accent-double); color: white;
             font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px;
@@ -137,6 +151,11 @@
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
+            
+            <button class="btn-share-link" onclick="window.shareCurrentPage()" title="Copier le lien">
+                🔗
+            </button>
+            
             <a href="index.html" class="cta-btn" data-t="btnCreate">Créer ma collection 🚀</a>
         </div>
     </nav>
@@ -201,28 +220,17 @@
 
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
-            if (accept) {
-                localStorage.setItem('cookieConsent', 'true');
-                loadAnalytics();
-            } else {
-                localStorage.setItem('cookieConsent', 'false');
-            }
+            if (accept) { localStorage.setItem('cookieConsent', 'true'); loadAnalytics(); } 
+            else { localStorage.setItem('cookieConsent', 'false'); }
             if(banner) banner.style.display = 'none';
         };
 
         window.initCookieLogic = function() {
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
-            if (consent === 'true') { 
-                loadAnalytics(); 
-                if(banner) banner.style.display = 'none';
-            } 
-            else if (consent === null) { 
-                if(banner) banner.style.display = 'block'; 
-            }
-            else {
-                if(banner) banner.style.display = 'none';
-            }
+            if (consent === 'true') { loadAnalytics(); if(banner) banner.style.display = 'none'; } 
+            else if (consent === null) { if(banner) banner.style.display = 'block'; }
+            else { if(banner) banner.style.display = 'none'; }
         }
     </script>
 
@@ -234,7 +242,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- I18N ---
         const translations = {
             fr: {
                 btnCreate: "Créer ma collection 🚀", msgLoading: "Chargement de la collection... 🐼",
@@ -242,12 +249,8 @@
                 optAllSeries: "-- Toutes les séries --", badgeOwned: "OWNED", badgeWish: "WISH",
                 lblTotal: "Possédées", lblSecrets: "Secrets", lblDoubles: "Doublons (Dispo)",
                 searchPh: "Rechercher une figurine...",
-                // AJOUTS POUR LE FOOTER
-                footerPrivacy: "Politique de Confidentialité",
-                footerTerms: "Mentions Légales",
-                footerRights: "Tous droits réservés.",
-                footerLinks: "Liens utiles",
-                footerContact: "Contact"
+                footerPrivacy: "Politique de Confidentialité", footerTerms: "Mentions Légales",
+                footerRights: "Tous droits réservés.", footerLinks: "Liens utiles", footerContact: "Contact"
             },
             en: {
                 btnCreate: "Start my collection 🚀", msgLoading: "Loading collection... 🐼",
@@ -255,12 +258,8 @@
                 optAllSeries: "-- All Series --", badgeOwned: "OWNED", badgeWish: "WISH",
                 lblTotal: "Owned", lblSecrets: "Secrets", lblDoubles: "Duplicates (Trade)",
                 searchPh: "Search a figure...",
-                // AJOUTS POUR LE FOOTER
-                footerPrivacy: "Privacy Policy",
-                footerTerms: "Legal Notice",
-                footerRights: "All rights reserved.",
-                footerLinks: "Useful Links",
-                footerContact: "Contact"
+                footerPrivacy: "Privacy Policy", footerTerms: "Legal Notice",
+                footerRights: "All rights reserved.", footerLinks: "Useful Links", footerContact: "Contact"
             }
         };
 
@@ -268,10 +267,8 @@
         let currentStatus = 'all';
         let rawData = [];
 
-        // --- FONCTIONS I18N ---
         function updateUIText() {
             const tr = translations[currentLang];
-            // Classes boutons
             if(currentLang === 'fr') {
                 document.getElementById('lang-fr').classList.add('active');
                 document.getElementById('lang-en').classList.remove('active');
@@ -279,14 +276,10 @@
                 document.getElementById('lang-fr').classList.remove('active');
                 document.getElementById('lang-en').classList.add('active');
             }
-            
-            // Textes statiques
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
                 if(tr[key]) el.innerText = tr[key];
             });
-
-            // Placeholder et Option
             document.getElementById('search-box').placeholder = tr.searchPh;
             const select = document.getElementById('serie-filter');
             if(select.options.length > 0) select.options[0].text = tr.optAllSeries;
@@ -296,12 +289,21 @@
             currentLang = (currentLang === 'fr') ? 'en' : 'fr';
             localStorage.setItem('HRN_LANG', currentLang);
             updateUIText();
-            render(rawData); // Pour mettre à jour les badges
+            render(rawData);
         };
 
-        // --- DONNEES ---
+        window.shareCurrentPage = () => {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                alert(currentLang === 'fr' ? "Lien copié !" : "Link copied!");
+            }).catch(err => {
+                prompt(currentLang === 'fr' ? "Copiez ce lien :" : "Copy this link:", url);
+            });
+        }
+
         // --- BASE DATA ---
-        // --- BASE DATA ---
+        // (Copie ici ta liste complète baseData car elle est trop longue pour le chat, 
+        // assure-toi d'inclure toutes les lignes du code précédent)
         const baseData = [
             {"ID":"CIT-BELONG","Name":"Belonging","Serie":"City of Mercy","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/5tn6hRN7/Belonging_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
             {"ID":"CIT-COMFOR","Name":"Comfortably Numb","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvMXrVQy/Comfortably_Numb_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
@@ -499,13 +501,13 @@
             {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP_MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"},
             {"ID":"SPE-WISHPE","Name":"Wish List Pendant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
-            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},    
-            {"ID":"SPE-LUCKSP","Name":"Luck on the Way (Special edition)","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png"},    
+            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},    
+            {"ID":"SPE-LUCKSP","Name":"Luck on the Way (Special edition)","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png"},    
         ];
         
         // --- INIT ---
         async function init() {
-            updateUIText(); // Init lang
+            updateUIText(); 
 
             const params = new URLSearchParams(window.location.search);
             const uid = params.get('uid');
@@ -522,16 +524,18 @@
                     if(profile.pseudo) {
                         document.getElementById('profile-pseudo').innerText = profile.pseudo;
                         document.title = `${profile.pseudo} - HRNtrack`;
+                        // Mettre à jour les meta tags pour le partage
+                        document.querySelector('meta[property="og:title"]').content = `Collection de ${profile.pseudo} - HRNtrack`;
+                        document.querySelector('meta[property="og:url"]').content = window.location.href;
                     }
                     if(profile.avatar) {
                         document.getElementById('profile-avatar').innerHTML = `<img src="${profile.avatar}">`;
                     }
 
-                    // FUSION DES DONNEES (Sécurisée pour Qty)
+                    // FUSION DES DONNEES
                     rawData = baseData.map(b => {
                         const find = userColl.find(u => u.ID === b.ID);
                         if (find) {
-                            // On s'assure que Qty est un nombre. Si pas de champ Qty mais 'Possédé', on force 1.
                             let q = find.Qty ? Number(find.Qty) : (find.Status === 'Possédé' ? 1 : 0);
                             return { ...b, ...find, Qty: q };
                         }
@@ -550,7 +554,6 @@
                     const ownedCount = rawData.filter(i => i.Status === 'Possédé').length;
                     const secretCount = rawData.filter(i => i.Status === 'Possédé' && i["Secret Rare"] === 'Yes').length;
                     
-                    // Calcul Doublons : Somme de (Quantité - 1) pour ceux qui en ont > 1
                     const doublesCount = rawData.reduce((acc, curr) => {
                         return acc + (curr.Qty > 1 ? (curr.Qty - 1) : 0);
                     }, 0);
@@ -604,18 +607,14 @@
             const grouped = {};
             data.forEach(i => { if(!grouped[i.Serie]) grouped[i.Serie] = []; grouped[i.Serie].push(i); });
 
-            // LOGIQUE DE TRI : Standard d'abord, Special/Limited ensuite
             const allSeries = Object.keys(grouped);
             
-            // 1. Séparer les séries
             const standardSeries = allSeries.filter(s => !s.toLowerCase().includes('special') && !s.toLowerCase().includes('limited'));
             const specialSeries = allSeries.filter(s => s.toLowerCase().includes('special') || s.toLowerCase().includes('limited'));
             
-            // 2. Trier alphabétiquement dans chaque groupe
             standardSeries.sort();
             specialSeries.sort();
             
-            // 3. Fusionner : Standard d'abord, puis Spéciales
             const finalSortedSeries = [...standardSeries, ...specialSeries];
 
             let html = '';
@@ -625,11 +624,9 @@
                     let cls = "card";
                     let badges = "";
                     
-                    // Logique Badges
                     if(item.Status === "Possédé") { 
                         cls += " owned"; 
                         badges += `<div class="badge owned">${translations[currentLang].badgeOwned}</div>`; 
-                        // Badge Quantité (Doublons)
                         if(item.Qty > 1) {
                             badges += `<div class="qty-badge">x${item.Qty}</div>`;
                         }
@@ -655,7 +652,7 @@
         fetch('footer.html').then(r=>r.text()).then(d=>{
             document.getElementById('footer-placeholder').innerHTML=d;
             if(window.initCookieLogic) window.initCookieLogic();
-            updateUIText(); // <--- AJOUT CRITIQUE ICI : On traduit APRÈS avoir chargé le footer
+            updateUIText();
         });
 
         init();

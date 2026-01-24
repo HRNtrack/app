@@ -1013,7 +1013,14 @@ const translations = {
             const avgPrice = totalItems > 0 ? (totalValue / totalItems) : 0;
             const score = (totalItems * 10) + (secretsCount * 100) + (fullyComplete * 50);
             
-            let rName="Novice", emoji="🌱"; if(score>2000){rName="Legend";emoji="🌌";} else if(score>1000){rName="Master";emoji="🎭";} else if(score>500){rName="Collector";emoji="💎";}
+            // --- LOGIQUE RANK & EMOJI ---
+            let rName = "Novice";
+            let emoji = "🌱";
+
+            if (score >= 2000) { rName = "Legend"; emoji = "🌌"; }
+            else if (score >= 1000) { rName = "Master"; emoji = "👑"; }
+            else if (score >= 500) { rName = "Collector"; emoji = "💎"; }
+            else if (score >= 200) { rName = "Amateur"; emoji = "🧢"; }
             
             document.getElementById('rank-name').innerText = rName;
             document.getElementById('rank-emoji').innerText = emoji;
@@ -1119,8 +1126,10 @@ const translations = {
                 alert("Vous devez être connecté pour partager votre profil !");
                 return;
             }
+            // CORRECTION ICI : Ajout du slash manquant
             const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
-            const link = `${baseUrl}share.html?uid=${user.uid}`;
+            const link = `${baseUrl}/share.html?uid=${user.uid}`;
+            
             navigator.clipboard.writeText(link).then(() => {
                 alert("Link copied! Send it to your friends::\n" + link);
             }).catch(err => {
