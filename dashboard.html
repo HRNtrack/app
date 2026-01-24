@@ -354,13 +354,13 @@
                 <option value="all" data-t="optAllSeries">Toutes les séries</option>
             </select>
             <select id="sort-order" class="control-select" onchange="window.updateGrid()">
+                <option value="date_desc" data-t="sortDateDesc">Date d'ajout (Récent)</option>
+                <option value="price_desc" data-t="sortPriceDesc">Prix (Haut → Bas)</option>
+                <option value="price_asc" data-t="sortPriceAsc">Prix (Bas → Haut)</option>
+                <option value="serie_asc">Série (A-Z)</option>
                 <option value="name_asc" data-t="sortNameAsc">Nom (A-Z)</option>
                 <option value="name_desc" data-t="sortNameDesc">Nom (Z-A)</option>
-                <option value="price_asc" data-t="sortPriceAsc">Prix d'achat (Croissant)</option>
-                <option value="price_desc" data-t="sortPriceDesc">Prix d'achat (Décroissant)</option>
-                <option value="date_desc" data-t="sortDateDesc">Date d'achat (Récent)</option>
-            </select>
-        </div>
+            </select>        </div>
 
         <div class="search-container">
             <input type="text" class="search-bar" id="searchBar" onkeyup="window.updateGrid()" placeholder="Rechercher une figurine...">
@@ -597,6 +597,7 @@
         }
 
         // --- BASE DATA ---
+        // --- BASE DATA ---
         const baseData = [
             {"ID":"CIT-BELONG","Name":"Belonging","Serie":"City of Mercy","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/5tn6hRN7/Belonging_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
             {"ID":"CIT-COMFOR","Name":"Comfortably Numb","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvMXrVQy/Comfortably_Numb_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
@@ -711,7 +712,7 @@
             {"ID":"SPE-BIRD B","Name":"Bird Black","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrB/Hirono_Bird_Black_Lang_Studio_Hirono_Inner_Flow_b1xfh_Wjy_IR79r5_removebg_preview.png"},
             {"ID":"SPE-BIRD P","Name":"Bird Pink","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/K80VKvFV/Hirono-Bird-Pink-Lang-Studio-Hirono-trampt-361642o-removebg-preview.png"},
             {"ID":"SPE-CERFEA","Name":"Ceramic Feather","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MTY4z1fC/20241211_170933_813176_1_1200x1200_removebg_preview.png"},
-            {"ID":"SPE-CHENG","Name":"Cheng Du","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qRGYp2CB/Hirono_Cheng_Du_Lang_Studio_Hirono_POP_MART_Fj_Atvtx8b_Jcf_X_removebg_preview.png"},
+            {"ID":"SPE-CHENG","Name":"Stray Panda","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qRGYp2CB/Hirono_Cheng_Du_Lang_Studio_Hirono_POP_MART_Fj_Atvtx8b_Jcf_X_removebg_preview.png"},
             {"ID":"SPE-COFFEE","Name":"Coffee Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5h9RyJd/Hirono_Coffee_Figure_Lang_Studio_Hirono_POP_MART_em_Zhzq_YFHqell_D_removebg_preview.png"},
             {"ID":"SPE-DEAD S","Name":"Dead Silence Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XJghn9yb/20251121_154650_246653_1_hirono_dead_silence_figure_figurine_details_pop_mart_us_1200x1200_re.png"},
             {"ID":"SPE-DOLL P","Name":"Doll Panda","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y9xVtQmc/20241023_115711_930388_1_1200x1200_removebg_preview.png"},
@@ -729,11 +730,11 @@
             {"ID":"SPE-LISTEN","Name":"Listening","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y0h4tfyL/20231102_161740_342057_1200x1200_removebg_preview.png"},
             {"ID":"SPE-LIVING","Name":"Living Wild-Fight for Joy Plush Doll","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x8ck9yF7/20250624_113916_900182_1_1200x1200_removebg_preview.png"},
             {"ID":"SPE-MERRY","Name":"Merry Christmas Mr.Hirono","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVd0/Merry_Christmas_Mr_Hirono_Lang_Studio_Hirono_Inner_Flow_POP_MART_Svn_GSVK1RXS3Kt_removebg_preview.png"},
-            {"ID":"SPE-POLAR","Name":"Polar Symbiosis","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6qy7BL10/20240731_173909_035236_hirono_x_polar_symbiosis_figure_figurine_pop_mart_us_3_1200x1200_remov.png"},
-            {"ID":"SPE-POLAR","Name":"Polar Coexistence","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mkJPkzvR/Hirono_Polar_Coexistence_Lang_Studio_Hirono_POP_MART_x_Pn_VMyk_Z_B1Jfr_removebg_preview.png"},
+            {"ID":"SPE-POLARSY","Name":"Polar Symbiosis","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6qy7BL10/20240731_173909_035236_hirono_x_polar_symbiosis_figure_figurine_pop_mart_us_3_1200x1200_remov.png"},
+            {"ID":"SPE-POLARCI","Name":"Polar Coexistence","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mkJPkzvR/Hirono_Polar_Coexistence_Lang_Studio_Hirono_POP_MART_x_Pn_VMyk_Z_B1Jfr_removebg_preview.png"},
             {"ID":"SPE-POPMAR","Name":"Popmart Spotlight Hirono Misfit","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y2sGbZhW/Popmart_Spotlight_Hirono_Misfit_Lang_Studio_Hirono_POP_MART_k1mv6Ol_CRQSM0J_removebg_preview.png"},
             {"ID":"SPE-PRANKS","Name":"Prankster Loong","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/nrgXrjyp/Hirono_Prankster_Loong_Lang_Studio_Hirono_POP_MART_j_ZS4l2Ew_Il_Uyfe_removebg_preview.png"},
-            {"ID":"SPE-PRANGR","Name":"Prankster Loong Green Variant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fypVytGs/Hirono_Prankster_Loong_Green_Variant_POP_MART_Sweet_Bean_POP_MART_c_Z3ut_Q1t_GCVK7J_removebg_preview.png"},
+            {"ID":"SPE-PRANGR","Name":"Prankster Loong Green Variant","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/fypVytGs/Hirono_Prankster_Loong_Green_Variant_POP_MART_Sweet_Bean_POP_MART_c_Z3ut_Q1t_GCVK7J_removebg_preview.png"},
             {"ID":"SPE-RESHAP","Name":"Reshape","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SRJXm7tC/20240416_113609_076924_1200x1200_removebg_preview.png"},
             {"ID":"SPE-SANDRES","Name":"Sand ofReshaping","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XqbzCrPp/Sand-of-reshaping-removebg-preview.png"},
             {"ID":"SPE-SAD CL","Name":"Sad Clown","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVdG/Sad_Clown_Lang_Studio_Hirono_POP_MART_ohmacqz_AJLu_WOS_removebg_preview.png"},
@@ -786,7 +787,7 @@
             {"ID":"SPE-LOSTPARA","Name":"Lost Paradise Scilpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02DK2bYC/95928ed881d3f77328b137463f2b9cdf-removebg-preview.png"},
             {"ID":"SPE-TERRAARMY","Name":"Terracotta Army Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/yNt7ZTBS/images-4-removebg-preview.png"},
             {"ID":"SPE-STONEFEA","Name":"Stone Feather Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvrX038X/images-6-removebg-preview.png"},
-            {"ID":"SPE-DRIFTBO","Name":"Drift Bottle Ornament","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QC5zyp2C/images-8-removebg-preview.png"},
+            {"ID":"SPE-DRIFTBO","Name":"Freedom Island","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QC5zyp2C/images-8-removebg-preview.png"},
             {"ID":"SPE-YYCERAM","Name":"Yin-Yang Ceramic Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrY/CLOT_Yin_Yang_Ceramic_Incense_Burner_Celadon.png"},
             {"ID":"SPE-YYCEBUR","Name":"Yin-Yang Incense Burner","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jqgYwXXW/m55817971196-1-removebg-preview.png"},
             {"ID":"SPE-UNKJOUR","Name":"Unknown Journey","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wM9ccLQB/Hirono-Unknown-Journey-Lang-Studio-Hirono-Self-produced-trampt-376190o-removebg-preview.png"},
@@ -794,7 +795,8 @@
             {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP_MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"},
             {"ID":"SPE-WISHPE","Name":"Wish List Pendant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
-            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"}        
+            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},    
+            {"ID":"SPE-LUCKSP","Name":"Luck on the Way (Special edition)","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png"},    
         ];
 
         let myCollection = [...baseData];
@@ -898,27 +900,55 @@
             window.updateGrid();
         };
 
-        window.updateGrid = () => {
+window.updateGrid = () => {
             let result = [...myCollection];
+
+            // 1. FILTRAGE (Owned / Wishlist)
             if (currentFilter === 'owned') result = result.filter(i => i.Status === 'Possédé');
             if (currentFilter === 'wish') result = result.filter(i => i.Status === 'Recherché');
+
+            // 2. FILTRAGE (Série spécifique via le menu de gauche)
             const serieVal = document.getElementById('filter-series').value;
             if (serieVal !== 'all') result = result.filter(i => i.Serie === serieVal);
+
+            // 3. RECHERCHE
             const searchTerm = document.getElementById('searchBar').value.toLowerCase();
             if (searchTerm) result = result.filter(i => i.Name.toLowerCase().includes(searchTerm) || i.Serie.toLowerCase().includes(searchTerm));
             
+            // 4. TRI AVANCÉ
             const sortMode = document.getElementById('sort-order').value;
+            
             result.sort((a, b) => {
-                if (sortMode === 'name_asc') return a.Name.localeCompare(b.Name);
-                if (sortMode === 'name_desc') return b.Name.localeCompare(a.Name);
-                if (sortMode === 'price_asc') return (parseFloat(a["Purchase price"])||0) - (parseFloat(b["Purchase price"])||0);
-                if (sortMode === 'price_desc') return (parseFloat(b["Purchase price"])||0) - (parseFloat(a["Purchase price"])||0);
-                if (sortMode === 'date_desc') return (b["Purchase date"] ? new Date(b["Purchase date"]) : new Date(0)) - (a["Purchase date"] ? new Date(a["Purchase date"]) : new Date(0));
-                return 0;
+                // Préparation des valeurs pour le tri
+                const priceA = parseFloat(a["Purchase price"]) || 0;
+                const priceB = parseFloat(b["Purchase price"]) || 0;
+                // Date : on utilise 0 (1970) si pas de date, pour les mettre à la fin
+                const dateA = a["Purchase date"] ? new Date(a["Purchase date"]).getTime() : 0;
+                const dateB = b["Purchase date"] ? new Date(b["Purchase date"]).getTime() : 0;
+
+                switch (sortMode) {
+                    case 'price_desc': 
+                        return priceB - priceA; // Plus cher en premier
+                    case 'price_asc': 
+                        // Astuce : Si le prix est 0, on le considère comme "très grand" pour le mettre à la fin
+                        // sinon les 0€ apparaissent en premier, ce qui n'est pas pertinent.
+                        const pA = priceA === 0 ? 999999 : priceA;
+                        const pB = priceB === 0 ? 999999 : priceB;
+                        return pA - pB; 
+                    case 'date_desc': 
+                        return dateB - dateA; // Plus récent en premier
+                    case 'serie_asc': 
+                        return a.Serie.localeCompare(b.Serie); // Alphabétique Série
+                    case 'name_desc': 
+                        return b.Name.localeCompare(a.Name);
+                    case 'name_asc': 
+                    default: 
+                        return a.Name.localeCompare(b.Name);
+                }
             });
+
             window.render(myCollection, result);
         };
-
         // --- CHART GENERATORS ---
 
         function getFakeHistory(currentPrice) {

@@ -570,12 +570,10 @@ const translations = {
         badge_expert_hunter_title: "Roi des Secrets", badge_expert_hunter_desc: "Avoir trouvé 3 Secrets Rares.",
         badge_investor_title: "Investisseur", badge_investor_desc: "Valeur de collection > 500€.",
         badge_whale_title: "Baleine", badge_whale_desc: "Valeur de collection > 1000€.",
-        badge_completionist_title: "Complétiste", badge_completionist_desc: "Avoir terminé au moins une série (12 figs).",
+        badge_completionist_title: "Complétiste", badge_completionist_desc: "Avoir terminé au moins une série entière.",
         badge_explorer_title: "Explorateur", badge_explorer_desc: "Posséder des figurines de 5 séries différentes.",
         badge_dreamer_title: "Rêveur", badge_dreamer_desc: "Avoir 10 figurines dans sa Wishlist.",
         badge_diamond_title: "Mains de Diamant", badge_diamond_desc: "Posséder une figurine achetée plus de 100€.",
-        badge_citizen_title: "Citoyen", badge_citizen_desc: "Posséder une figurine 'City of Mercy'.",
-        badge_mime_title: "Artiste Mime", badge_mime_desc: "Posséder une figurine 'Mime'.",
     },
     en: {
         navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -601,12 +599,10 @@ const translations = {
         badge_expert_hunter_title: "Secret King", badge_expert_hunter_desc: "Find 3 Secret Rares.",
         badge_investor_title: "Investor", badge_investor_desc: "Collection value > 500€.",
         badge_whale_title: "Whale", badge_whale_desc: "Collection value > 1000€.",
-        badge_completionist_title: "Completionist", badge_completionist_desc: "Complete at least one full series (12 figs).",
+        badge_completionist_title: "Completionist", badge_completionist_desc: "Complete at least one full series.",
         badge_explorer_title: "Explorer", badge_explorer_desc: "Own figures from 5 different series.",
         badge_dreamer_title: "Dreamer", badge_dreamer_desc: "Have 10 items in your Wishlist.",
         badge_diamond_title: "Diamond Hands", badge_diamond_desc: "Own a single figure bought for > 100€.",
-        badge_citizen_title: "Citizen", badge_citizen_desc: "Own a 'City of Mercy' figure.",
-        badge_mime_title: "Mime Artist", badge_mime_desc: "Own a 'Mime' figure.",
     }
 };
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
@@ -644,6 +640,7 @@ const translations = {
             } catch (e) { console.log("Pas de prix dispos"); }
         }
 
+        // --- BASE DATA ---
         // --- BASE DATA ---
         const baseData = [
             {"ID":"CIT-BELONG","Name":"Belonging","Serie":"City of Mercy","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/5tn6hRN7/Belonging_City_of_Mercy_Series_Hirono_Pop_Mart_Figure_1_removebg_preview.png"},
@@ -759,7 +756,7 @@ const translations = {
             {"ID":"SPE-BIRD B","Name":"Bird Black","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrB/Hirono_Bird_Black_Lang_Studio_Hirono_Inner_Flow_b1xfh_Wjy_IR79r5_removebg_preview.png"},
             {"ID":"SPE-BIRD P","Name":"Bird Pink","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/K80VKvFV/Hirono-Bird-Pink-Lang-Studio-Hirono-trampt-361642o-removebg-preview.png"},
             {"ID":"SPE-CERFEA","Name":"Ceramic Feather","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MTY4z1fC/20241211_170933_813176_1_1200x1200_removebg_preview.png"},
-            {"ID":"SPE-CHENG","Name":"Cheng Du","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qRGYp2CB/Hirono_Cheng_Du_Lang_Studio_Hirono_POP_MART_Fj_Atvtx8b_Jcf_X_removebg_preview.png"},
+            {"ID":"SPE-CHENG","Name":"Stray Panda","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qRGYp2CB/Hirono_Cheng_Du_Lang_Studio_Hirono_POP_MART_Fj_Atvtx8b_Jcf_X_removebg_preview.png"},
             {"ID":"SPE-COFFEE","Name":"Coffee Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/j5h9RyJd/Hirono_Coffee_Figure_Lang_Studio_Hirono_POP_MART_em_Zhzq_YFHqell_D_removebg_preview.png"},
             {"ID":"SPE-DEAD S","Name":"Dead Silence Figure","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XJghn9yb/20251121_154650_246653_1_hirono_dead_silence_figure_figurine_details_pop_mart_us_1200x1200_re.png"},
             {"ID":"SPE-DOLL P","Name":"Doll Panda","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y9xVtQmc/20241023_115711_930388_1_1200x1200_removebg_preview.png"},
@@ -777,11 +774,11 @@ const translations = {
             {"ID":"SPE-LISTEN","Name":"Listening","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y0h4tfyL/20231102_161740_342057_1200x1200_removebg_preview.png"},
             {"ID":"SPE-LIVING","Name":"Living Wild-Fight for Joy Plush Doll","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x8ck9yF7/20250624_113916_900182_1_1200x1200_removebg_preview.png"},
             {"ID":"SPE-MERRY","Name":"Merry Christmas Mr.Hirono","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVd0/Merry_Christmas_Mr_Hirono_Lang_Studio_Hirono_Inner_Flow_POP_MART_Svn_GSVK1RXS3Kt_removebg_preview.png"},
-            {"ID":"SPE-POLAR","Name":"Polar Symbiosis","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6qy7BL10/20240731_173909_035236_hirono_x_polar_symbiosis_figure_figurine_pop_mart_us_3_1200x1200_remov.png"},
-            {"ID":"SPE-POLAR","Name":"Polar Coexistence","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mkJPkzvR/Hirono_Polar_Coexistence_Lang_Studio_Hirono_POP_MART_x_Pn_VMyk_Z_B1Jfr_removebg_preview.png"},
+            {"ID":"SPE-POLARSY","Name":"Polar Symbiosis","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6qy7BL10/20240731_173909_035236_hirono_x_polar_symbiosis_figure_figurine_pop_mart_us_3_1200x1200_remov.png"},
+            {"ID":"SPE-POLARCI","Name":"Polar Coexistence","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mkJPkzvR/Hirono_Polar_Coexistence_Lang_Studio_Hirono_POP_MART_x_Pn_VMyk_Z_B1Jfr_removebg_preview.png"},
             {"ID":"SPE-POPMAR","Name":"Popmart Spotlight Hirono Misfit","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y2sGbZhW/Popmart_Spotlight_Hirono_Misfit_Lang_Studio_Hirono_POP_MART_k1mv6Ol_CRQSM0J_removebg_preview.png"},
             {"ID":"SPE-PRANKS","Name":"Prankster Loong","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/nrgXrjyp/Hirono_Prankster_Loong_Lang_Studio_Hirono_POP_MART_j_ZS4l2Ew_Il_Uyfe_removebg_preview.png"},
-            {"ID":"SPE-PRANGR","Name":"Prankster Loong Green Variant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/fypVytGs/Hirono_Prankster_Loong_Green_Variant_POP_MART_Sweet_Bean_POP_MART_c_Z3ut_Q1t_GCVK7J_removebg_preview.png"},
+            {"ID":"SPE-PRANGR","Name":"Prankster Loong Green Variant","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/fypVytGs/Hirono_Prankster_Loong_Green_Variant_POP_MART_Sweet_Bean_POP_MART_c_Z3ut_Q1t_GCVK7J_removebg_preview.png"},
             {"ID":"SPE-RESHAP","Name":"Reshape","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SRJXm7tC/20240416_113609_076924_1200x1200_removebg_preview.png"},
             {"ID":"SPE-SANDRES","Name":"Sand ofReshaping","Serie":"Special 200%","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/XqbzCrPp/Sand-of-reshaping-removebg-preview.png"},
             {"ID":"SPE-SAD CL","Name":"Sad Clown","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/3rc4nVdG/Sad_Clown_Lang_Studio_Hirono_POP_MART_ohmacqz_AJLu_WOS_removebg_preview.png"},
@@ -806,7 +803,7 @@ const translations = {
             {"ID":"THE-BEING","Name":"Being Alive","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/v8rfXMJ4/1732004113350_being_alive.webp"},
             {"ID":"THE-CUCKOO","Name":"Cuckoo","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/T2VgQGzp/1732004132352_cuckoo.webp"},
             {"ID":"THE-DREAMI","Name":"Dreaming","Serie":"The Other One","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/X7nFzmWV/1732004190662_secret.webp"},
-            {"ID":"THE-MARION","Name":"Marionette","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tR3WDyKC/1732003918689_raving.webp"}, /* note: url might be wrong in source, kept as is */
+            {"ID":"THE-MARION","Name":"Marionette","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/tR3WDyKC/1732003951303_marionette.webp"},
             {"ID":"THE-NOWHER","Name":"Nowhere Safe","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/mZYCVRvT/1732003756778_nowhere_safe.webp"},
             {"ID":"THE-RAVING","Name":"Raving","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L4tLvRc4/1732003918689_raving.webp"},
             {"ID":"THE-STARIN","Name":"Staring","Serie":"The Other One","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NG6mbY3s/1732003979811_staring.webp"},
@@ -819,7 +816,7 @@ const translations = {
             {"ID":"SPE-HALO23","Name":"Halloween Special 2023","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sxzQ5mm5/pop-mart-hirono-halloween-special-figure-1-removebg-preview.png"},
             {"ID":"SPE-HALOCH","Name":"Halloween Special China","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/FHvvmqRP/s-l1200-removebg-preview.png"},
             {"ID":"SPE-SUMWIND","Name":"Summer Time Wind Blows","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/MpX1ts08/687be300e25b9e5510d9c8cc-summer-wind-removebg-preview.png"},
-            {"ID":"SPE-FLOMARK","Name":"Floating Market","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png"},
+            {"ID":"SPE-FLOMARK","Name":"Floating Market","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200_removebg_preview.png"},
             {"ID":"SPE-ORANGE","Name":"Orange Pop","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/dVTLLgmC/20250720-cc3fa10a6eff669b-w800h800-removebg-preview.png"},
             {"ID":"SPE-BACKTO","Name":"Back to Play","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02Ssmv34/pts-2025-exclusive-hirono-back-1755842172-bcd4434c-progressive-removebg-preview.png"},
             {"ID":"SPE-SNOWFALL","Name":"Snowfall Alley","Serie":"Special Pop Blocks","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/xCdkT8sj/1734934091955-snowfall-alley.webp"},
@@ -834,7 +831,7 @@ const translations = {
             {"ID":"SPE-LOSTPARA","Name":"Lost Paradise Scilpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/02DK2bYC/95928ed881d3f77328b137463f2b9cdf-removebg-preview.png"},
             {"ID":"SPE-TERRAARMY","Name":"Terracotta Army Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/yNt7ZTBS/images-4-removebg-preview.png"},
             {"ID":"SPE-STONEFEA","Name":"Stone Feather Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/BvrX038X/images-6-removebg-preview.png"},
-            {"ID":"SPE-DRIFTBO","Name":"Drift Bottle Ornament","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QC5zyp2C/images-8-removebg-preview.png"},
+            {"ID":"SPE-DRIFTBO","Name":"Freedom Island","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/QC5zyp2C/images-8-removebg-preview.png"},
             {"ID":"SPE-YYCERAM","Name":"Yin-Yang Ceramic Sculpture","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/NMxVQRrY/CLOT_Yin_Yang_Ceramic_Incense_Burner_Celadon.png"},
             {"ID":"SPE-YYCEBUR","Name":"Yin-Yang Incense Burner","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jqgYwXXW/m55817971196-1-removebg-preview.png"},
             {"ID":"SPE-UNKJOUR","Name":"Unknown Journey","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wM9ccLQB/Hirono-Unknown-Journey-Lang-Studio-Hirono-Self-produced-trampt-376190o-removebg-preview.png"},
@@ -842,10 +839,78 @@ const translations = {
             {"ID":"CIT-WANDER","Name":"Wandering","Serie":"City of Mercy","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/HL8YSMPj/Hirono-Wandering-Super-Secret-Lang-Studio-Hirono-POP_MART-qo-Ke-Yz-OID-nl-T-removebg-preview.png"},
             {"ID":"SPE-WISHPE","Name":"Wish List Pendant","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
-            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"} 
+            {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},    
+            {"ID":"SPE-LUCKSP","Name":"Luck on the Way (Special edition)","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png"},    
+        ];            
+        
+        let myCollection = [];
+
+        // --- GENERATION AUTOMATIQUE DES BADGES DE SÉRIE ---
+        // 1. Récupérer toutes les séries uniques qui ne contiennent pas "Special"
+        const allSeries = [...new Set(baseData.map(i => i.Serie))].filter(s => !s.toLowerCase().includes('special'));
+
+        // 2. Créer les badges dynamiques pour chaque série
+        const dynamicSeriesBadges = allSeries.map(serie => {
+            return {
+                id: 'complete_' + serie.replace(/\s+/g, ''), // ID unique basé sur le nom
+                icon: '🏁',
+                customTitle: serie, // On stocke le nom pour l'affichage dynamique
+                check: (ctx) => ctx.seriesStats[serie] && ctx.seriesStats[serie].total > 0 && ctx.seriesStats[serie].ownedUnique >= ctx.seriesStats[serie].total
+            };
+        });
+
+        // --- CONFIGURATION DES SUCCÈS (BADGES STATIQUES) ---
+        const staticBadges = [
+            {
+                id: 'starter', icon: '🥚', t_title: 'badge_starter_title', t_desc: 'badge_starter_desc',
+                check: (ctx) => ctx.totalItems >= 1
+            },
+            {
+                id: 'addict', icon: '🐼', t_title: 'badge_addict_title', t_desc: 'badge_addict_desc',
+                check: (ctx) => ctx.totalItems >= 10
+            },
+            {
+                id: 'explorer', icon: '🧭', t_title: 'badge_explorer_title', t_desc: 'badge_explorer_desc',
+                check: (ctx) => Object.keys(ctx.seriesStats).filter(k => ctx.seriesStats[k].ownedUnique > 0).length >= 5
+            },
+            {
+                id: 'dreamer', icon: '💭', t_title: 'badge_dreamer_title', t_desc: 'badge_dreamer_desc',
+                check: (ctx) => ctx.statusCounts.wish >= 10
+            },
+            {
+                id: 'hunter', icon: '✨', t_title: 'badge_hunter_title', t_desc: 'badge_hunter_desc',
+                check: (ctx) => ctx.secretsCount >= 1
+            },
+            {
+                id: 'completionist', icon: '🧩', t_title: 'badge_completionist_title', t_desc: 'badge_completionist_desc',
+                // NOUVEAU LOGIC : Au moins une série complète (100%)
+                check: (ctx) => Object.values(ctx.seriesStats).some(s => s.total > 0 && s.ownedUnique === s.total)
+            },
+            {
+                id: 'investor', icon: '💸', t_title: 'badge_investor_title', t_desc: 'badge_investor_desc',
+                check: (ctx) => ctx.totalValue >= 500
+            },
+            {
+                id: 'diamond', icon: '💎', t_title: 'badge_diamond_title', t_desc: 'badge_diamond_desc',
+                check: (ctx) => ctx.rawList.some(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) >= 100)
+            },
+            {
+                id: 'collector', icon: '🔥', t_title: 'badge_collector_title', t_desc: 'badge_collector_desc',
+                check: (ctx) => ctx.totalItems >= 50
+            },
+            {
+                id: 'expert_hunter', icon: '👑', t_title: 'badge_expert_hunter_title', t_desc: 'badge_expert_hunter_desc',
+                check: (ctx) => ctx.secretsCount >= 3
+            },
+            {
+                id: 'whale', icon: '🐋', t_title: 'badge_whale_title', t_desc: 'badge_whale_desc',
+                check: (ctx) => ctx.totalValue >= 1000
+            }
         ];
 
-        let myCollection = [];
+        // Combinaison des badges
+        const badgesConfig = [...staticBadges, ...dynamicSeriesBadges];
+
 
         onAuthStateChanged(auth, async (user) => {
             const btn = document.getElementById('auth-trigger');
@@ -877,79 +942,41 @@ const translations = {
             document.body.classList.add('auth-ready');
         });
 
-// --- CONFIGURATION DES SUCCÈS (BADGES) ---
-const badgesConfig = [
-    {
-        id: 'starter', icon: '🥚', t_title: 'badge_starter_title', t_desc: 'badge_starter_desc',
-        check: (ctx) => ctx.totalItems >= 1
-    },
-    {
-        id: 'citizen', icon: '🏙️', t_title: 'badge_citizen_title', t_desc: 'badge_citizen_desc',
-        check: (ctx) => ctx.seriesStats["City of Mercy"] && ctx.seriesStats["City of Mercy"].ownedUnique > 0
-    },
-    {
-        id: 'mime', icon: '🎭', t_title: 'badge_mime_title', t_desc: 'badge_mime_desc',
-        check: (ctx) => ctx.seriesStats["Mime"] && ctx.seriesStats["Mime"].ownedUnique > 0
-    },
-    {
-        id: 'addict', icon: '🐼', t_title: 'badge_addict_title', t_desc: 'badge_addict_desc',
-        check: (ctx) => ctx.totalItems >= 10
-    },
-    {
-        id: 'explorer', icon: '🧭', t_title: 'badge_explorer_title', t_desc: 'badge_explorer_desc',
-        check: (ctx) => Object.keys(ctx.seriesStats).filter(k => ctx.seriesStats[k].ownedUnique > 0).length >= 5
-    },
-    {
-        id: 'dreamer', icon: '💭', t_title: 'badge_dreamer_title', t_desc: 'badge_dreamer_desc',
-        check: (ctx) => ctx.statusCounts.wish >= 10
-    },
-    {
-        id: 'hunter', icon: '✨', t_title: 'badge_hunter_title', t_desc: 'badge_hunter_desc',
-        check: (ctx) => ctx.secretsCount >= 1
-    },
-    {
-        id: 'completionist', icon: '🧩', t_title: 'badge_completionist_title', t_desc: 'badge_completionist_desc',
-        check: (ctx) => Object.values(ctx.seriesStats).some(s => s.ownedUnique >= 12)
-    },
-    {
-        id: 'investor', icon: '💸', t_title: 'badge_investor_title', t_desc: 'badge_investor_desc',
-        check: (ctx) => ctx.totalValue >= 500
-    },
-    {
-        id: 'diamond', icon: '💎', t_title: 'badge_diamond_title', t_desc: 'badge_diamond_desc',
-        check: (ctx) => ctx.rawList.some(i => i.Status === 'Possédé' && parseFloat(i["Purchase price"]) >= 100)
-    },
-    {
-        id: 'collector', icon: '🔥', t_title: 'badge_collector_title', t_desc: 'badge_collector_desc',
-        check: (ctx) => ctx.totalItems >= 50
-    },
-    {
-        id: 'expert_hunter', icon: '👑', t_title: 'badge_expert_hunter_title', t_desc: 'badge_expert_hunter_desc',
-        check: (ctx) => ctx.secretsCount >= 3
-    },
-    {
-        id: 'whale', icon: '🐋', t_title: 'badge_whale_title', t_desc: 'badge_whale_desc',
-        check: (ctx) => ctx.totalValue >= 1000
-    }
-];
+        // --- FONCTION RENDER BADGES ---
+        function renderBadges(context) {
+            const container = document.getElementById('badges-grid');
+            if(!container) return;
+            
+            container.innerHTML = badgesConfig.map(badge => {
+                const isUnlocked = badge.check(context);
+                
+                // Gestion des textes dynamiques pour les séries
+                let title, desc;
+                if(badge.customTitle) {
+                    // Badge Série Dynamique
+                    if(currentLang === 'fr') {
+                        title = "Série : " + badge.customTitle;
+                        desc = "Posséder toute la série " + badge.customTitle + ".";
+                    } else {
+                        title = "Series: " + badge.customTitle;
+                        desc = "Complete the " + badge.customTitle + " series.";
+                    }
+                } else {
+                    // Badge Statique
+                    title = t(badge.t_title);
+                    desc = t(badge.t_desc);
+                }
 
-// --- FONCTION RENDER BADGES ---
-function renderBadges(context) {
-    const container = document.getElementById('badges-grid');
-    if(!container) return;
-    
-    // On utilise t() pour traduire les titres et descriptions
-    container.innerHTML = badgesConfig.map(badge => {
-        const isUnlocked = badge.check(context);
-        return `
-            <div class="badge-card ${isUnlocked ? 'unlocked' : ''}">
-                <div class="badge-icon">${badge.icon}</div>
-                <div class="badge-title">${t(badge.t_title)}</div>
-                <div class="badge-desc">${t(badge.t_desc)}</div>
-            </div>
-        `;
-    }).join('');
-}
+                return `
+                    <div class="badge-card ${isUnlocked ? 'unlocked' : ''}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <div class="badge-title">${title}</div>
+                        <div class="badge-desc">${desc}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function renderStats(data) {
             if(!data || data.length === 0) return;
             let totalItems=0, totalValue=0, secretsCount=0, comparisonTotalPaid=0, comparisonTotalMarket=0;
@@ -1032,7 +1059,7 @@ function renderBadges(context) {
                 secretsCount, 
                 seriesStats, 
                 statusCounts, 
-                rawList: data // On passe la liste brute pour vérifier les prix unitaires
+                rawList: data 
             });
 
             updateCharts(timelineData, seriesStats, statusCounts, monthlyData);
@@ -1086,23 +1113,16 @@ function renderBadges(context) {
             } catch (err) { alert("Error generating image."); } finally { btn.innerText = originalText; }
         };
 
-window.copyPublicLink = () => {
+        window.copyPublicLink = () => {
             const user = auth.currentUser;
             if (!user) {
                 alert("Vous devez être connecté pour partager votre profil !");
                 return;
             }
-
-            // CORRECTION IMPORTANTE POUR GITHUB PAGES :
-            // On prend l'URL actuelle complète et on enlève le nom du fichier en cours (ex: statistiques.html)
-            // Cela permet de garder le dossier du projet (ex: /hrntrack/) dans le lien.
-            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-            
-            // On ajoute share.html à la suite
+            const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
             const link = `${baseUrl}share.html?uid=${user.uid}`;
-            
             navigator.clipboard.writeText(link).then(() => {
-                alert("Link copied! Send it to your friends:\n" + link);
+                alert("Link copied! Send it to your friends::\n" + link);
             }).catch(err => {
                 prompt("Copiez ce lien :", link);
             });
@@ -1112,5 +1132,4 @@ window.copyPublicLink = () => {
         fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;if(window.initCookieLogic)window.initCookieLogic();});
     </script>
 </body>
-
 </html>
