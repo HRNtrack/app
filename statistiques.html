@@ -847,7 +847,8 @@ const translations = {
 
         // --- GENERATION AUTOMATIQUE DES BADGES DE SÉRIE ---
         // 1. Récupérer toutes les séries uniques qui ne contiennent pas "Special"
-        const allSeries = [...new Set(baseData.map(i => i.Serie))].filter(s => !s.toLowerCase().includes('special'));
+        const allSeries = [...new Set(baseData.map(i => i.Serie))].filter(s => !s.toLowerCase().includes('special')&& 
+            !s.toLowerCase().includes('limited'));
 
         // 2. Créer les badges dynamiques pour chaque série
         const dynamicSeriesBadges = allSeries.map(serie => {
@@ -1141,4 +1142,5 @@ const translations = {
         fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;if(window.initCookieLogic)window.initCookieLogic();});
     </script>
 </body>
+
 </html>
