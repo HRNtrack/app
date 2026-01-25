@@ -226,15 +226,9 @@
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
 
-        /* Canvas Neige */
-        #snow-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 9999;
-        }
     </style>
 </head>
 <body>
-<canvas id="snow-canvas"></canvas>
 
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -790,47 +784,6 @@
             })
             .catch(error => console.error('Erreur Footer:', error));
 
-        // --- SNOW ---
-        const canvas = document.getElementById('snow-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height, snowflakes;
-        function initSnow() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-            snowflakes = [];
-            for (let i = 0; i < 150; i++) {
-                snowflakes.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    radius: Math.random() * 3 + 1,
-                    speed: Math.random() * 1 + 0.5,
-                    wind: Math.random() * 0.5 - 0.25,
-                    opacity: Math.random() * 0.5 + 0.3
-                });
-            }
-        }
-        function drawSnow() {
-            ctx.clearRect(0, 0, width, height);
-            ctx.fillStyle = "white";
-            snowflakes.forEach(flake => {
-                ctx.beginPath();
-                ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                ctx.globalAlpha = flake.opacity;
-                ctx.fill();
-                flake.y += flake.speed;
-                flake.x += flake.wind;
-                if (flake.y > height) {
-                    flake.y = -10;
-                    flake.x = Math.random() * width;
-                }
-            });
-            requestAnimationFrame(drawSnow);
-        }
-        window.addEventListener('resize', initSnow);
-        initSnow();
-        drawSnow();
     </script>
    
 </body>

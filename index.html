@@ -23,6 +23,7 @@
             --color-gold: #C6A875;
             --color-red: #C0392B;
             --color-green: #6A8C47;
+            --color-blue: #2196F3;
 
             --primary: var(--color-green);
             --primary-hover: #557235;
@@ -122,6 +123,7 @@
             .hero-section { grid-template-columns: 1fr !important; text-align: center; padding: 40px 20px 80px 20px !important; }
             .hero-text h1 { font-size: 36px !important; }
             .hero-text p { margin: 0 auto 30px auto !important; }
+            .user-count-badge { margin: 0 auto 20px auto !important; }
 
             /* --- CORRECTIF IMAGE MOBILE (AVEC 3D) --- */
             .hero-image-container {
@@ -167,6 +169,24 @@
             box-shadow: 0 8px 25px rgba(106, 140, 71, 0.4);
         }
 
+        /* USER BADGE */
+        .user-count-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(106, 140, 71, 0.1); color: var(--primary);
+            padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 13px;
+            margin-bottom: 20px;
+        }
+        .pulse-dot {
+            width: 8px; height: 8px; background: var(--primary); border-radius: 50%;
+            box-shadow: 0 0 0 rgba(106, 140, 71, 0.4);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(106, 140, 71, 0.7); }
+            70% { box-shadow: 0 0 0 6px rgba(106, 140, 71, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(106, 140, 71, 0); }
+        }
+
         .hero-image-container { position: relative; }
         .hero-image {
             width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
@@ -175,26 +195,35 @@
         }
         .hero-image:hover { transform: perspective(1000px) rotateY(0deg); }
 
-        /* --- NOUVEAUTÉ SECTION (INTEGRÉE) --- */
+        /* --- NEWS BANNERS (DUAL SYSTEM) --- */
         .news-banner {
             max-width: 1000px;
-            margin: -60px auto 40px auto; /* Marge négative pour remonter sur le Hero */
+            margin: -60px auto 40px auto; 
             padding: 0 20px;
             position: relative;
-            z-index: 10; /* Au-dessus du hero */
+            z-index: 10;
+            display: flex;
+            gap: 20px; /* Espace entre les deux cartes */
         }
+
         .news-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            border-left: 5px solid var(--primary); /* Bordure latérale élégante */
             border-radius: 12px;
-            padding: 25px 35px;
+            padding: 20px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08); /* Ombre douce pour l'effet flottant */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex: 1; /* Les cartes prennent la même largeur */
+            border-left: 5px solid transparent;
         }
+        
+        /* Styles spécifiques pour différencier les deux cartes */
+        .news-card.card-fig { border-color: var(--color-red); }
+        .news-card.card-sys { border-color: var(--color-blue); }
+
         .news-card:hover { 
             transform: translateY(-2px); 
             box-shadow: 0 20px 40px rgba(0,0,0,0.12);
@@ -202,34 +231,35 @@
         
         .news-content { flex: 1; }
         
-        .badge-new {
-            background: var(--color-red); color: white;
-            font-size: 10px; font-weight: 800; padding: 3px 8px;
+        .badge-news {
+            color: white; font-size: 9px; font-weight: 800; padding: 3px 8px;
             border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
-            display: inline-block; margin-bottom: 8px; vertical-align: middle;
+            display: inline-block; margin-bottom: 5px; vertical-align: middle;
         }
+        .badge-news.new { background: var(--color-red); }
+        .badge-news.update { background: var(--color-blue); }
 
         .news-card h3 { 
-            margin: 0 0 5px 0; font-size: 18px; color: var(--text-main); font-weight: 700;
-            display: inline-block; vertical-align: middle; margin-left: 8px;
+            margin: 0 0 3px 0; font-size: 16px; color: var(--text-main); font-weight: 700;
         }
-        .news-card p { margin: 0 0 0 0; font-size: 13px; color: var(--text-sub); }
+        .news-card p { margin: 0; font-size: 12px; color: var(--text-sub); line-height: 1.4; }
 
         .btn-news-arrow {
             background: #F3F4F6; color: var(--text-main);
-            width: 40px; height: 40px; border-radius: 50%;
+            width: 36px; height: 36px; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: 0.2s; font-size: 18px;
-            margin-left: 20px; flex-shrink: 0;
+            text-decoration: none; transition: 0.2s; font-size: 16px;
+            margin-left: 15px; flex-shrink: 0;
         }
         .btn-news-arrow:hover { background: var(--primary); color: white; }
 
         @media (max-width: 768px) {
-            .news-banner { margin-top: -40px; } /* Moins de chevauchement sur mobile */
-            .news-card { flex-direction: column; text-align: center; gap: 15px; padding: 20px; }
-            .news-card h3 { display: block; margin-left: 0; margin-top: 5px; }
-            /* Bouton simple flèche sur mobile, mais largeur pleine pour faciliter le clic */
-            .btn-news-arrow { width: 100%; border-radius: 8px; height: auto; padding: 10px; margin-left: 0; }
+            .news-banner { 
+                margin-top: -40px; 
+                flex-direction: column; /* Empiler les cartes sur mobile */
+                gap: 15px;
+            }
+            .news-card { text-align: left; padding: 20px; }
         }
 
         /* FEATURES SECTION */
@@ -270,7 +300,6 @@
         .social-card.tiktok:hover { border-color: #000; }
         .social-card.tiktok:hover .social-icon { background: #000; color: white; }
 
-        /* Style spécifique Discord */
         .social-card.discord .social-icon { background: #eef0fd; color: #5865F2; }
         .social-card.discord:hover { border-color: #5865F2; }
         .social-card.discord:hover .social-icon { background: #5865F2; color: white; }
@@ -296,13 +325,9 @@
         .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
         .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
         .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
-
-        /* Canvas Neige */
-        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
     </style>
 </head>
 <body>
-    <canvas id="snow-canvas"></canvas>
     
     <nav class="top-nav">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -337,6 +362,11 @@
 
     <div class="hero-section">
         <div class="hero-text">
+            <div class="user-count-badge">
+                <span class="pulse-dot"></span>
+                <span data-t="userCount">Plus de 60 collectionneurs nous font confiance</span>
+            </div>
+
             <h1 data-t="heroTitle">Le compagnon ultime pour votre collection Hirono.</h1>
             <p data-t="heroDesc">
                 Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. 
@@ -350,14 +380,25 @@
     </div>
 
     <section class="news-banner">
-        <div class="news-card">
+        
+        <div class="news-card card-fig">
             <div class="news-content">
-                <span class="badge-new" data-t="newsBadge">NOUVEAU</span>
-                <h3 data-t="newsTitle">Mise à jour du catalogue</h3>
-                <p data-t="newsDesc">De nouvelles figurines viennent d'être ajoutées à la base de données. Vérifiez si vous les possédez !</p>
+                <span class="badge-news new" data-t="newsFigBadge">NOUVEAU</span>
+                <h3 data-t="newsFigTitle">Nouvelles Figurines</h3>
+                <p data-t="newsFigDesc">Le catalogue a été mis à jour. Vérifiez vos séries !</p>
             </div>
             <a href="nouveautes.html" class="btn-news-arrow">→</a>
         </div>
+
+        <div class="news-card card-sys">
+            <div class="news-content">
+                <span class="badge-news update" data-t="newsSysBadge">UPDATE</span>
+                <h3 data-t="newsSysTitle">Mises à jour du site</h3>
+                <p data-t="newsSysDesc">Découvrez les nouvelles fonctions (Cotes, Graphiques...)</p>
+            </div>
+            <a href="releases.html" class="btn-news-arrow">→</a>
+        </div>
+
     </section>
 
     <section class="features-section">
@@ -499,7 +540,6 @@
                 // Pas encore choisi ET le bandeau existe bien dans le DOM
                 if(banner) banner.style.display = 'block'; 
             }
-            // Si 'false', on ne fait rien.
         }
     </script>
 
@@ -520,10 +560,17 @@
                 heroTitle: "Le compagnon ultime pour votre collection Hirono.",
                 heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
                 heroBtn: "Démarrer ma collection",
+                
+                userCount: "Plus de 60 collectionneurs nous font confiance",
 
-                newsBadge: "NOUVEAU",
-                newsTitle: "Mise à jour du catalogue",
-                newsDesc: "De nouvelles figurines viennent d'être ajoutées à la base de données. Vérifiez si vous les possédez !",
+                // NOUVEAUX TEXTES DOUBLE CARTE
+                newsFigBadge: "NOUVEAU",
+                newsFigTitle: "Nouvelles Figurines",
+                newsFigDesc: "Le catalogue a été mis à jour. Vérifiez vos séries !",
+
+                newsSysBadge: "UPDATE",
+                newsSysTitle: "Mises à jour du site",
+                newsSysDesc: "Découvrez les nouvelles fonctions (Cotes, Graphiques...)",
 
                 feat1Title: "Tracker Intelligent",
                 feat1Desc: "Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.",
@@ -556,9 +603,16 @@
                 heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
                 heroBtn: "Start my collection",
 
-                newsBadge: "NEW",
-                newsTitle: "Catalog Update",
-                newsDesc: "New figures have just been added to the database. Check if you own them!",
+                userCount: "Over 60 collectors trust us",
+
+                // NEW CARD TEXTS
+                newsFigBadge: "NEW",
+                newsFigTitle: "New Figures",
+                newsFigDesc: "The catalog has been updated. Check your series!",
+
+                newsSysBadge: "UPDATE",
+                newsSysTitle: "Website Updates",
+                newsSysDesc: "Discover new features (Values, Charts...)",
 
                 feat1Title: "Smart Tracker",
                 feat1Desc: "Mark the figures you own. The tool automatically calculates what you're missing to finish the series.",
@@ -672,65 +726,11 @@
                 return response.text();
             })
             .then(data => {
-                // A. On insère le HTML du footer
                 document.getElementById('footer-placeholder').innerHTML = data;
-                
-                // B. On lance la traduction du footer
                 if(window.updateUIText) window.updateUIText();
-
-                // C. On initialise le bandeau cookie (MAINTENANT qu'il existe dans le DOM)
                 initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
-
-        // --- NEIGE ---
-        const canvas = document.getElementById('snow-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            let width, height, snowflakes;
-
-            function initSnow() {
-                width = window.innerWidth;
-                height = window.innerHeight;
-                canvas.width = width;
-                canvas.height = height;
-
-                snowflakes = [];
-                for (let i = 0; i < 150; i++) {
-                    snowflakes.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        radius: Math.random() * 3 + 1,
-                        speed: Math.random() * 1 + 0.5,
-                        wind: Math.random() * 0.5 - 0.25,
-                        opacity: Math.random() * 0.5 + 0.3
-                    });
-                }
-            }
-
-            function drawSnow() {
-                ctx.clearRect(0, 0, width, height);
-                ctx.fillStyle = "white";
-                
-                snowflakes.forEach(flake => {
-                    ctx.beginPath();
-                    ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-                    ctx.globalAlpha = flake.opacity;
-                    ctx.fill();
-                    flake.y += flake.speed;
-                    flake.x += flake.wind;
-                    if (flake.y > height) {
-                        flake.y = -10;
-                        flake.x = Math.random() * width;
-                    }
-                });
-                requestAnimationFrame(drawSnow);
-            }
-
-            window.addEventListener('resize', initSnow);
-            initSnow();
-            drawSnow();
-        }
     </script>
     </body>
 </html>
