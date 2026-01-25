@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HRNtrack - Mises à jour</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -35,7 +35,7 @@
         }
         body.ready { opacity: 1; }
 
-        /* --- HEADER & NAV (Identique aux autres pages) --- */
+        /* --- HEADER & NAV --- */
         .top-nav {
             background: var(--dark-bg); color: white; padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center;
@@ -121,10 +121,23 @@
             background: var(--primary); border: 4px solid var(--bg-body);
         }
 
-        .release-date {
-            display: inline-block; background: rgba(106, 140, 71, 0.1); color: var(--primary);
-            font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 6px; margin-bottom: 15px;
+        /* NOUVEAU : Wrapper pour la date et la version */
+        .release-meta {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
         }
+
+        .release-date {
+            background: rgba(106, 140, 71, 0.1); color: var(--primary);
+            font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 6px;
+        }
+
+        /* NOUVEAU : Badge de version */
+        .version-badge {
+            background: #F3F4F6; color: #555; border: 1px solid #E5E7EB;
+            font-family: 'JetBrains Mono', monospace; /* Police monospace pour le style tech */
+            font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+        }
+
         .release-title {
             font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 15px;
         }
@@ -135,7 +148,6 @@
         .release-content ul { padding-left: 20px; margin: 10px 0; }
         .release-content li { margin-bottom: 5px; }
 
-        /* Box d'alerte spécifique pour le 13/01 */
         .alert-box {
             background: #FFF4E5; border-left: 4px solid #FF9800;
             padding: 15px; border-radius: 8px; margin-top: 15px;
@@ -162,7 +174,6 @@
 
         #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
         
-        /* Modal Auth (Copié des autres pages) */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
         .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
@@ -212,7 +223,10 @@
         <div class="timeline">
             
             <div class="release-card">
-                <div class="release-date">24 Jan 2026</div>
+                <div class="release-meta">
+                    <span class="release-date">24 Jan 2026</span>
+                    <span class="version-badge">v1.1.2</span>
+                </div>
                 <div class="release-title" data-t="title_24jan">Mise à jour Base de Données & Ranks</div>
                 <div class="release-content" data-t="content_24jan">
                     <ul>
@@ -224,7 +238,10 @@
             </div>
 
             <div class="release-card">
-                <div class="release-date">19 Jan 2026</div>
+                <div class="release-meta">
+                    <span class="release-date">19 Jan 2026</span>
+                    <span class="version-badge">v1.1.1</span>
+                </div>
                 <div class="release-title" data-t="title_19jan">Fonctionnalités Majeures</div>
                 <div class="release-content" data-t="content_19jan">
                     <p><strong>Suivi des Cotes & Graphiques :</strong> Fini les fichiers Excel ! Consultez la Cote Communautaire estimée pour chaque figurine et visualisez l'Historique des Prix (tendance sur 6 mois) directement sur la fiche.</p>
@@ -235,7 +252,10 @@
             </div>
 
             <div class="release-card">
-                <div class="release-date">13 Jan 2026</div>
+                <div class="release-meta">
+                    <span class="release-date">13 Jan 2026</span>
+                    <span class="version-badge">v1.1.0</span>
+                </div>
                 <div class="release-title" data-t="title_13jan">Les Cotes Communautaires sont actives !</div>
                 <div class="release-content" data-t="content_13jan">
                     <p>Nous avons déployé un nouvel algorithme qui calcule la valeur marché (Cote) de chaque figurine en se basant sur les prix d'achat réels de toute la communauté.</p>
@@ -258,7 +278,10 @@
             </div>
 
             <div class="release-card">
-                <div class="release-date">12 Jan 2026</div>
+                <div class="release-meta">
+                    <span class="release-date">12 Jan 2026</span>
+                    <span class="version-badge">v1.0.1</span>
+                </div>
                 <div class="release-title" data-t="title_12jan">New Arrivals</div>
                 <div class="release-content" data-t="content_12jan">
                     3 nouvelles "Special Blind Box" sont disponibles sur le tracker ! C'est l'heure de mettre à jour votre collection ou votre wishlist.
