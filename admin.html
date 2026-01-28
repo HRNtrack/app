@@ -82,12 +82,28 @@
         .kpi-value { font-size: 28px; font-weight: 800; color: var(--text-main); margin-top: 5px; }
         .kpi-sub { font-size: 11px; color: #9CA3AF; margin-top: 5px; font-weight: 500; }
         
+        /* DATA QUALITY & TIERS */
+        .quality-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .quality-bar-bg { height: 8px; width: 100%; background: #E5E7EB; border-radius: 4px; overflow: hidden; }
+        .quality-bar-fill { height: 100%; background: var(--primary); border-radius: 4px; transition: width 1s ease; }
+
         /* CHARTS SECTION */
-        .charts-container { display: grid; grid-template-columns: 1fr; gap: 30px; margin-bottom: 30px; }
-        .chart-card { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); position: relative; }
+        .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; margin-bottom: 30px; }
+        @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
+
+        .chart-card { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); position: relative; display: flex; flex-direction: column;}
         .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .chart-title { font-size: 16px; font-weight: 700; color: var(--text-main); }
         
+        /* FEED ACTIVITY */
+        .feed-list { max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .feed-item { display: flex; gap: 15px; align-items: center; border-bottom: 1px solid #f3f4f6; padding-bottom: 10px; }
+        .feed-item:last-child { border-bottom: none; }
+        .feed-img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; background: #eee; }
+        .feed-content { flex: 1; }
+        .feed-text { font-size: 12px; color: var(--text-main); margin: 0; font-weight: 500; }
+        .feed-time { font-size: 10px; color: var(--text-sub); }
+
         /* FILTRES GRAPHIQUES */
         .chart-controls { display: flex; gap: 5px; }
         .chart-btn { 
@@ -185,7 +201,7 @@
             <p>Données certifiées de l'écosystème et outils de maintenance.</p>
         </div>
 
-        <div class="section-label">Indicateurs Globaux (Validés)</div>
+        <div class="section-label">Santé de la Base</div>
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div>
@@ -194,90 +210,121 @@
                 </div>
                 <div class="kpi-sub" id="kpi-active-ratio">...</div>
             </div>
-            <div class="kpi-card" style="border-color: var(--color-gold);">
+            
+            <div class="kpi-card" style="border-color: #E74C3C;">
                 <div>
-                    <div class="kpi-label">Figurines Référencées</div>
-                    <div class="kpi-value" id="kpi-total-items-all">...</div>
+                    <div class="kpi-label">Actifs vs Dormants</div>
+                    <div class="kpi-value" id="kpi-dormant-val">...</div>
                 </div>
-                <div class="kpi-sub">Total cumulé (Qte) de tous les users</div>
+                <div class="kpi-sub">Inactifs depuis +6 mois</div>
             </div>
-            <div class="kpi-card" style="border-color: var(--color-red);">
+
+            <div class="kpi-card" style="border-color: #34495E;">
                 <div>
-                    <div class="kpi-label">Valeur Est. Collections</div>
-                    <div class="kpi-value" id="kpi-market-val">...</div>
+                    <div class="kpi-label">Niveaux Collectionneurs</div>
+                    <div style="margin-top:10px;">
+                        <div class="quality-row"><span style="font-size:10px;">🥚 Vide (0)</span><span style="font-size:10px; font-weight:bold;" id="tier-empty">0</span></div>
+                        <div class="quality-row"><span style="font-size:10px;">👶 Débutant (1-10)</span><span style="font-size:10px; font-weight:bold;" id="tier-newbie">0</span></div>
+                        <div class="quality-row"><span style="font-size:10px;">👦 Confirmé (11-50)</span><span style="font-size:10px; font-weight:bold;" id="tier-inter">0</span></div>
+                        <div class="quality-row"><span style="font-size:10px;">👑 Expert (50+)</span><span style="font-size:10px; font-weight:bold;" id="tier-expert">0</span></div>
+                    </div>
                 </div>
-                <div class="kpi-sub">Basé sur Cote Moyenne Communautaire</div>
             </div>
-            <div class="kpi-card" style="border-color: var(--color-purple);">
+
+            <div class="kpi-card" style="border-color: var(--color-blue);">
                 <div>
-                    <div class="kpi-label">Secrets & Rareté</div>
-                    <div class="kpi-value" id="kpi-secrets-rate">...</div>
+                    <div class="kpi-label">Qualité Donnée</div>
+                    <div style="margin-top:10px;">
+                        <div class="quality-row"><span style="font-size:10px;">Prix</span><span style="font-size:10px;" id="val-qual-price">0%</span></div>
+                        <div class="quality-bar-bg"><div id="bar-qual-price" class="quality-bar-fill" style="width:0%;"></div></div>
+                        <div class="quality-row" style="margin-top:5px;"><span style="font-size:10px;">Dates</span><span style="font-size:10px;" id="val-qual-date">0%</span></div>
+                        <div class="quality-bar-bg"><div id="bar-qual-date" class="quality-bar-fill" style="width:0%; background:#9B59B6;"></div></div>
+                    </div>
                 </div>
-                <div class="kpi-sub" id="kpi-secrets-count">... secrets au total</div>
             </div>
         </div>
 
-        <div class="section-label">Moyennes par Utilisateur</div>
+        <div class="section-label">Valeur & Volume</div>
         <div class="kpi-grid">
-            <div class="kpi-card" style="border-color: var(--color-teal);">
+            <div class="kpi-card" style="border-color: var(--color-red);">
                 <div>
-                    <div class="kpi-label">Dépense Réelle Moy.</div>
+                    <div class="kpi-label">Valeur Est. Globale</div>
+                    <div class="kpi-value" id="kpi-market-val">...</div>
+                </div>
+                <div class="kpi-sub">Basé sur Cote Moyenne</div>
+            </div>
+            <div class="kpi-card" style="border-color: var(--color-gold);">
+                <div>
+                    <div class="kpi-label">Figurines Totales</div>
+                    <div class="kpi-value" id="kpi-total-items-all">...</div>
+                </div>
+                <div class="kpi-sub" id="kpi-secrets-rate">...</div>
+            </div>
+             <div class="kpi-card" style="border-color: var(--color-teal);">
+                <div>
+                    <div class="kpi-label">Dépense Moyenne</div>
                     <div class="kpi-value" id="kpi-avg-spent">...</div>
                 </div>
-                <div class="kpi-sub">Basé sur prix d'achat déclarés</div>
+                <div class="kpi-sub">Par utilisateur actif</div>
             </div>
-            <div class="kpi-card" style="border-color: var(--color-blue);">
-                <div>
-                    <div class="kpi-label">Taille Moy. Collection</div>
-                    <div class="kpi-value" id="kpi-avg-figs">...</div>
-                </div>
-                <div class="kpi-sub">Figurines par user actif</div>
-            </div>
-            <div class="kpi-card" style="border-color: #E67E22;">
-                <div>
-                    <div class="kpi-label">Wishlist Moyenne</div>
-                    <div class="kpi-value" id="kpi-avg-wish">...</div>
-                </div>
-                <div class="kpi-sub">Articles recherchés par user</div>
-            </div>
-             <div class="kpi-card" style="border-color: #34495E;">
+             <div class="kpi-card" style="border-color: var(--color-purple);">
                 <div>
                     <div class="kpi-label">Stock Doublons</div>
                     <div class="kpi-value" id="kpi-doubles">...</div>
                 </div>
-                <div class="kpi-sub">Total doublons circulants</div>
+                <div class="kpi-sub">Total circulant</div>
             </div>
         </div>
 
-        <div class="section-label">Analyses Temporelles</div>
+        <div class="section-label">Analyses Temporelles & Flux</div>
         
-        <div class="chart-card">
-            <div class="chart-header">
-                <div class="chart-title">👥 Évolution du nombre d'utilisateurs</div>
-                <div class="chart-controls">
-                    <button class="chart-btn" onclick="updateUserChart(30, this)">1 Mois</button>
-                    <button class="chart-btn" onclick="updateUserChart(90, this)">3 Mois</button>
-                    <button class="chart-btn" onclick="updateUserChart(365, this)">1 An</button>
-                    <button class="chart-btn active" onclick="updateUserChart('all', this)">Tout</button>
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">👥 Évolution du nombre d'utilisateurs</div>
+                    <div class="chart-controls">
+                        <button class="chart-btn" onclick="updateUserChart(30, this)">1 Mois</button>
+                        <button class="chart-btn" onclick="updateUserChart(90, this)">3 Mois</button>
+                        <button class="chart-btn active" onclick="updateUserChart('all', this)">Tout</button>
+                    </div>
+                </div>
+                <div style="height: 250px; width:100%;">
+                    <canvas id="chartUsers"></canvas>
                 </div>
             </div>
-            <div style="height: 300px; width:100%;">
-                <canvas id="chartUsers"></canvas>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">🌍 Devises</div>
+                </div>
+                <div style="height: 250px; width:100%; position:relative;">
+                    <canvas id="chartCurrency"></canvas>
+                </div>
             </div>
         </div>
 
-        <div class="chart-card" style="margin-top:20px;">
-            <div class="chart-header">
-                <div class="chart-title">📦 Évolution des acquisitions (Volume total)</div>
-                <div class="chart-controls">
-                    <button class="chart-btn" onclick="updateVolumeChart(30, this)">1 Mois</button>
-                    <button class="chart-btn" onclick="updateVolumeChart(90, this)">3 Mois</button>
-                    <button class="chart-btn" onclick="updateVolumeChart(365, this)">1 An</button>
-                    <button class="chart-btn active" onclick="updateVolumeChart('all', this)">Tout</button>
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">📦 Croissance du Stock (Figurines totales)</div>
+                    <div class="chart-controls">
+                        <button class="chart-btn" onclick="updateVolumeChart(30, this)">1 Mois</button>
+                        <button class="chart-btn" onclick="updateVolumeChart(90, this)">3 Mois</button>
+                        <button class="chart-btn active" onclick="updateVolumeChart('all', this)">Tout</button>
+                    </div>
+                </div>
+                <div style="height: 250px; width:100%;">
+                    <canvas id="chartVolume"></canvas>
                 </div>
             </div>
-            <div style="height: 300px; width:100%;">
-                <canvas id="chartVolume"></canvas>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">🔔 Derniers Ajouts (Live)</div>
+                </div>
+                <div class="feed-list" id="feed-container">
+                    <div style="text-align:center; color:#ccc; padding:20px;">Chargement...</div>
+                </div>
             </div>
         </div>
 
@@ -303,6 +350,15 @@
                 </div>
                 <div class="module-content">
                     <table class="data-table" id="table-popular"></table>
+                </div>
+            </div>
+
+            <div class="admin-module">
+                <div class="module-header">
+                    <h3>🐋 Top 10 - Gros Collectionneurs (Whales)</h3>
+                </div>
+                <div class="module-content">
+                    <table class="data-table" id="table-whales"></table>
                 </div>
             </div>
 
@@ -343,8 +399,11 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
-        // Import BaseData (Assure-toi que ce fichier existe)
-        import { baseData } from './data.js';
+        let baseData = [];
+        try {
+            const module = await import('./data.js');
+            baseData = module.baseData || [];
+        } catch(e) { console.warn("data.js non chargé, mode dégradé actif."); }
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
         const app = initializeApp(firebaseConfig);
@@ -353,230 +412,343 @@
 
         const ADMIN_UID = "OL3t9jEDaDO1uZwNrrcvi26DZ1x1"; 
 
-        // Variables globales pour graphiques
         let globalUserJoinDates = []; 
         let globalPurchaseDates = {}; 
         let userChartInstance = null;
         let volumeChartInstance = null;
+        let currencyChartInstance = null; 
 
         onAuthStateChanged(auth, (user) => {
             if (user && user.uid === ADMIN_UID) {
                 document.getElementById('intruder').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
-                runAnalysis(true); 
+                setTimeout(() => runAnalysis(true), 500);
             } else {
                 document.getElementById('intruder').style.display = 'flex';
                 document.getElementById('admin-panel').style.display = 'none';
             }
         });
 
+        const safeSetText = (id, text) => {
+            const el = document.getElementById(id);
+            if(el) el.innerText = text;
+        }
+
         window.runAnalysis = async (readOnly = false) => {
             const btn = document.getElementById('btn-calc');
             const logDiv = document.getElementById('logs');
             
             const log = (msg) => {
-                logDiv.innerHTML += `<div class="log-line">> ${msg}</div>`;
-                logDiv.scrollTop = logDiv.scrollHeight;
+                if(logDiv) {
+                    logDiv.innerHTML += `<div class="log-line">> ${msg}</div>`;
+                    logDiv.scrollTop = logDiv.scrollHeight;
+                }
             };
 
-            if(!readOnly) {
+            if(!readOnly && btn) {
                 btn.disabled = true;
                 btn.querySelector('span').innerText = "⏳";
                 logDiv.innerHTML = ""; 
-                log("Démarrage de l'analyse complète...");
+                log("Démarrage de l'analyse...");
             }
 
             const RATES = { "EUR": 1, "USD": 0.92, "GBP": 1.17, "CNY": 0.13 };
 
             try {
-                // 1. SCAN DE LA BASE
+                log("Connexion Firestore...");
                 const usersSnap = await getDocs(collection(db, "users"));
                 const userCount = usersSnap.size || 0;
                 
-                if(!readOnly) log(`Utilisateurs scannés : ${usersSnap.size}`);
+                if(!readOnly) log(`Utilisateurs scannés : ${userCount}`);
                 
-                // --- INITIALISATION COMPTEURS ---
                 let totalItemsQty = 0; 
                 let activeUsers = 0; 
-                let totalPaidEur = 0; // "Vrai" argent dépensé
+                let totalPaidEur = 0; 
                 let totalDoubles = 0;
                 let totalSecrets = 0;
                 let totalWishlist = 0;
                 
-                // Maps
                 let popularityMap = {};     
                 let wishlistMap = {};       
-                let priceMap = {}; // Pour calculer la cote moyenne (id -> [prix1, prix2...])
+                let priceMap = {}; 
                 let serieMap = {};
-                let userCollectionsStats = []; // Pour stocker (qty, items...) pour calcul valeur totale après
-                
-                // Reset graphs
+                let userCollectionsStats = []; 
+
+                let currencyCounts = { "EUR": 0, "USD": 0, "CNY": 0, "GBP": 0, "Others": 0 };
+                let dataQuality = { itemsWithPrice: 0, itemsWithDate: 0, totalItemsOwned: 0 };
+                let allActivities = []; 
+
+                // Nouveaux Compteurs
+                let dormantCount = 0;
+                // AJOUT DU COMPTEUR 'EMPTY'
+                let tierCounts = { empty: 0, newbie: 0, inter: 0, expert: 0 };
+                const sixMonthsAgo = new Date();
+                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+
                 globalUserJoinDates = [];
                 globalPurchaseDates = {};
 
                 usersSnap.forEach(u => {
-                    const d = u.data();
-                    let hasItems = false;
-                    let userFirstDate = null; 
+                    try {
+                        const d = u.data();
+                        const uidShort = u.id ? (u.id.substring(0,6) + "...") : "User";
+                        let hasItems = false;
+                        let userFirstDate = null; 
+                        let lastActiveDate = null; // Pour Dormants
+                        let userStats = { uid: uidShort, items: [], totalQty: 0, estValue: 0 }; 
 
-                    let userStats = { items: [] }; // Stockage temp pour calcul valeur collection après scan complet
+                        if(d.collection && Array.isArray(d.collection)) {
+                            d.collection.forEach(item => {
+                                if(!item) return;
 
-                    if(d.collection) {
-                        d.collection.forEach(item => {
-                            // --- CAS 1 : POSSÉDÉ ---
-                            if(item.Status === "Possédé") {
-                                hasItems = true;
-                                const qty = parseInt(item.Quantity) || 1; 
-                                
-                                totalItemsQty += qty;
-                                
-                                // Stats globales
-                                popularityMap[item.ID] = (popularityMap[item.ID] || 0) + 1; // Compte par utilisateur unique
-                                serieMap[item.Serie] = (serieMap[item.Serie] || 0) + qty;
-                                
-                                if(qty > 1) totalDoubles += (qty - 1);
-                                if(item["Secret Rare"] && item["Secret Rare"].toLowerCase() === "yes") totalSecrets += qty;
+                                if(item.Status === "Possédé") {
+                                    hasItems = true;
+                                    const qty = parseInt(item.Quantity) || 1; 
+                                    
+                                    totalItemsQty += qty;
+                                    dataQuality.totalItemsOwned += qty; 
+                                    userStats.totalQty += qty;
 
-                                // Stocker pour calcul valeur globale plus tard
-                                userStats.items.push({ id: item.ID, qty: qty });
+                                    if(item.ID) popularityMap[item.ID] = (popularityMap[item.ID] || 0) + 1;
+                                    if(item.Serie) serieMap[item.Serie] = (serieMap[item.Serie] || 0) + qty;
+                                    if(qty > 1) totalDoubles += (qty - 1);
+                                    if(item["Secret Rare"] && String(item["Secret Rare"]).toLowerCase() === "yes") totalSecrets += qty;
 
-                                // --- GESTION DATES (CRITIQUE POUR GRAPHES) ---
-                                let pDate = null;
-                                if(item["Purchase date"]) {
-                                    pDate = new Date(item["Purchase date"]);
-                                }
-                                
-                                // Fallback date pour graphique volume : Aujourd'hui si pas de date
-                                let volumeDateStr = pDate && !isNaN(pDate) ? item["Purchase date"] : new Date().toISOString().split('T')[0];
-                                globalPurchaseDates[volumeDateStr] = (globalPurchaseDates[volumeDateStr] || 0) + qty;
+                                    if(item.ID) userStats.items.push({ id: item.ID, qty: qty });
 
-                                // Date arrivée user (la plus ancienne trouvée)
-                                if (pDate && !isNaN(pDate)) {
-                                    if(!userFirstDate || pDate < userFirstDate) {
-                                        userFirstDate = pDate;
+                                    const curr = item.Currency || "EUR";
+                                    if(currencyCounts[curr] !== undefined) currencyCounts[curr]++;
+                                    else currencyCounts["Others"]++;
+
+                                    let pDate = null;
+                                    let hasRealDate = false;
+                                    if(item["Purchase date"]) {
+                                        pDate = new Date(item["Purchase date"]);
+                                        if(!isNaN(pDate.getTime())) {
+                                            dataQuality.itemsWithDate += qty; 
+                                            hasRealDate = true;
+                                            
+                                            // Check Latest Date (Dormant Logic)
+                                            if(!lastActiveDate || pDate > lastActiveDate) {
+                                                lastActiveDate = pDate;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if(hasRealDate) {
+                                        let realName = item.Name || "Figurine";
+                                        let realImg = item.Image || "";
+                                        
+                                        if(baseData && baseData.length > 0 && item.ID) {
+                                            const baseItem = baseData.find(b => b.ID === item.ID);
+                                            if(baseItem) {
+                                                if(!item.Name) realName = baseItem.Name;
+                                                if(!item.Image) realImg = baseItem.Image;
+                                            }
+                                        }
+
+                                        allActivities.push({
+                                            user: "Collectionneur",
+                                            name: realName,
+                                            date: pDate,
+                                            img: realImg
+                                        });
+                                    }
+
+                                    let volumeDateStr = hasRealDate ? item["Purchase date"] : new Date().toISOString().split('T')[0];
+                                    globalPurchaseDates[volumeDateStr] = (globalPurchaseDates[volumeDateStr] || 0) + qty;
+
+                                    if (hasRealDate) {
+                                        if(!userFirstDate || pDate < userFirstDate) {
+                                            userFirstDate = pDate;
+                                        }
+                                    }
+
+                                    const p = parseFloat(item["Purchase price"]);
+                                    if(p > 0) {
+                                        dataQuality.itemsWithPrice += qty; 
+                                        const rate = RATES[curr] || 1;
+                                        const priceInEur = p * rate;
+                                        totalPaidEur += (priceInEur * qty);
+                                        if(item.ID) {
+                                            if(!priceMap[item.ID]) priceMap[item.ID] = [];
+                                            priceMap[item.ID].push(priceInEur);
+                                        }
                                     }
                                 }
-
-                                // Calcul Dépense Réelle (Total Paid)
-                                const p = parseFloat(item["Purchase price"]);
-                                if(p > 0) {
-                                    const curr = item.Currency || "EUR";
-                                    const rate = RATES[curr] || 1;
-                                    const priceInEur = p * rate;
-                                    totalPaidEur += (priceInEur * qty);
-                                    
-                                    // Ajout pour calcul cote moyenne
-                                    if(!priceMap[item.ID]) priceMap[item.ID] = [];
-                                    priceMap[item.ID].push(priceInEur);
+                                else if (item.Status === "Recherché" || item.Status === "Wishlist") {
+                                    totalWishlist++;
+                                    if(item.ID) wishlistMap[item.ID] = (wishlistMap[item.ID] || 0) + 1;
                                 }
+                            });
+                        }
+                        
+                        // Analyse Dormant
+                        if(hasItems) {
+                            activeUsers++;
+                            // Si pas de date d'achat, on assume actif par défaut, sinon on vérifie
+                            if(lastActiveDate && lastActiveDate < sixMonthsAgo) {
+                                dormantCount++;
                             }
-                            // --- CAS 2 : WISHLIST ---
-                            else if (item.Status === "Recherché" || item.Status === "Wishlist") {
-                                totalWishlist++;
-                                wishlistMap[item.ID] = (wishlistMap[item.ID] || 0) + 1;
-                            }
-                        });
-                    }
-                    
-                    if(hasItems) activeUsers++;
+                        }
 
-                    // Pour le graph User : Si pas de date trouvée, on met Aujourd'hui pour qu'il soit compté
-                    if(!userFirstDate) {
-                        userFirstDate = new Date(); 
+                        // Analyse Tiers (AVEC 0)
+                        if(userStats.totalQty === 0) tierCounts.empty++;
+                        else if(userStats.totalQty <= 10) tierCounts.newbie++;
+                        else if(userStats.totalQty <= 50) tierCounts.inter++;
+                        else tierCounts.expert++;
+
+                        if(!userFirstDate) userFirstDate = new Date(); 
+                        globalUserJoinDates.push(userFirstDate);
+                        userCollectionsStats.push(userStats);
+
+                    } catch (errUser) {
+                        console.error("Erreur User ignorée", errUser);
                     }
-                    globalUserJoinDates.push(userFirstDate);
-                    
-                    userCollectionsStats.push(userStats); // On garde ça pour calculer la valeur totale estimée
                 });
 
-                // Ajouter les users vides (inscrits mais sans collection) au graph pour que le total soit exact
                 const emptyUsersCount = userCount - globalUserJoinDates.length;
                 for(let i=0; i<emptyUsersCount; i++) globalUserJoinDates.push(new Date());
-
-                // Tri Chronologique
                 globalUserJoinDates.sort((a, b) => a - b);
 
-                // 2. CALCUL COTES MOYENNES (COMMUNITY PRICES)
+                log("Calcul des stats terminé. Mise à jour UI...");
+
                 let finalCotes = {};
                 for (const [id, prices] of Object.entries(priceMap)) {
                     const sum = prices.reduce((a, b) => a + b, 0);
                     finalCotes[id] = Math.round(sum / prices.length);
                 }
 
-                // 3. CALCUL "VALEUR TOTALE DES COLLECTIONS" (Estimée)
-                // On repasse sur les items de tout le monde et on applique la cote moyenne
                 let totalEstimatedValue = 0;
-                // Si pas de cote, on met une valeur par défaut (ex: 15€) pour ne pas avoir 0
                 const DEFAULT_VAL = 15; 
                 
                 userCollectionsStats.forEach(u => {
                     u.items.forEach(item => {
                         let unitVal = finalCotes[item.id] || DEFAULT_VAL;
-                        totalEstimatedValue += (unitVal * item.qty);
+                        let itemVal = unitVal * item.qty;
+                        totalEstimatedValue += itemVal;
+                        u.estValue += itemVal; 
                     });
                 });
 
-                // 4. SAUVEGARDE
                 if(!readOnly) {
-                    await setDoc(doc(db, "market_prices", "community"), finalCotes);
-                    log("✅ Cotes mises à jour.");
-                    log("Terminé.");
-                    btn.disabled = false;
-                    btn.querySelector('span').innerText = "🔄";
+                    try {
+                        await setDoc(doc(db, "market_prices", "community"), finalCotes);
+                        log("✅ Cotes sauvegardées.");
+                    } catch(e) { log("⚠️ Erreur sauvegarde DB (droits?)"); }
+                    
+                    if(btn) {
+                        btn.disabled = false;
+                        btn.querySelector('span').innerText = "🔄";
+                    }
                 }
 
-                // 5. UPDATE UI (AFFICHAGE)
                 const formatNum = (n) => n.toLocaleString('fr-FR');
                 const formatEur = (n) => Math.round(n).toLocaleString('fr-FR') + " €";
 
-                // KPIs Ligne 1
-                document.getElementById('kpi-users').innerText = userCount;
-                document.getElementById('kpi-active-ratio').innerText = `${activeUsers} actifs (${Math.round(activeUsers/userCount*100)}%)`;
-                document.getElementById('kpi-total-items-all').innerText = formatNum(totalItemsQty);
-                
-                // Valeur Estimée (Cote)
-                document.getElementById('kpi-market-val').innerText = formatEur(totalEstimatedValue);
-                
-                document.getElementById('kpi-secrets-count').innerText = `${totalSecrets} secrets`;
-                document.getElementById('kpi-secrets-rate').innerText = totalItemsQty > 0 ? (totalSecrets/totalItemsQty*100).toFixed(1) + "%" : "0%";
+                safeSetText('kpi-users', userCount);
+                safeSetText('kpi-active-ratio', `${activeUsers} actifs / ${userCount} total`);
+                safeSetText('kpi-total-items-all', formatNum(totalItemsQty));
+                safeSetText('kpi-market-val', formatEur(totalEstimatedValue));
+                safeSetText('kpi-secrets-count', `${totalSecrets} secrets`);
+                safeSetText('kpi-secrets-rate', totalItemsQty > 0 ? (totalSecrets/totalItemsQty*100).toFixed(1) + "%" : "0%");
 
-                // KPIs Ligne 2 - Moyennes
-                const avgSpent = activeUsers > 0 ? totalPaidEur / activeUsers : 0; // Basé sur dépense réelle
-                document.getElementById('kpi-avg-spent').innerText = formatEur(avgSpent);
+                // Dormants
+                safeSetText('kpi-dormant-val', dormantCount);
                 
+                // Tiers
+                safeSetText('tier-empty', tierCounts.empty);
+                safeSetText('tier-newbie', tierCounts.newbie);
+                safeSetText('tier-inter', tierCounts.inter);
+                safeSetText('tier-expert', tierCounts.expert);
+
+                const pctPrice = totalItemsQty > 0 ? Math.round((dataQuality.itemsWithPrice / totalItemsQty) * 100) : 0;
+                const pctDate = totalItemsQty > 0 ? Math.round((dataQuality.itemsWithDate / totalItemsQty) * 100) : 0;
+                
+                safeSetText('val-qual-price', pctPrice + "%");
+                if(document.getElementById('bar-qual-price')) document.getElementById('bar-qual-price').style.width = pctPrice + "%";
+                safeSetText('val-qual-date', pctDate + "%");
+                if(document.getElementById('bar-qual-date')) document.getElementById('bar-qual-date').style.width = pctDate + "%";
+
+                const avgSpent = activeUsers > 0 ? totalPaidEur / activeUsers : 0;
+                safeSetText('kpi-avg-spent', formatEur(avgSpent));
                 const avgFigs = activeUsers > 0 ? totalItemsQty / activeUsers : 0;
-                document.getElementById('kpi-avg-figs').innerText = Math.round(avgFigs);
-                
+                safeSetText('kpi-avg-figs', Math.round(avgFigs));
                 const avgWish = userCount > 0 ? totalWishlist / userCount : 0;
-                document.getElementById('kpi-avg-wish').innerText = avgWish.toFixed(1);
                 
-                document.getElementById('kpi-doubles').innerText = formatNum(totalDoubles);
+                safeSetText('kpi-doubles', formatNum(totalDoubles));
 
-                // TABLES
-                const getName = (id) => { const f = baseData.find(b=>b.ID===id); return f ? f.Name : id; };
+                const getName = (id) => { 
+                    if(baseData.length > 0) { const f = baseData.find(b=>b.ID===id); return f ? f.Name : id; }
+                    return id;
+                };
+
+                allActivities.sort((a,b) => b.date - a.date);
+                const feedContainer = document.getElementById('feed-container');
+                if(feedContainer) {
+                    if(allActivities.length === 0) {
+                        feedContainer.innerHTML = `<div style="text-align:center;color:#ccc;padding:20px;">Aucune activité récente</div>`;
+                    } else {
+                        feedContainer.innerHTML = allActivities.slice(0, 10).map(act => {
+                            const dateStr = act.date ? act.date.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) : 'Date inconnue';
+                            const imgUrl = act.img || 'https://via.placeholder.com/40';
+                            return `<div class="feed-item"><img src="${imgUrl}" class="feed-img" loading="lazy"><div class="feed-content"><p class="feed-text">Ajout : <strong>${act.name}</strong></p><span class="feed-time">📅 ${dateStr}</span></div></div>`;
+                        }).join('');
+                    }
+                }
+                
                 const sortedPop = Object.entries(popularityMap).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                document.getElementById('table-popular').innerHTML = sortedPop.map((([id, count], idx) => `<tr><td><span class="rank-badge">${idx+1}</span> ${getName(id)}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
+                if(document.getElementById('table-popular')) document.getElementById('table-popular').innerHTML = sortedPop.map((([id, count], idx) => `<tr><td><span class="rank-badge">${idx+1}</span> ${getName(id)}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
+
+                const sortedWhales = userCollectionsStats.sort((a,b) => b.totalQty - a.totalQty).slice(0, 10);
+                if(document.getElementById('table-whales')) {
+                    document.getElementById('table-whales').innerHTML = sortedWhales.map(((w, idx) => {
+                        let rankIcon = idx + 1;
+                        let rankStyle = "background:#8E44AD";
+                        if(idx === 0) { rankIcon = "🥇"; rankStyle = "background:transparent; font-size:16px; width:auto; height:auto; color:black;"; }
+                        else if(idx === 1) { rankIcon = "🥈"; rankStyle = "background:transparent; font-size:16px; width:auto; height:auto; color:black;"; }
+                        else if(idx === 2) { rankIcon = "🥉"; rankStyle = "background:transparent; font-size:16px; width:auto; height:auto; color:black;"; }
+                        return `<tr><td><span class="rank-badge" style="${rankStyle}">${rankIcon}</span> User #${w.uid}</td><td style="text-align:right;"><div style="font-weight:bold;">${w.totalQty} figs</div><div style="font-size:10px; color:#888;">~${formatEur(w.estValue)}</div></td></tr>`;
+                    })).join('');
+                }
 
                 const sortedExp = Object.entries(finalCotes).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                document.getElementById('table-expensive').innerHTML = sortedExp.map((([id, price], idx) => `<tr><td><span class="rank-badge" style="background:var(--color-gold)">${idx+1}</span> ${getName(id)}</td><td style="text-align:right; color:var(--color-green); font-weight:bold;">${price} €</td></tr>`)).join('');
+                if(document.getElementById('table-expensive')) document.getElementById('table-expensive').innerHTML = sortedExp.map((([id, price], idx) => `<tr><td><span class="rank-badge" style="background:var(--color-gold)">${idx+1}</span> ${getName(id)}</td><td style="text-align:right; color:var(--color-green); font-weight:bold;">${price} €</td></tr>`)).join('');
 
                 const sortedWish = Object.entries(wishlistMap).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                document.getElementById('table-wishlist').innerHTML = sortedWish.map((([id, count], idx) => `<tr><td><span class="rank-badge" style="background:#E67E22">${idx+1}</span> ${getName(id)}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
+                if(document.getElementById('table-wishlist')) document.getElementById('table-wishlist').innerHTML = sortedWish.map((([id, count], idx) => `<tr><td><span class="rank-badge" style="background:#E67E22">${idx+1}</span> ${getName(id)}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
 
                 const sortedSeriesList = Object.entries(serieMap).sort((a,b) => b[1] - a[1]);
-                document.getElementById('table-series').innerHTML = sortedSeriesList.map((([serie, count]) => `<tr><td>${serie}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
+                if(document.getElementById('table-series')) document.getElementById('table-series').innerHTML = sortedSeriesList.map((([serie, count]) => `<tr><td>${serie}</td><td style="text-align:right;">${count}</td></tr>`)).join('');
 
-                // 6. INITIALISATION GRAPHIQUES
-                updateUserChart('all', null);
-                updateVolumeChart('all', null);
+                try { updateUserChart('all', null); } catch(e){ console.error("Err Graph User", e); }
+                try { updateVolumeChart('all', null); } catch(e){ console.error("Err Graph Vol", e); }
+
+                const ctxCurr = document.getElementById('chartCurrency');
+                if(ctxCurr) {
+                    if(currencyChartInstance) currencyChartInstance.destroy();
+                    currencyChartInstance = new Chart(ctxCurr.getContext('2d'), {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['EUR', 'USD', 'CNY', 'GBP', 'Autres'],
+                            datasets: [{
+                                data: [currencyCounts['EUR'], currencyCounts['USD'], currencyCounts['CNY'], currencyCounts['GBP'], currencyCounts['Others']],
+                                backgroundColor: ['#3498DB', '#2ECC71', '#E74C3C', '#9B59B6', '#95A5A6'],
+                                borderWidth: 0
+                            }]
+                        },
+                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {boxWidth:10} } } }
+                    });
+                }
+                
+                log("Terminé avec succès !");
 
             } catch (e) {
-                console.error(e);
-                if(!readOnly) log(`ERREUR : ${e.message}`);
+                console.error("ERREUR PRINCIPALE:", e);
+                log(`ERREUR CRITIQUE : ${e.message}`);
             }
         };
 
-        // --- MOTEUR GRAPHIQUE ---
         function processTimeData(datesMap, daysFilter, isCumulative = false) {
             const today = new Date();
             const cutoffDate = new Date();
@@ -585,32 +757,20 @@
             } else {
                 cutoffDate.setFullYear(2020); 
             }
-
             let sortedKeys = Object.keys(datesMap).sort();
             let filteredKeys = sortedKeys.filter(d => new Date(d) >= cutoffDate);
-            
-            // Calcul du cumul initial avant la période (si filtre actif)
             let startingCount = 0;
             if(isCumulative && daysFilter !== 'all') {
-                sortedKeys.forEach(d => {
-                    if(new Date(d) < cutoffDate) startingCount += datesMap[d];
-                });
+                sortedKeys.forEach(d => { if(new Date(d) < cutoffDate) startingCount += datesMap[d]; });
             }
-
             let labels = filteredKeys;
             let data = [];
-            
             if (isCumulative) {
                 let cumulative = startingCount;
-                data = filteredKeys.map(d => {
-                    cumulative += datesMap[d];
-                    return cumulative;
-                });
+                data = filteredKeys.map(d => { cumulative += datesMap[d]; return cumulative; });
             } else {
                 data = filteredKeys.map(d => datesMap[d]);
             }
-            
-            // Si aucune donnée dans la période, on renvoie tableau vide
             return { labels, data };
         }
 
@@ -619,17 +779,14 @@
                 btn.parentElement.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             }
-            // Agrégation
             let userMap = {};
             globalUserJoinDates.forEach(dateObj => {
                 const dStr = dateObj.toISOString().split('T')[0];
                 userMap[dStr] = (userMap[dStr] || 0) + 1;
             });
-
             const processed = processTimeData(userMap, period, true);
             const ctx = document.getElementById('chartUsers').getContext('2d');
             if(userChartInstance) userChartInstance.destroy();
-
             userChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -644,11 +801,7 @@
                         pointRadius: processed.labels.length > 50 ? 0 : 3
                     }]
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } } }
             });
         }
 
@@ -657,31 +810,31 @@
                 btn.parentElement.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
             }
-            // globalPurchaseDates contient déjà { "DATE": QTY }
-            const processed = processTimeData(globalPurchaseDates, period, false);
+            const processed = processTimeData(globalPurchaseDates, period, true);
             const ctx = document.getElementById('chartVolume').getContext('2d');
             if(volumeChartInstance) volumeChartInstance.destroy();
-
             volumeChartInstance = new Chart(ctx, {
-                type: 'bar',
+                type: 'line', 
                 data: {
                     labels: processed.labels,
                     datasets: [{
-                        label: 'Figurines ajoutées',
+                        label: 'Stock Total (Cumulé)',
                         data: processed.data,
-                        backgroundColor: '#6A8C47',
-                        borderRadius: 4
+                        borderColor: '#6A8C47',
+                        backgroundColor: 'rgba(106, 140, 71, 0.1)',
+                        fill: true,
+                        tension: 0.3,
+                        pointRadius: processed.labels.length > 50 ? 0 : 3
                     }]
                 },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } }
-                }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } } }
             });
         }
 
-        fetch('footer.html').then(r => r.text()).then(d => document.getElementById('footer-placeholder').innerHTML = d);
+        fetch('footer.html').then(r => r.text()).then(d => {
+            const el = document.getElementById('footer-placeholder');
+            if(el) el.innerHTML = d;
+        });
     </script>
 </body>
 </html>
