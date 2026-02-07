@@ -613,10 +613,21 @@
 
                 log("Calcul des stats terminé. Mise à jour UI...");
 
+                // --- CALCUL VALEURS AVEC PROTECTION ANTI-OUTLIERS ---
                 let finalCotes = {};
                 for (const [id, prices] of Object.entries(priceMap)) {
-                    const sum = prices.reduce((a, b) => a + b, 0);
-                    finalCotes[id] = Math.round(sum / prices.length);
+                    // 1. On trie les prix du plus petit au plus grand
+                    prices.sort((a, b) => a - b);
+                    
+                    // 2. Si on a assez de données (5+), on retire les extrêmes
+                    let validPrices = prices;
+                    if (prices.length >= 5) {
+                        validPrices = prices.slice(1, -1);
+                    }
+                    
+                    const sum = validPrices.reduce((a, b) => a + b, 0);
+                    // On évite la division par 0
+                    finalCotes[id] = validPrices.length > 0 ? Math.round(sum / validPrices.length) : 0;
                 }
 
                 let totalEstimatedValue = 0;
