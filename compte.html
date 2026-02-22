@@ -283,7 +283,7 @@
                 alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
                 confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",
                 alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: ",
-                			  // Footer keys
+                              // Footer keys
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
@@ -366,7 +366,11 @@
                     const p = docSnap.data().profile;
                     
                     // Charger le pseudo
-                    document.getElementById('profile-pseudo').value = p.pseudo || "";
+                    if(p.pseudo) {
+                        document.getElementById('profile-pseudo').value = p.pseudo;
+                        // On affiche le pseudo en haut à la place de l'email s'il est défini
+                        document.getElementById('display-email').innerText = p.pseudo; 
+                    }
                     
                     // Charger l'avatar
                     if(p.avatar) {
@@ -411,9 +415,13 @@
             btn.innerText = "Sauvegarde...";
 
             try {
+                // merge: true permet de sauvegarder le profil SANS effacer la collection
                 await setDoc(doc(db, "users", user.uid), {
                     profile: { pseudo: pseudo, avatar: avatar }
                 }, { merge: true });
+                
+                // On met à jour l'en-tête pour le feedback visuel
+                document.getElementById('display-email').innerText = pseudo; 
                 
                 alert("Profil mis à jour avec succès !");
                 
@@ -430,7 +438,7 @@
             if (user) {
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
                 document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-                document.getElementById('display-email').innerText = user.email;
+                document.getElementById('display-email').innerText = user.email; // Par défaut avant chargement du pseudo
                 
                 // Charger le profil public
                 loadUserProfile(user.uid);
@@ -486,6 +494,7 @@
                 await updateEmail(auth.currentUser, newEmail);
                 alert(t('alertEmailUpdated'));
                 document.getElementById('display-email').innerText = newEmail;
+                // Si l'utilisateur a un pseudo, il reprendra le dessus au rechargement
             } catch (error) {
                 if(error.code === 'auth/requires-recent-login') {
                     const success = await reauth();
