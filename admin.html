@@ -452,8 +452,8 @@
                 log("Démarrage de l'analyse...");
             }
 
-            const RATES = { "EUR": 1, "USD": 0.92, "GBP": 1.17, "CNY": 0.13 };
-
+            // --- AJOUT DU CAD (0.68) ---
+const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             try {
                 log("Connexion Firestore...");
                 const usersSnap = await getDocs(collection(db, "users"));
@@ -468,19 +468,19 @@
                 let totalSecrets = 0;
                 let totalWishlist = 0;
                 
-                let popularityMap = {};     
+                let popularityMap = {};    
                 let wishlistMap = {};       
                 let priceMap = {}; 
                 let serieMap = {};
                 let userCollectionsStats = []; 
 
-                let currencyCounts = { "EUR": 0, "USD": 0, "CNY": 0, "GBP": 0, "Others": 0 };
+                // --- AJOUT DU CAD DANS LE COMPTEUR ---
+                let currencyCounts = { "EUR": 0, "USD": 0, "CAD": 0, "CNY": 0, "GBP": 0, "Others": 0 };
                 let dataQuality = { itemsWithPrice: 0, itemsWithDate: 0, totalItemsOwned: 0 };
                 let allActivities = []; 
 
                 // Nouveaux Compteurs
                 let dormantCount = 0;
-                // AJOUT DU COMPTEUR 'EMPTY'
                 let tierCounts = { empty: 0, newbie: 0, inter: 0, expert: 0 };
                 const sixMonthsAgo = new Date();
                 sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
@@ -494,7 +494,7 @@
                         const uidShort = u.id ? (u.id.substring(0,6) + "...") : "User";
                         let hasItems = false;
                         let userFirstDate = null; 
-                        let lastActiveDate = null; // Pour Dormants
+                        let lastActiveDate = null; 
                         let userStats = { uid: uidShort, items: [], totalQty: 0, estValue: 0 }; 
 
                         if(d.collection && Array.isArray(d.collection)) {
@@ -586,13 +586,12 @@
                         // Analyse Dormant
                         if(hasItems) {
                             activeUsers++;
-                            // Si pas de date d'achat, on assume actif par défaut, sinon on vérifie
                             if(lastActiveDate && lastActiveDate < sixMonthsAgo) {
                                 dormantCount++;
                             }
                         }
 
-                        // Analyse Tiers (AVEC 0)
+                        // Analyse Tiers 
                         if(userStats.totalQty === 0) tierCounts.empty++;
                         else if(userStats.totalQty <= 10) tierCounts.newbie++;
                         else if(userStats.totalQty <= 50) tierCounts.inter++;
@@ -613,20 +612,15 @@
 
                 log("Calcul des stats terminé. Mise à jour UI...");
 
-                // --- CALCUL VALEURS AVEC PROTECTION ANTI-OUTLIERS ---
+                // --- CALCUL VALEURS ---
                 let finalCotes = {};
                 for (const [id, prices] of Object.entries(priceMap)) {
-                    // 1. On trie les prix du plus petit au plus grand
                     prices.sort((a, b) => a - b);
-                    
-                    // 2. Si on a assez de données (5+), on retire les extrêmes
                     let validPrices = prices;
                     if (prices.length >= 5) {
                         validPrices = prices.slice(1, -1);
                     }
-                    
                     const sum = validPrices.reduce((a, b) => a + b, 0);
-                    // On évite la division par 0
                     finalCotes[id] = validPrices.length > 0 ? Math.round(sum / validPrices.length) : 0;
                 }
 
@@ -664,10 +658,8 @@
                 safeSetText('kpi-secrets-count', `${totalSecrets} secrets`);
                 safeSetText('kpi-secrets-rate', totalItemsQty > 0 ? (totalSecrets/totalItemsQty*100).toFixed(1) + "%" : "0%");
 
-                // Dormants
                 safeSetText('kpi-dormant-val', dormantCount);
                 
-                // Tiers
                 safeSetText('tier-empty', tierCounts.empty);
                 safeSetText('tier-newbie', tierCounts.newbie);
                 safeSetText('tier-inter', tierCounts.inter);
@@ -735,16 +727,24 @@
                 try { updateUserChart('all', null); } catch(e){ console.error("Err Graph User", e); }
                 try { updateVolumeChart('all', null); } catch(e){ console.error("Err Graph Vol", e); }
 
+                // --- MAJ DU GRAPHIQUE POUR LE CAD ---
                 const ctxCurr = document.getElementById('chartCurrency');
                 if(ctxCurr) {
                     if(currencyChartInstance) currencyChartInstance.destroy();
                     currencyChartInstance = new Chart(ctxCurr.getContext('2d'), {
                         type: 'doughnut',
                         data: {
-                            labels: ['EUR', 'USD', 'CNY', 'GBP', 'Autres'],
+                            labels: ['EUR', 'USD', 'CAD', 'CNY', 'GBP', 'Autres'],
                             datasets: [{
-                                data: [currencyCounts['EUR'], currencyCounts['USD'], currencyCounts['CNY'], currencyCounts['GBP'], currencyCounts['Others']],
-                                backgroundColor: ['#3498DB', '#2ECC71', '#E74C3C', '#9B59B6', '#95A5A6'],
+                                data: [
+                                    currencyCounts['EUR'], 
+                                    currencyCounts['USD'], 
+                                    currencyCounts['CAD'], 
+                                    currencyCounts['CNY'], 
+                                    currencyCounts['GBP'], 
+                                    currencyCounts['Others']
+                                ],
+                                backgroundColor: ['#3498DB', '#2ECC71', '#F1C40F', '#E74C3C', '#9B59B6', '#95A5A6'],
                                 borderWidth: 0
                             }]
                         },
