@@ -121,7 +121,6 @@
             background: var(--primary); border: 4px solid var(--bg-body);
         }
 
-        /* NOUVEAU : Wrapper pour la date et la version */
         .release-meta {
             display: flex; align-items: center; gap: 10px; margin-bottom: 15px;
         }
@@ -131,10 +130,9 @@
             font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 6px;
         }
 
-        /* NOUVEAU : Badge de version */
         .version-badge {
             background: #F3F4F6; color: #555; border: 1px solid #E5E7EB;
-            font-family: 'JetBrains Mono', monospace; /* Police monospace pour le style tech */
+            font-family: 'JetBrains Mono', monospace; 
             font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px;
         }
 
@@ -222,6 +220,21 @@
 
         <div class="timeline">
             
+            <div class="release-card">
+                <div class="release-meta">
+                    <span class="release-date">06 Mar 2026</span>
+                    <span class="version-badge">v1.1.5</span>
+                </div>
+                <div class="release-title" data-t="title_06mar">Optimisation de la page Collection</div>
+                <div class="release-content" data-t="content_06mar">
+                    <ul>
+                        <li>Refonte complète du système de graphiques : affichage des vraies données historiques de la communauté.</li>
+                        <li>Meilleure gestion des affichages lorsqu'il y a peu ou pas d'historique (ex: 1 seule donnée).</li>
+                        <li>Améliorations esthétiques et responsive (PC/Mobile) de la pop-up.</li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="release-card">
                 <div class="release-meta">
                     <span class="release-date">02 Mar 2026</span>
@@ -353,6 +366,10 @@
                 authLogin: "Connexion", authAccount: "Mon Compte", btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
                 pageTitle: "Notes de Mise à Jour", pageSub: "L'historique des nouveautés et améliorations.",
                 
+                // 06 Mar (Nouveau)
+                title_06mar: "Optimisation de la page Collection",
+                content_06mar: `<ul><li>Refonte complète du système de graphiques : affichage des vraies données historiques de la communauté.</li><li>Meilleure gestion des affichages lorsqu'il y a peu ou pas d'historique (ex: 1 seule donnée).</li><li>Améliorations esthétiques et responsive (PC/Mobile) de la pop-up.</li></ul>`,
+
                 // 02 Mar
                 title_02mar: "Ajout du Dollar Canadien (CAD)",
                 content_02mar: `Vous l'avez demandé ! Le <strong>Dollar Canadien (CAD / CA$)</strong> est désormais disponible dans le choix des devises pour vos achats. Les cotes et les statistiques prennent désormais correctement en compte cette monnaie.`,
@@ -376,14 +393,13 @@
                 // 12 Jan
                 title_12jan: "New Arrivals",
                 content_12jan: `3 nouvelles "Special Blind Box" sont disponibles sur le tracker ! C'est l'heure de mettre à jour votre collection ou votre wishlist.<ul><li>Wish List Pendant</li><li>Good Health</li><li>Luck on the Way</li></ul>`,
-                                  // Footer keys
+                                  
+                // Footer keys
                 navReleases: "Mises à jour", 
                 footerNav: "Navigation",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -395,6 +411,10 @@
                 authLogin: "Login", authAccount: "My Account", btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
                 pageTitle: "Release Notes", pageSub: "History of updates and improvements.",
                 
+                // 06 Mar (New)
+                title_06mar: "Collection Page Optimization",
+                content_06mar: `<ul><li>Complete overhaul of the chart system: displaying real community historical data.</li><li>Better fallback display when there is little to no history (e.g., only 1 data point).</li><li>Aesthetic and responsive (PC/Mobile) improvements to the pop-up modal.</li></ul>`,
+
                 // 02 Mar
                 title_02mar: "Canadian Dollar (CAD) Support",
                 content_02mar: `You asked for it! The <strong>Canadian Dollar (CAD / CA$)</strong> is now available in the currency selection for your purchases. Market values and statistics now properly support this currency.`,
@@ -418,14 +438,13 @@
                 // 12 Jan
                 title_12jan: "New Arrivals",
                 content_12jan: `3 new "Special Blind Boxes" are available on the tracker! Time to update your collection or wishlist.<ul><li>Wish List Pendant</li><li>Good Health</li><li>Luck on the Way</li></ul>`,
-                              // Footer keys
+                              
+                // Footer keys
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
                 legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",

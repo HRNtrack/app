@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* PALETTE */
             --primary: #6A8C47;
             --primary-dark: #557235;
             --bg-body: #F5F5F0;
@@ -36,6 +35,7 @@
             display: flex; flex-direction: column; min-height: 100vh;
             padding-bottom: var(--nav-height-mobile);
             opacity: 0; transition: opacity 0.3s ease-in-out;
+            scroll-behavior: smooth;
         }
         body.auth-ready { opacity: 1; }
 
@@ -67,7 +67,6 @@
 
         .nav-right { display: flex; align-items: center; gap: 10px; }
 
-        /* BOUTON LANGUE */
         .lang-toggle {
             display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
             padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
@@ -78,7 +77,6 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        /* BOUTON AUTH */
         .btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
@@ -87,20 +85,12 @@
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        /* --- TOOLTIP --- */
         .tooltip-container { position: relative; display: inline-block; cursor: help; margin-left: 5px; }
-        .info-icon {
-            display: inline-block; width: 14px; height: 14px; background: #ccc; color: white;
-            border-radius: 50%; text-align: center; line-height: 14px; font-size: 10px;
-        }
-        .tooltip-text {
-            display: none; position: absolute; background: #333; color: white; padding: 10px;
-            border-radius: 8px; font-size: 11px; width: 200px; z-index: 3100; bottom: 120%; left: 50%; transform: translateX(-50%);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3); pointer-events: none; line-height: 1.4; text-align: left; text-transform: none; font-weight: normal;
-        }
+        .info-icon { display: inline-block; width: 14px; height: 14px; background: #ccc; color: white; border-radius: 50%; text-align: center; line-height: 14px; font-size: 10px; }
+        .tooltip-text { display: none; position: absolute; background: #333; color: white; padding: 10px; border-radius: 8px; font-size: 11px; width: 200px; z-index: 3100; bottom: 120%; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 10px rgba(0,0,0,0.3); pointer-events: none; line-height: 1.4; text-align: left; text-transform: none; font-weight: normal; }
         .tooltip-container:hover .tooltip-text { display: block; }
 
-        /* --- MOBILE --- */
+        /* --- MOBILE NAV --- */
         @media (min-width: 769px) { body { padding-bottom: 0; } }
         @media (max-width: 768px) {
             .site-logo { display: none; } 
@@ -111,9 +101,7 @@
                 padding: 8px 0 25px 0; justify-content: space-around; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
                 box-sizing: border-box; z-index: 2000;
             }
-            .nav-link {
-                flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; 
-            }
+            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
             .nav-link span:first-child { font-size: 20px; }
             .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
             .nav-link.active { color: var(--primary); }
@@ -121,17 +109,14 @@
             .modules-grid { grid-template-columns: 1fr !important; }
             .dashboard-grid { grid-template-columns: 1fr 1fr !important; }
             .stat-card.progression { grid-column: span 2 !important; }
-            .controls-row { flex-direction: column; gap: 10px; }
+            .dashboard-toolbar { flex-direction: column; position: relative !important; top: 0 !important; }
+            .toolbar-top { flex-direction: column; align-items: stretch !important; }
+            .filters-container { justify-content: flex-start; }
         }
 
         /* --- LAYOUT --- */
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
-        .announcement-box {
-            background: linear-gradient(135deg, var(--info-bg), white); border-left: 5px solid var(--info-blue);
-            color: #0d47a1; padding: 15px 20px; border-radius: 12px; margin-bottom: 25px;
-            display: flex; align-items: flex-start; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            position: relative; animation: slideDown 0.5s ease-out;
-        }
+        .announcement-box { background: linear-gradient(135deg, var(--info-bg), white); border-left: 5px solid var(--info-blue); color: #0d47a1; padding: 15px 20px; border-radius: 12px; margin-bottom: 25px; display: flex; align-items: flex-start; gap: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative; animation: slideDown 0.5s ease-out; }
         .announcement-icon { font-size: 24px; }
         .announcement-content { flex: 1; font-size: 13px; line-height: 1.5; }
         .announcement-title { font-weight: 700; font-size: 15px; margin-bottom: 5px; display: block; color: var(--info-blue); }
@@ -140,21 +125,14 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- ACCESS DENIED --- */
-        #access-denied {
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            height: 60vh; text-align: center; padding: 20px;
-        }
+        #access-denied { display: none; flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
         .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
         .btn-login-big:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(106, 140, 71, 0.5); background: var(--primary-dark); }
 
         /* --- DASHBOARD WIDGETS --- */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 25px; }
-        .stat-card {
-            background: var(--card-bg); padding: 20px; border-radius: 16px;
-            box-shadow: var(--shadow); position: relative; overflow: hidden;
-            border-left: 4px solid var(--primary); transition: transform 0.3s ease;
-        }
+        .stat-card { background: var(--card-bg); padding: 20px; border-radius: 16px; box-shadow: var(--shadow); position: relative; overflow: hidden; border-left: 4px solid var(--primary); transition: transform 0.3s ease; }
         .stat-card:hover { transform: translateY(-2px); }
         .stat-card h3 { margin: 0 0 5px 0; font-size: 11px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.8px; font-weight: 600; }
         .stat-card .value { font-size: 24px; font-weight: 700; color: var(--text-main); }
@@ -170,95 +148,109 @@
         .bar-bg { flex: 1; height: 6px; background: #E5E7EB; margin: 0 10px; border-radius: 3px; overflow: hidden; }
         .bar-fill { height: 100%; background: var(--primary); border-radius: 3px; }
 
-        /* --- FILTRES --- */
-        .filters-container { display: flex; gap: 10px; margin-bottom: 15px; overflow-x: auto; padding-bottom: 5px; }
-        .filter-btn { 
-            padding: 8px 16px; border-radius: 20px; border: 1px solid #E5E7EB; 
-            background: white; color: var(--text-sub); font-weight: 600; font-size: 12px; 
-            cursor: pointer; transition: 0.3s; white-space: nowrap;
-        }
+        /* --- BARRE D'OUTILS --- */
+        .dashboard-toolbar { background: var(--card-bg); padding: 15px 20px; border-radius: 16px; box-shadow: var(--shadow); margin-bottom: 25px; display: flex; flex-direction: column; gap: 15px; position: sticky; top: 90px; z-index: 100; }
+        .toolbar-top { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .filters-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 2px; }
+        .filter-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid #E5E7EB; background: white; color: var(--text-sub); font-weight: 600; font-size: 12px; cursor: pointer; transition: 0.3s; white-space: nowrap; }
         .filter-btn:hover { background: #f9fafb; color: var(--primary); border-color: var(--primary); }
         .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 2px 5px rgba(106, 140, 71, 0.3); }
 
-        .search-container { margin-bottom: 30px; }
-        .search-bar { width: 100%; padding: 14px 20px; border-radius: 14px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-shadow: var(--shadow); transition: 0.3s; box-sizing: border-box; outline: none; }
-        .search-bar:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
+        /* Module Recherche */
+        .search-wrapper { position: relative; flex: 1; min-width: 250px; display: flex; align-items: center; }
+        .search-wrapper::before { content: '🔍'; position: absolute; left: 15px; font-size: 14px; opacity: 0.5; pointer-events: none; }
+        .search-bar { width: 100%; padding: 12px 35px 12px 40px; border-radius: 12px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 13px; transition: 0.3s; box-sizing: border-box; outline: none; background: #F9FAFB; }
+        .search-bar:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
+        .search-clear { position: absolute; right: 10px; background: none; border: none; font-size: 16px; color: #9CA3AF; cursor: pointer; display: none; padding: 5px; }
+        .search-clear:hover { color: var(--red); }
 
-        .controls-row { display: flex; gap: 15px; margin-bottom: 15px; }
-        .control-select { 
-            flex: 1; padding: 10px 15px; border-radius: 12px; 
-            border: 1px solid #E5E7EB; background: white; 
-            font-family: inherit; font-size: 13px; color: var(--text-main);
-            cursor: pointer; box-shadow: var(--shadow); outline: none;
-        }
+        .controls-row { display: flex; gap: 15px; flex-wrap: wrap; }
+        .control-select { flex: 1; min-width: 140px; padding: 10px 15px; border-radius: 10px; border: 1px solid #E5E7EB; background: white; font-family: inherit; font-size: 13px; color: var(--text-main); cursor: pointer; outline: none; transition: 0.2s; }
         .control-select:focus { border-color: var(--primary); }
 
         /* --- GRID CARDS --- */
         .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; }
-        .card {
-            background: var(--card-bg); border-radius: 16px; overflow: hidden;
-            box-shadow: var(--shadow); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer; position: relative; border: 2px solid transparent;
-        }
+        .card { background: var(--card-bg); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: pointer; position: relative; border: 2px solid transparent; }
         .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(106, 140, 71, 0.3); }
         .card.owned { border-color: var(--primary); }
+        .card.wish { border-color: #E67E22; }
         .card.secret { border-color: var(--gold); background: linear-gradient(to bottom, #fff, var(--gold-light)); }
-        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f3f4f6; }
+        
+        .card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: #f3f4f6; transition: 0.3s; }
         .card img.missing { filter: grayscale(1) opacity(0.5); }
         .card.owned img { filter: none; opacity: 1; }
 
         .qty-badge { position: absolute; top: 8px; left: 8px; background: var(--primary); color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; z-index: 2; }
+        .wish-badge { position: absolute; top: 8px; left: 8px; background: #E67E22; color: white; padding: 2px 8px; border-radius: 12px; font-size: 10px; font-weight: 700; z-index: 2; box-shadow: 0 2px 5px rgba(230, 126, 34, 0.4); }
         .secret-badge { position: absolute; top: 8px; right: 8px; background: var(--gold); color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; z-index: 2; border: 2px solid white; }
+        
         .card-info { padding: 12px; text-align: center; }
         .card-name { font-weight: 700; font-size: 12px; margin: 0; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .card-serie { font-size: 10px; color: var(--text-sub); margin-top: 2px; }
 
-        /* TREND BADGE (SUR CARTE) */
-        .trend-badge {
-            display: inline-block; padding: 2px 6px; border-radius: 4px;
-            background: #f3f4f6; font-size: 9px; margin-left: 5px; font-weight: 700;
-        }
+        .trend-badge { display: inline-block; padding: 2px 6px; border-radius: 4px; background: #f3f4f6; font-size: 9px; margin-left: 5px; font-weight: 700; }
         .trend-up { color: #6A8C47; }
         .trend-down { color: #C0392B; }
         .trend-neutral { color: #9CA3AF; }
 
-        /* --- DETAILED CHART (DANS POPUP) --- */
-        .chart-container {
-            width: 100%;
-            height: 150px;
-            background: #F9FAFB;
-            border-radius: 8px;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            position: relative;
-            border: 1px solid #E5E7EB;
+        /* --- CSS DU GRAPHIQUE CORRIGÉ --- */
+        .chart-container { 
+            width: 100%; height: 140px; background: #F9FAFB; 
+            border-radius: 12px; margin-top: 10px; margin-bottom: 20px; 
+            position: relative; border: 1px solid #E5E7EB; 
+            overflow: hidden; 
         }
-        .detailed-svg {
-            width: 100%;
-            height: 100%;
-        }
+        .detailed-svg { width: 100%; height: 100%; display: block; }
         .axis-line { stroke: #E5E7EB; stroke-width: 1; }
-        .chart-line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+        .chart-line { fill: none; stroke-width: 2.5; stroke-linejoin: round; stroke-linecap: round; }
         .chart-line.up { stroke: #6A8C47; }
         .chart-line.down { stroke: #C0392B; }
         .axis-text { font-size: 10px; fill: #9CA3AF; font-family: sans-serif; }
 
-        /* MODALS */
+        /* --- MODALS (POPUP) --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
+        
+        /* Popup PC (Agrandie) */
+        .modal-content { background: white; width: 90%; max-width: 600px; padding: 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
+        
+        /* Popup Mobile (Bottom Sheet) */
+        @media (max-width: 768px) {
+            .modal-overlay { align-items: flex-end; }
+            .modal-content { 
+                width: 100%; max-width: none; border-radius: 24px 24px 0 0; padding: 25px 20px; 
+                max-height: 85vh; margin: 0; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+        }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
+        /* En-tête Modal */
+        .modal-header-info { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #E5E7EB; }
+        .modal-header-img-wrapper { position: relative; flex-shrink: 0; }
+        .modal-header-img-wrapper img { width: 90px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid #E5E7EB; }
+        @media (max-width: 768px) { .modal-header-img-wrapper img { width: 70px; height: 70px; } }
+        .modal-header-text { text-align: left; flex: 1; }
+
         .form-label { font-size: 11px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; display: block; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        input, select, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
+        @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;} } 
+        
+        input, select, textarea { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; background: #fff; }
         input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); }
-        .read-only-field { background: #F3F4F6; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; color: #6A8C47; font-weight: 700; font-size: 14px; }
-        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
+        .read-only-field { background: #F3F4F6; padding: 12px; border-radius: 10px; border: 1px solid #E5E7EB; color: #6A8C47; font-weight: 700; font-size: 14px; }
+        
+        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; margin-top: 10px; transition: 0.2s; }
         .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600;}
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 12px; cursor: pointer; margin-top: 5px; font-size: 13px; font-weight: 600;}
         .btn-cancel:hover { text-decoration: underline; }
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
-        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
-
+        
+        #btn-back-to-top {
+            position: fixed; bottom: 30px; right: 30px; width: 50px; height: 50px;
+            background: var(--primary); color: white; border: none; border-radius: 50%;
+            font-size: 20px; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4);
+            cursor: pointer; display: none; z-index: 1500; transition: 0.3s;
+        }
+        #btn-back-to-top:hover { transform: translateY(-3px); background: var(--primary-dark); }
+        @media (max-width: 768px) { #btn-back-to-top { bottom: 100px; right: 20px; width: 45px; height: 45px; } }
     </style>
 </head>
 <body>
@@ -340,51 +332,58 @@
             </div>
         </div>
 
-        <div class="filters-container">
-            <button class="filter-btn active" onclick="window.setFilter('all')" id="btn-all" data-t="filterAll">Tout voir</button>
-            <button class="filter-btn" onclick="window.setFilter('owned')" id="btn-owned" data-t="filterOwned">Ma Collection</button>
-            <button class="filter-btn" onclick="window.setFilter('wish')" id="btn-wish" data-t="filterWish">Wishlist</button>
-        </div>
-
-        <div class="controls-row">
-            <select id="filter-series" class="control-select" onchange="window.updateGrid()">
-                <option value="all" data-t="optAllSeries">Toutes les séries</option>
-            </select>
-            <select id="sort-order" class="control-select" onchange="window.updateGrid()">
-                <option value="date_desc" data-t="sortDateDesc">Date d'ajout (Récent)</option>
-                <option value="price_desc" data-t="sortPriceDesc">Prix (Haut → Bas)</option>
-                <option value="price_asc" data-t="sortPriceAsc">Prix (Bas → Haut)</option>
-                <option value="serie_asc">Série (A-Z)</option>
-                <option value="name_asc" data-t="sortNameAsc">Nom (A-Z)</option>
-                <option value="name_desc" data-t="sortNameDesc">Nom (Z-A)</option>
-            </select>        </div>
-
-        <div class="search-container">
-            <input type="text" class="search-bar" id="searchBar" onkeyup="window.updateGrid()" placeholder="Rechercher une figurine...">
+        <div class="dashboard-toolbar">
+            <div class="toolbar-top">
+                <div class="filters-container">
+                    <button class="filter-btn active" onclick="window.setFilter('all')" id="btn-all" data-t="filterAll">Tout voir</button>
+                    <button class="filter-btn" onclick="window.setFilter('owned')" id="btn-owned" data-t="filterOwned">Ma Collection</button>
+                    <button class="filter-btn" onclick="window.setFilter('wish')" id="btn-wish" data-t="filterWish">Wishlist</button>
+                </div>
+                <div class="search-wrapper">
+                    <input type="text" class="search-bar" id="searchBar" placeholder="Rechercher une figurine...">
+                    <button class="search-clear" id="searchClear" onclick="document.getElementById('searchBar').value=''; window.updateGrid();">✕</button>
+                </div>
+            </div>
+            <div class="controls-row">
+                <select id="filter-series" class="control-select" onchange="window.updateGrid()">
+                    <option value="all" data-t="optAllSeries">Toutes les séries</option>
+                </select>
+                <select id="sort-order" class="control-select" onchange="window.updateGrid()">
+                    <option value="date_desc" data-t="sortDateDesc">Date d'ajout (Récent)</option>
+                    <option value="price_desc" data-t="sortPriceDesc">Prix (Haut → Bas)</option>
+                    <option value="price_asc" data-t="sortPriceAsc">Prix (Bas → Haut)</option>
+                    <option value="serie_asc">Série (A-Z)</option>
+                    <option value="name_asc" data-t="sortNameAsc">Nom (A-Z)</option>
+                    <option value="name_desc" data-t="sortNameDesc">Nom (Z-A)</option>
+                </select>
+            </div>
         </div>
 
         <div id="hirono-grid" class="collection-grid"></div>
     </div>
 
+    <button id="btn-back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
+
     <div id="modal" class="modal-overlay">
         <div class="modal-content">
-            <div style="text-align:center; margin-bottom:15px;">
-                <img id="edit-img" src="" style="height:120px; object-fit:contain; border-radius:8px;">
-                <br>
-                <span id="edit-secret-badge" style="display:none; background:var(--gold); color:white; font-size:10px; font-weight:800; padding:2px 8px; border-radius:10px; margin-top:5px; text-transform:uppercase;">✨ Secret Rare</span>
+            <div class="modal-header-info">
+                <div class="modal-header-img-wrapper">
+                    <img id="edit-img" src="">
+                    <span id="edit-secret-badge" style="display:none; position:absolute; bottom:-10px; left:50%; transform:translateX(-50%); background:var(--gold); color:white; font-size:9px; font-weight:800; padding:2px 6px; border-radius:10px; text-transform:uppercase; border:2px solid white;">Secret</span>
+                </div>
+                <div class="modal-header-text">
+                    <h2 id="edit-title" style="margin:0; font-size:1.2rem; color:var(--text-main); line-height:1.2;"></h2>
+                    <p id="edit-subtitle" style="margin:6px 0 0; color:var(--primary); font-size:13px; font-weight:600;"></p>
+                </div>
             </div>
 
-            <h2 id="edit-title" style="margin:0; font-size:1.3rem;"></h2>
-            <p id="edit-subtitle" style="margin:2px 0 20px; color:var(--text-sub); font-size:12px;"></p>
-            
             <div id="modal-chart-section" style="display:none;">
                 <label class="form-label" data-t="lblChartTitle">Historique des prix (6 mois)</label>
-                <div id="modal-chart-container" class="chart-container">
-                    </div>
+                <div id="modal-chart-container" class="chart-container"></div>
             </div>
              
             <label class="form-label" data-t="lblStatus">Statut</label>
-            <select id="input-status" style="margin-bottom:15px;">
+            <select id="input-status" style="margin-bottom:15px; background:#F9FAFB;">
                 <option value="No status" data-t="optNone">Non possédé</option>
                 <option value="Possédé" data-t="optOwned">Dans ma collection ✅</option>
                 <option value="Recherché" data-t="optWish">Wishlist ⭐</option>
@@ -420,7 +419,7 @@
                     <label class="form-label" data-t="lblPurchasePrice">Prix d'achat</label>
                     <div style="display:flex; gap:5px;">
                         <input type="number" id="modal-price" placeholder="0" step="0.01" style="flex:1;">
-                        <select id="modal-currency" style="width:70px; padding:10px; border-radius:8px; border:1px solid #E5E7EB;">
+                        <select id="modal-currency" style="width:70px; border-radius:10px; border:1px solid #E5E7EB; background:#fff;">
                             <option value="EUR">€</option>
                             <option value="USD">$</option>
                             <option value="CAD">CA$</option>
@@ -432,13 +431,13 @@
             </div>
 
             <div class="form-row">
-                <div style="grid-column: span 2;">
+                <div style="grid-column: 1 / -1;">
                     <label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date">
                 </div>
             </div>
              
             <label class="form-label" data-t="lblNotes">Notes</label>
-            <textarea id="input-note" rows="2"></textarea>
+            <textarea id="input-note" rows="2" placeholder="Où l'avez-vous acheté ? Un détail ?"></textarea>
 
             <button class="btn-save" onclick="window.sauvegarder()" data-t="btnSave">Enregistrer</button>
             <button class="btn-cancel" onclick="window.fermer()" data-t="btnClose">Fermer</button>
@@ -461,7 +460,22 @@
     <div id="footer-placeholder"></div>
 
     <script>
-        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
+        // --- GESTION BOUTON SCROLL TOP & RECHERCHE ---
+        const searchInput = document.getElementById('searchBar');
+        const searchClear = document.getElementById('searchClear');
+        const btnTop = document.getElementById('btn-back-to-top');
+
+        searchInput.addEventListener('input', function() {
+            searchClear.style.display = this.value.length > 0 ? 'block' : 'none';
+            window.updateGrid();
+        });
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) btnTop.style.display = 'block';
+            else btnTop.style.display = 'none';
+        });
+
+        // --- COOKIES & ANALYTICS ---
         const GA_ID = 'G-RFP1HDMW49';
         function loadAnalytics() {
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
@@ -476,12 +490,8 @@
         }
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
-            if (accept) {
-                localStorage.setItem('cookieConsent', 'true');
-                loadAnalytics();
-            } else {
-                localStorage.setItem('cookieConsent', 'false');
-            }
+            if (accept) { localStorage.setItem('cookieConsent', 'true'); loadAnalytics(); } 
+            else { localStorage.setItem('cookieConsent', 'false'); }
             if(banner) banner.style.display = 'none';
         };
         window.initCookieLogic = function() {
@@ -497,15 +507,21 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
-        // MODIFICATION ICI : IMPORT DES DONNÉES DEPUIS LE FICHIER EXTERNE
-        import { baseData } from './data.js';
+        let baseData = [];
+        try {
+            const module = await import('./data.js');
+            baseData = module.baseData || [];
+        } catch(e) {
+            console.error("Erreur critique : Impossible de charger data.js", e);
+            alert("Erreur de connexion à la base de données locale. Rechargez la page.");
+        }
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- I18N DICTIONNAIRE COMPLET ---
+        // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
@@ -513,15 +529,10 @@
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", btnShare: "Partager",
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
                 filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist", searchPlaceholder: "Rechercher une figurine...",
-                optAllSeries: "Toutes les séries",
-                sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)", sortDateDesc: "Date d'achat (Récent)",
+                optAllSeries: "Toutes les séries", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)", sortDateDesc: "Date d'achat (Récent)",
                 lblStatus: "Statut", lblCondition: "Condition", lblQty: "Quantité", lblDate: "Date d'achat", lblNotes: "Notes",
                 lblMarketPrice: "Cote Moyenne", lblPurchasePrice: "Mon Prix", lblCardCote: "Cote", lblCardPaid: "Achat",
-                
-                // NOUVEAUX CHAMPS GRAPHIQUE
-                lblChartTitle: "Historique des prix (6 mois)",
-                lblAxisNow: "Auj.", lblAxisPast: "-6 mois",
-                
+                lblChartTitle: "Historique des prix (6 mois)", lblAxisNow: "Auj.", lblAxisPast: "-6 mois",
                 announcementTitle: "Nouveauté : Suivi des Cotes !", announcementMsg: "Comparez désormais la cote moyenne avec votre prix d'achat. <br><strong>Important :</strong> Veuillez bien sélectionner la devise (EUR/USD...) lors de vos saisies pour que les calculs soient justes !",
                 btnSave: "Enregistrer", btnSaving: "Sauvegarde...", btnClose: "Fermer",
                 optNone: "Non possédé", optOwned: "Dans ma collection ✅", optWish: "Wishlist ⭐",
@@ -530,19 +541,9 @@
                 alertFill: "Merci de remplir tous les champs.", alertErr: "Erreur : ", confirmLogout: "Voulez-vous vraiment vous déconnecter ?", msgNoResults: "Aucune figurine trouvée.",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono.", footerNav: "Navigation", footerDisclaimer: "Ce site est un projet de fan (Fanmade).", legalMainTitle: "Mentions Légales",
                 priceTooltip: "Prix moyen calculé sur les achats déclarés par la communauté.<br>Ceci est une estimation, pas une valeur officielle.",
-                                  // Footer keys
-                navReleases: "Mises à jour", 
-                footerNav: "Navigation",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
-                footerLegalTitle: "Infos Légales",
-                cookieTitle: "🍪 Cookies ?",
-                cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
-                cookieDecline: "Non merci",
-                cookieAccept: "Accepter" 
+                navReleases: "Mises à jour", footerLegalTitle: "Infos Légales", cookieTitle: "🍪 Cookies ?", cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?", cookieDecline: "Non merci", cookieAccept: "Accepter",
+                msgNoHistory: "Pas encore assez de recul pour cette figurine",
+                msgOneData: "1 seule donnée enregistrée"
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
@@ -550,15 +551,10 @@
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", btnShare: "Share",
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
                 filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist", searchPlaceholder: "Search for a figure...",
-                optAllSeries: "All Series",
-                sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)", sortDateDesc: "Purchase Date (Newest)",
+                optAllSeries: "All Series", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)", sortDateDesc: "Purchase Date (Newest)",
                 lblStatus: "Status", lblCondition: "Condition", lblQty: "Quantity", lblDate: "Purchase Date", lblNotes: "Notes",
                 lblMarketPrice: "Market Price", lblPurchasePrice: "My Price", lblCardCote: "Est.", lblCardPaid: "Paid",
-                
-                // NEW CHART LABELS
-                lblChartTitle: "Price History (6 months)",
-                lblAxisNow: "Today", lblAxisPast: "-6 mths",
-
+                lblChartTitle: "Price History (6 months)", lblAxisNow: "Today", lblAxisPast: "-6 mths",
                 announcementTitle: "New: Market Value Tracking!", announcementMsg: "You can now compare the average market value with your purchase price.",
                 btnSave: "Save", btnSaving: "Saving...", btnClose: "Close",
                 optNone: "Not owned", optOwned: "Owned ✅", optWish: "Wishlist ⭐",
@@ -567,19 +563,9 @@
                 alertFill: "Please fill in all fields.", alertErr: "Error: ", confirmLogout: "Are you sure you want to log out?", msgNoResults: "No figures found.",
                 footerDesc: "The ultimate tool to manage Hirono figure collection.", footerNav: "Navigation", footerDisclaimer: "Fanmade project.", legalMainTitle: "Legal Mentions",
                 priceTooltip: "Average price based on community purchases.<br>Estimate only.",
-                              // Footer keys
-                navReleases: "Updates",
-                footerNav: "Navigation",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
-                footerLegalTitle: "Legal Info",
-                cookieTitle: "🍪 Cookies ?",
-                cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
-                cookieDecline: "No thanks",
-                cookieAccept: "Accept"
+                navReleases: "Updates", footerLegalTitle: "Legal Info", cookieTitle: "🍪 Cookies ?", cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?", cookieDecline: "No thanks", cookieAccept: "Accept",
+                msgNoHistory: "Not enough historical data yet",
+                msgOneData: "Only 1 historical record"
             }
         };
 
@@ -660,12 +646,14 @@
                     document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
                     document.getElementById('main-container').style.setProperty('display', 'none', 'important');
                     myCollection = [...baseData]; 
+                    window.updateGrid();
                 }
                 document.body.classList.add('auth-ready');
             });
         }
 
         async function loadUserCollection(targetUid) {
+            if(baseData.length === 0) return;
             const docRef = doc(db, "users", targetUid);
             try {
                 const snap = await getDoc(docRef);
@@ -674,9 +662,7 @@
                     const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
                     myCollection = baseData.map(baseItem => {
                         const savedItem = cloudData.find(i => i.ID === baseItem.ID);
-                        if (savedItem) {
-                            return { ...baseItem, ...savedItem };
-                        }
+                        if (savedItem) return { ...baseItem, ...savedItem };
                         return baseItem;
                     });
                 } else { myCollection = [...baseData]; }
@@ -700,9 +686,6 @@
             if(!email || !pass) return alert(t('alertFill'));
             try { await createUserWithEmailAndPassword(auth, email, pass); window.toggleAuthModal(); } catch(e) { alert(t('alertErr') + e.message); }
         };
-        window.handleLogout = async () => {
-            if(confirm(t('confirmLogout'))) { await signOut(auth); location.reload(); }
-        };
 
         const initSeriesFilter = () => {
             if (!baseData || baseData.length === 0) return;
@@ -725,107 +708,105 @@
         };
 
         window.updateGrid = () => {
-            let result = [...myCollection];
+            try {
+                let result = [...myCollection];
 
-            // 1. FILTRAGE (Owned / Wishlist)
-            if (currentFilter === 'owned') result = result.filter(i => i.Status === 'Possédé');
-            if (currentFilter === 'wish') result = result.filter(i => i.Status === 'Recherché');
+                if (currentFilter === 'owned') result = result.filter(i => i.Status === 'Possédé');
+                if (currentFilter === 'wish') result = result.filter(i => i.Status === 'Recherché');
 
-            // 2. FILTRAGE (Série spécifique via le menu de gauche)
-            const serieVal = document.getElementById('filter-series').value;
-            if (serieVal !== 'all') result = result.filter(i => i.Serie === serieVal);
+                const serieVal = document.getElementById('filter-series').value;
+                if (serieVal !== 'all') result = result.filter(i => i.Serie === serieVal);
 
-            // 3. RECHERCHE
-            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
-            if (searchTerm) result = result.filter(i => i.Name.toLowerCase().includes(searchTerm) || i.Serie.toLowerCase().includes(searchTerm));
-            
-            // 4. TRI AVANCÉ
-            const sortMode = document.getElementById('sort-order').value;
-            
-            result.sort((a, b) => {
-                // Préparation des valeurs pour le tri
-                const priceA = parseFloat(a["Purchase price"]) || 0;
-                const priceB = parseFloat(b["Purchase price"]) || 0;
-                // Date : on utilise 0 (1970) si pas de date, pour les mettre à la fin
-                const dateA = a["Purchase date"] ? new Date(a["Purchase date"]).getTime() : 0;
-                const dateB = b["Purchase date"] ? new Date(b["Purchase date"]).getTime() : 0;
+                const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+                document.getElementById('searchClear').style.display = searchTerm.length > 0 ? 'block' : 'none';
+                if (searchTerm) result = result.filter(i => i.Name.toLowerCase().includes(searchTerm) || i.Serie.toLowerCase().includes(searchTerm));
+                
+                const sortMode = document.getElementById('sort-order').value;
+                
+                result.sort((a, b) => {
+                    const priceA = parseFloat(a["Purchase price"]) || 0;
+                    const priceB = parseFloat(b["Purchase price"]) || 0;
+                    const dateA = a["Purchase date"] ? new Date(a["Purchase date"]).getTime() : 0;
+                    const dateB = b["Purchase date"] ? new Date(b["Purchase date"]).getTime() : 0;
 
-                switch (sortMode) {
-                    case 'price_desc': 
-                        return priceB - priceA; // Plus cher en premier
-                    case 'price_asc': 
-                        const pA = priceA === 0 ? 999999 : priceA;
-                        const pB = priceB === 0 ? 999999 : priceB;
-                        return pA - pB; 
-                    case 'date_desc': 
-                        return dateB - dateA; // Plus récent en premier
-                    case 'serie_asc': 
-                        return a.Serie.localeCompare(b.Serie); // Alphabétique Série
-                    case 'name_desc': 
-                        return b.Name.localeCompare(a.Name);
-                    case 'name_asc': 
-                    default: 
-                        return a.Name.localeCompare(b.Name);
-                }
-            });
+                    switch (sortMode) {
+                        case 'price_desc': return priceB - priceA; 
+                        case 'price_asc': 
+                            const pA = priceA === 0 ? 999999 : priceA;
+                            const pB = priceB === 0 ? 999999 : priceB;
+                            return pA - pB; 
+                        case 'date_desc': return dateB - dateA; 
+                        case 'serie_asc': return (a.Serie || "").localeCompare(b.Serie || "");
+                        case 'name_desc': return (b.Name || "").localeCompare(a.Name || "");
+                        case 'name_asc': 
+                        default: return (a.Name || "").localeCompare(b.Name || "");
+                    }
+                });
 
-            window.render(myCollection, result);
-        };
-        // --- CHART GENERATORS ---
-
-        function getFakeHistory(currentPrice) {
-            if (!currentPrice || currentPrice === 0) return [];
-            let history = [];
-            let price = currentPrice;
-            for (let i = 0; i < 5; i++) {
-                let variance = (Math.random() * 0.4) - 0.2; 
-                history.unshift(price * (1 + variance));
+                window.render(myCollection, result);
+            } catch (e) {
+                console.error("Erreur lors de la mise à jour de la grille:", e);
             }
-            history.push(currentPrice);
-            return history;
-        }
+        };
 
-        // GRAPHIQUE DÉTAILLÉ (POUR POPUP)
+        // --- GÉNÉRATEUR SVG (Gère 1 point ou plus) ---
         function generateDetailedChartSVG(data, colorClass, currencySymbol) {
-            if (!data || data.length < 2) return '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#ccc;font-size:12px;">Données insuffisantes</div>';
+            if (!data || data.length === 0) return `<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#ccc;font-size:12px;text-align:center;padding:0 20px;">${t('msgNoHistory')}</div>`;
             
-            const maxVal = Math.max(...data);
-            const minVal = Math.min(...data);
-            const range = maxVal - minVal || 1;
+            const width = 400; 
+            const height = 140; 
+            const paddingLeft = 10;
+            const paddingRight = 55;
+            const paddingTop = 20; 
+            const paddingBottom = 20;
+            const chartW = width - paddingLeft - paddingRight; 
+            const chartH = height - paddingTop - paddingBottom;
+
+            // S'il n'y a qu'une seule donnée enregistrée dans Firebase
+            if (data.length === 1) {
+                const val = Math.round(data[0]);
+                return `
+                <svg class="detailed-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; display: block;">
+                    <line x1="${paddingLeft}" y1="${height/2}" x2="${paddingLeft + chartW}" y2="${height/2}" stroke="#E5E7EB" stroke-dasharray="4" />
+                    <text x="${paddingLeft + chartW + 8}" y="${height/2 + 4}" font-size="11" fill="#9CA3AF" font-family="sans-serif" font-weight="600">${val}${currencySymbol}</text>
+                    <circle cx="${paddingLeft + chartW / 2}" cy="${height/2}" r="4" fill="#6A8C47" stroke="#fff" stroke-width="1.5" />
+                    <text x="${paddingLeft + chartW / 2}" y="${height/2 + 20}" font-size="10" fill="#9CA3AF" font-family="sans-serif" text-anchor="middle">${t('msgOneData')}</text>
+                </svg>
+                `;
+            }
+
+            // S'il y a 2 données ou plus
+            const maxVal = Math.max(...data); 
+            const minVal = Math.min(...data); 
             
-            // Dimensions SVG
-            const width = 300;
-            const height = 150;
-            const padding = 20; // espace pour les labels
-            
-            // Zone de tracé
-            const chartW = width - padding;
-            const chartH = height - padding * 2;
-            
-            // Création de la ligne
+            const range = (maxVal - minVal) === 0 ? 1 : (maxVal - minVal) * 1.2;
+            const adjustedMin = minVal - (range * 0.1);
+
             const points = data.map((val, index) => {
-                const x = (index / (data.length - 1)) * chartW;
-                // Inverser Y car SVG commence en haut
-                const y = chartH - ((val - minVal) / range) * chartH + padding; 
+                const x = paddingLeft + (index / (data.length - 1)) * chartW;
+                const y = paddingTop + chartH - ((val - adjustedMin) / range) * chartH; 
                 return `${x},${y}`;
             }).join(' ');
 
             const color = (colorClass === 'trend-up') ? '#6A8C47' : '#C0392B';
+            
+            const lastVal = data[data.length - 1];
+            const lastY = paddingTop + chartH - ((lastVal - adjustedMin) / range) * chartH;
 
             return `
-            <svg class="detailed-svg" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none">
-                <line x1="0" y1="${padding}" x2="${chartW}" y2="${padding}" class="axis-line" stroke-dasharray="4" />
-                <line x1="0" y1="${height - padding}" x2="${chartW}" y2="${height - padding}" class="axis-line" />
+            <svg class="detailed-svg" viewBox="0 0 ${width} ${height}" style="width: 100%; height: 100%; display: block;">
+                <line x1="${paddingLeft}" y1="${paddingTop}" x2="${paddingLeft + chartW}" y2="${paddingTop}" stroke="#E5E7EB" stroke-dasharray="4" />
+                <line x1="${paddingLeft}" y1="${height - paddingBottom}" x2="${paddingLeft + chartW}" y2="${height - paddingBottom}" stroke="#E5E7EB" />
                 
-                <text x="${chartW + 5}" y="${padding + 4}" class="axis-text">${Math.round(maxVal)}${currencySymbol}</text>
-                <text x="${chartW + 5}" y="${height - padding + 4}" class="axis-text">${Math.round(minVal)}${currencySymbol}</text>
+                <text x="${paddingLeft + chartW + 8}" y="${paddingTop + 4}" font-size="11" fill="#9CA3AF" font-family="sans-serif" font-weight="600">${Math.round(maxVal)}${currencySymbol}</text>
+                <text x="${paddingLeft + chartW + 8}" y="${height - paddingBottom + 4}" font-size="11" fill="#9CA3AF" font-family="sans-serif" font-weight="600">${Math.round(minVal)}${currencySymbol}</text>
                 
-                <text x="0" y="${height - 5}" class="axis-text">${t('lblAxisPast')}</text>
-                <text x="${chartW - 20}" y="${height - 5}" class="axis-text">${t('lblAxisNow')}</text>
+                <text x="${paddingLeft}" y="${height - 5}" font-size="10" fill="#9CA3AF" font-family="sans-serif">${t('lblAxisPast')}</text>
+                <text x="${paddingLeft + chartW - 25}" y="${height - 5}" font-size="10" fill="#9CA3AF" font-family="sans-serif">${t('lblAxisNow')}</text>
 
-                <polyline points="${points}" fill="none" stroke="${color}" stroke-width="2" stroke-linejoin="round" />
+                <polyline points="${points}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" />
                 
-                <circle cx="${chartW}" cy="${chartH - ((data[data.length-1] - minVal) / range) * chartH + padding}" r="3" fill="${color}" />
+                <circle cx="${paddingLeft + chartW}" cy="${lastY}" r="4" fill="${color}" stroke="#fff" stroke-width="1.5" />
             </svg>
             `;
         }
@@ -834,11 +815,10 @@
             if(!dataForGrid) dataForGrid = dataForStats;
             let stats = { spent: 0, totalItems: 0, ownedUniques: 0, secretsFound: 0, doubles: 0 };
             let condMap = {}; let serMap = {};
+            
             dataForStats.forEach(item => {
-                const q = parseInt(item.Quantity) || 0;
-                const p = parseFloat(item["Purchase price"]) || 0;
-                const c = item.Condition || "Inconnu";
-                const s = item.Serie || "Inconnue";
+                const q = parseInt(item.Quantity) || 0; const p = parseFloat(item["Purchase price"]) || 0;
+                const c = item.Condition || "Inconnu"; const s = item.Serie || "Inconnue";
                 if (!serMap[s]) serMap[s] = { owned: 0, total: 0 };
                 serMap[s].total++;
                 if (item.Status === "Possédé") {
@@ -848,6 +828,7 @@
                     condMap[c] = (condMap[c] || 0) + q; serMap[s].owned++;
                 }
             });
+
             const percent = dataForStats.length > 0 ? Math.round((stats.ownedUniques / dataForStats.length) * 100) : 0;
             document.getElementById('progression-text').innerText = percent + "%";
             document.getElementById('progress-fill').style.width = percent + "%";
@@ -857,6 +838,7 @@
             document.getElementById('stat-total').innerText = stats.ownedUniques;
             document.getElementById('stat-doubles-val').innerText = stats.doubles;
             document.getElementById('stat-secrets').innerText = stats.secretsFound;
+            
             const renderBar = (label, textVal, widthPercent, color) => `
                 <div class="bar-row"><span style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:110px;">${label}</span><span>${textVal}</span></div>
                 <div class="bar-bg"><div class="bar-fill" style="width:${widthPercent}%; background:${color}"></div></div>`;
@@ -870,23 +852,33 @@
                     return { name: k, percent: p };
                 }).sort((a,b) => b.percent - a.percent).filter(s => s.percent > 0).slice(0,3).map(s => renderBar(s.name, s.percent + '%', s.percent, '#6A8C47')).join('');
             
-            // RENDU GRILLE
             const grid = document.getElementById('hirono-grid');
             grid.innerHTML = "";
-const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };            
+            const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };            
             const currencySymbols = { "EUR": "€", "USD": "$", "CAD": "CA$", "GBP": "£", "CNY": "¥" };
-
             const fragment = document.createDocumentFragment();
+            
             dataForGrid.forEach(item => {
                 const owned = item.Status === "Possédé";
+                const isWish = item.Status === "Recherché";
                 const isSecret = item["Secret Rare"] === "Yes";
+                
                 const card = document.createElement('div');
-                card.className = `card ${owned ? 'owned' : ''} ${isSecret ? 'secret' : ''}`;
+                card.className = `card ${owned ? 'owned' : ''} ${isWish ? 'wish' : ''} ${isSecret ? 'secret' : ''}`;
                 const imgUrl = (item.Image && item.Image.trim() !== "") ? item.Image : `https://via.placeholder.com/300/e5e7eb/9ca3af?text=${encodeURIComponent(item.Name)}`;
                 card.onclick = () => window.openModal(item);
                 
-                // --- LOGIQUE PRIX & BADGE % SEULEMENT (PLUS DE COURBE ICI) ---
-                let avgBaseEur = communityPrices[item.ID] || 0;
+                let marketData = communityPrices[item.ID];
+                let avgBaseEur = 0;
+                let historyData = [];
+
+                if (marketData && typeof marketData === 'object') {
+                    avgBaseEur = marketData.current || 0;
+                    historyData = marketData.history || [];
+                } else {
+                    avgBaseEur = marketData || 0; 
+                }
+
                 let displayCurrency = (currentLang === 'fr') ? 'EUR' : 'USD'; 
                 let rate = RATES[displayCurrency];
                 let finalPrice = (avgBaseEur * rate).toFixed(0);
@@ -894,24 +886,29 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                 let priceHtml = "";
 
                 if (avgBaseEur > 0) {
-                    const history = getFakeHistory(parseFloat(finalPrice));
-                    const startPrice = history[0];
-                    const endPrice = history[history.length - 1];
-                    const percentChange = ((endPrice - startPrice) / startPrice) * 100;
-                    let trendClass = 'trend-neutral';
+                    let trendClass = 'trend-neutral'; 
                     let sign = '';
-                    if (percentChange > 1) { trendClass = 'trend-up'; sign = '+'; }
-                    if (percentChange < -1) { trendClass = 'trend-down'; sign = ''; } 
+                    let percentChange = 0;
+                    let badgeHtml = '';
 
-                    // Juste le prix et le badge %, pas de SVG ici
+                    // N'affiche le badge que s'il y a 2 mois ou plus
+                    if (historyData.length >= 2) {
+                        const startPrice = historyData[0] * rate;
+                        const endPrice = historyData[historyData.length - 1] * rate;
+                        if(startPrice > 0) {
+                            percentChange = ((endPrice - startPrice) / startPrice) * 100;
+                            if (percentChange > 1) { trendClass = 'trend-up'; sign = '+'; }
+                            else if (percentChange < -1) { trendClass = 'trend-down'; sign = ''; } 
+                            badgeHtml = `<span class="trend-badge ${trendClass}">${sign}${percentChange.toFixed(0)}%</span>`;
+                        }
+                    }
+
                     priceHtml = `
                         <div style="font-size:11px; margin-top:8px; color:#555;">
                             <div style="display:flex; justify-content:center; align-items:center; gap:5px; margin-bottom:2px;">
                                 <span style="font-size:10px; color:#777;">${t('lblCardCote')}:</span>
                                 <span style="font-weight:800; font-size:13px; color:#1A1A1A;">${finalPrice}${symbol}</span>
-                                <span class="trend-badge ${trendClass}">
-                                    ${sign}${percentChange.toFixed(0)}%
-                                </span>
+                                ${badgeHtml}
                             </div>
                         </div>`;
                 } else {
@@ -922,6 +919,7 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
 
                 card.innerHTML = `
                     ${(owned && item.Quantity > 1) ? `<div class="qty-badge">x${item.Quantity}</div>` : ''}
+                    ${isWish ? `<div class="wish-badge">⭐ Wishlist</div>` : ''}
                     ${isSecret ? `<div class="secret-badge">★</div>` : ''}
                     <img src="${imgUrl}" class="${owned ? '' : 'missing'}" loading="lazy">
                     <div class="card-info">
@@ -937,14 +935,12 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             if(dataForGrid.length === 0) grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding:40px; color:#9CA3AF;">${t('msgNoResults')}</div>`;
         };
 
-        // --- ACTIONS MODAL ---
         window.openModal = (item) => {
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
             document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
-            const secretBadge = document.getElementById('edit-secret-badge');
-            secretBadge.style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
+            document.getElementById('edit-secret-badge').style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
 
             document.getElementById('input-status').value = item.Status || "No status";
             document.getElementById('input-condition').value = item.Condition || "Inconnu";
@@ -952,9 +948,18 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             document.getElementById('modal-price').value = item["Purchase price"] || "";
             document.getElementById('modal-currency').value = item.Currency || "EUR"; 
 
-            // COTE ET GRAPHIQUE DÉTAILLÉ
-            const RATES = { "EUR": 1, "USD": 1.08, "CAD": 1.48, "GBP": 0.85, "CNY": 7.8 };
-            let avgBaseEur = communityPrices[item.ID] || 0;
+            let marketData = communityPrices[item.ID];
+            let avgBaseEur = 0;
+            let realHistory = [];
+
+            if (marketData && typeof marketData === 'object') {
+                avgBaseEur = marketData.current || 0;
+                realHistory = marketData.history || [];
+            } else {
+                avgBaseEur = marketData || 0;
+            }
+
+            const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             let displayCurrency = (currentLang === 'fr') ? 'EUR' : 'USD'; 
             let rate = RATES[displayCurrency];
             let symbol = (displayCurrency === 'EUR') ? '€' : '$';
@@ -966,14 +971,20 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                 let finalPrice = (avgBaseEur * rate).toFixed(0);
                 document.getElementById('modal-market-price').innerText = `${finalPrice} ${symbol}`;
                 
-                // GÉNÉRATION CHART DÉTAILLÉ
-                const history = getFakeHistory(parseFloat(finalPrice));
-                const startPrice = history[0];
-                const endPrice = history[history.length - 1];
-                let trendClass = (endPrice > startPrice) ? 'trend-up' : 'trend-down';
-                
-                chartContainer.innerHTML = generateDetailedChartSVG(history, trendClass, symbol);
-                chartSection.style.display = 'block';
+                if (realHistory.length > 0) {
+                    const historyConverted = realHistory.map(price => price * rate);
+                    const startPrice = historyConverted[0];
+                    const endPrice = historyConverted[historyConverted.length - 1];
+                    let trendClass = 'trend-neutral';
+                    if (historyConverted.length >= 2) {
+                        trendClass = (endPrice > startPrice) ? 'trend-up' : 'trend-down';
+                    }
+                    chartContainer.innerHTML = generateDetailedChartSVG(historyConverted, trendClass, symbol);
+                    chartSection.style.display = 'block';
+                } else {
+                    chartContainer.innerHTML = `<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#ccc;font-size:12px;text-align:center;padding:0 20px;">${t('msgNoHistory')}</div>`;
+                    chartSection.style.display = 'block';
+                }
             } else {
                 document.getElementById('modal-market-price').innerText = "-";
                 chartSection.style.display = 'none';
