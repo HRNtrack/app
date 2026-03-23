@@ -197,7 +197,8 @@ export const baseData = [            {"ID":"CIT-BELONG","Name":"Belonging","Seri
             {"ID":"SPE-GOODHEL","Name":"Good Health","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
             {"ID":"SPE-LUCKON","Name":"Luck on the Way","Serie":"Special Blind Box","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},    
             {"ID":"SPE-LUCKSP","Name":"Luck on the Way (Special edition)","Serie":"Special Blind Box","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png"}, 
-        {"ID":"SPE-BRICK","Name":"Freedom Island Plus","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SxQFNRtM/3-cbc36e3e-efa9-480b-98c9-be77d0b80ab6.webp"},
-        {"ID":"SPE-PHARMA","Name":"Well Pharmacy","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/yNkNxvrk/Capture-d-ecran-2026-02-22-210901-removebg-preview.png"},
-        {"ID":"SPE-ELEPMAR","Name":"Elephant in the room","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L5XSQXKt/Capture-d-ecran-2026-02-22-212915-removebg-preview.png"}
-        ];
+            {"ID":"SPE-BRICK","Name":"Freedom Island Plus","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SxQFNRtM/3-cbc36e3e-efa9-480b-98c9-be77d0b80ab6.webp"},
+            {"ID":"SPE-PHARMA","Name":"Well Pharmacy","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qMbWkbNr/Capture-d-ecran-2026-02-22-210901-removebg-preview.png"},
+            {"ID":"SPE-ELEPMAR","Name":"Elephant in the room","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L5XSQXKt/Capture-d-ecran-2026-02-22-212915-removebg-preview.png"},
+            {"ID":"SPE-TUKTUK","Name":"Tuk-Tuk Figure","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png"}
+        ]
