@@ -200,5 +200,20 @@ export const baseData = [            {"ID":"CIT-BELONG","Name":"Belonging","Seri
             {"ID":"SPE-BRICK","Name":"Freedom Island Plus","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/SxQFNRtM/3-cbc36e3e-efa9-480b-98c9-be77d0b80ab6.webp"},
             {"ID":"SPE-PHARMA","Name":"Well Pharmacy","Serie":"Special Blister","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/qMbWkbNr/Capture-d-ecran-2026-02-22-210901-removebg-preview.png"},
             {"ID":"SPE-ELEPMAR","Name":"Elephant in the room","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L5XSQXKt/Capture-d-ecran-2026-02-22-212915-removebg-preview.png"},
-            {"ID":"SPE-TUKTUK","Name":"Tuk-Tuk","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png"}
+            {"ID":"SPE-TUKTUK","Name":"Tuk-Tuk Figure","Serie":"Special Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png"},
+            {"ID":"SPE-HAREPINK","Name":"Little Hare Pink","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/Y9y0xQ4g/20260327-173407-725622-1-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png"},
+            {"ID":"SPE-HAREBLACK","Name":"Little Hare Black","Serie":"Special Plush Doll","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/V65L557P/20260327-173406-609438-2-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png"},
+            {"ID":"TAM-CAMPING","Name":"Camping","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x1kwkMQg/1774601484881-camping.webp"},
+        {"ID":"TAM-CANNED","Name":"Canned Dreams","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/s2dNvLwr/1774601475301-canned-dreams.webp"},
+        {"ID":"TAM-SISYPH","Name":"Sisyphean Work","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/4ym58vBP/1774601912524-sisyphean-work.webp"},
+        {"ID":"TAM-LIVEUN","Name":"Live Under Receipts","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/x1KPF13Q/1774601451638-live-under-receipts.webp"},
+        {"ID":"TAM-BOILING","Name":"Boiling Frog","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/FH7mrBDQ/1774601440500-boiling-frog.webp"},
+        {"ID":"TAM-FULLT","Name":"Full-Time","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/6q5gH8m0/1774601419385-full-time.webp"},
+        {"ID":"TAM-CAGED","Name":"Caged Bird","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/JnR2nymS/1774601408669-caged-bird.webp"},
+        {"ID":"TAM-DIGITAL","Name":"Digital Blind","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/5tb35ZTc/1774601399931-digital-bind.webp"},
+        {"ID":"TAM-SELF","Name":"Self-Anchored","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/T1MqwFr7/1774601391633-self-anchored.webp"},
+        {"ID":"TAM-FATED","Name":"Fated","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wTkcqW30/1774601382852-fated.webp"},
+        {"ID":"TAM-CITY","Name":"City Escape","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L5pLRfp3/1774601374215-city-escape.webp"},
+        {"ID":"TAM-OVERL","Name":"Overload","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/t4M6J8bn/1774601365271-overload.webp"},
+        {"ID":"TAM-BOUND","Name":"Boundary","Serie":"Tamed Wildgrass","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp"}
         ]

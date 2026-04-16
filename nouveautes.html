@@ -113,6 +113,7 @@
             background: var(--dark-bg); color: white; padding: 4px 10px; 
             border-radius: 6px; font-size: 10px; font-weight: 600; 
         }
+        .tag-new { background: var(--primary); }
 
         /* GRID */
         .release-grid {
@@ -265,10 +266,18 @@
 
         <div class="release-section">
             <div class="section-header">
-                <span class="section-name" data-t="secAll">Toutes les nouveautés</span>
+                <span class="section-name" data-t="secTamed">Série Tamed Wildgrass</span>
+                <span class="section-tag tag-new">NOUVEAU</span>
+            </div>
+            <div class="release-grid" id="grid-tamed"></div>
+        </div>
+
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secSpecials">Collaborations & Events</span>
                 <span class="section-tag">2025-2026</span>
             </div>
-            <div class="release-grid" id="grid-all"></div>
+            <div class="release-grid" id="grid-others"></div>
         </div>
 
     </div>
@@ -395,14 +404,27 @@
 
         // --- DATA DES NOUVEAUTÉS ---
         const newReleases = [
-            { id: "SPE-TUKTUK", name: "Tuk-Tuk", serie: "Special Edition", cat: "specials", img: "https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png" }, // NOUVELLE FIGURINE AJOUTÉE ICI
+            // TAMED WILDGRASS
+            { id: "TAM-CAMPING", name: "Camping", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/x1kwkMQg/1774601484881-camping.webp" },
+            { id: "TAM-CANNED", name: "Canned Dreams", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/s2dNvLwr/1774601475301-canned-dreams.webp" },
+            { id: "TAM-SISYPH", name: "Sisyphean Work", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/4ym58vBP/1774601912524-sisyphean-work.webp" },
+            { id: "TAM-LIVEUN", name: "Live Under Receipts", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/x1KPF13Q/1774601451638-live-under-receipts.webp" },
+            { id: "TAM-BOILING", name: "Boiling Frog", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/FH7mrBDQ/1774601440500-boiling-frog.webp" },
+            { id: "TAM-FULLT", name: "Full-Time", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/6q5gH8m0/1774601419385-full-time.webp" },
+            { id: "TAM-CAGED", name: "Caged Bird", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/JnR2nymS/1774601408669-caged-bird.webp" },
+            { id: "TAM-DIGITAL", name: "Digital Blind", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/5tb35ZTc/1774601399931-digital-bind.webp" },
+            { id: "TAM-SELF", name: "Self-Anchored", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/T1MqwFr7/1774601391633-self-anchored.webp" },
+            { id: "TAM-FATED", name: "Fated", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/wTkcqW30/1774601382852-fated.webp" },
+            { id: "TAM-CITY", name: "City Escape", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/L5pLRfp3/1774601374215-city-escape.webp" },
+            { id: "TAM-OVERL", name: "Overload", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/t4M6J8bn/1774601365271-overload.webp" },
+            { id: "TAM-BOUND", name: "Boundary", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp", isSecret: true },
+
+            // SPECIALS / AUTRES
+            { id: "SPE-HAREPINK", name: "Little Hare Pink", serie: "Special Plush Doll", cat: "specials", img: "https://i.postimg.cc/Y9y0xQ4g/20260327-173407-725622-1-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png" },
+            { id: "SPE-HAREBLACK", name: "Little Hare Black", serie: "Special Plush Doll", cat: "specials", img: "https://i.postimg.cc/V65L557P/20260327-173406-609438-2-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png", isSecret: true },
+            { id: "SPE-TUKTUK", name: "Tuk-Tuk", serie: "Special Edition", cat: "specials", img: "https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png" },
             { id: "SPE-PHARMA", name: "Well Pharmacy", serie: "Special Blister", cat: "specials", img: "https://i.postimg.cc/yNkNxvrk/Capture-d-ecran-2026-02-22-210901-removebg-preview.png" },
             { id: "SPE-BRICK", name: "Freedom Island Plus", serie: "Special Edition", cat: "specials", img: "https://i.postimg.cc/SxQFNRtM/3-cbc36e3e-efa9-480b-98c9-be77d0b80ab6.webp" },
-            { id: "SPE-WISHPE", name: "Wish List Pendant", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/sggrH6Yg/1763105667836-wish-list.webp"},
-            { id: "SPE-GOODHEL", name: "Good Health", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/KzXCbJM3/Have-A-Good-Run-Hirono-Good-Health.webp"},
-            { id: "SPE-LUCKON", name: "Luck on the Way", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/bvq25j6V/Capture-d-ecran-2026-01-11-204115-removebg-preview.png"},
-            { id: "SPE-LUCKSP", name: "Luck on the Way", serie:("Special Blind Box"), cat: "specials", img: "https://i.postimg.cc/v805cg5g/Capture-d-ecran-2026-01-24-210109-removebg-preview.png", isSecret: true },
-            { id: "SPE-FLOMARK", name: "Floating Market", serie: "Special Blister", cat: "specials", img: "https://i.postimg.cc/15qWM3yv/20251219-155619-439793-1-1200x1200-removebg-preview.png" },
         ];
 
         let userCollection = [];
@@ -431,10 +453,8 @@
                 // Page Content
                 pageTitle: "Dernières Sorties",
                 pageSub: "Les nouveautés Hirono les plus récentes.",
+                secTamed: "Série Tamed Wildgrass",
                 secSpecials: "Collaborations & Events",
-                secXmas: "Noël 2025",
-                secRoad: "Road Journal Series",
-                secAll: "Toutes les nouveautés", // AJOUTÉ
 
                 // Footer
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.",
@@ -465,14 +485,9 @@
                 lblPrice: "Prix",
                 lblDate: "Date d'achat",
                 lblNotes: "Notes",
-                                  // Footer keys
+                
+                // Footer keys
                 navReleases: "Mises à jour", 
-                footerNav: "Navigation",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -499,10 +514,8 @@
                 // Page Content
                 pageTitle: "Latest Releases",
                 pageSub: "The most recent Hirono releases.",
+                secTamed: "Tamed Wildgrass Series",
                 secSpecials: "Collabs & Events",
-                secXmas: "Christmas 2025",
-                secRoad: "Road Journal Series",
-                secAll: "All New Releases", // ADDED
 
                 // Footer
                 footerDesc: "The ultimate tool for tracking your Hirono collection.",
@@ -533,14 +546,9 @@
                 lblPrice: "Price",
                 lblDate: "Purchase Date",
                 lblNotes: "Notes",
-                              // Footer keys
+                
+                // Footer keys
                 navReleases: "Updates",
-                footerNav: "Navigation",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
@@ -630,9 +638,10 @@
             document.body.classList.add('auth-ready');
         });
 
-        // MODIFICATION ICI : On ne filtre plus par catégorie, on affiche tout.
         function renderGrids() {
-            renderSection('grid-all', newReleases);
+            // Affichage séparé des catégories
+            renderSection('grid-tamed', newReleases.filter(i => i.cat === 'tamed'));
+            renderSection('grid-others', newReleases.filter(i => i.cat === 'specials'));
         }
 
         function renderSection(elementId, items) {
