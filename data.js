@@ -215,5 +215,7 @@ export const baseData = [            {"ID":"CIT-BELONG","Name":"Belonging","Seri
         {"ID":"TAM-FATED","Name":"Fated","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/wTkcqW30/1774601382852-fated.webp"},
         {"ID":"TAM-CITY","Name":"City Escape","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/L5pLRfp3/1774601374215-city-escape.webp"},
         {"ID":"TAM-OVERL","Name":"Overload","Serie":"Tamed Wildgrass","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/t4M6J8bn/1774601365271-overload.webp"},
-        {"ID":"TAM-BOUND","Name":"Boundary","Serie":"Tamed Wildgrass","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp"}
+        {"ID":"TAM-BOUND","Name":"Boundary","Serie":"Tamed Wildgrass","Secret Rare":"Yes","Status":"No status","Image":"https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp"},
+        {"ID":"SPE-BEHTF","Name":"Behind Time Figure","Serie":"Limited Edition","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/ZqCKHxGX/20260424-155718-195216-1-1200x1200-removebg-preview.png"},
+{"ID":"SPE-KODAK","Name":"Hirono × Kodak","Serie":"Special Plush Doll","Secret Rare":"No","Status":"No status","Image":"https://i.postimg.cc/jdLgswr0/kodak-removebg-preview.png"}
         ]

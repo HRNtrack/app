@@ -7,7 +7,7 @@
     <meta property="og:title" content="HRNtrack - Track your Hirono Collection">
     <meta property="og:description" content="The ultimate free tool to manage your collection, estimate its value, and complete your series. Fanmade Project.">
     <meta property="og:image" content="https://i.postimg.cc/wvg5Wkqt/logo1-noir.png">
-    <meta property="og:url" content="https://hrntrack.github.io/app/">
+    <meta property="og:url" content="https://hrntrack.app/">
     <meta property="og:type" content="website">
     <meta name="theme-color" content="#6A8C47">
     <meta name="twitter:card" content="summary_large_image">
@@ -364,7 +364,7 @@
         <div class="hero-text">
             <div class="user-count-badge">
                 <span class="pulse-dot"></span>
-                <span data-t="userCount">Plus de 65 collectionneurs nous font confiance</span>
+                <span data-t="userCount">Plus de 115 collectionneurs nous font confiance</span>
             </div>
 
             <h1 data-t="heroTitle">Le compagnon ultime pour votre collection Hirono.</h1>
@@ -471,27 +471,38 @@
         </a>
     </div>
 
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center;">
-            <div class="auth-title" data-t="authLogin">Connexion</div>
-            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
-                Sauvegardez votre collection dans le cloud.
-            </p>
-            
-            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+<div id="auth-modal" class="modal-overlay">
+    <div class="modal-content" style="text-align:center;">
+        <div class="auth-title" data-t="authLogin">Connexion</div>
+        <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+            Sauvegardez votre collection dans le cloud.
+        </p>
+        
+        <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+        <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
 
-            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
-            
-            <div class="auth-separator">OU</div>
-            
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
-                Créer un compte
-            </button>
-            
-            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        <!-- Lien Mot de passe oublié -->
+        <div style="text-align: right; margin-bottom: 15px;">
+            <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
         </div>
+
+        <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+        
+        <div class="auth-separator">OU</div>
+        
+        <!-- Bouton Google -->
+        <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+            <span data-t="btnGoogle">Continuer avec Google</span>
+        </button>
+
+        <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+            Créer un compte (Email)
+        </button>
+        
+        <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 15px;">Annuler</button>
     </div>
+</div>
 
     <div id="footer-placeholder"></div>
 
@@ -544,9 +555,9 @@
     </script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -556,12 +567,16 @@
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+
+                btnGoogle: "Continuer avec Google", 
+                btnForgot: "Mot de passe oublié ?", 
+                btnRegister: "Créer un compte (Email)",
                 
                 heroTitle: "Le compagnon ultime pour votre collection Hirono.",
                 heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
                 heroBtn: "Démarrer ma collection",
                 
-                userCount: "Plus de 100 collectionneurs nous font confiance",
+                userCount: "Plus de 115 collectionneurs nous font confiance",
 
                 // NOUVEAUX TEXTES DOUBLE CARTE
                 newsFigBadge: "NOUVEAU",
@@ -606,12 +621,15 @@
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                btnGoogle: "Continue with Google", 
+                btnForgot: "Forgot password?", 
+                btnRegister: "Sign Up (Email)",
 
                 heroTitle: "The ultimate companion for your Hirono collection.",
                 heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
                 heroBtn: "Start my collection",
 
-                userCount: "Over 100 collectors trust us",
+                userCount: "Over 115 collectors trust us",
 
                 // NEW CARD TEXTS
                 newsFigBadge: "NEW",
@@ -694,8 +712,20 @@
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
             try {
-                await signInWithEmailAndPassword(auth, email, pass);
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                
+                // Vérification du statut de l'email
+                if (!userCredential.user.emailVerified) {
+                    alert(currentLang === 'fr'
+                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
+                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
+                    
+                    await signOut(auth);
+                    return;
+                }
+                
                 window.toggleAuthModal();
             } catch(e) { alert("Erreur: " + e.message); }
         };
@@ -704,10 +734,54 @@
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
             try {
-                await createUserWithEmailAndPassword(auth, email, pass);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Envoi du mail de vérification
+                await sendEmailVerification(userCredential.user);
+                
+                alert(currentLang === 'fr' 
+                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
+                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
+                
+                // Déconnexion immédiate pour forcer la vérification
+                await signOut(auth);
                 window.toggleAuthModal();
+                
             } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        // Initialisation du provider Google
+        const googleProvider = new GoogleAuthProvider();
+
+        // Connexion Google (L'email est automatiquement vérifié par Google)
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.toggleAuthModal();
+            } catch(e) { 
+                alert("Erreur Google: " + e.message); 
+            }
+        };
+
+        // Réinitialisation du mot de passe
+        window.handleResetPassword = async () => {
+            const email = document.getElementById('auth-email').value;
+            if(!email) {
+                alert(currentLang === 'fr' 
+                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
+                    : "Please enter your email address in the field above to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(currentLang === 'fr' 
+                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
+                    : "Reset email sent! Check your spam folder.");
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            }
         };
 
         window.handleLogout = async () => {

@@ -135,6 +135,16 @@
         #access-denied { flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
         .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
         .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
+
+        /* AUTH MODAL */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
+        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
+        .btn-cancel:hover { text-decoration: underline; }
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
+        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+
     </style>
 </head>
 <body>
@@ -160,8 +170,9 @@
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
 
-            <button id="nav-account-btn" class="btn-auth-trigger logged-in">
-                <span>🐼 </span> <span data-t="navAccount">Mon Compte</span>
+            <!-- Modifié pour ouvrir la modale par défaut si non connecté -->
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>🐼 </span> <span id="auth-status-text" data-t="navAccount">Mon Compte</span>
             </button>
         </div>
     </nav>
@@ -172,7 +183,8 @@
         <p style="color:var(--text-sub); max-width:400px; margin:0 auto;" data-t="deniedMsg">
             Connectez-vous pour accéder aux paramètres de votre compte.
         </p>
-        <a href="index.html" class="btn-login-big" data-t="deniedBtn">Retour à l'accueil</a>
+        <!-- Remplacement du lien vers l'accueil par l'ouverture de la modale -->
+        <button class="btn-login-big" onclick="window.toggleAuthModal()" data-t="deniedBtn">Se connecter</button>
     </div>
 
     <div id="main-container" class="container">
@@ -225,14 +237,48 @@
         </div>
     </div>
 
+    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+
+            <!-- Lien Mot de passe oublié -->
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
+            <button class="btn-action btn-update" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <!-- Bouton Google -->
+            <button class="btn-action btn-update" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button class="btn-action btn-update" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte (Email)
+            </button>
+            
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 15px;">Annuler</button>
+        </div>
+    </div>
+
     <div id="footer-placeholder"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // Ajout des imports nécessaires pour Google et Verification Email
+        import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
-        // MODIFICATION ICI : On importe la base de données depuis un fichier externe
         import { baseData } from './data.js';
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
@@ -244,7 +290,11 @@
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir", navAccount: "Mon Compte",
-                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Retour à l'accueil",
+                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",
+                
+                authLogin: "Connexion", authDesc: "Sauvegardez votre collection dans le cloud.", btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler",
+                btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
+
                 lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
                 btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
                 lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
@@ -255,14 +305,12 @@
                 alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
                 confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",
                 alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : ",
-                                  // Footer keys
+                
                 navReleases: "Mises à jour", 
                 footerNav: "Navigation",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -272,7 +320,11 @@
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", navSupport: "Support", navAccount: "My Account",
-                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Back to Home",
+                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",
+                
+                authLogin: "Login", authDesc: "Save your collection to the cloud.", btnLogin: "Log In", btnRegister: "Sign Up (Email)", btnCancel: "Cancel",
+                btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
+
                 lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
                 btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
                 lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
@@ -283,14 +335,12 @@
                 alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
                 confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",
                 alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: ",
-                              // Footer keys
+                
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
                 legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
@@ -331,9 +381,94 @@
             if(emailInput) emailInput.placeholder = tr.phNewEmail;
         };
 
+        // --- AUTH SYSTEM (MODAL & LOGIC) ---
+        
+        window.toggleAuthModal = () => {
+            const el = document.getElementById('auth-modal');
+            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.style.display = "none";
+            }
+        }
+
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                
+                // Vérification du statut de l'email
+                if (!userCredential.user.emailVerified) {
+                    alert(currentLang === 'fr'
+                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
+                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
+                    
+                    await signOut(auth);
+                    return;
+                }
+                
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Envoi du mail de vérification
+                await sendEmailVerification(userCredential.user);
+                
+                alert(currentLang === 'fr' 
+                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
+                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
+                
+                // Déconnexion immédiate pour forcer la vérification
+                await signOut(auth);
+                window.toggleAuthModal();
+                
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        const googleProvider = new GoogleAuthProvider();
+
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.toggleAuthModal();
+            } catch(e) { 
+                alert("Erreur Google: " + e.message); 
+            }
+        };
+
+        window.handleResetPassword = async () => {
+            const email = document.getElementById('auth-email').value;
+            if(!email) {
+                alert(currentLang === 'fr' 
+                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
+                    : "Please enter your email address in the field above to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(currentLang === 'fr' 
+                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
+                    : "Reset email sent! Check your spam folder.");
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            }
+        };
+
         // --- GESTION DU PROFIL (LOGIQUE) ---
         
-        // 1. Remplir le select d'avatars (UTILISATION DE L'IMPORT)
         const avatarSelect = document.getElementById('profile-avatar-select');
         baseData.sort((a,b) => a.Name.localeCompare(b.Name)).forEach(item => {
             const opt = document.createElement('option');
@@ -342,7 +477,6 @@
             avatarSelect.appendChild(opt);
         });
 
-        // 2. Aperçu Avatar
         avatarSelect.onchange = function() {
             const url = this.value;
             const preview = document.getElementById('preview-avatar-mini');
@@ -351,30 +485,25 @@
             if(url) {
                 const imgTag = `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
                 preview.innerHTML = imgTag;
-                bigPreview.innerHTML = imgTag; // Mise à jour immédiate pour feedback visuel
+                bigPreview.innerHTML = imgTag; 
             } else {
                 preview.innerHTML = "👤";
                 bigPreview.innerHTML = "🐼";
             }
         };
 
-        // 3. Charger le profil existant
         async function loadUserProfile(uid) {
             try {
                 const docSnap = await getDoc(doc(db, "users", uid));
                 if(docSnap.exists() && docSnap.data().profile) {
                     const p = docSnap.data().profile;
                     
-                    // Charger le pseudo
                     if(p.pseudo) {
                         document.getElementById('profile-pseudo').value = p.pseudo;
-                        // On affiche le pseudo en haut à la place de l'email s'il est défini
                         document.getElementById('display-email').innerText = p.pseudo; 
                     }
                     
-                    // Charger l'avatar
                     if(p.avatar) {
-                        // Vérifier si l'avatar existe dans la liste actuelle
                         let optionExists = false;
                         for(let i=0; i<avatarSelect.options.length; i++){
                             if(avatarSelect.options[i].value === p.avatar) {
@@ -383,7 +512,6 @@
                             }
                         }
 
-                        // Si l'option n'existe pas (ancienne image ou liste incomplète), on l'ajoute temporairement
                         if(!optionExists) {
                             const tempOpt = document.createElement('option');
                             tempOpt.value = p.avatar;
@@ -392,7 +520,7 @@
                         }
 
                         avatarSelect.value = p.avatar;
-                        avatarSelect.onchange(); // Force la mise à jour des visuels
+                        avatarSelect.onchange();
                     }
                 }
             } catch(e) {
@@ -400,7 +528,6 @@
             }
         }
 
-        // 4. Sauvegarder
         window.saveUserProfile = async () => {
             const user = auth.currentUser;
             if(!user) return;
@@ -415,14 +542,11 @@
             btn.innerText = "Sauvegarde...";
 
             try {
-                // merge: true permet de sauvegarder le profil SANS effacer la collection
                 await setDoc(doc(db, "users", user.uid), {
                     profile: { pseudo: pseudo, avatar: avatar }
                 }, { merge: true });
                 
-                // On met à jour l'en-tête pour le feedback visuel
                 document.getElementById('display-email').innerText = pseudo; 
-                
                 alert("Profil mis à jour avec succès !");
                 
             } catch(e) {
@@ -432,26 +556,34 @@
             }
         };
 
-        // --- AUTH & INIT ---
+        // --- AUTH INIT ---
         onAuthStateChanged(auth, (user) => {
             updateUIText();
+            const btn = document.getElementById('auth-trigger');
+
             if (user) {
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
                 document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-                document.getElementById('display-email').innerText = user.email; // Par défaut avant chargement du pseudo
+                document.getElementById('display-email').innerText = user.email; 
                 
-                // Charger le profil public
+                if (btn) {
+                    btn.classList.add('logged-in');
+                    btn.onclick = () => {}; 
+                }
                 loadUserProfile(user.uid);
             } else {
                 document.getElementById('main-container').style.setProperty('display', 'none', 'important');
                 document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
-                const navBtn = document.getElementById('nav-account-btn');
-                if(navBtn) navBtn.classList.remove('logged-in');
+                
+                if (btn) {
+                    btn.classList.remove('logged-in');
+                    btn.onclick = () => window.toggleAuthModal();
+                }
             }
             document.body.classList.add('auth-ready');
         });
 
-        // --- AUTH FUNCTIONS (UNCHANGED) ---
+        // --- SECURITY ACCOUNT FUNCTIONS ---
         window.handleLogout = async () => {
             if(confirm(t('confirmLogout'))) {
                 await signOut(auth);
@@ -494,7 +626,6 @@
                 await updateEmail(auth.currentUser, newEmail);
                 alert(t('alertEmailUpdated'));
                 document.getElementById('display-email').innerText = newEmail;
-                // Si l'utilisateur a un pseudo, il reprendra le dessus au rechargement
             } catch (error) {
                 if(error.code === 'auth/requires-recent-login') {
                     const success = await reauth();

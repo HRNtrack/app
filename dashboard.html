@@ -251,6 +251,8 @@
         }
         #btn-back-to-top:hover { transform: translateY(-3px); background: var(--primary-dark); }
         @media (max-width: 768px) { #btn-back-to-top { bottom: 100px; right: 20px; width: 45px; height: 45px; } }
+                .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
+
     </style>
 </head>
 <body>
@@ -444,15 +446,30 @@
         </div>
     </div>
 
+    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
             <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">Sauvegardez votre collection dans le cloud.</p>
+            
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+            
+            <!-- Lien Mot de passe oublié -->
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
             <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
             <div class="auth-separator">OU</div>
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">Créer un compte</button>
+            
+            <!-- Bouton Google -->
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">Créer un compte (Email)</button>
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>
@@ -504,7 +521,8 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        // AJOUT DES IMPORTS GOOGLE & RESET PASSWORD & VERIFICATION EMAIL
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         let baseData = [];
@@ -526,7 +544,8 @@
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
-                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", btnShare: "Partager",
+                btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler", btnShare: "Partager",
+                btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
                 kpiCompletion: "Complétion", kpiValue: "Valeur Est.", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "État", kpiSeries: "Séries",
                 filterAll: "Tout voir", filterOwned: "Ma Collection", filterWish: "Wishlist", searchPlaceholder: "Rechercher une figurine...",
                 optAllSeries: "Toutes les séries", sortNameAsc: "Nom (A-Z)", sortNameDesc: "Nom (Z-A)", sortPriceAsc: "Prix d'achat (Croissant)", sortPriceDesc: "Prix d'achat (Décroissant)", sortDateDesc: "Date d'achat (Récent)",
@@ -548,7 +567,8 @@
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
-                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", btnShare: "Share",
+                btnLogin: "Log In", btnRegister: "Sign Up (Email)", btnCancel: "Cancel", btnShare: "Share",
+                btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
                 kpiCompletion: "Completion", kpiValue: "Est. Value", kpiCollection: "Collection", kpiDoubles: "Doubles", kpiSecrets: "Secrets", kpiCondition: "Condition", kpiSeries: "Series",
                 filterAll: "View All", filterOwned: "My Collection", filterWish: "Wishlist", searchPlaceholder: "Search for a figure...",
                 optAllSeries: "All Series", sortNameAsc: "Name (A-Z)", sortNameDesc: "Name (Z-A)", sortPriceAsc: "Price (Low to High)", sortPriceDesc: "Price (High to Low)", sortDateDesc: "Purchase Date (Newest)",
@@ -674,18 +694,81 @@
             const el = document.getElementById('auth-modal');
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
         };
+
         window.handleLogin = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             if(!email || !pass) return alert(t('alertFill'));
-            try { await signInWithEmailAndPassword(auth, email, pass); window.toggleAuthModal(); } catch(e) { alert(t('alertErr') + e.message); }
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                
+                // Vérification du statut de l'email
+                if (!userCredential.user.emailVerified) {
+                    alert(currentLang === 'fr'
+                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
+                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
+                    
+                    await signOut(auth);
+                    return;
+                }
+                
+                window.toggleAuthModal();
+            } catch(e) { alert(t('alertErr') + e.message); }
         };
+
         window.handleRegister = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             if(!email || !pass) return alert(t('alertFill'));
-            try { await createUserWithEmailAndPassword(auth, email, pass); window.toggleAuthModal(); } catch(e) { alert(t('alertErr') + e.message); }
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Envoi du mail de vérification
+                await sendEmailVerification(userCredential.user);
+                
+                alert(currentLang === 'fr' 
+                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
+                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
+                
+                // Déconnexion immédiate pour forcer la vérification
+                await signOut(auth);
+                window.toggleAuthModal();
+                
+            } catch(e) { alert(t('alertErr') + e.message); }
         };
+
+        // --- NOUVELLES FONCTIONS GOOGLE & RESET PASSWORD ---
+        const googleProvider = new GoogleAuthProvider();
+
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.toggleAuthModal();
+            } catch(e) { 
+                alert("Erreur Google: " + e.message); 
+            }
+        };
+
+        window.handleResetPassword = async () => {
+            const email = document.getElementById('auth-email').value;
+            if(!email) {
+                alert(currentLang === 'fr' 
+                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
+                    : "Please enter your email address in the field above to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(currentLang === 'fr' 
+                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
+                    : "Reset email sent! Check your spam folder.");
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            }
+        };
+        // ----------------------------------------------------
 
         const initSeriesFilter = () => {
             if (!baseData || baseData.length === 0) return;

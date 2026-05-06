@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Mises à jour</title>
+    <title>HRNtrack - Releases</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
@@ -71,11 +71,12 @@
         }
         .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-        .btn-auth-trigger {
+.btn-auth-trigger {
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
             padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
             transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
         }
+                
         .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
         .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
@@ -219,11 +220,23 @@
         </div>
 
         <div class="timeline">
+
+            <!-- V1.2.0 (MAI 2026) : MISE À JOUR FUSIONNÉE -->
+            <div class="release-card">
+                <div class="release-meta">
+                    <span class="release-date">Mai 2026</span>
+                    <span class="version-badge">v1.2.0</span>
+                </div>
+                <div class="release-title" data-t="title_v120">Domaine, Connexion & Nouveautés</div>
+                <div class="release-content" data-t="content_v120">
+                    <!-- Rempli par le script de traduction -->
+                </div>
+            </div>
             
             <div class="release-card">
                 <div class="release-meta">
                     <span class="release-date">Avril 2026</span>
-                    <span class="version-badge">v1.2.0</span>
+                    <span class="version-badge">v1.1.6</span>
                 </div>
                 <div class="release-title" data-t="title_16apr">Série Tamed Wildgrass & Nouveautés</div>
                 <div class="release-content" data-t="content_16apr">
@@ -352,15 +365,36 @@
         </div>
     </div>
 
+    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
-            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">Sauvegardez votre collection dans le cloud.</p>
+            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+            
+            <!-- Lien Mot de passe oublié -->
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
             <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            
             <div class="auth-separator">OU</div>
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">Créer un compte</button>
+            
+            <!-- Bouton Google -->
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+                Créer un compte (Email)
+            </button>
+            
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>
@@ -369,7 +403,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
         const app = initializeApp(firebaseConfig);
@@ -379,42 +413,37 @@
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
-                authLogin: "Connexion", authAccount: "Mon Compte", btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
+                authLogin: "Connexion", authAccount: "Mon Compte", btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler",
+                authDesc: "Sauvegardez votre collection dans le cloud.", btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
                 pageTitle: "Notes de Mise à Jour", pageSub: "L'historique des nouveautés et améliorations.",
+
+                title_v120: "Mise à jour v1.2.0 : Domaine, Connexion & Nouveautés",
+                content_v120: "Grâce aux dons de la communauté, le site est désormais accessible via son propre domaine officiel : <strong>hrntrack.app</strong>. Un immense merci aux donateurs !<br><br><strong>Nouveautés de cette version :</strong><ul><li>Ajout de la figurine <strong>Behind Time Figure (Limited Edition)</strong>.</li><li>Ajout de la peluche <strong>Hirono × Kodak (Special Plush Doll)</strong>.</li><li>Amélioration du système de connexion : possibilité de <strong>se connecter avec Google</strong> et ajout d'une option <strong>\"Mot de passe oublié ?\"</strong>.</li></ul>",
                 
-                // NOUVEAU
                 title_16apr: "Série Tamed Wildgrass & Nouveautés",
                 content_16apr: `Une mise à jour massive du catalogue !<br><ul><li>Ajout de la série complète <strong>Tamed Wildgrass</strong> (13 figurines, dont la secrète <em>Boundary</em>).</li><li>Ajout des peluches <strong>Little Hare Pink & Black</strong> (Special Plush Dolls).</li><li>Ajout de la figurine <strong>Tuk-Tuk</strong> (Special Edition).</li></ul>`,
 
-                // 06 Mar 
                 title_06mar: "Optimisation de la page Collection",
                 content_06mar: `<ul><li>Refonte complète du système de graphiques : affichage des vraies données historiques de la communauté.</li><li>Meilleure gestion des affichages lorsqu'il y a peu ou pas d'historique (ex: 1 seule donnée).</li><li>Améliorations esthétiques et responsive (PC/Mobile) de la pop-up.</li></ul>`,
 
-                // 02 Mar
                 title_02mar: "Ajout du Dollar Canadien (CAD)",
                 content_02mar: `Vous l'avez demandé ! Le <strong>Dollar Canadien (CAD / CA$)</strong> est désormais disponible dans le choix des devises pour vos achats. Les cotes et les statistiques prennent désormais correctement en compte cette monnaie.`,
 
-                // 22 Feb 
                 title_22feb: "Nouveaux Ajouts (Specials)",
                 content_22feb: `Ajout de 3 nouvelles figurines <strong>Special Edition / Blister</strong> au tracker :<ul><li>Freedom Island Plus</li><li>Well Pharmacy</li><li>Elephant in the room marbed</li></ul>`,
 
-                // 24 Jan
                 title_24jan: "Mise à jour Base de Données & Ranks",
                 content_24jan: `<ul><li>Ajout de la figurine <strong>Luck on the Way (Special Edition)</strong>.</li><li>Mise à jour majeure du système de <strong>Rank</strong> (plus de paliers : Amateur, Legend...).</li><li>Amélioration du système de badges.</li></ul>`,
                 
-                // 19 Jan
                 title_19jan: "Fonctionnalités Majeures",
                 content_19jan: `<p><strong>Suivi des Cotes & Graphiques :</strong> Fini les fichiers Excel ! Consultez la Cote Communautaire estimée pour chaque figurine et visualisez l'Historique des Prix (tendance sur 6 mois) directement sur la fiche.</p><p><strong>Personnalisez votre Profil :</strong> C'est votre espace ! Ajoutez désormais un Pseudo et une Photo de Profil pour rendre votre page de collection unique.</p><p><strong>Partage de Collection :</strong> Générez un lien public unique en un clic. Partagez votre vitrine personnalisée à vos amis (même s'ils n'ont pas de compte) !</p><p><strong>Système de Trophées :</strong> Votre passion est récompensée ! Débloquez des badges exclusifs comme Chasseur, Investisseur, Complétiste et bien d'autres.</p>`,
                 
-                // 13 Jan
                 title_13jan: "Les Cotes Communautaires sont actives !",
                 content_13jan: `<p>Nous avons déployé un nouvel algorithme qui calcule la valeur marché (Cote) de chaque figurine en se basant sur les prix d'achat réels de toute la communauté.</p><p><strong>POURQUOI C'EST IMPORTANT ?</strong><br>Pour que ce système fonctionne et que votre "Deal Score" (Indicateur de bonne affaire) soit juste, nous avons besoin de données précises.</p><div class="alert-box"><span class="alert-title">⚠️ LA DEVISE (CURRENCY) EST CRUCIALE !</span>Si vous avez acheté une figurine en Dollars ($) ou en Livres (£), merci de bien sélectionner la devise correspondante.<br><em>Exemple : Si vous notez "20" en prix d'achat pour du $USD mais que vous laissez la devise sur "€" (EUR), cela fausse les statistiques de tout le monde !</em><br><br><strong>Action requise :</strong><ul style="margin-bottom:0;"><li>Allez dans votre Collection.</li><li>Vérifiez vos prix d'achat.</li><li>Assurez-vous que le champ Devise correspond bien à ce que vous avez payé.</li></ul></div>`,
                 
-                // 12 Jan
                 title_12jan: "New Arrivals",
                 content_12jan: `3 nouvelles "Special Blind Box" sont disponibles sur le tracker ! C'est l'heure de mettre à jour votre collection ou votre wishlist.<ul><li>Wish List Pendant</li><li>Good Health</li><li>Luck on the Way</li></ul>`,
                                   
-                // Footer keys
                 navReleases: "Mises à jour", 
                 footerNav: "Navigation",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
@@ -428,42 +457,37 @@
             },
             en: {
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donations", navContact: "Contact", navSupport: "Support",
-                authLogin: "Login", authAccount: "My Account", btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
+                authLogin: "Login", authAccount: "My Account", btnLogin: "Log In", btnRegister: "Sign Up (Email)", btnCancel: "Cancel",
+                authDesc: "Save your collection to the cloud.", btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
                 pageTitle: "Release Notes", pageSub: "History of updates and improvements.",
-                
-                // NOUVEAU
+
+                title_v120: "Update v1.2.0: Domain, Login & New Arrivals",
+                content_v120: "Thanks to community donations, the site is now accessible via its own official domain: <strong>hrntrack.app</strong>. A huge thank you to the donors!<br><br><strong>New in this version:</strong><ul><li>Added the <strong>Behind Time Figure (Limited Edition)</strong> figure.</li><li>Added the <strong>Hirono × Kodak (Special Plush Doll)</strong> plush.</li><li>Improved login system: ability to <strong>log in with Google</strong> and added a <strong>\"Forgot password?\"</strong> option.</li></ul>",
+        
                 title_16apr: "Tamed Wildgrass Series & New Arrivals",
                 content_16apr: `A massive catalog update!<br><ul><li>Added the complete <strong>Tamed Wildgrass</strong> series (13 figures, including the secret <em>Boundary</em>).</li><li>Added the <strong>Little Hare Pink & Black</strong> plush dolls (Specials).</li><li>Added the <strong>Tuk-Tuk</strong> figure.</li></ul>`,
 
-                // 06 Mar 
                 title_06mar: "Collection Page Optimization",
                 content_06mar: `<ul><li>Complete overhaul of the chart system: displaying real community historical data.</li><li>Better fallback display when there is little to no history (e.g., only 1 data point).</li><li>Aesthetic and responsive (PC/Mobile) improvements to the pop-up modal.</li></ul>`,
 
-                // 02 Mar
                 title_02mar: "Canadian Dollar (CAD) Support",
                 content_02mar: `You asked for it! The <strong>Canadian Dollar (CAD / CA$)</strong> is now available in the currency selection for your purchases. Market values and statistics now properly support this currency.`,
 
-                // 22 Feb 
                 title_22feb: "New Additions (Specials)",
                 content_22feb: `Added 3 new <strong>Special Edition / Blister</strong> figures to the tracker:<ul><li>Freedom Island Plus</li><li>Well Pharmacy</li><li>Elephant in the room marbed </li></ul>`,
 
-                // 24 Jan
                 title_24jan: "Database & Rank Update",
                 content_24jan: `<ul><li>Added figure <strong>Luck on the Way (Special Edition)</strong>.</li><li>Major update to the <strong>Rank</strong> system (new tiers: Amateur, Legend...).</li><li>Badge system improvement.</li></ul>`,
                 
-                // 19 Jan
                 title_19jan: "Major Features",
                 content_19jan: `<p><strong>Market Trends & Charts:</strong> No more Excel files! Check the estimated Community Value for each figure and view Price History (6-month trend) directly on the card.</p><p><strong>Customize your Profile:</strong> It's your space! Add a Nickname and Profile Picture to make your collection page unique.</p><p><strong>Collection Sharing:</strong> Generate a unique public link in one click. Share your personalized showcase with friends (even if they don't have an account)!</p><p><strong>Trophy System:</strong> Your passion is rewarded! Unlock exclusive badges like Hunter, Investor, Completionist, and many more.</p>`,
                 
-                // 13 Jan
                 title_13jan: "Community Prices are Live!",
                 content_13jan: `<p>We deployed a new algorithm calculating the market value of each figure based on real purchase prices from the community.</p><p><strong>WHY IS THIS IMPORTANT?</strong><br>For this system to work and your "Deal Score" to be accurate, we need precise data.</p><div class="alert-box"><span class="alert-title">⚠️ CURRENCY IS CRUCIAL!</span>If you bought a figure in Dollars ($) or Pounds (£), please select the corresponding currency.<br><em>Example: If you input "20" as purchase price for $USD but leave the currency on "€" (EUR), it skews stats for everyone!</em><br><br><strong>Action required:</strong><ul style="margin-bottom:0;"><li>Go to your Collection.</li><li>Check your purchase prices.</li><li>Ensure the Currency field matches what you paid.</li></ul></div>`,
                 
-                // 12 Jan
                 title_12jan: "New Arrivals",
                 content_12jan: `3 new "Special Blind Boxes" are available on the tracker! Time to update your collection or wishlist.<ul><li>Wish List Pendant</li><li>Good Health</li><li>Luck on the Way</li></ul>`,
                               
-                // Footer keys
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
@@ -501,8 +525,81 @@
         };
 
         window.toggleAuthModal = () => { const el = document.getElementById('auth-modal'); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; };
-        window.handleLogin = async () => { try { await signInWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-pass').value); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); } };
-        window.handleRegister = async () => { try { await createUserWithEmailAndPassword(auth, document.getElementById('auth-email').value, document.getElementById('auth-pass').value); window.toggleAuthModal(); } catch(e) { alert("Erreur: " + e.message); } };
+        
+        window.handleLogin = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                
+                // Vérification du statut de l'email
+                if (!userCredential.user.emailVerified) {
+                    alert(currentLang === 'fr'
+                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
+                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
+                    
+                    await signOut(auth);
+                    return;
+                }
+                
+                window.toggleAuthModal();
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+
+        window.handleRegister = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Merci de remplir tous les champs.");
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                
+                // Envoi du mail de vérification
+                await sendEmailVerification(userCredential.user);
+                
+                alert(currentLang === 'fr' 
+                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
+                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
+                
+                // Déconnexion immédiate pour forcer la vérification
+                await signOut(auth);
+                window.toggleAuthModal();
+                
+            } catch(e) { alert("Erreur: " + e.message); }
+        };
+        
+        // --- NOUVELLES FONCTIONS GOOGLE & RESET PASSWORD ---
+        const googleProvider = new GoogleAuthProvider();
+
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.toggleAuthModal();
+            } catch(e) { 
+                alert("Erreur Google: " + e.message); 
+            }
+        };
+
+        window.handleResetPassword = async () => {
+            const email = document.getElementById('auth-email').value;
+            if(!email) {
+                alert(currentLang === 'fr' 
+                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
+                    : "Please enter your email address in the field above to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(currentLang === 'fr' 
+                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
+                    : "Reset email sent! Check your spam folder.");
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            }
+        };
+        
         window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.style.display = "none"; } }
 
         onAuthStateChanged(auth, (user) => {
