@@ -189,7 +189,6 @@
             display: block; margin-bottom: 5px; color: var(--text-sub); font-size: 0.8rem; font-weight: 600; text-transform: uppercase;
         }
 
-        /* Styles spécifiques pour les inputs du nouveau modal */
         #modal select, #modal input, #modal textarea, #auth-modal input {
             width: 100%;
             background: #F3F4F6;
@@ -266,19 +265,36 @@
 
         <div class="release-section">
             <div class="section-header">
-                <span class="section-name" data-t="secTamed">Série Tamed Wildgrass</span>
+                <span class="section-name" data-t="secMist">Mist Walker Series</span>
                 <span class="section-tag tag-new">NOUVEAU</span>
             </div>
-            <div class="release-grid" id="grid-tamed"></div>
+            <div class="release-grid" id="grid-mist"></div>
         </div>
 
         <div class="release-section">
             <div class="section-header">
-                <span class="section-name" data-t="secSpecials">Collaborations & Events</span>
-                <span class="section-tag">2025-2026</span>
+                <span class="section-name" data-t="secMistOrnament">Mist Walker Felt Ornament</span>
+                <span class="section-tag tag-new">NOUVEAU</span>
             </div>
-            <div class="release-grid" id="grid-others"></div>
+            <div class="release-grid" id="grid-mist-ornament"></div>
         </div>
+        
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secAccessories">Accessoires</span>
+                <span class="section-tag">Nouveau</span>
+            </div>
+            <div class="release-grid" id="grid-accessories"></div>
+        </div>
+
+        <div class="release-section">
+            <div class="section-header">
+                <span class="section-name" data-t="secTamed">Série Tamed Wildgrass</span>
+                <span class="section-tag">2025</span>
+            </div>
+            <div class="release-grid" id="grid-tamed"></div>
+        </div>
+
 
     </div>
 
@@ -417,6 +433,29 @@
 
         // --- DATA DES NOUVEAUTÉS ---
         const newReleases = [
+            // ACCESSORIES
+            { id: "ACCES-PASMIST", name: "Passport Holder", serie: "Accessories", cat: "accessories", img: "https://hrntrack.app/image/ACCES-PASMIST.webp" },
+            { id: "ACCES-MIST", name: "Jacquard Blanket", serie: "Accessories", cat: "accessories", img: "https://hrntrack.app/image/ACCES-MIST.jpg" },
+            { id: "ACCES-MISTBAG", name: "Crossbody Bag", serie: "Accessories", cat: "accessories", img: "https://hrntrack.app/image/ACCES-MISTBAG.png" },
+
+            // MIST WALKER 
+            { id: "MIST-FOLLOW", name: "The Wingless Follower", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-FOLLOW.png" },
+            { id: "MIST-GAP", name: "The Gap-Glimmer Wanderer", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-GAP.png" },
+            { id: "MIST-MESSE", name: "The Backlit Messenger", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-MESSE.png" },
+            { id: "MIST-PRIMOR", name: "The Primordial Grace", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-PRIMOR.png" },
+            { id: "MIST-SOUL", name: "The Soul Corroder", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-SOUL.png" },
+            { id: "MIST-TEMPE", name: "The Tempered Aegis", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-TEMPE.png", isSecret: true },
+            { id: "MIST-UNFALL", name: "The Unfallen Wing", serie: "Mist Walker", cat: "mist", img: "https://hrntrack.app/image/MIST-UNFALL.png" },
+
+            // MIST WALKER FELT ORNAMENT
+            { id: "MISTO-FOLLOW", name: "The Wingless Follower", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-FOLLOW.png" },
+            { id: "MISTO-GAP", name: "The Gap-Glimmer Wanderer", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-GAP.png" },
+            { id: "MISTO-MESSE", name: "The Backlit Messenger", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-MESSE.png" },
+            { id: "MISTO-PRIMOR", name: "The Primordial Grace", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-PRIMOR.png" },
+            { id: "MISTO-SOUL", name: "The Soul Corroder", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-SOUL.png" },
+            { id: "MISTO-TEMPE", name: "The Tempered Aegis", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-TEMPE.webp", isSecret: true },
+            { id: "MISTO-UNFALL", name: "The Unfallen Wing", serie: "Mist Walker Felt Ornament", cat: "mist-ornament", img: "https://hrntrack.app/image/MISTO-UNFALL.png" },
+
             // TAMED WILDGRASS
             { id: "TAM-CAMPING", name: "Camping", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/x1kwkMQg/1774601484881-camping.webp" },
             { id: "TAM-CANNED", name: "Canned Dreams", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/s2dNvLwr/1774601475301-canned-dreams.webp" },
@@ -432,14 +471,6 @@
             { id: "TAM-OVERL", name: "Overload", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/t4M6J8bn/1774601365271-overload.webp" },
             { id: "TAM-BOUND", name: "Boundary", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp", isSecret: true },
 
-            // SPECIALS / AUTRES (Nouveautés en haut de la liste)
-            { id: "SPE-BEHTF", name: "Behind Time Figure", serie: "Limited Edition", cat: "specials", img: "https://i.postimg.cc/ZqCKHxGX/20260424-155718-195216-1-1200x1200-removebg-preview.png" },
-            { id: "SPE-KODAK", name: "Hirono × Kodak", serie: "Special Plush Doll", cat: "specials", img: "https://i.postimg.cc/jdLgswr0/kodak-removebg-preview.png" },
-            { id: "SPE-HAREPINK", name: "Little Hare Pink", serie: "Special Plush Doll", cat: "specials", img: "https://i.postimg.cc/Y9y0xQ4g/20260327-173407-725622-1-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png" },
-            { id: "SPE-HAREBLACK", name: "Little Hare Black", serie: "Special Plush Doll", cat: "specials", img: "https://i.postimg.cc/V65L557P/20260327-173406-609438-2-hirono-little-hare-plush-doll-pendant-plush-toys-details-pop-mart-us.png", isSecret: true },
-            { id: "SPE-TUKTUK", name: "Tuk-Tuk", serie: "Special Edition", cat: "specials", img: "https://i.postimg.cc/rF94z3Vd/Capture-d-ecran-2026-03-23-220133-removebg-preview.png" },
-            { id: "SPE-PHARMA", name: "Well Pharmacy", serie: "Special Blister", cat: "specials", img: "https://i.postimg.cc/yNkNxvrk/Capture-d-ecran-2026-02-22-210901-removebg-preview.png" },
-            { id: "SPE-BRICK", name: "Freedom Island Plus", serie: "Special Edition", cat: "specials", img: "https://i.postimg.cc/SxQFNRtM/3-cbc36e3e-efa9-480b-98c9-be77d0b80ab6.webp" },
         ];
 
         let userCollection = [];
@@ -471,8 +502,10 @@
                 // Page Content
                 pageTitle: "Dernières Sorties",
                 pageSub: "Les nouveautés Hirono les plus récentes.",
+                secMist: "Série Mist Walker",
+                secMistOrnament: "Ornements Mist Walker",
+                secAccessories: "Accessoires",
                 secTamed: "Série Tamed Wildgrass",
-                secSpecials: "Collaborations & Events",
 
                 // Footer
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.",
@@ -535,8 +568,10 @@
                 // Page Content
                 pageTitle: "Latest Releases",
                 pageSub: "The most recent Hirono releases.",
+                secMist: "Mist Walker Series",
+                secMistOrnament: "Mist Walker Ornaments",
+                secAccessories: "Accessories",
                 secTamed: "Tamed Wildgrass Series",
-                secSpecials: "Collabs & Events",
 
                 // Footer
                 footerDesc: "The ultimate tool for tracking your Hirono collection.",
@@ -714,7 +749,10 @@
         });
 
         function renderGrids() {
-            // Affichage séparé des catégories
+            // Affichage séparé des catégories (nouvelles grilles incluses)
+            renderSection('grid-mist', newReleases.filter(i => i.cat === 'mist'));
+            renderSection('grid-mist-ornament', newReleases.filter(i => i.cat === 'mist-ornament'));
+            renderSection('grid-accessories', newReleases.filter(i => i.cat === 'accessories'));
             renderSection('grid-tamed', newReleases.filter(i => i.cat === 'tamed'));
             renderSection('grid-others', newReleases.filter(i => i.cat === 'specials'));
         }
