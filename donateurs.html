@@ -229,6 +229,10 @@
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
 
+            <!-- Bouton de connexion/compte réintégré pour permettre l'accès admin -->
+            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
+                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+            </button>
         </div>
     </nav>
 
@@ -356,14 +360,7 @@
                 lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien ! ❤️", lblWall: "Mur des Donateurs",
                 btnKofi: "Soutenez-moi sur Ko-fi",
                 legalMainTitle: "Mentions Légales",
-                                  // Footer keys
                 navReleases: "Mises à jour", 
-                footerNav: "Navigation",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -378,14 +375,7 @@
                 lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support! ❤️", lblWall: "Wall of Donors",
                 btnKofi: "Support me on Ko-fi",
                 legalMainTitle: "Legal Mentions",
-                			  // Footer keys
                 navReleases: "Updates",
-                footerNav: "Navigation",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
@@ -403,7 +393,6 @@
             loadDonations(); 
         };
 
-        // Rendre updateUIText globale pour le footer script
         window.updateUIText = function() {
             const t = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => { const key = el.getAttribute('data-t'); if(t[key]) el.innerText = t[key]; });
@@ -416,7 +405,6 @@
 
         window.toggleAuthModal = () => { const el = document.getElementById('auth-modal'); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; };
         
-        // --- MODAL CLICK OUTSIDE ---
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.style.display = "none";
@@ -488,7 +476,6 @@
 
         loadDonations();
 
-        // --- CHARGEMENT DU FOOTER DYNAMIQUE ET COOKIES ---
         fetch('footer.html')
             .then(response => {
                 if (!response.ok) throw new Error("Erreur chargement footer");
@@ -497,10 +484,8 @@
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
                 
-                // Traduction du footer
                 if(window.updateUIText) window.updateUIText();
                 
-                // Init Cookies
                 if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
