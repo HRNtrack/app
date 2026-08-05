@@ -343,7 +343,7 @@
         </div>
     </div>
 
-    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
+    <!-- MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
@@ -354,7 +354,6 @@
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
             <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
             
-            <!-- Lien Mot de passe oublié -->
             <div style="text-align: right; margin-bottom: 15px;">
                 <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
             </div>
@@ -363,7 +362,6 @@
             
             <div class="auth-separator">OU</div>
             
-            <!-- Bouton Google -->
             <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
@@ -380,7 +378,6 @@
     <div id="footer-placeholder"></div>
 
 <script>
-    // --- 1. FONCTIONS COOKIES & ANALYTICS (GLOBALES) ---
     const GA_ID = 'G-RFP1HDMW49';
 
     function loadAnalytics() {
@@ -396,7 +393,6 @@
         console.log("Analytics chargé ✅");
     }
 
-    // Accessible pour les boutons du footer
     window.handleCookie = function(accept) {
         const banner = document.getElementById('cookie-banner');
         if (accept) {
@@ -408,7 +404,6 @@
         if(banner) banner.style.display = 'none';
     };
 
-    // Logique d'initialisation
     window.initCookieLogic = function() {
         const consent = localStorage.getItem('cookieConsent');
         const banner = document.getElementById('cookie-banner');
@@ -422,7 +417,6 @@
 
 <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        // Ajout des imports sendEmailVerification et signOut
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
@@ -470,17 +464,14 @@
             { id: "TAM-CITY", name: "City Escape", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/L5pLRfp3/1774601374215-city-escape.webp" },
             { id: "TAM-OVERL", name: "Overload", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/t4M6J8bn/1774601365271-overload.webp" },
             { id: "TAM-BOUND", name: "Boundary", serie: "Tamed Wildgrass", cat: "tamed", img: "https://i.postimg.cc/90CRshdv/1774601431692-secret-boundary.webp", isSecret: true },
-
         ];
 
         let userCollection = [];
         let currentUser = null;
         let currentModalItem = null;
 
-        // --- I18N (TRADUCTIONS) ---
         const translations = {
             fr: { 
-                // Navigation & Layout
                 navHome: "Accueil",
                 navCollection: "Collection",
                 navStats: "Stats",
@@ -490,7 +481,6 @@
                 navAccount: "Mon Compte",
                 navNew: "Nouveautés",
 
-                // Auth
                 authLogin: "Connexion",
                 authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter",
@@ -499,7 +489,6 @@
                 btnForgot: "Mot de passe oublié ?",
                 btnCancel: "Annuler",
 
-                // Page Content
                 pageTitle: "Dernières Sorties",
                 pageSub: "Les nouveautés Hirono les plus récentes.",
                 secMist: "Série Mist Walker",
@@ -507,21 +496,18 @@
                 secAccessories: "Accessoires",
                 secTamed: "Série Tamed Wildgrass",
 
-                // Footer
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.",
                 footerNav: "Navigation",
                 footerAbout: "À propos",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 legalMainTitle: "Mentions Légales",
 
-                // Buttons & Actions
                 btnAdd: "Ajouter", 
                 btnOwned: "Possédé", 
                 btnWish: "Recherché", 
                 btnSave: "Enregistrer",
                 btnClose: "Fermer",
                 
-                // Modal
                 lblStatus: "Statut",
                 optNone: "Non possédé",
                 optOwned: "Dans ma collection ✅",
@@ -537,7 +523,6 @@
                 lblDate: "Date d'achat",
                 lblNotes: "Notes",
                 
-                // Footer keys
                 navReleases: "Mises à jour", 
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
@@ -546,7 +531,6 @@
                 cookieAccept: "Accepter"         
             },
             en: { 
-                // Navigation & Layout
                 navHome: "Home",
                 navCollection: "Collection",
                 navStats: "Stats",
@@ -556,7 +540,6 @@
                 navAccount: "My Account",
                 navNew: "New Releases",
 
-                // Auth
                 authLogin: "Login",
                 authDesc: "Save your collection to the cloud.",
                 btnLogin: "Log In",
@@ -565,7 +548,6 @@
                 btnForgot: "Forgot password?",
                 btnCancel: "Cancel",
 
-                // Page Content
                 pageTitle: "Latest Releases",
                 pageSub: "The most recent Hirono releases.",
                 secMist: "Mist Walker Series",
@@ -573,21 +555,18 @@
                 secAccessories: "Accessories",
                 secTamed: "Tamed Wildgrass Series",
 
-                // Footer
                 footerDesc: "The ultimate tool for tracking your Hirono collection.",
                 footerNav: "Navigation",
                 footerAbout: "About",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
                 legalMainTitle: "Legal Mentions",
 
-                // Buttons & Actions
                 btnAdd: "Add", 
                 btnOwned: "Owned", 
                 btnWish: "Wishlist", 
                 btnSave: "Save",
                 btnClose: "Close",
                 
-                // Modal
                 lblStatus: "Status",
                 optNone: "Not owned",
                 optOwned: "In collection ✅",
@@ -603,7 +582,6 @@
                 lblDate: "Purchase Date",
                 lblNotes: "Notes",
                 
-                // Footer keys
                 navReleases: "Updates",
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
@@ -622,12 +600,10 @@
             updateUI();
         };
 
-        // On rend la fonction accessible globalement pour le footer
         window.updateUI = function() {
             if(currentLang === 'fr') { document.getElementById('lang-fr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); }
             else { document.getElementById('lang-fr').classList.remove('active'); document.getElementById('lang-en').classList.add('active'); }
             
-            // Mise à jour de tous les éléments avec data-t
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
                 if(translations[currentLang][key]) el.innerText = translations[currentLang][key];
@@ -653,7 +629,6 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
                 
-                // Vérification du statut de l'email
                 if (!userCredential.user.emailVerified) {
                     alert(currentLang === 'fr'
                         ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
@@ -674,22 +649,18 @@
             
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Envoi du mail de vérification
                 await sendEmailVerification(userCredential.user);
                 
                 alert(currentLang === 'fr' 
                     ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
                     : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
                 
-                // Déconnexion immédiate pour forcer la vérification
                 await signOut(auth);
                 window.toggleAuthModal();
                 
             } catch(e) { alert("Erreur: " + e.message); }
         };
 
-        // --- NOUVELLES FONCTIONS GOOGLE & RESET PASSWORD ---
         const googleProvider = new GoogleAuthProvider();
 
         window.handleGoogleLogin = async () => {
@@ -728,14 +699,13 @@
                 btn.classList.add('logged-in');
                 btn.onclick = () => window.location.href = "compte.html";
                 
-                // Chargement de la collection
                 const docRef = doc(db, "users", user.uid);
                 try {
                     const snap = await getDoc(docRef);
                     if(snap.exists()) {
                         userCollection = snap.data().collection || [];
                     } else {
-                        userCollection = []; // Nouvel utilisateur
+                        userCollection = []; 
                     }
                 } catch(e) { console.error("Erreur chargement:", e); }
             } else {
@@ -749,7 +719,6 @@
         });
 
         function renderGrids() {
-            // Affichage séparé des catégories (nouvelles grilles incluses)
             renderSection('grid-mist', newReleases.filter(i => i.cat === 'mist'));
             renderSection('grid-mist-ornament', newReleases.filter(i => i.cat === 'mist-ornament'));
             renderSection('grid-accessories', newReleases.filter(i => i.cat === 'accessories'));
@@ -808,23 +777,20 @@
             currentModalItem = item;
             const existing = userCollection.find(i => i.ID === id);
 
-            // Remplissage visuel
             document.getElementById('edit-img').src = item.img;
             document.getElementById('edit-title').innerText = item.name;
             document.getElementById('edit-subtitle').innerText = item.serie;
 
-            // Badge secret
             const badge = document.getElementById('edit-secret-badge');
             if(badge) badge.style.display = item.isSecret ? 'inline-block' : 'none';
 
-            // Remplissage formulaire
             if (existing) {
                 document.getElementById('input-status').value = existing.Status || 'No status';
                 document.getElementById('input-condition').value = existing.Condition || 'Inconnu';
                 document.getElementById('input-qty').value = existing.Quantity || 1;
                 document.getElementById('input-price').value = existing["Purchase price"] || '';
                 document.getElementById('input-date').value = existing["Purchase date"] || '';
-                document.getElementById('input-note').value = existing.Notes || '';
+                document.getElementById('input-note').value = existing.Notes || existing.Note || '';
             } else {
                 document.getElementById('input-status').value = 'No status';
                 document.getElementById('input-condition').value = 'Inconnu';
@@ -841,7 +807,7 @@
             document.getElementById('modal').style.display = 'none';
         };
 
-        // --- FONCTION SAUVEGARDER ---
+        // --- FONCTION SAUVEGARDER (SANCTISÉE) ---
         window.sauvegarder = async function() {
             if (!currentUser) {
                 alert("Erreur : Vous avez été déconnecté. Veuillez rafraîchir la page.");
@@ -860,21 +826,19 @@
                     if(confirm("Voulez-vous retirer cet objet de votre collection ?")) {
                         userCollection.splice(idx, 1);
                     } else {
-                        return; // Annulé
+                        return;
                     }
                 }
             } else {
+                // Stockage strict des métadonnées utilisateur uniquement
                 const newItem = {
                     ID: currentModalItem.id,
-                    Name: currentModalItem.name,
-                    Serie: currentModalItem.serie,
                     Status: status,
                     Condition: document.getElementById('input-condition').value,
                     Quantity: parseInt(document.getElementById('input-qty').value) || 1,
                     "Purchase price": parseFloat(document.getElementById('input-price').value) || 0,
-                    "Purchase date": document.getElementById('input-date').value,
-                    "Notes": document.getElementById('input-note').value,
-                    "Secret Rare": currentModalItem.isSecret ? "Yes" : "No"
+                    "Purchase date": document.getElementById('input-date').value || "",
+                    "Notes": document.getElementById('input-note').value || ""
                 };
 
                 const idx = userCollection.findIndex(i => i.ID === newItem.ID);
@@ -885,11 +849,22 @@
                 }
             }
 
+            // Filtrage préventif sur l'ensemble de la collection pour nettoyer toute clé statique résiduelle
+            const collectionPropre = userCollection.map(item => ({
+                ID: item.ID,
+                Status: item.Status || "No status",
+                Condition: item.Condition || "Inconnu",
+                Quantity: item.Quantity || 0,
+                "Purchase price": item["Purchase price"] || 0,
+                "Purchase date": item["Purchase date"] || "",
+                "Notes": item.Notes || item.Note || ""
+            }));
+
             try {
-                await setDoc(doc(db, "users", currentUser.uid), { collection: userCollection }, { merge: true });
+                await setDoc(doc(db, "users", currentUser.uid), { collection: collectionPropre }, { merge: true });
+                userCollection = collectionPropre;
                 renderGrids();
                 window.fermer();
-
             } catch(e) {
                 console.error("Erreur Firebase:", e);
                 alert("Une erreur est survenue lors de la sauvegarde : " + e.message);
@@ -903,7 +878,6 @@
             if (event.target == authModal) window.toggleAuthModal();
         }
 
-        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
         fetch('footer.html')
             .then(response => {
                 if (!response.ok) throw new Error("Erreur chargement footer");
@@ -911,16 +885,10 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                
-                // On relance la traduction pour traduire le footer
                 if(window.updateUI) window.updateUI();
-
-                // CRUCIAL : On lance la logique cookie APRÈS que le footer soit affiché
                 if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
-
     </script>
-   
 </body>
 </html>

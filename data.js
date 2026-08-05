@@ -1,5 +1,4 @@
-        // --- BASE DATA ---
-export const baseData = [
+        export const baseData = [
 
         { "ID": "ACCES-3DMUG", "Name": "Echo 3D Ceramic Cup", "Serie": "Accessories", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/ACCES-3DMUG.jpg" },
         { "ID": "ACCES-ECHOPAS", "Name": "Echo Passport Bag", "Serie": "Accessories", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/ACCES-ECHOPAS.jpg" },
@@ -180,7 +179,7 @@ export const baseData = [
         { "ID": "SHE-SUNNY", "Name": "Sunny Doll", "Serie": "Shelter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SHE-SUNNY.webp" },
         { "ID": "SHE-TRAFFI", "Name": "Traffic Cone", "Serie": "Shelter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SHE-TRAFFI.webp" },
         { "ID": "SHE-WARRIO", "Name": "Warrior", "Serie": "Shelter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SHE-WARRIO.webp" },
-        { "ID": "SPE- SIM200", "Name": "Simper", "Serie": "Special 200%", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SIM200.png" },
+        { "ID": "SPE- SIM200", "Name": "Simper", "Serie": "Special 200%", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-SIM200.png" },
         { "ID": "SPE- SIMPE", "Name": "Simper", "Serie": "Special Blister", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-SIMPE.png" },
         { "ID": "SPE-3, 2,", "Name": "3, 2, 1 Boom!", "Serie": "Special Blind Box", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-32.png" },
         { "ID": "SPE-BACKTO", "Name": "Back to Play", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-BACKTO.png" },

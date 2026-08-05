@@ -193,7 +193,7 @@
         .trend-down { color: #C0392B; }
         .trend-neutral { color: #9CA3AF; }
 
-        /* --- CSS DU GRAPHIQUE CORRIGÉ --- */
+        /* --- CSS DU GRAPHIQUE --- */
         .chart-container { 
             width: 100%; height: 140px; background: #F9FAFB; 
             border-radius: 12px; margin-top: 10px; margin-bottom: 20px; 
@@ -210,10 +210,8 @@
         /* --- MODALS (POPUP) --- */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
         
-        /* Popup PC (Agrandie) */
         .modal-content { background: white; width: 90%; max-width: 600px; padding: 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
         
-        /* Popup Mobile (Bottom Sheet) */
         @media (max-width: 768px) {
             .modal-overlay { align-items: flex-end; }
             .modal-content { 
@@ -223,7 +221,6 @@
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        /* En-tête Modal */
         .modal-header-info { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid #E5E7EB; }
         .modal-header-img-wrapper { position: relative; flex-shrink: 0; }
         .modal-header-img-wrapper img { width: 90px; height: 90px; object-fit: cover; border-radius: 12px; border: 2px solid #E5E7EB; }
@@ -251,8 +248,7 @@
         }
         #btn-back-to-top:hover { transform: translateY(-3px); background: var(--primary-dark); }
         @media (max-width: 768px) { #btn-back-to-top { bottom: 100px; right: 20px; width: 45px; height: 45px; } }
-                .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-
+        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
     </style>
 </head>
 <body>
@@ -446,7 +442,7 @@
         </div>
     </div>
 
-    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
+    <!-- MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
         <div class="modal-content" style="text-align:center;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
@@ -455,7 +451,6 @@
             <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
             <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
             
-            <!-- Lien Mot de passe oublié -->
             <div style="text-align: right; margin-bottom: 15px;">
                 <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
             </div>
@@ -463,7 +458,6 @@
             <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
             <div class="auth-separator">OU</div>
             
-            <!-- Bouton Google -->
             <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
@@ -477,7 +471,6 @@
     <div id="footer-placeholder"></div>
 
     <script>
-        // --- GESTION BOUTON SCROLL TOP & RECHERCHE ---
         const searchInput = document.getElementById('searchBar');
         const searchClear = document.getElementById('searchClear');
         const btnTop = document.getElementById('btn-back-to-top');
@@ -492,7 +485,6 @@
             else btnTop.style.display = 'none';
         });
 
-        // --- COOKIES & ANALYTICS ---
         const GA_ID = 'G-RFP1HDMW49';
         function loadAnalytics() {
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
@@ -521,7 +513,6 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        // AJOUT DES IMPORTS GOOGLE & RESET PASSWORD & VERIFICATION EMAIL
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
@@ -539,7 +530,6 @@
         const db = getFirestore(app);
         const auth = getAuth(app);
 
-        // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
@@ -682,8 +672,18 @@
                     const cloudData = (data && Array.isArray(data.collection)) ? data.collection : [];
                     myCollection = baseData.map(baseItem => {
                         const savedItem = cloudData.find(i => i.ID === baseItem.ID);
-                        if (savedItem) return { ...baseItem, ...savedItem };
-                        return baseItem;
+                        if (savedItem) {
+                            return {
+                                ...baseItem,
+                                ...savedItem,
+                                // Les métadonnées du catalogue local priment toujours sur les anciennes valeurs Firestore
+                                Image: baseItem.Image,
+                                Name: baseItem.Name,
+                                Serie: baseItem.Serie,
+                                "Secret Rare": baseItem["Secret Rare"]
+                            };
+                        }
+                        return { ...baseItem };
                     });
                 } else { myCollection = [...baseData]; }
             } catch (error) { myCollection = [...baseData]; }
@@ -703,7 +703,6 @@
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
                 
-                // Vérification du statut de l'email
                 if (!userCredential.user.emailVerified) {
                     alert(currentLang === 'fr'
                         ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
@@ -724,22 +723,18 @@
             
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Envoi du mail de vérification
                 await sendEmailVerification(userCredential.user);
                 
                 alert(currentLang === 'fr' 
                     ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
                     : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
                 
-                // Déconnexion immédiate pour forcer la vérification
                 await signOut(auth);
                 window.toggleAuthModal();
                 
             } catch(e) { alert(t('alertErr') + e.message); }
         };
 
-        // --- NOUVELLES FONCTIONS GOOGLE & RESET PASSWORD ---
         const googleProvider = new GoogleAuthProvider();
 
         window.handleGoogleLogin = async () => {
@@ -768,7 +763,6 @@
                 alert("Erreur: " + e.message); 
             }
         };
-        // ----------------------------------------------------
 
         const initSeriesFilter = () => {
             if (!baseData || baseData.length === 0) return;
@@ -822,7 +816,7 @@
                         case 'serie_asc': return (a.Serie || "").localeCompare(b.Serie || "");
                         case 'name_desc': return (b.Name || "").localeCompare(a.Name || "");
                         case 'name_asc': 
-                        default: return (a.Name || "").localeCompare(b.Name || "");
+                        default: return (a.Name || "").localeCompare(a.Name || "");
                     }
                 });
 
@@ -832,7 +826,6 @@
             }
         };
 
-        // --- GÉNÉRATEUR SVG (Gère 1 point ou plus) ---
         function generateDetailedChartSVG(data, colorClass, currencySymbol) {
             if (!data || data.length === 0) return `<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#ccc;font-size:12px;text-align:center;padding:0 20px;">${t('msgNoHistory')}</div>`;
             
@@ -845,7 +838,6 @@
             const chartW = width - paddingLeft - paddingRight; 
             const chartH = height - paddingTop - paddingBottom;
 
-            // S'il n'y a qu'une seule donnée enregistrée dans Firebase
             if (data.length === 1) {
                 const val = Math.round(data[0]);
                 return `
@@ -858,7 +850,6 @@
                 `;
             }
 
-            // S'il y a 2 données ou plus
             const maxVal = Math.max(...data); 
             const minVal = Math.min(...data); 
             
@@ -974,7 +965,6 @@
                     let percentChange = 0;
                     let badgeHtml = '';
 
-                    // N'affiche le badge que s'il y a 2 mois ou plus
                     if (historyData.length >= 2) {
                         const startPrice = historyData[0] * rate;
                         const endPrice = historyData[historyData.length - 1] * rate;
@@ -1112,16 +1102,26 @@
                 const saveBtn = document.querySelector('.btn-save');
                 saveBtn.innerText = t('btnSaving'); saveBtn.disabled = true;
 
+                // Extraction stricte des données utilisateur (Image, Name, Serie, Secret Rare sont exclus)
                 const collectionPropre = myCollection.map(item => {
                     return {
-                        ...item,
-                        Status: item.Status || "No status", Condition: item.Condition || "Inconnu", Quantity: item.Quantity || 0,
-                        "Purchase price": item["Purchase price"] || 0, Currency: item.Currency || "EUR", "Purchase date": item["Purchase date"] || "",
-                        Note: item.Note || "", "Secret Rare": item["Secret Rare"] || "No"
+                        ID: item.ID,
+                        Status: item.Status || "No status", 
+                        Condition: item.Condition || "Inconnu", 
+                        Quantity: item.Quantity || 0,
+                        "Purchase price": item["Purchase price"] || 0, 
+                        Currency: item.Currency || "EUR", 
+                        "Purchase date": item["Purchase date"] || "",
+                        Note: item.Note || ""
                     };
                 });
-                if (auth.currentUser) { await setDoc(doc(db, "users", auth.currentUser.uid), { collection: collectionPropre }); } 
-                else { localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre)); }
+
+                if (auth.currentUser) { 
+                    await setDoc(doc(db, "users", auth.currentUser.uid), { collection: collectionPropre }); 
+                } else { 
+                    localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre)); 
+                }
+
                 saveBtn.innerText = t('btnSave'); saveBtn.disabled = false;
                 window.fermer(); window.updateGrid();
             } catch (error) {
@@ -1129,6 +1129,7 @@
                 const saveBtn = document.querySelector('.btn-save'); if(saveBtn) { saveBtn.innerText = t('btnSave'); saveBtn.disabled = false; }
             }
         };
+
         window.fermer = () => document.getElementById('modal').style.display = "none";
         window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.style.display = "none"; } }
         
