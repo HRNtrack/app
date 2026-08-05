@@ -452,8 +452,7 @@
                 log("Démarrage de l'analyse...");
             }
 
-            // --- AJOUT DU CAD (0.68) ---
-const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
+            const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             try {
                 log("Connexion Firestore...");
                 const usersSnap = await getDocs(collection(db, "users"));
@@ -474,12 +473,10 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                 let serieMap = {};
                 let userCollectionsStats = []; 
 
-                // --- AJOUT DU CAD DANS LE COMPTEUR ---
                 let currencyCounts = { "EUR": 0, "USD": 0, "CAD": 0, "CNY": 0, "GBP": 0, "Others": 0 };
                 let dataQuality = { itemsWithPrice: 0, itemsWithDate: 0, totalItemsOwned: 0 };
                 let allActivities = []; 
 
-                // Nouveaux Compteurs
                 let dormantCount = 0;
                 let tierCounts = { empty: 0, newbie: 0, inter: 0, expert: 0 };
                 const sixMonthsAgo = new Date();
@@ -501,34 +498,53 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                             d.collection.forEach(item => {
                                 if(!item) return;
 
-                                if(item.Status === "Possédé") {
+                                const itemId = item.ID ?? item.id;
+                                const status = item.Status || item.status || '';
+                                const isOwned = status === 'Possédé' || status === 'Possédée' || status === 'Owned' || status === 'owned';
+                                const isWish = status === 'Recherché' || status === 'Wishlist' || status === 'Recherche' || status === 'wishlist';
+
+                                const rawQty = parseInt(item.Quantity ?? item.quantity);
+                                const qty = !isNaN(rawQty) && rawQty > 0 ? rawQty : (isOwned ? 1 : 0);
+
+                                const rawPrice = item["Purchase price"] ?? item.purchasePrice ?? item.price;
+                                const p = parseFloat(rawPrice);
+
+                                const currRaw = item.Currency || item.currency || "EUR";
+                                const curr = currRaw.toUpperCase();
+
+                                const rawDate = item["Purchase date"] || item.purchaseDate || item.date;
+
+                                if(isOwned) {
                                     hasItems = true;
-                                    const qty = parseInt(item.Quantity) || 1; 
                                     
                                     totalItemsQty += qty;
                                     dataQuality.totalItemsOwned += qty; 
                                     userStats.totalQty += qty;
 
-                                    if(item.ID) popularityMap[item.ID] = (popularityMap[item.ID] || 0) + 1;
-                                    if(item.Serie) serieMap[item.Serie] = (serieMap[item.Serie] || 0) + qty;
+                                    if(itemId) popularityMap[itemId] = (popularityMap[itemId] || 0) + 1;
+                                    
+                                    const serieName = item.Serie || item.serie || (baseData.find(b => String(b.ID) === String(itemId))?.Serie);
+                                    if(serieName) serieMap[serieName] = (serieMap[serieName] || 0) + qty;
+                                    
                                     if(qty > 1) totalDoubles += (qty - 1);
-                                    if(item["Secret Rare"] && String(item["Secret Rare"]).toLowerCase() === "yes") totalSecrets += qty;
 
-                                    if(item.ID) userStats.items.push({ id: item.ID, qty: qty });
+                                    const isSecret = (item["Secret Rare"] && String(item["Secret Rare"]).toLowerCase() === "yes") ||
+                                                     (item.secret === true) || (item.Secret === "Yes");
+                                    if(isSecret) totalSecrets += qty;
 
-                                    const curr = item.Currency || "EUR";
+                                    if(itemId) userStats.items.push({ id: itemId, qty: qty });
+
                                     if(currencyCounts[curr] !== undefined) currencyCounts[curr]++;
                                     else currencyCounts["Others"]++;
 
                                     let pDate = null;
                                     let hasRealDate = false;
-                                    if(item["Purchase date"]) {
-                                        pDate = new Date(item["Purchase date"]);
+                                    if(rawDate) {
+                                        pDate = new Date(rawDate);
                                         if(!isNaN(pDate.getTime())) {
                                             dataQuality.itemsWithDate += qty; 
                                             hasRealDate = true;
                                             
-                                            // Check Latest Date (Dormant Logic)
                                             if(!lastActiveDate || pDate > lastActiveDate) {
                                                 lastActiveDate = pDate;
                                             }
@@ -536,14 +552,14 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                                     }
                                     
                                     if(hasRealDate) {
-                                        let realName = item.Name || "Figurine";
-                                        let realImg = item.Image || "";
+                                        let realName = item.Name || item.name || "Figurine";
+                                        let realImg = item.Image || item.image || "";
                                         
-                                        if(baseData && baseData.length > 0 && item.ID) {
-                                            const baseItem = baseData.find(b => b.ID === item.ID);
+                                        if(baseData && baseData.length > 0 && itemId) {
+                                            const baseItem = baseData.find(b => String(b.ID) === String(itemId));
                                             if(baseItem) {
-                                                if(!item.Name) realName = baseItem.Name;
-                                                if(!item.Image) realImg = baseItem.Image;
+                                                if(!item.Name && !item.name) realName = baseItem.Name;
+                                                if(!item.Image && !item.image) realImg = baseItem.Image;
                                             }
                                         }
 
@@ -555,7 +571,7 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                                         });
                                     }
 
-                                    let volumeDateStr = hasRealDate ? item["Purchase date"] : new Date().toISOString().split('T')[0];
+                                    let volumeDateStr = hasRealDate ? rawDate : new Date().toISOString().split('T')[0];
                                     globalPurchaseDates[volumeDateStr] = (globalPurchaseDates[volumeDateStr] || 0) + qty;
 
                                     if (hasRealDate) {
@@ -564,26 +580,24 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                                         }
                                     }
 
-                                    const p = parseFloat(item["Purchase price"]);
-                                    if(p > 0) {
+                                    if(!isNaN(p) && p > 0) {
                                         dataQuality.itemsWithPrice += qty; 
                                         const rate = RATES[curr] || 1;
                                         const priceInEur = p * rate;
                                         totalPaidEur += (priceInEur * qty);
-                                        if(item.ID) {
-                                            if(!priceMap[item.ID]) priceMap[item.ID] = [];
-                                            priceMap[item.ID].push(priceInEur);
+                                        if(itemId) {
+                                            if(!priceMap[itemId]) priceMap[itemId] = [];
+                                            priceMap[itemId].push(priceInEur);
                                         }
                                     }
                                 }
-                                else if (item.Status === "Recherché" || item.Status === "Wishlist") {
+                                else if (isWish) {
                                     totalWishlist++;
-                                    if(item.ID) wishlistMap[item.ID] = (wishlistMap[item.ID] || 0) + 1;
+                                    if(itemId) wishlistMap[itemId] = (wishlistMap[itemId] || 0) + 1;
                                 }
                             });
                         }
                         
-                        // Analyse Dormant
                         if(hasItems) {
                             activeUsers++;
                             if(lastActiveDate && lastActiveDate < sixMonthsAgo) {
@@ -591,7 +605,6 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                             }
                         }
 
-                        // Analyse Tiers 
                         if(userStats.totalQty === 0) tierCounts.empty++;
                         else if(userStats.totalQty <= 10) tierCounts.newbie++;
                         else if(userStats.totalQty <= 50) tierCounts.inter++;
@@ -612,7 +625,6 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
 
                 log("Calcul des stats terminé. Mise à jour UI...");
 
-                // --- CALCUL VALEURS ---
                 let finalCotes = {};
                 for (const [id, prices] of Object.entries(priceMap)) {
                     prices.sort((a, b) => a - b);
@@ -655,7 +667,6 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                 safeSetText('kpi-active-ratio', `${activeUsers} actifs / ${userCount} total`);
                 safeSetText('kpi-total-items-all', formatNum(totalItemsQty));
                 safeSetText('kpi-market-val', formatEur(totalEstimatedValue));
-                safeSetText('kpi-secrets-count', `${totalSecrets} secrets`);
                 safeSetText('kpi-secrets-rate', totalItemsQty > 0 ? (totalSecrets/totalItemsQty*100).toFixed(1) + "%" : "0%");
 
                 safeSetText('kpi-dormant-val', dormantCount);
@@ -675,14 +686,11 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
 
                 const avgSpent = activeUsers > 0 ? totalPaidEur / activeUsers : 0;
                 safeSetText('kpi-avg-spent', formatEur(avgSpent));
-                const avgFigs = activeUsers > 0 ? totalItemsQty / activeUsers : 0;
-                safeSetText('kpi-avg-figs', Math.round(avgFigs));
-                const avgWish = userCount > 0 ? totalWishlist / userCount : 0;
                 
                 safeSetText('kpi-doubles', formatNum(totalDoubles));
 
                 const getName = (id) => { 
-                    if(baseData.length > 0) { const f = baseData.find(b=>b.ID===id); return f ? f.Name : id; }
+                    if(baseData.length > 0) { const f = baseData.find(b => String(b.ID) === String(id)); return f ? f.Name : id; }
                     return id;
                 };
 
@@ -727,7 +735,6 @@ const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
                 try { updateUserChart('all', null); } catch(e){ console.error("Err Graph User", e); }
                 try { updateVolumeChart('all', null); } catch(e){ console.error("Err Graph Vol", e); }
 
-                // --- MAJ DU GRAPHIQUE POUR LE CAD ---
                 const ctxCurr = document.getElementById('chartCurrency');
                 if(ctxCurr) {
                     if(currencyChartInstance) currencyChartInstance.destroy();
