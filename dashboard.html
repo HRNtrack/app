@@ -236,78 +236,9 @@
             .modules-grid { grid-template-columns: 1fr !important; }
             .dashboard-grid { grid-template-columns: 1fr 1fr !important; }
             .stat-card.progression { grid-column: span 2 !important; }
-            .dashboard-toolbar { padding: 15px; flex-direction: column; position: relative !important; top: 0 !important; gap: 12px; }
-            .toolbar-top { flex-direction: column; align-items: stretch !important; width: 100%; gap: 12px; }
-            .filters-container { justify-content: flex-start; width: 100%; overflow-x: auto; padding-bottom: 4px; }
-            .search-wrapper { width: 100%; min-width: 0; }
-            .controls-row { flex-direction: column; width: 100%; gap: 10px; }
-            .control-select { width: 100%; min-width: 0; }
-        }
-
-        /* CONFIGURATION MOBILE AVANCÉE (2 ITEMS PAR LIGNE + REPOSITIONNEMENT BOUTON TOP) */
-        @media (max-width: 600px) {
-            .container {
-                padding: 0 10px !important;
-                margin: 15px auto !important;
-            }
-
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 8px !important;
-            }
-
-            .stat-card {
-                padding: 10px 12px !important;
-            }
-
-            .stat-card .value {
-                font-size: 1.2rem !important;
-            }
-
-            .stat-card h3 {
-                font-size: 0.65rem !important;
-            }
-
-            .collection-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
-                gap: 10px !important;
-            }
-
-            .card {
-                padding: 8px 8px 10px 8px !important;
-                height: 100% !important;
-                display: flex !important;
-                flex-direction: column !important;
-                justify-content: space-between !important;
-            }
-
-            .card-info {
-                padding-top: 6px !important;
-            }
-
-            .card-name {
-                font-size: 0.72rem !important;
-                line-height: 1.2 !important;
-            }
-
-            .card-serie {
-                font-size: 0.62rem !important;
-            }
-
-            .card::before {
-                width: 28px !important;
-                height: 7px !important;
-                top: -4px !important;
-            }
-
-            #btn-back-to-top {
-                bottom: 12px !important;
-                right: 12px !important;
-                width: 36px !important;
-                height: 36px !important;
-                font-size: 14px !important;
-                opacity: 0.85;
-            }
+            .dashboard-toolbar { flex-direction: column; position: relative !important; top: 0 !important; }
+            .toolbar-top { flex-direction: column; align-items: stretch !important; }
+            .filters-container { justify-content: flex-start; }
         }
 
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
