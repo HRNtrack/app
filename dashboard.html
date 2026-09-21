@@ -236,9 +236,34 @@
             .modules-grid { grid-template-columns: 1fr !important; }
             .dashboard-grid { grid-template-columns: 1fr 1fr !important; }
             .stat-card.progression { grid-column: span 2 !important; }
-            .dashboard-toolbar { flex-direction: column; position: relative !important; top: 0 !important; }
-            .toolbar-top { flex-direction: column; align-items: stretch !important; }
-            .filters-container { justify-content: flex-start; }
+            .dashboard-toolbar { padding: 15px; flex-direction: column; position: relative !important; top: 0 !important; gap: 12px; }
+            .toolbar-top { flex-direction: column; align-items: stretch !important; width: 100%; gap: 12px; }
+            .filters-container { justify-content: flex-start; width: 100%; overflow-x: auto; padding-bottom: 4px; }
+            .search-wrapper { width: 100%; min-width: 0; }
+            .controls-row { flex-direction: column; width: 100%; gap: 10px; }
+            .control-select { width: 100%; min-width: 0; }
+        }
+
+        /* CONFIGURATION MOBILE (2 ITEMS PAR LIGNE) */
+        @media (max-width: 600px) {
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            .card {
+                padding: 8px 8px 12px 8px !important;
+            }
+            .card-name {
+                font-size: 0.75rem !important;
+            }
+            .card-serie {
+                font-size: 0.65rem !important;
+            }
+            .card::before {
+                width: 30px !important;
+                height: 8px !important;
+                top: -4px !important;
+            }
         }
 
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
