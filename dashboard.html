@@ -234,36 +234,86 @@
             .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
             .mobile-menu-btn { display: block; }
             .modules-grid { grid-template-columns: 1fr !important; }
-            .dashboard-grid { grid-template-columns: 1fr 1fr !important; }
+            .dashboard-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
             .stat-card.progression { grid-column: span 2 !important; }
-            .dashboard-toolbar { padding: 15px; flex-direction: column; position: relative !important; top: 0 !important; gap: 12px; }
-            .toolbar-top { flex-direction: column; align-items: stretch !important; width: 100%; gap: 12px; }
-            .filters-container { justify-content: flex-start; width: 100%; overflow-x: auto; padding-bottom: 4px; }
-            .search-wrapper { width: 100%; min-width: 0; }
-            .controls-row { flex-direction: column; width: 100%; gap: 10px; }
-            .control-select { width: 100%; min-width: 0; }
+
+            /* Barre de filtres / recherche : reste collée sous la nav */
+            .dashboard-toolbar {
+                padding: 12px;
+                flex-direction: column;
+                gap: 10px;
+                position: sticky;
+                top: var(--nav-height);
+                z-index: 100;
+            }
+            .toolbar-top { flex-direction: column; align-items: stretch !important; width: 100%; gap: 10px; }
+            .search-wrapper { width: 100%; min-width: 0; flex: none; order: -1; }
+            .search-bar { font-size: 16px; padding: 11px 38px 11px 38px; } /* 16px = pas de zoom iOS */
+            .filters-container {
+                width: 100%;
+                min-width: 0;
+                justify-content: flex-start;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x proximity;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+                margin: 0 -2px;
+            }
+            .filters-container::-webkit-scrollbar { display: none; }
+            .filter-btn { flex: 1 0 auto; scroll-snap-align: start; padding: 9px 14px; }
+            /* Les 2 sélecteurs restent côte à côte pour gagner de la hauteur */
+            .controls-row { flex-direction: row; width: 100%; gap: 8px; flex-wrap: nowrap; }
+            .control-select {
+                flex: 1 1 0;
+                width: auto;
+                min-width: 0;
+                font-size: 0.78rem;
+                padding: 10px 8px;
+                text-overflow: ellipsis;
+            }
         }
 
-        /* CONFIGURATION MOBILE (2 ITEMS PAR LIGNE) */
-        @media (max-width: 600px) {
+        /* CONFIGURATION MOBILE (2 ITEMS PAR LIGNE, TAILLE IDENTIQUE) */
+        @media (max-width: 767px) {
+            .container { margin: 18px auto; padding: 0 12px; }
+            .announcement-box { padding: 12px 14px; gap: 10px; margin-bottom: 18px; }
+            .announcement-content { font-size: 12.5px; }
+            .dashboard-grid { gap: 10px; margin-bottom: 18px; }
+            .stat-card { padding: 14px; }
+            .stat-card .value { font-size: 1.35rem; }
+            .modules-grid { gap: 12px; margin-bottom: 20px; }
+
+            /* Grille : exactement 2 colonnes égales, quelle que soit la largeur */
             .collection-grid {
-                grid-template-columns: repeat(2, 1fr) !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                grid-auto-rows: 1fr;
                 gap: 12px !important;
             }
             .card {
                 padding: 8px 8px 12px 8px !important;
+                height: 100%;
+                min-width: 0;
             }
-            .card-name {
-                font-size: 0.75rem !important;
-            }
-            .card-serie {
-                font-size: 0.65rem !important;
-            }
+            /* Hauteur de texte réservée -> toutes les cartes font la même taille */
+            .card-info { padding-top: 8px; min-height: 84px; }
+            .card-name { font-size: 0.78rem !important; line-height: 1.25; }
+            .card-serie { font-size: 0.66rem !important; }
             .card::before {
                 width: 30px !important;
                 height: 8px !important;
                 top: -4px !important;
             }
+            .card:hover { transform: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        }
+
+        /* Très petits écrans : on garde 2 colonnes, on réduit juste le texte */
+        @media (max-width: 360px) {
+            .collection-grid { gap: 8px !important; }
+            .card { padding: 6px 6px 10px 6px !important; }
+            .card-name { font-size: 0.72rem !important; }
+            .card-info { min-height: 78px; }
+            .filter-btn { font-size: 0.7rem; padding: 8px 10px; }
         }
 
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
@@ -331,9 +381,11 @@
         .control-select:focus { border-color: var(--color-dark); }
 
         /* CARTE POLAROID */
-        .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 24px; }
+        .collection-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 24px; align-items: stretch; }
         
         .card { 
+            height: 100%;
+            min-width: 0;
             background: #FFFFFF; 
             padding: 12px 12px 18px 12px; 
             border: 1px solid var(--color-border); 
@@ -392,8 +444,8 @@
         .wish-badge { position: absolute; top: 8px; left: 8px; background: #E67E22; color: white; padding: 2px 8px; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.05em; z-index: 2; }
         .secret-badge { position: absolute; top: 8px; right: 8px; background: var(--color-gold); color: white; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2; border: 1px solid white; }
         
-        .card-info { padding-top: 12px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .card-name { font-weight: 600; font-size: 0.82rem; margin: 0; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .card-info { padding-top: 12px; text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; }
+        .card-name { font-weight: 600; font-size: 0.82rem; margin: 0; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
         .card-serie { font-size: 0.72rem; color: var(--color-text-sub); margin-top: 2px; }
 
         .trend-badge { display: inline-block; padding: 2px 5px; background: #F0EDE6; font-size: 0.65rem; margin-left: 4px; font-weight: 700; }
