@@ -244,25 +244,69 @@
             .control-select { width: 100%; min-width: 0; }
         }
 
-        /* CONFIGURATION MOBILE (2 ITEMS PAR LIGNE) */
+        /* CONFIGURATION MOBILE AVANCÉE (2 ITEMS PAR LIGNE + REPOSITIONNEMENT BOUTON TOP) */
         @media (max-width: 600px) {
-            .collection-grid {
+            .container {
+                padding: 0 10px !important;
+                margin: 15px auto !important;
+            }
+
+            .dashboard-grid {
                 grid-template-columns: repeat(2, 1fr) !important;
-                gap: 12px !important;
+                gap: 8px !important;
             }
-            .card {
-                padding: 8px 8px 12px 8px !important;
+
+            .stat-card {
+                padding: 10px 12px !important;
             }
-            .card-name {
-                font-size: 0.75rem !important;
+
+            .stat-card .value {
+                font-size: 1.2rem !important;
             }
-            .card-serie {
+
+            .stat-card h3 {
                 font-size: 0.65rem !important;
             }
+
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px !important;
+            }
+
+            .card {
+                padding: 8px 8px 10px 8px !important;
+                height: 100% !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+            }
+
+            .card-info {
+                padding-top: 6px !important;
+            }
+
+            .card-name {
+                font-size: 0.72rem !important;
+                line-height: 1.2 !important;
+            }
+
+            .card-serie {
+                font-size: 0.62rem !important;
+            }
+
             .card::before {
-                width: 30px !important;
-                height: 8px !important;
+                width: 28px !important;
+                height: 7px !important;
                 top: -4px !important;
+            }
+
+            #btn-back-to-top {
+                bottom: 12px !important;
+                right: 12px !important;
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 14px !important;
+                opacity: 0.85;
             }
         }
 
