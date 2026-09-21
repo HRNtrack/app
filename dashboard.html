@@ -244,6 +244,28 @@
             .control-select { width: 100%; min-width: 0; }
         }
 
+        /* CONFIGURATION MOBILE (2 ITEMS PAR LIGNE) */
+        @media (max-width: 600px) {
+            .collection-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            .card {
+                padding: 8px 8px 12px 8px !important;
+            }
+            .card-name {
+                font-size: 0.75rem !important;
+            }
+            .card-serie {
+                font-size: 0.65rem !important;
+            }
+            .card::before {
+                width: 30px !important;
+                height: 8px !important;
+                top: -4px !important;
+            }
+        }
+
         .container { max-width: 1400px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; display: none; }
         
         .announcement-box { 
