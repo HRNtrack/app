@@ -3,86 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Releases</title>
+    <title>HRNtrack - Mises à jour</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <!-- Typographies Poppins & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --primary: #6A8C47;
-            --primary-dark: #557235;
-            --bg-body: #F5F5F0;
-            --card-bg: #ffffff;
-            --text-main: #1A1A1A;
-            --text-sub: #555555;
-            --gold: #C6A875;
-            --red: #C0392B;
-            --dark-bg: #1A1A1A;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --nav-height-mobile: 80px;
-            --info-blue: #2196F3;
-            --info-bg: #E3F2FD;        
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-sand: #EBE7DF;
+            --color-border: #D8D2C5;
+            --color-gold: #C6A875;
+            --color-gold-light: #F9F5EB;
+            --color-red: #C0392B; 
+            --color-green: #6A8C47;
+            --color-green-dark: #557235;
+            --color-text-sub: #5E5D59;
+            --card-bg: #FCFBF8;
+            
+            --primary: var(--color-green);
+            --primary-dark: var(--color-green-dark);
+            --bg-body: var(--color-light);
+            --text-main: var(--color-dark);
+            --text-sub: var(--color-text-sub);
+            
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --nav-height: 75px;
+            --nav-height-mobile: 70px;
+            
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body { 
             background-color: var(--bg-body); 
             color: var(--text-main); 
-            font-family: 'Poppins', sans-serif; 
+            font-family: var(--font-sans); 
             margin: 0; 
-            display: flex; flex-direction: column; min-height: 100vh;
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
             padding-bottom: var(--nav-height-mobile);
-            opacity: 0; transition: opacity 0.3s ease-in-out;
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
         }
         body.ready { opacity: 1; }
 
-        /* --- HEADER & NAV --- */
+        /* --- NAVIGATION SUPÉRIEURE --- */
         .top-nav {
-            background: var(--dark-bg); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            height: var(--nav-height);
+            background: rgba(216, 210, 197, 0.45);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .site-logo { height: 80px; }
-        
+
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-logo {
+            height: 100px;
+            width: auto;
+            filter: brightness(0);
+            transition: opacity 0.25s ease;
+            display: block;
+        }
+
+        .site-logo:hover {
+            opacity: 0.75;
+        }
+
         .nav-center {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.05); padding: 4px;
-            border-radius: 12px; display: flex; gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
+
         .nav-link {
-            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
-            border-radius: 8px; font-size: 12px; font-weight: 600;
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+            text-decoration: none;
+            color: var(--color-dark);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s ease;
+            display: inline-block;
         }
-        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
-        
-        .nav-right { display: flex; align-items: center; gap: 10px; }
+
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-auth-trigger {
+            background: transparent;
+            border: 1px solid var(--color-dark);
+            color: var(--color-dark);
+            padding: 0.5rem 1.2rem;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-auth-trigger:hover {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
 
         .lang-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            background: var(--color-sand);
         }
-        .lang-option {
-            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
-            color: #9CA3AF; transition: all 0.3s ease;
-        }
-        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
 
-.btn-auth-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
-            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+        .lang-option {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-sub);
+            transition: all 0.2s ease;
         }
-                
-        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
+
+        .lang-option.active {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        /* Mobile Hamburger Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--color-dark);
+        }
+        
+        .mobile-menu-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--color-dark);
+        }
+
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0; right: 0; bottom: 0;
+            background: var(--color-light);
+            border-top: 1px solid var(--color-border);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-drawer.open {
+            display: flex;
+        }
+
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        .mobile-drawer .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+        @media (max-width: 992px) {
+            .top-nav { padding: 0 1.5rem; }
+            .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
+            .mobile-menu-btn { display: block; }
+        }
 
         /* --- RELEASE PAGE SPECIFIC --- */
         .container { 
-            max-width: 900px; margin: 30px auto; padding: 0 20px; 
+            max-width: 900px; margin: 40px auto; padding: 0 20px; 
             width: 100%; box-sizing: border-box; flex: 1;
         }
 
@@ -90,10 +241,11 @@
             text-align: center; margin-bottom: 40px;
         }
         .page-title {
-            font-size: 28px; font-weight: 800; color: var(--text-main); margin-bottom: 10px;
+            font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;
+            text-transform: uppercase; letter-spacing: 0.05em;
         }
         .page-sub {
-            color: var(--text-sub); font-size: 14px;
+            color: var(--text-sub); font-size: 0.88rem;
         }
 
         .timeline {
@@ -103,23 +255,26 @@
         /* Ligne verticale */
         .timeline::before {
             content: ''; position: absolute; left: 0; top: 10px; bottom: 0;
-            width: 2px; background: #E5E7EB;
+            width: 2px; background: var(--color-border);
         }
 
         .release-card {
-            background: white; border-radius: 16px; padding: 25px;
-            margin-bottom: 30px; box-shadow: var(--shadow);
-            position: relative; margin-left: 20px;
-            border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.2s;
+            background: #FFFFFF; 
+            border: 1px solid var(--color-border); 
+            padding: 28px;
+            margin-bottom: 30px; 
+            box-shadow: var(--shadow);
+            position: relative; 
+            margin-left: 20px;
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .release-card:hover { transform: translateY(-2px); border-color: var(--primary); }
+        .release-card:hover { transform: translateY(-3px); border-color: var(--color-dark); box-shadow: var(--shadow-hover); }
         
         /* Point sur la timeline */
         .release-card::before {
-            content: ''; position: absolute; left: -27px; top: 25px;
+            content: ''; position: absolute; left: -27px; top: 32px;
             width: 12px; height: 12px; border-radius: 50%;
-            background: var(--primary); border: 4px solid var(--bg-body);
+            background: var(--color-dark); border: 4px solid var(--bg-body);
         }
 
         .release-meta {
@@ -127,91 +282,172 @@
         }
 
         .release-date {
-            background: rgba(106, 140, 71, 0.1); color: var(--primary);
-            font-weight: 700; font-size: 12px; padding: 4px 10px; border-radius: 6px;
+            background: var(--color-sand); color: var(--color-dark);
+            border: 1px solid var(--color-border);
+            font-weight: 700; font-size: 0.72rem; padding: 4px 10px; text-transform: uppercase; letter-spacing: 0.05em;
         }
 
         .version-badge {
-            background: #F3F4F6; color: #555; border: 1px solid #E5E7EB;
-            font-family: 'JetBrains Mono', monospace; 
-            font-size: 11px; font-weight: 600; padding: 4px 8px; border-radius: 6px;
+            background: var(--color-dark); color: var(--color-light);
+            font-family: var(--font-mono); 
+            font-size: 0.72rem; font-weight: 600; padding: 4px 10px; letter-spacing: 0.05em;
         }
 
         .release-title {
-            font-size: 18px; font-weight: 700; color: var(--text-main); margin-bottom: 15px;
+            font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.03em;
         }
         .release-content {
-            font-size: 14px; color: var(--text-sub); line-height: 1.6;
+            font-size: 0.88rem; color: var(--text-sub); line-height: 1.6;
         }
         .release-content strong { color: var(--text-main); }
         .release-content ul { padding-left: 20px; margin: 10px 0; }
-        .release-content li { margin-bottom: 5px; }
+        .release-content li { margin-bottom: 6px; }
 
         .alert-box {
-            background: #FFF4E5; border-left: 4px solid #FF9800;
-            padding: 15px; border-radius: 8px; margin-top: 15px;
-            color: #663C00; font-size: 13px;
+            background: var(--color-gold-light); 
+            border-left: 4px solid var(--color-gold);
+            border: 1px solid var(--color-border);
+            border-left-width: 4px;
+            padding: 16px; margin-top: 18px;
+            color: var(--color-dark); font-size: 0.82rem; line-height: 1.6;
         }
-        .alert-title { font-weight: 700; display: block; margin-bottom: 5px; color: #E65100; }
+        .alert-title { font-weight: 700; display: block; margin-bottom: 6px; color: var(--color-dark); text-transform: uppercase; letter-spacing: 0.05em; }
 
-        @media (min-width: 769px) { body { padding-bottom: 0; } }
-        @media (max-width: 768px) {
-            .site-logo { display: none; } 
-            .top-nav { justify-content: flex-end; padding: 10px 15px; }
-            .nav-center {
-                position: fixed; bottom: 0; top: auto; left: 0; transform: none; width: 100%;
-                background: #1A1A1A; border-radius: 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);
-                padding: 8px 0 25px 0; justify-content: space-around; 
-                box-shadow: 0 -5px 20px rgba(0,0,0,0.5); box-sizing: border-box; z-index: 2000;
-            }
-            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
-            .nav-link span:first-child { font-size: 20px; }
-            .nav-link span:last-child { font-size: 10px; font-weight: 500; }
-            .nav-link.active { color: var(--primary); }
-            .nav-link:hover { background: transparent; color: white; }
+        /* MODALS & INPUTS */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(26, 26, 26, 0.7); 
+            z-index: 3000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px); 
+            padding: 1rem;
         }
+        .modal-content { 
+            background: #FCFBF8; 
+            border: 1px solid var(--color-border);
+            width: 100%; 
+            max-width: 440px; 
+            padding: 2.2rem; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+        }
+        .btn-save { 
+            width: 100%; 
+            background: var(--color-dark); 
+            color: var(--color-light); 
+            border: 1px solid var(--color-dark); 
+            padding: 12px; 
+            font-family: var(--font-sans);
+            font-weight: 600; 
+            font-size: 0.82rem; 
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: all 0.25s ease; 
+        }
+        .btn-save:hover { background: transparent; color: var(--color-dark); }
+        .btn-cancel { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--color-text-sub); 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-size: 0.78rem; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .btn-cancel:hover { color: var(--color-red); }
 
-        #snow-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
-        
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
-        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600;}
-        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
-        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+        input { 
+            width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); 
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: #FFFFFF;
+            color: var(--color-dark); outline: none; transition: border-color 0.25s ease; margin-bottom: 10px; 
+        }
+        input:focus { border-color: var(--color-dark); }
+
+        .auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--color-dark); }
+        .auth-separator { margin: 1.2rem 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--color-text-sub); text-align: center; }
     </style>
 </head>
 <body>
 
-    <canvas id="snow-canvas"></canvas>
-
+    <!-- NAVIGATION HEADER -->
     <nav class="top-nav">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo"></a>
+        <div class="nav-logo-group">
+            <a href="index.html" aria-label="HRNtrack Accueil">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
+            </a>
         </div>
+
         <div class="nav-center">
-            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+            <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
         </div>
+
         <div class="nav-right">
-            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
-                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
             </a>
 
             <div class="lang-toggle" onclick="window.toggleLanguage()">
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
+
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </nav>
+
+    <!-- MOBILE DRAWER MENU -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+        <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+        <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+        <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+        <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
+        
+        <div class="mobile-actions">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
+                <div class="lang-toggle" onclick="window.toggleLanguage()">
+                    <div class="lang-option active" id="lang-fr-mob">FR</div>
+                    <div class="lang-option" id="lang-en-mob">EN</div>
+                </div>
+            </div>
+            
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
+                <span id="auth-status-text-mob" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </div>
 
     <div class="container">
         <div class="page-header">
@@ -221,6 +457,16 @@
 
         <div class="timeline">
 
+            <!-- V2.0.0 (SEPTEMBRE 2026) : DESIGN V2 & NOUVELLES SÉRIES -->
+            <div class="release-card">
+                <div class="release-meta">
+                    <span class="release-date">Septembre 2026</span>
+                    <span class="version-badge">v2.0.0</span>
+                </div>
+                <div class="release-title" data-t="title_v200">Refonte v2.0 & Nouvelles Séries After Dark</div>
+                <div class="release-content" data-t="content_v200"></div>
+            </div>
+
             <!-- V1.2.1 (AOUT 2026) : AJOUT ACCESSOIRES -->
             <div class="release-card">
                 <div class="release-meta">
@@ -228,9 +474,7 @@
                     <span class="version-badge">v1.2.1</span>
                 </div>
                 <div class="release-title" data-t="title_v121">Mise à jour : Ajout des Accessoires</div>
-                <div class="release-content" data-t="content_v121">
-                    <!-- Rempli par le script de traduction -->
-                </div>
+                <div class="release-content" data-t="content_v121"></div>
             </div>
 
             <!-- V1.2.0 (MAI 2026) : MISE À JOUR FUSIONNÉE -->
@@ -240,9 +484,7 @@
                     <span class="version-badge">v1.2.0</span>
                 </div>
                 <div class="release-title" data-t="title_v120">Domaine, Connexion & Nouveautés</div>
-                <div class="release-content" data-t="content_v120">
-                    <!-- Rempli par le script de traduction -->
-                </div>
+                <div class="release-content" data-t="content_v120"></div>
             </div>
             
             <div class="release-card">
@@ -251,14 +493,7 @@
                     <span class="version-badge">v1.1.6</span>
                 </div>
                 <div class="release-title" data-t="title_16apr">Série Tamed Wildgrass & Nouveautés</div>
-                <div class="release-content" data-t="content_16apr">
-                    Une mise à jour massive du catalogue !<br>
-                    <ul>
-                        <li>Ajout de la série complète <strong>Tamed Wildgrass</strong> (13 figurines, dont la secrète <em>Boundary</em>).</li>
-                        <li>Ajout des peluches <strong>Little Hare Pink & Black</strong> (Special Plush Dolls).</li>
-                        <li>Ajout de la figurine <strong>Tuk-Tuk</strong> (Special Edition).</li>
-                    </ul>
-                </div>
+                <div class="release-content" data-t="content_16apr"></div>
             </div>
 
             <div class="release-card">
@@ -267,13 +502,7 @@
                     <span class="version-badge">v1.1.5</span>
                 </div>
                 <div class="release-title" data-t="title_06mar">Optimisation de la page Collection</div>
-                <div class="release-content" data-t="content_06mar">
-                    <ul>
-                        <li>Refonte complète du système de graphiques : affichage des vraies données historiques de la communauté.</li>
-                        <li>Meilleure gestion des affichages lorsqu'il y a peu ou pas d'historique (ex: 1 seule donnée).</li>
-                        <li>Améliorations esthétiques et responsive (PC/Mobile) de la pop-up.</li>
-                    </ul>
-                </div>
+                <div class="release-content" data-t="content_06mar"></div>
             </div>
 
             <div class="release-card">
@@ -282,9 +511,7 @@
                     <span class="version-badge">v1.1.4</span>
                 </div>
                 <div class="release-title" data-t="title_02mar">Ajout du Dollar Canadien (CAD)</div>
-                <div class="release-content" data-t="content_02mar">
-                    Vous l'avez demandé ! Le <strong>Dollar Canadien (CAD / CA$)</strong> est désormais disponible dans le choix des devises pour vos achats. Les cotes et les statistiques prennent désormais correctement en compte cette monnaie.
-                </div>
+                <div class="release-content" data-t="content_02mar"></div>
             </div>
 
             <div class="release-card">
@@ -293,14 +520,7 @@
                     <span class="version-badge">v1.1.3</span>
                 </div>
                 <div class="release-title" data-t="title_22feb">Nouveaux Ajouts (Specials)</div>
-                <div class="release-content" data-t="content_22feb">
-                    Ajout de 3 nouvelles figurines <strong>Special Edition / Blister</strong> au tracker :
-                    <ul>
-                        <li>Freedom Island Plus</li>
-                        <li>Well Pharmacy</li>
-                        <li>Elephant in the room marbed</li>
-                    </ul>
-                </div>
+                <div class="release-content" data-t="content_22feb"></div>
             </div>
 
             <div class="release-card">
@@ -309,13 +529,7 @@
                     <span class="version-badge">v1.1.2</span>
                 </div>
                 <div class="release-title" data-t="title_24jan">Mise à jour Base de Données & Ranks</div>
-                <div class="release-content" data-t="content_24jan">
-                    <ul>
-                        <li>Ajout de la figurine <strong>Luck on the Way (Special Edition)</strong>.</li>
-                        <li>Mise à jour majeure du système de <strong>Rank</strong> (plus de paliers : Amateur, Legend...).</li>
-                        <li>Amélioration du système de badges.</li>
-                    </ul>
-                </div>
+                <div class="release-content" data-t="content_24jan"></div>
             </div>
 
             <div class="release-card">
@@ -324,12 +538,7 @@
                     <span class="version-badge">v1.1.1</span>
                 </div>
                 <div class="release-title" data-t="title_19jan">Fonctionnalités Majeures</div>
-                <div class="release-content" data-t="content_19jan">
-                    <p><strong>Suivi des Cotes & Graphiques :</strong> Fini les fichiers Excel ! Consultez la Cote Communautaire estimée pour chaque figurine et visualisez l'Historique des Prix (tendance sur 6 mois) directement sur la fiche.</p>
-                    <p><strong>Personnalisez votre Profil :</strong> C'est votre espace ! Ajoutez désormais un Pseudo et une Photo de Profil pour rendre votre page de collection unique.</p>
-                    <p><strong>Partage de Collection :</strong> Générez un lien public unique en un clic. Partagez votre vitrine personnalisée à vos amis (même s'ils n'ont pas de compte) !</p>
-                    <p><strong>Système de Trophées :</strong> Votre passion est récompensée ! Débloquez des badges exclusifs comme Chasseur, Investisseur, Complétiste et bien d'autres.</p>
-                </div>
+                <div class="release-content" data-t="content_19jan"></div>
             </div>
 
             <div class="release-card">
@@ -338,24 +547,7 @@
                     <span class="version-badge">v1.1.0</span>
                 </div>
                 <div class="release-title" data-t="title_13jan">Les Cotes Communautaires sont actives !</div>
-                <div class="release-content" data-t="content_13jan">
-                    <p>Nous avons déployé un nouvel algorithme qui calcule la valeur marché (Cote) de chaque figurine en se basant sur les prix d'achat réels de toute la communauté.</p>
-                    
-                    <p><strong>POURQUOI C'EST IMPORTANT ?</strong><br>Pour que ce système fonctionne et que votre "Deal Score" (Indicateur de bonne affaire) soit juste, nous avons besoin de données précises.</p>
-                    
-                    <div class="alert-box">
-                        <span class="alert-title">⚠️ LA DEVISE (CURRENCY) EST CRUCIALE !</span>
-                        Si vous avez acheté une figurine en Dollars ($) ou en Livres (£), merci de bien sélectionner la devise correspondante.<br>
-                        <em>Exemple : Si vous notez "20" en prix d'achat pour du $USD mais que vous laissez la devise sur "€" (EUR), cela fausse les statistiques de tout le monde !</em>
-                        <br><br>
-                        <strong>Action requise :</strong>
-                        <ul style="margin-bottom:0;">
-                            <li>Allez dans votre Collection.</li>
-                            <li>Vérifiez vos prix d'achat.</li>
-                            <li>Assurez-vous que le champ Devise correspond bien à ce que vous avez payé.</li>
-                        </ul>
-                    </div>
-                </div>
+                <div class="release-content" data-t="content_13jan"></div>
             </div>
 
             <div class="release-card">
@@ -364,46 +556,37 @@
                     <span class="version-badge">v1.0.1</span>
                 </div>
                 <div class="release-title" data-t="title_12jan">New Arrivals</div>
-                <div class="release-content" data-t="content_12jan">
-                    3 nouvelles "Special Blind Box" sont disponibles sur le tracker ! C'est l'heure de mettre à jour votre collection ou votre wishlist.
-                    <ul>
-                        <li>Wish List Pendant</li>
-                        <li>Good Health</li>
-                        <li>Luck on the Way</li>
-                    </ul>
-                </div>
+                <div class="release-content" data-t="content_12jan"></div>
             </div>
 
         </div>
     </div>
 
-    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
+    <!-- MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center;">
+        <div class="modal-content" style="text-align:center; max-width:440px;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
-            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">
                 Sauvegardez votre collection dans le cloud.
             </p>
             
-            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:12px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:12px;">
             
-            <!-- Lien Mot de passe oublié -->
             <div style="text-align: right; margin-bottom: 15px;">
                 <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
             </div>
 
-            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary); border-color:var(--primary);" data-t="btnLogin">Se connecter</button>
             
             <div class="auth-separator">OU</div>
             
-            <!-- Bouton Google -->
-            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
 
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
                 Créer un compte (Email)
             </button>
             
@@ -413,6 +596,50 @@
 
     <div id="footer-placeholder"></div>
 
+    <script>
+        window.toggleMobileMenu = function() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('open');
+            }
+        };
+
+        const GA_ID = 'G-RFP1HDMW49';
+
+        function loadAnalytics() {
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+        }
+
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            if (consent === 'true') {
+                loadAnalytics();
+            } else if (consent === null && banner) {
+                banner.style.display = 'block'; 
+            }
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -421,13 +648,15 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // --- TRADUCTIONS ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler",
                 authDesc: "Sauvegardez votre collection dans le cloud.", btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
                 pageTitle: "Notes de Mise à Jour", pageSub: "L'historique des nouveautés et améliorations.",
+
+                title_v200: "Refonte v2.0 & Nouvelles Séries After Dark",
+                content_v200: "Bienvenue sur la version 2.0 d'HRNtrack ! Une refonte graphique complète a été déployée pour offrir un design plus épuré, moderne et élégant.<br><br><strong>Nouvelles Séries Ajoutées (28 figurines) :</strong><ul><li><strong>After Dark Charm</strong> (Série de charmes)</li><li><strong>After Dark Magnet</strong> (Série d'aimants)</li><li><strong>After Dark Pendant</strong> (Série de pendentifs)</li><li><strong>Accessoires & Éditions Spéciales</strong> (Mugs After Dark Black & White, Lampes, Diffuseur, The Hundreds Figure & Pendant, Dino Plush)</li></ul>",
 
                 title_v121: "Mise à jour v1.2.1 : Ajout des Accessoires",
                 content_v121: "Excellente nouvelle ! Toutes les collections d'<strong>Accessoires</strong> ont été ajoutées au site. Vous pouvez désormais les tracker avec la même facilité que vos figurines pour compléter votre profil.",
@@ -476,6 +705,9 @@
                 authDesc: "Save your collection to the cloud.", btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
                 pageTitle: "Release Notes", pageSub: "History of updates and improvements.",
 
+                title_v200: "v2.0 Overhaul & New After Dark Series",
+                content_v200: "Welcome to HRNtrack v2.0! A complete design overhaul has been deployed for a cleaner, more modern, and elegant experience.<br><br><strong>New Series Added (28 items):</strong><ul><li><strong>After Dark Charm Series</strong></li><li><strong>After Dark Magnet Series</strong></li><li><strong>After Dark Pendant Series</strong></li><li><strong>Accessories & Special Editions</strong> (After Dark Mugs, Ambient Light, Diffuseur, The Hundreds Figure & Pendant, Dino Plush)</li></ul>",
+
                 title_v121: "Update v1.2.1: Accessories Added",
                 content_v121: "Great news! All <strong>Accessories</strong> collections have been added to the site. You can now track them just as easily as your figures to complete your profile.",
 
@@ -522,8 +754,27 @@
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
         
         function updateUIText() {
-            if(currentLang === 'fr') { document.getElementById('lang-fr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); } 
-            else { document.getElementById('lang-fr').classList.remove('active'); document.getElementById('lang-en').classList.add('active'); }
+            if(currentLang === 'fr') { 
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.add('active');
+                if(enBtn) enBtn.classList.remove('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.add('active');
+                if(enMob) enMob.classList.remove('active');
+            } else { 
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.remove('active');
+                if(enBtn) enBtn.classList.add('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.remove('active');
+                if(enMob) enMob.classList.add('active');
+            }
             
             const tr = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => { 
@@ -533,7 +784,9 @@
             
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
+            const btnTextMob = document.getElementById('auth-status-text-mob');
             if(btnText) btnText.innerText = user ? tr.authAccount : tr.authLogin;
+            if(btnTextMob) btnTextMob.innerText = user ? tr.authAccount : tr.authLogin;
         }
 
         window.toggleLanguage = () => {
@@ -551,17 +804,13 @@
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                
-                // Vérification du statut de l'email
                 if (!userCredential.user.emailVerified) {
                     alert(currentLang === 'fr'
                         ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
                         : "Your email address has not been verified yet. Please click the link sent to your inbox.");
-                    
                     await signOut(auth);
                     return;
                 }
-                
                 window.toggleAuthModal();
             } catch(e) { alert("Erreur: " + e.message); }
         };
@@ -573,22 +822,15 @@
             
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Envoi du mail de vérification
                 await sendEmailVerification(userCredential.user);
-                
                 alert(currentLang === 'fr' 
                     ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
                     : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
-                
-                // Déconnexion immédiate pour forcer la vérification
                 await signOut(auth);
                 window.toggleAuthModal();
-                
             } catch(e) { alert("Erreur: " + e.message); }
         };
         
-        // --- NOUVELLES FONCTIONS GOOGLE & RESET PASSWORD ---
         const googleProvider = new GoogleAuthProvider();
 
         window.handleGoogleLogin = async () => {
@@ -622,19 +864,38 @@
 
         onAuthStateChanged(auth, (user) => {
             const btn = document.getElementById('auth-trigger');
+            const btnMob = document.getElementById('auth-trigger-mob');
             updateUIText();
             if (user) {
-                btn.classList.add('logged-in'); 
-                btn.onclick = () => window.location.href = "compte.html";
+                if (btn) {
+                    btn.classList.add('logged-in'); 
+                    btn.onclick = () => window.location.href = "compte.html";
+                }
+                if (btnMob) {
+                    btnMob.classList.add('logged-in');
+                    btnMob.onclick = () => window.location.href = "compte.html";
+                }
             } else {
-                btn.classList.remove('logged-in');
-                btn.onclick = () => window.toggleAuthModal();
+                if (btn) {
+                    btn.classList.remove('logged-in');
+                    btn.onclick = () => window.toggleAuthModal();
+                }
+                if (btnMob) {
+                    btnMob.classList.remove('logged-in');
+                    btnMob.onclick = () => { window.toggleAuthModal(); window.toggleMobileMenu(); };
+                }
             }
             document.body.classList.add('ready');
         });
 
-        // Footer loader
-        fetch('footer.html').then(r=>r.text()).then(d=>{document.getElementById('footer-placeholder').innerHTML=d;});
+        fetch('footer.html')
+            .then(r=>r.text())
+            .then(d=>{
+                document.getElementById('footer-placeholder').innerHTML=d;
+                if(window.updateUIText) window.updateUIText();
+                if(window.initCookieLogic) window.initCookieLogic();
+            })
+            .catch(error => console.error('Erreur Footer:', error));
     </script>
 </body>
 </html>

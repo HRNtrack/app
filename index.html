@@ -9,344 +9,805 @@
     <meta property="og:image" content="https://i.postimg.cc/wvg5Wkqt/logo1-noir.png">
     <meta property="og:url" content="https://hrntrack.app/">
     <meta property="og:type" content="website">
-    <meta name="theme-color" content="#6A8C47">
+    <meta name="theme-color" content="#1A1A1A">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="HRNtrack - Hirono Collection Tracker">
     <meta name="twitter:description" content="Manage, track, and value your Hirono figure collection.">
     <meta name="twitter:image" content="https://i.postimg.cc/wvg5Wkqt/logo1-noir.png">
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
             --color-dark: #1A1A1A;
             --color-light: #F5F5F0;
+            --color-sand: #EBE7DF;
+            --color-border: #D8D2C5;
             --color-gold: #C6A875;
             --color-red: #C0392B;
             --color-green: #6A8C47;
-            --color-blue: #2196F3;
+            --color-kraft: #B8976C;
+            --color-text-sub: #5E5D59;
 
-            --primary: var(--color-green);
-            --primary-hover: #557235;
+            --primary: var(--color-dark);
             --bg-body: var(--color-light);
-            --card-bg: #ffffff;
-            --text-main: #1A1A1A;
-            --text-sub: #555555;
-            --dark-bg: var(--color-dark);
+            --card-bg: #FCFBF8;
+            --text-main: var(--color-dark);
+            --text-sub: var(--color-text-sub);
             
-            --nav-height-mobile: 80px;
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --nav-height: 75px;
+            --nav-height-mobile: 70px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body { 
             background-color: var(--bg-body); 
             color: var(--text-main); 
-            font-family: 'Poppins', sans-serif; 
+            font-family: var(--font-sans); 
             margin: 0; 
-            -webkit-font-smoothing: antialiased; 
-            display: flex; flex-direction: column; min-height: 100vh;
-            padding-bottom: var(--nav-height-mobile);
+            padding: 0;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- HEADER & NAV --- */
+        /* --- HEADER & NAVIGATION --- */
         .top-nav {
-            background: var(--dark-bg); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            position: sticky; top: 0; z-index: 100;
-        }
-
-        .site-logo { height: 80px; }
-
-        .nav-center {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.05); padding: 4px;
-            border-radius: 12px; display: flex; gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2000;
-        }
-
-        .nav-link {
-            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
-            border-radius: 8px; font-size: 12px; font-weight: 600;
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
-        }
-        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
-
-        .nav-right { display: flex; align-items: center; gap: 10px; }
-
-        .lang-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
-        }
-        .lang-option {
-            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
-            color: #9CA3AF; transition: all 0.3s ease;
-        }
-        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        .btn-auth-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
-            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
-        }
-        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
-
-        @media (min-width: 769px) { body { padding-bottom: 0; } }
-        @media (max-width: 768px) {
-            .site-logo { display: none; } 
-            .top-nav { justify-content: flex-end; padding: 10px 15px; }
-            
-            .nav-center {
-                position: fixed; 
-                bottom: 0; 
-                top: auto; 
-                left: 0; 
-                width: 100%;
-                transform: none; 
-                background: #1A1A1A; 
-                border: none; 
-                border-top: 1px solid rgba(255,255,255,0.1);
-                padding: 8px 0 25px 0; 
-                justify-content: space-around; 
-                box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-                z-index: 2000;
-                box-sizing: border-box; 
-            }
-
-            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
-            .nav-link span:first-child { font-size: 20px; }
-            .nav-link span:last-child { font-size: 10px; font-weight: 500; }
-            .nav-link.active { color: var(--primary); }
-            
-            /* Ajustement Hero Mobile */
-            .hero-section { grid-template-columns: 1fr !important; text-align: center; padding: 40px 20px 80px 20px !important; }
-            .hero-text h1 { font-size: 36px !important; }
-            .hero-text p { margin: 0 auto 30px auto !important; }
-            .user-count-badge { margin: 0 auto 20px auto !important; }
-
-            /* --- CORRECTIF IMAGE MOBILE (AVEC 3D) --- */
-            .hero-image-container {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-                padding: 0 10px;
-            }
-            .hero-image {
-                max-width: 200px; /* Taille réduite pour mobile */
-                height: auto !important;
-                margin: 0 auto;
-            }
-        }
-
-        /* HERO SECTION */
-        .hero-section {
-            padding: 80px 20px 100px 20px; /* Plus d'espace en bas pour le chevauchement */
-            max-width: 1200px; margin: 0 auto;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
-            position: relative;
-        }
-
-        .hero-text h1 {
-            font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--color-dark) 0%, var(--primary) 100%);
-            background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
-
-        .hero-text p {
-            font-size: 18px; color: var(--text-sub); margin-bottom: 30px;
-            line-height: 1.6; max-width: 500px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary); color: white; padding: 15px 35px;
-            border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 16px;
-            transition: transform 0.2s, box-shadow 0.2s, background-color 0.2s; display: inline-block;
-            box-shadow: 0 4px 15px rgba(106, 140, 71, 0.3);
-        }
-        .btn-primary:hover {
-            background-color: var(--primary-hover); transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(106, 140, 71, 0.4);
-        }
-
-        /* USER BADGE */
-        .user-count-badge {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: rgba(106, 140, 71, 0.1); color: var(--primary);
-            padding: 6px 12px; border-radius: 20px; font-weight: 600; font-size: 13px;
-            margin-bottom: 20px;
-        }
-        .pulse-dot {
-            width: 8px; height: 8px; background: var(--primary); border-radius: 50%;
-            box-shadow: 0 0 0 rgba(106, 140, 71, 0.4);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(106, 140, 71, 0.7); }
-            70% { box-shadow: 0 0 0 6px rgba(106, 140, 71, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(106, 140, 71, 0); }
-        }
-
-        .hero-image-container { position: relative; }
-        .hero-image {
-            width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform: perspective(1000px) rotateY(-5deg); transition: transform 0.5s ease;
-            background: white; padding: 10px; border: 1px solid rgba(0,0,0,0.05);
-        }
-        .hero-image:hover { transform: perspective(1000px) rotateY(0deg); }
-
-        /* --- NEWS BANNERS (DUAL SYSTEM) --- */
-        .news-banner {
-            max-width: 1000px;
-            margin: -60px auto 40px auto; 
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-            display: flex;
-            gap: 20px; /* Espace entre les deux cartes */
-        }
-
-        .news-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 20px 25px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+            padding: 0 3rem;
+            height: var(--nav-height);
+            background: rgba(216, 210, 197, 0.45);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-logo {
+            height: 100px;
+            width: auto;
+            filter: brightness(0);
+            transition: opacity 0.25s ease;
+            display: block;
+        }
+
+        .site-logo:hover {
+            opacity: 0.75;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s ease;
+            display: inline-block;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-auth-trigger {
+            background: transparent;
+            border: 1px solid var(--color-dark);
+            color: var(--color-dark);
+            padding: 0.5rem 1.2rem;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-auth-trigger:hover {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--color-green);
+            color: var(--color-green);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--color-green);
+            color: #ffffff;
+        }
+
+        .lang-toggle {
+            display: flex;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            background: var(--color-sand);
+        }
+
+        .lang-option {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-sub);
+            transition: all 0.2s ease;
+        }
+
+        .lang-option.active {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        /* Bouton Hamburger Mobile */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--color-dark);
+        }
+        
+        .mobile-menu-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--color-dark);
+        }
+
+        /* Tiroir Menu Mobile */
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0; right: 0; bottom: 0;
+            background: var(--color-light);
+            border-top: 1px solid var(--color-border);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-drawer.open {
+            display: flex;
+        }
+
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        .mobile-drawer .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .mobile-drawer .btn-auth-trigger {
+            justify-content: center;
+            width: 100%;
+            padding: 0.85rem;
+            font-size: 0.85rem;
+        }
+
+        /* --- STYLES CADRES HERBIER --- */
+        .herbarium-frame {
+            border: 1px solid var(--color-border);
+            background: #FCFBF8;
+            padding: 18px;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-            flex: 1; /* Les cartes prennent la même largeur */
-            border-left: 5px solid transparent;
         }
-        
-        /* Styles spécifiques pour différencier les deux cartes */
-        .news-card.card-fig { border-color: var(--color-red); }
-        .news-card.card-sys { border-color: var(--color-blue); }
 
-        .news-card:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+        .herbarium-frame:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.06);
         }
-        
-        .news-content { flex: 1; }
-        
+
+        .herbarium-frame::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 16px;
+            background: rgba(216, 210, 197, 0.45);
+            border: 1px dashed rgba(160, 150, 130, 0.4);
+            z-index: 2;
+        }
+
+        .specimen-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            background: #F0EDE6;
+            border: 1px solid var(--color-border);
+        }
+
+        .specimen-tag {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid var(--color-sand);
+            font-size: 0.7rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--color-text-sub);
+        }
+
+        .specimen-tag .tag-no {
+            font-weight: 700;
+            color: var(--color-dark);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            padding: 5rem 6rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .hero-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .user-count-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 3px solid var(--color-kraft);
+            padding: 4px 0 4px 12px;
+            margin-bottom: 1.8rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-dark);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--color-green);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.2);
+        }
+
+        .hero-section h1 {
+            font-family: var(--font-sans);
+            font-size: 2.8rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--color-dark);
+            margin: 0 0 1.5rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-section p {
+            font-size: 0.98rem;
+            color: var(--color-text-sub);
+            margin-bottom: 2.5rem;
+            max-width: 520px;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--color-dark);
+            color: var(--color-light);
+            padding: 0.95rem 2.2rem;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: 1px solid var(--color-dark);
+        }
+
+        .btn-primary:hover {
+            background: transparent;
+            color: var(--color-dark);
+        }
+
+        .hero-image-container .herbarium-frame {
+            padding: 24px;
+        }
+
+        .hero-image-container .specimen-image {
+            aspect-ratio: 1/1;
+        }
+
+        /* --- NEWS BANNER --- */
+        .news-banner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 6rem;
+        }
+
+        .news-card {
+            border: 1px solid var(--color-border);
+            background: var(--card-bg);
+            padding: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .news-card:hover {
+            background: #ffffff;
+            border-color: var(--color-dark);
+        }
+
         .badge-news {
-            color: white; font-size: 9px; font-weight: 800; padding: 3px 8px;
-            border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;
-            display: inline-block; margin-bottom: 5px; vertical-align: middle;
+            font-size: 0.68rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            font-weight: 700;
+            padding: 3px 8px;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border: 1px solid currentColor;
         }
-        .badge-news.new { background: var(--color-red); }
-        .badge-news.update { background: var(--color-blue); }
 
-        .news-card h3 { 
-            margin: 0 0 3px 0; font-size: 16px; color: var(--text-main); font-weight: 700;
+        .badge-news.new { color: var(--color-red); }
+        .badge-news.update { color: var(--color-green); }
+
+        .news-card h3 {
+            font-family: var(--font-sans);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+            color: var(--color-dark);
         }
-        .news-card p { margin: 0; font-size: 12px; color: var(--text-sub); line-height: 1.4; }
+
+        .news-card p {
+            font-size: 0.88rem;
+            color: var(--color-text-sub);
+            margin: 0;
+            font-weight: 400;
+        }
 
         .btn-news-arrow {
-            background: #F3F4F6; color: var(--text-main);
-            width: 36px; height: 36px; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; transition: 0.2s; font-size: 16px;
-            margin-left: 15px; flex-shrink: 0;
-        }
-        .btn-news-arrow:hover { background: var(--primary); color: white; }
-
-        @media (max-width: 768px) {
-            .news-banner { 
-                margin-top: -40px; 
-                flex-direction: column; /* Empiler les cartes sur mobile */
-                gap: 15px;
-            }
-            .news-card { text-align: left; padding: 20px; }
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            text-decoration: none;
+            transition: transform 0.25s ease;
         }
 
-        /* FEATURES SECTION */
-        .features-section { background: white; padding: 60px 20px 80px 20px; }
+        .news-card:hover .btn-news-arrow {
+            transform: translateX(6px);
+        }
+
+        /* --- FEATURES SECTION --- */
+        .features-section {
+            max-width: 1400px;
+            margin: 6rem auto;
+            padding: 0 6rem;
+        }
+
+        .section-header-editorial {
+            margin-bottom: 3.5rem;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .section-header-editorial h2 {
+            font-family: var(--font-sans);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .section-header-editorial span {
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--color-text-sub);
+            font-weight: 600;
+        }
+
         .features-grid {
-            max-width: 1200px; margin: 0 auto; display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
         }
 
-        .feature-card {
-            padding: 30px; border-radius: 20px; background: var(--bg-body);
-            transition: transform 0.3s; border: 1px solid #E5E7EB;
+        .feature-card .herbarium-frame {
+            margin-bottom: 1.5rem;
         }
-        .feature-card:hover {
-            transform: translateY(-5px); background: #fff;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-color: var(--primary);
+
+        .feature-card h3 {
+            font-family: var(--font-sans);
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin: 0.6rem 0 0.8rem 0;
+            color: var(--color-dark);
         }
-        .feature-icon { font-size: 40px; margin-bottom: 20px; display: block; }
-        .feature-card h3 { margin: 0 0 10px 0; font-size: 20px; color: var(--text-main); }
-        .feature-card p { color: var(--text-sub); line-height: 1.6; font-size: 14px; }
 
-        /* SOCIAL & DONATION styles */
-        .social-section { padding: 60px 20px; background: transparent; text-align: center; }
-        .social-container { max-width: 800px; margin: 0 auto; }
-        .social-title { font-size: 24px; font-weight: 800; margin-bottom: 10px; color: var(--text-main); }
-        .social-desc { color: var(--text-sub); margin-bottom: 30px; font-size: 14px; }
-        .social-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .social-card { background: white; border-radius: 16px; padding: 15px 25px; display: flex; align-items: center; gap: 15px; text-decoration: none; color: var(--text-main); box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease; width: 200px; }
-        .social-card:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(0,0,0,0.08); }
-        .social-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: 0.3s; }
-        .social-icon svg { width: 20px; height: 20px; fill: currentColor; }
-        
-        .social-card.insta .social-icon { background: #fdf2f6; color: #E1306C; }
-        .social-card.insta:hover { border-color: #E1306C; }
-        .social-card.insta:hover .social-icon { background: #E1306C; color: white; }
-        
-        .social-card.tiktok .social-icon { background: #eee; color: #000; }
-        .social-card.tiktok:hover { border-color: #000; }
-        .social-card.tiktok:hover .social-icon { background: #000; color: white; }
+        .feature-card p {
+            font-size: 0.88rem;
+            color: var(--color-text-sub);
+            line-height: 1.65;
+            margin: 0;
+            font-weight: 400;
+        }
 
-        .social-card.discord .social-icon { background: #eef0fd; color: #5865F2; }
-        .social-card.discord:hover { border-color: #5865F2; }
-        .social-card.discord:hover .social-icon { background: #5865F2; color: white; }
+        /* --- SOCIAL SECTION --- */
+        .social-section {
+            background: #ECE7DF;
+            border-top: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
+            padding: 5rem 6rem;
+            margin-top: 6rem;
+        }
 
-        .social-info h4 { margin: 0; font-size: 14px; font-weight: 700; }
-        .social-info span { font-size: 12px; color: var(--text-sub); }
+        .social-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-        .donation-section { max-width: 900px; margin: 80px auto; background: linear-gradient(135deg, var(--color-dark) 0%, #2c2c2c 100%); border-radius: 24px; padding: 50px; text-align: center; color: white; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); }
-        .donation-section::before { content: "☕"; position: absolute; top: -20px; right: -20px; font-size: 200px; opacity: 0.05; transform: rotate(15deg); }
-        .donation-section h2 { margin-top: 0; font-size: 28px; }
-        .donation-section p { color: #D1D5DB; max-width: 600px; margin: 0 auto 30px auto; line-height: 1.7; }
-        .btn-coffee { background: var(--color-gold); color: white; padding: 12px 30px; border-radius: 50px; text-decoration: none; font-weight: 700; font-size: 16px; display: inline-flex; align-items: center; gap: 10px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(198, 168, 117, 0.4); }
-        .btn-coffee:hover { transform: scale(1.05); background: #b59865; }
+        .social-title {
+            font-family: var(--font-sans);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 0.8rem 0;
+        }
 
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
-        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--color-red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
-        .btn-cancel:hover { text-decoration: underline; }
-        input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #E5E7EB; font-family: inherit; font-size: 14px; box-sizing: border-box; }
-        input:focus { outline: none; border-color: var(--primary); }
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
-        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+        .social-desc {
+            font-size: 0.95rem;
+            color: var(--color-text-sub);
+            margin: 0 0 3rem 0;
+            font-weight: 400;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .social-card {
+            background: var(--card-bg);
+            border: 1px solid var(--color-border);
+            padding: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .social-card:hover {
+            border-color: var(--color-dark);
+            transform: translateY(-2px);
+            background: #ffffff;
+        }
+
+        .social-icon {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-sand);
+            flex-shrink: 0;
+        }
+
+        .social-icon svg {
+            width: 22px;
+            height: 22px;
+            fill: var(--color-dark);
+        }
+
+        .social-info h4 {
+            font-family: var(--font-sans);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 0 0 2px 0;
+        }
+
+        .social-info span {
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-text-sub);
+            font-weight: 500;
+        }
+
+        /* --- DONATION SECTION --- */
+        .donation-section {
+            max-width: 900px;
+            margin: 6rem auto;
+            padding: 4rem 3rem;
+            text-align: center;
+            border: 1px solid var(--color-border);
+            background: var(--card-bg);
+        }
+
+        .donation-section h2 {
+            font-family: var(--font-sans);
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 0 1.2rem 0;
+        }
+
+        .donation-section p {
+            font-size: 0.95rem;
+            color: var(--color-text-sub);
+            line-height: 1.7;
+            margin: 0 0 2.2rem 0;
+            font-weight: 400;
+        }
+
+        .btn-coffee {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--color-dark);
+            color: var(--color-light);
+            padding: 1rem 2.2rem;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid var(--color-dark);
+            transition: all 0.3s ease;
+        }
+
+        .btn-coffee:hover {
+            background: transparent;
+            color: var(--color-dark);
+        }
+
+        /* --- AUTH MODAL --- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(26, 26, 26, 0.7);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-content {
+            background: #FCFBF8;
+            border: 1px solid var(--color-border);
+            padding: 2.5rem 2rem;
+            width: 100%;
+            max-width: 440px;
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-title {
+            font-family: var(--font-sans);
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark);
+        }
+
+        .modal-content input[type="email"],
+        .modal-content input[type="password"] {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--color-border);
+            background: #FFFFFF;
+            font-family: var(--font-sans);
+            font-size: 0.88rem;
+            color: var(--color-dark);
+            outline: none;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+            transition: border-color 0.2s ease;
+        }
+
+        .modal-content input:focus {
+            border-color: var(--color-dark);
+        }
+
+        .auth-separator {
+            margin: 1.5rem 0;
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--color-text-sub);
+            position: relative;
+        }
+
+        .auth-separator::before,
+        .auth-separator::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: var(--color-border);
+        }
+
+        .auth-separator::before { left: 0; }
+        .auth-separator::after { right: 0; }
+
+        .btn-save {
+            width: 100%;
+            padding: 0.85rem 1rem;
+            border: 1px solid var(--color-dark);
+            background: var(--color-dark);
+            color: var(--color-light);
+            font-family: var(--font-sans);
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: none;
+            color: var(--color-text-sub);
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* --- MEDIA QUERIES MOBILE --- */
+        @media (max-width: 992px) {
+            .top-nav {
+                padding: 0 1.5rem;
+            }
+            .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle {
+                display: none;
+            }
+            .mobile-menu-btn {
+                display: block;
+            }
+            .hero-section {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.5rem;
+                gap: 2.5rem;
+                text-align: center;
+            }
+            .hero-text {
+                align-items: center;
+            }
+            .hero-section h1 {
+                font-size: 2.2rem;
+            }
+            .hero-section p {
+                max-width: 100%;
+            }
+            .news-banner {
+                grid-template-columns: 1fr;
+                padding: 0 1.5rem;
+                margin: 3rem auto;
+            }
+            .features-section {
+                padding: 0 1.5rem;
+                margin: 4rem auto;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .section-header-editorial {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .social-section {
+                padding: 3.5rem 1.5rem;
+                margin-top: 4rem;
+            }
+            .social-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .donation-section {
+                margin: 4rem 1.5rem;
+                padding: 2.5rem 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>
     
     <nav class="top-nav">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html">
-                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+        <div class="nav-logo-group">
+            <a href="index.html" aria-label="HRNtrack Accueil" style="text-decoration:none; display:flex; align-items:center;">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
             </a>
         </div>
 
         <div class="nav-center">
-            <a href="index.html" class="nav-link active"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+            <a href="index.html" class="nav-link active"><span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
         </div>
 
         <div class="nav-right">
-            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
-                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
             </a>
 
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -355,10 +816,44 @@
             </div>
 
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
+
+        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </nav>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link active"><span data-t="navHome">Accueil</span></a>
+        <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+        <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+        <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+        <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
+        
+        <div class="mobile-actions">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
+                <div class="lang-toggle" onclick="window.toggleLanguage()">
+                    <div class="lang-option active" id="lang-fr-mob">FR</div>
+                    <div class="lang-option" id="lang-en-mob">EN</div>
+                </div>
+            </div>
+            
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
+                <span id="auth-status-text-mob" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </div>
 
     <div class="hero-section">
         <div class="hero-text">
@@ -374,13 +869,19 @@
             </p>
             <a href="dashboard.html" class="btn-primary" data-t="heroBtn">Démarrer ma collection</a>
         </div>
+
         <div class="hero-image-container">
-            <img src="https://i.postimg.cc/wvg5Wkqt/logo1-noir.png" class="hero-image" style="background:#dbd4c8; object-fit:contain; height:300px;" alt="Aperçu">
+            <div class="herbarium-frame">
+                <img src="https://www.hrntrack.app/image/DSCF3055.JPG" class="specimen-image" alt="Hero Hirono">
+                <div class="specimen-tag">
+                    <span>HIRONO N° 01</span>
+                    <span class="tag-no">HRN-TRACK-01</span>
+                </div>
+            </div>
         </div>
     </div>
 
     <section class="news-banner">
-        
         <div class="news-card card-fig">
             <div class="news-content">
                 <span class="badge-news new" data-t="newsFigBadge">NOUVEAU</span>
@@ -398,23 +899,50 @@
             </div>
             <a href="releases.html" class="btn-news-arrow">→</a>
         </div>
-
     </section>
 
     <section class="features-section">
+        <div class="section-header-editorial">
+            <h2>Expérience & Fonctionnalités</h2>
+            <span>[ SYSTEM FEATURES ]</span>
+        </div>
+
         <div class="features-grid">
+            <!-- Feature 1 -->
             <div class="feature-card">
-                <span class="feature-icon">✨</span>
+                <div class="herbarium-frame">
+                    <img id="feat-img-1" src="" class="specimen-image" alt="Figurine aléatoire 1">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-1">EXHIBIT A</span>
+                        <span class="tag-no">FIG-01</span>
+                    </div>
+                </div>
                 <h3 data-t="feat1Title">Tracker Intelligent</h3>
                 <p data-t="feat1Desc">Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.</p>
             </div>
+
+            <!-- Feature 2 -->
             <div class="feature-card">
-                <span class="feature-icon">📈</span>
+                <div class="herbarium-frame">
+                    <img id="feat-img-2" src="" class="specimen-image" alt="Figurine aléatoire 2">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-2">EXHIBIT B</span>
+                        <span class="tag-no">FIG-02</span>
+                    </div>
+                </div>
                 <h3 data-t="feat2Title">Statistiques & Valeur</h3>
                 <p data-t="feat2Desc">Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.</p>
             </div>
+
+            <!-- Feature 3 -->
             <div class="feature-card">
-                <span class="feature-icon">🎁</span>
+                <div class="herbarium-frame">
+                    <img id="feat-img-3" src="" class="specimen-image" alt="Figurine aléatoire 3">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-3">EXHIBIT C</span>
+                        <span class="tag-no">FIG-03</span>
+                    </div>
+                </div>
                 <h3 data-t="feat3Title">Wishlist & Doubles</h3>
                 <p data-t="feat3Desc">Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.</p>
             </div>
@@ -471,48 +999,50 @@
         </a>
     </div>
 
-<div id="auth-modal" class="modal-overlay">
-    <div class="modal-content" style="text-align:center;">
-        <div class="auth-title" data-t="authLogin">Connexion</div>
-        <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
-            Sauvegardez votre collection dans le cloud.
-        </p>
-        
-        <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-        <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">
+                Sauvegardez votre collection dans le cloud.
+            </p>
+            
+            <input type="email" id="auth-email" placeholder="Email">
+            <input type="password" id="auth-pass" placeholder="Mot de passe">
 
-        <!-- Lien Mot de passe oublié -->
-        <div style="text-align: right; margin-bottom: 15px;">
-            <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
+            <button class="btn-save" onclick="window.handleLogin()" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
+                Créer un compte (Email)
+            </button>
+            
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 18px; display:inline-block;">Annuler</button>
         </div>
-
-        <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
-        
-        <div class="auth-separator">OU</div>
-        
-        <!-- Bouton Google -->
-        <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
-            <span data-t="btnGoogle">Continuer avec Google</span>
-        </button>
-
-        <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
-            Créer un compte (Email)
-        </button>
-        
-        <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 15px;">Annuler</button>
     </div>
-</div>
 
     <div id="footer-placeholder"></div>
 
     <script>
-        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
+        window.toggleMobileMenu = function() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('open');
+            }
+        };
+
         const GA_ID = 'G-RFP1HDMW49';
 
-        // Fonction pour charger Analytics
         function loadAnalytics() {
-            // On vérifie si on n'a pas déjà chargé le script pour éviter les doublons
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
 
             const script = document.createElement('script');
@@ -524,10 +1054,8 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', GA_ID);
-            console.log("Analytics chargé ✅");
         }
 
-        // Fonction appelée par les boutons (doit être globale/window)
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
             if (accept) {
@@ -535,42 +1063,60 @@
                 loadAnalytics();
             } else {
                 localStorage.setItem('cookieConsent', 'false');
-                console.log("Analytics bloqué ❌");
             }
             if(banner) banner.style.display = 'none';
         };
 
-        // Fonction d'initialisation (à lancer après le chargement du footer)
         function initCookieLogic() {
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
-            
             if (consent === 'true') {
-                loadAnalytics(); // Déjà accepté avant
+                loadAnalytics();
             } else if (consent === null) {
-                // Pas encore choisi ET le bandeau existe bien dans le DOM
                 if(banner) banner.style.display = 'block'; 
             }
         }
     </script>
 
     <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { baseData } from './data.js';
+            
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+
+        // --- CHARGEMENT ALÉATOIRE DES 3 FIGURINES POUR LES FEATURES ---
+        function initRandomFeatureImages() {
+            if (!baseData || baseData.length === 0) return;
+            
+            // Mélanger et prendre 3 figurines uniques
+            const shuffled = [...baseData].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+
+            for (let i = 0; i < 3; i++) {
+                const imgEl = document.getElementById(`feat-img-${i + 1}`);
+                const tagEl = document.getElementById(`feat-tag-${i + 1}`);
+                if (imgEl && selected[i]) {
+                    imgEl.src = selected[i].Image;
+                    imgEl.alt = selected[i].Name;
+                }
+                if (tagEl && selected[i]) {
+                    tagEl.innerText = selected[i].Name;
+                }
+            }
+        }
+
+        initRandomFeatureImages();
 
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
                 btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler",
-
                 btnGoogle: "Continuer avec Google", 
                 btnForgot: "Mot de passe oublié ?", 
-                btnRegister: "Créer un compte (Email)",
                 
                 heroTitle: "Le compagnon ultime pour votre collection Hirono.",
                 heroDesc: "Gérez vos séries, suivez la valeur de vos figurines et complétez votre collection. Une interface simple pensée par un fan, pour les fans.",
@@ -578,7 +1124,6 @@
                 
                 userCount: "Plus de 150 collectionneurs nous font confiance",
 
-                // NOUVEAUX TEXTES DOUBLE CARTE
                 newsFigBadge: "NOUVEAU",
                 newsFigTitle: "Nouvelles Figurines",
                 newsFigDesc: "Le catalogue a été mis à jour. Vérifiez vos séries !",
@@ -603,14 +1148,11 @@
                 donateDesc: "J'ai créé ce tracker pour la communauté Hirono. Le site est gratuit et sans publicités intrusives. Si l'outil vous aide à gérer votre collection, vous pouvez m'offrir un café pour participer aux frais d'hébergement !",
                 btnCoffee: "☕ Offrir un café à l'auteur",
 
-                // Footer keys
                 navReleases: "Mises à jour", 
                 footerNav: "Navigation",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -623,7 +1165,6 @@
                 btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel",
                 btnGoogle: "Continue with Google", 
                 btnForgot: "Forgot password?", 
-                btnRegister: "Sign Up (Email)",
 
                 heroTitle: "The ultimate companion for your Hirono collection.",
                 heroDesc: "Manage your series, track figure value, and complete your collection. A simple interface built by a fan, for fans.",
@@ -631,7 +1172,6 @@
 
                 userCount: "Over 150 collectors trust us",
 
-                // NEW CARD TEXTS
                 newsFigBadge: "NEW",
                 newsFigTitle: "New Figures",
                 newsFigDesc: "The catalog has been updated. Check your series!",
@@ -656,20 +1196,16 @@
                 donateDesc: "I created this tracker for the Hirono community. The site is free. If this tool helps you, feel free to buy me a coffee!",
                 btnCoffee: "☕ Buy me a coffee",
 
-                // Footer keys
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
                 legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
                 cookieDecline: "No thanks",
                 cookieAccept: "Accept"
-                
             }
         };
 
@@ -681,14 +1217,27 @@
             updateUIText();
         };
 
-        // Rendre la fonction accessible globalement pour le fetch
         window.updateUIText = function() {
             if(currentLang === 'fr') {
-                document.getElementById('lang-fr').classList.add('active');
-                document.getElementById('lang-en').classList.remove('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if (frBtn) frBtn.classList.add('active');
+                if (enBtn) enBtn.classList.remove('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if (frMob) frMob.classList.add('active');
+                if (enMob) enMob.classList.remove('active');
             } else {
-                document.getElementById('lang-fr').classList.remove('active');
-                document.getElementById('lang-en').classList.add('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if (frBtn) frBtn.classList.remove('active');
+                if (enBtn) enBtn.classList.add('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if (frMob) frMob.classList.remove('active');
+                if (enMob) enMob.classList.add('active');
             }
 
             const t = translations[currentLang];
@@ -699,10 +1248,11 @@
 
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
+            const btnTextMob = document.getElementById('auth-status-text-mob');
             if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+            if(btnTextMob) btnTextMob.innerText = user ? t.authAccount : t.authLogin;
         };
 
-        // --- AUTH LOGIC ---
         window.toggleAuthModal = () => {
             const el = document.getElementById('auth-modal');
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
@@ -715,17 +1265,13 @@
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                
-                // Vérification du statut de l'email
                 if (!userCredential.user.emailVerified) {
                     alert(currentLang === 'fr'
                         ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
                         : "Your email address has not been verified yet. Please click the link sent to your inbox.");
-                    
                     await signOut(auth);
                     return;
                 }
-                
                 window.toggleAuthModal();
             } catch(e) { alert("Erreur: " + e.message); }
         };
@@ -737,25 +1283,17 @@
             
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Envoi du mail de vérification
                 await sendEmailVerification(userCredential.user);
-                
                 alert(currentLang === 'fr' 
                     ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
                     : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
-                
-                // Déconnexion immédiate pour forcer la vérification
                 await signOut(auth);
                 window.toggleAuthModal();
-                
             } catch(e) { alert("Erreur: " + e.message); }
         };
 
-        // Initialisation du provider Google
         const googleProvider = new GoogleAuthProvider();
 
-        // Connexion Google (L'email est automatiquement vérifié par Google)
         window.handleGoogleLogin = async () => {
             try {
                 await signInWithPopup(auth, googleProvider);
@@ -765,7 +1303,6 @@
             }
         };
 
-        // Réinitialisation du mot de passe
         window.handleResetPassword = async () => {
             const email = document.getElementById('auth-email').value;
             if(!email) {
@@ -800,17 +1337,29 @@
         onAuthStateChanged(auth, async (user) => {
             updateUIText();
             const btn = document.getElementById('auth-trigger');
+            const btnMob = document.getElementById('auth-trigger-mob');
 
             if (user) {
-                btn.classList.add('logged-in'); 
-                btn.onclick = () => window.location.href = "compte.html"; 
+                if (btn) {
+                    btn.classList.add('logged-in'); 
+                    btn.onclick = () => window.location.href = "compte.html"; 
+                }
+                if (btnMob) {
+                    btnMob.classList.add('logged-in');
+                    btnMob.onclick = () => window.location.href = "compte.html";
+                }
             } else {
-                btn.classList.remove('logged-in');
-                btn.onclick = () => window.toggleAuthModal();
+                if (btn) {
+                    btn.classList.remove('logged-in');
+                    btn.onclick = () => window.toggleAuthModal();
+                }
+                if (btnMob) {
+                    btnMob.classList.remove('logged-in');
+                    btnMob.onclick = () => { window.toggleAuthModal(); window.toggleMobileMenu(); };
+                }
             }
         });
         
-        // --- CHARGEMENT DU FOOTER DYNAMIQUE ---
         fetch('footer.html')
             .then(response => {
                 if (!response.ok) throw new Error("Erreur chargement footer");
@@ -823,5 +1372,5 @@
             })
             .catch(error => console.error('Erreur Footer:', error));
     </script>
-    </body>
+</body>
 </html>

@@ -7,164 +7,401 @@
     <meta property="og:title" content="Ma Collection Hirono - HRNtrack">
     <meta property="og:description" content="Découvre ma collection de figurines Hirono, mes doubles et mes recherches.">
     <meta property="og:image" content="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <meta property="og:url" content=""> <meta property="og:type" content="website">
+    <meta property="og:url" content=""> 
+    <meta property="og:type" content="website">
 
-    <title>HRNtrack - Collection Publique</title>
+    <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root { 
-            --primary: #6A8C47; 
-            --bg-body: #F5F5F0; 
-            --text-main: #1A1A1A; 
-            --text-sub: #555555; 
-            --gold: #C6A875; 
-            --card-bg: #ffffff; 
-            --shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
-            --accent-double: #E67E22; 
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-sand: #EBE7DF;
+            --color-border: #D8D2C5;
+            --color-gold: #C6A875;
+            --color-gold-light: #F9F5EB;
+            --color-red: #C0392B; 
+            --color-green: #6A8C47;
+            --color-green-dark: #557235;
+            --color-text-sub: #5E5D59;
+            --card-bg: #FCFBF8;
+            
+            --primary: var(--color-green);
+            --primary-dark: var(--color-green-dark);
+            --bg-body: var(--color-light);
+            --text-main: var(--color-dark);
+            --text-sub: var(--color-text-sub);
+            
+            --accent-double: #D97706; 
             --accent-secret: #8E44AD; 
+            
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --nav-height: 75px;
+            --nav-height-mobile: 70px;
+            
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
-        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        /* HEADER */
-        .public-header {
-            background: #1A1A1A; color: white; padding: 10px 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: sticky; top: 0; z-index: 1000;
-            display: flex; justify-content: space-between; align-items: center;
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
-        .logo-img { height: 50px; }
-        @media(min-width: 768px) { .logo-img { height: 70px; } }
-        
-        .header-right { display: flex; align-items: center; gap: 10px; }
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            margin: 0; 
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
+        }
+        body.ready { opacity: 1; }
+
+        /* --- NAVIGATION SUPÉRIEURE --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            height: var(--nav-height);
+            background: rgba(216, 210, 197, 0.45);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-logo {
+            height: 100px;
+            width: auto;
+            filter: brightness(0);
+            transition: opacity 0.25s ease;
+            display: block;
+        }
+
+        .site-logo:hover {
+            opacity: 0.75;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
         .cta-btn {
-            background: var(--primary); color: white; text-decoration: none; padding: 8px 16px; 
-            border-radius: 25px; font-size: 12px; font-weight: 600; transition: 0.2s; white-space: nowrap;
+            background: var(--color-dark); 
+            color: var(--color-light); 
+            border: 1px solid var(--color-dark);
+            text-decoration: none; 
+            padding: 0.5rem 1.2rem; 
+            font-size: 0.78rem; 
+            font-weight: 600; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: all 0.25s ease; 
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
         }
-        .cta-btn:hover { transform: scale(1.05); }
+        .cta-btn:hover { background: transparent; color: var(--color-dark); }
 
         .btn-share-link {
-            background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            transition: 0.2s;
+            background: var(--color-sand); 
+            color: var(--color-dark); 
+            border: 1px solid var(--color-border);
+            padding: 8px 12px; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            font-family: var(--font-sans);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.25s ease;
         }
-        .btn-share-link:hover { background: rgba(255,255,255,0.2); }
+        .btn-share-link:hover { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
 
         .lang-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            background: var(--color-sand);
         }
-        .lang-option { padding: 5px 10px; border-radius: 16px; font-size: 11px; font-weight: 700; color: #9CA3AF; }
-        .lang-option.active { background: var(--primary); color: white; }
 
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
-        
-        /* PROFILE & STATS CARD */
-        .profile-summary {
-            background: white; padding: 30px; border-radius: 20px; margin-bottom: 25px;
-            box-shadow: var(--shadow); text-align: center; display: flex; flex-direction: column; align-items: center;
-            position: relative; overflow: hidden;
+        .lang-option {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-sub);
+            transition: all 0.2s ease;
         }
+
+        .lang-option.active {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        /* Mobile Hamburger Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--color-dark);
+        }
+        
+        .mobile-menu-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--color-dark);
+        }
+
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0; right: 0; bottom: 0;
+            background: var(--color-light);
+            border-top: 1px solid var(--color-border);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-drawer.open {
+            display: flex;
+        }
+
+        .mobile-drawer .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+        @media (max-width: 992px) {
+            .top-nav { padding: 0 1.5rem; }
+            .nav-right .cta-btn, .nav-right .lang-toggle { display: none; }
+            .mobile-menu-btn { display: block; }
+        }
+
+        /* --- CONTAINER & PROFILE --- */
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        
+        .profile-summary {
+            background: #FFFFFF; 
+            padding: 35px; 
+            border: 1px solid var(--color-border);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow); 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+
         .avatar-circle {
-            width: 100px; height: 100px; background: #eee; border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 10px;
-            border: 4px solid var(--primary); overflow: hidden;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 90px; height: 90px; 
+            background: var(--color-sand); 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 32px; margin-bottom: 15px;
+            border: 2px solid var(--color-dark); 
+            overflow: hidden;
+            color: var(--color-text-sub);
         }
         .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .user-title { font-size: 24px; font-weight: 800; margin: 0 0 20px 0; color: #1A1A1A; line-height: 1.2; }
         
-        /* STATS */
+        .user-title { 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            margin: 0 0 20px 0; 
+            color: var(--color-dark); 
+            text-transform: uppercase; 
+            letter-spacing: 0.05em; 
+        }
+        
+        /* STATS ROW */
         .stats-row {
-            display: flex; gap: 15px; width: 100%; max-width: 600px; justify-content: center; flex-wrap: wrap;
+            display: flex; gap: 15px; width: 100%; max-width: 650px; justify-content: center; flex-wrap: wrap;
         }
         .stat-box {
-            flex: 1; min-width: 100px; background: #f8f9fa; border: 1px solid #eee;
-            border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center;
+            flex: 1; min-width: 120px; 
+            background: var(--color-sand); 
+            border: 1px solid var(--color-border);
+            padding: 12px 16px; 
+            display: flex; flex-direction: column; align-items: center;
         }
-        .stat-val { font-size: 20px; font-weight: 800; color: var(--text-main); }
-        .stat-lbl { font-size: 10px; text-transform: uppercase; color: var(--text-sub); font-weight: 600; margin-top: 2px; }
+        .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
+        .stat-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-sub); font-weight: 700; margin-top: 4px; }
         
-        /* FILTRES */
+        /* FILTRES BAR */
         .filter-bar {
-            background: white; padding: 20px; border-radius: 15px; margin-bottom: 30px;
-            box-shadow: var(--shadow); display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+            background: #FFFFFF; 
+            padding: 20px; 
+            border: 1px solid var(--color-border);
+            margin-bottom: 35px;
+            box-shadow: var(--shadow); 
+            display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
         }
-        .search-input { flex: 2; min-width: 200px; padding: 12px; border-radius: 10px; border: 1px solid #ddd; font-family: inherit; font-size: 14px; }
-        .select-input { flex: 1; min-width: 180px; padding: 12px; border-radius: 10px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-family: inherit; font-size: 14px; }
+        .search-input { 
+            flex: 2; min-width: 200px; padding: 10px 14px; 
+            border: 1px solid var(--color-border); 
+            font-family: var(--font-sans); font-size: 0.85rem; 
+            background: #FFFFFF; color: var(--color-dark); outline: none;
+        }
+        .search-input:focus { border-color: var(--color-dark); }
+
+        .select-input { 
+            flex: 1; min-width: 180px; padding: 10px 14px; 
+            border: 1px solid var(--color-border); 
+            background: #FFFFFF; cursor: pointer; 
+            font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-dark); outline: none;
+        }
+        .select-input:focus { border-color: var(--color-dark); }
         
         .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
         .filter-btn {
-            padding: 8px 14px; border-radius: 10px; border: 1px solid #eee;
-            background: #f8f9fa; cursor: pointer; font-size: 12px; font-weight: 600; transition: 0.2s;
+            padding: 8px 14px; 
+            border: 1px solid var(--color-border);
+            background: var(--color-sand); 
+            cursor: pointer; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; 
+            letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-sub);
+            transition: all 0.25s ease;
         }
-        .filter-btn:hover { background: #e9ecef; }
-        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .filter-btn:hover { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
+        .filter-btn.active { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
 
-        /* GRID */
-        .series-section { margin-bottom: 40px; }
+        /* GRID & CARDS */
+        .series-section { margin-bottom: 45px; }
         .series-title { 
-            font-size: 16px; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; 
-            border-left: 5px solid var(--primary); padding-left: 15px; color: #333;
+            font-size: 0.95rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; 
+            border-left: 4px solid var(--color-dark); padding-left: 12px; color: var(--color-dark);
+            letter-spacing: 0.08em;
         }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; }
         
         .card {
-            background: white; border-radius: 16px; padding: 15px; text-align: center;
-            box-shadow: var(--shadow); opacity: 0.4; transition: 0.3s; filter: grayscale(100%);
-            position: relative; border: 2px solid transparent;
+            background: #FFFFFF; 
+            border: 1px solid var(--color-border); 
+            padding: 12px; text-align: center;
+            box-shadow: var(--shadow); opacity: 0.45; transition: all 0.25s ease; filter: grayscale(100%);
+            position: relative;
         }
         .card.owned { opacity: 1; filter: grayscale(0%); border-color: var(--primary); }
-        .card.wish { opacity: 1; filter: grayscale(0%); border-color: var(--gold); border-style: dashed; }
+        .card.wish { opacity: 1; filter: grayscale(0%); border: 1px dashed var(--color-gold); }
         
-        .card-img { width: 100%; height: 110px; object-fit: contain; margin-bottom: 10px; }
-        .card-name { font-size: 11px; font-weight: 700; line-height: 1.3; min-height: 30px; display: flex; align-items: center; justify-content: center; }
+        .card-img { width: 100%; height: 110px; object-fit: contain; margin-bottom: 10px; background: var(--color-sand); border: 1px solid var(--color-border); }
+        .card-name { font-size: 0.78rem; font-weight: 600; line-height: 1.3; min-height: 32px; display: flex; align-items: center; justify-content: center; color: var(--color-dark); }
         
         /* BADGES */
         .badge {
-            position: absolute; top: 10px; right: 10px; font-size: 9px; font-weight: 800; 
-            padding: 4px 8px; border-radius: 6px; color: white; z-index: 2;
+            position: absolute; top: 10px; right: 10px; font-size: 0.62rem; font-weight: 700; 
+            padding: 2px 6px; letter-spacing: 0.08em; text-transform: uppercase; color: white; z-index: 2;
         }
         .badge.owned { background: var(--primary); }
-        .badge.wish { background: var(--gold); color: black;}
+        .badge.wish { background: var(--color-gold); color: white; }
 
         .qty-badge {
             position: absolute; top: 10px; left: 10px; background: var(--accent-double); color: white;
-            font-size: 10px; font-weight: 800; padding: 2px 8px; border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2); z-index: 2;
+            font-size: 0.65rem; font-weight: 800; padding: 2px 6px; z-index: 2;
         }
 
         @media(max-width: 600px) { 
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } 
+            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } 
             .filter-bar { flex-direction: column; align-items: stretch; }
             .stats-row { gap: 10px; }
-            .stat-val { font-size: 16px; }
+            .stat-val { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <nav class="public-header">
-        <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="logo-img" alt="HRNtrack"></a>
-        <div class="header-right">
+    <!-- NAVIGATION HEADER -->
+    <nav class="top-nav">
+        <div class="nav-logo-group">
+            <a href="index.html" aria-label="HRNtrack Accueil">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
+            </a>
+        </div>
+
+        <div class="nav-right">
             <div class="lang-toggle" onclick="window.toggleLanguage()">
                 <div class="lang-option active" id="lang-fr">FR</div>
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
             
-            <button class="btn-share-link" onclick="window.shareCurrentPage()" title="Copier le lien">
-                🔗
+            <button class="btn-share-link" onclick="window.shareCurrentPage()" title="Copier le lien" data-t="btnShare">
+                Copier le lien
             </button>
             
-            <a href="index.html" class="cta-btn" data-t="btnCreate">Créer ma collection 🚀</a>
+            <a href="index.html" class="cta-btn" data-t="btnCreate">Créer ma collection</a>
         </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </nav>
 
+    <!-- MOBILE DRAWER MENU -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <div class="mobile-actions">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
+                <div class="lang-toggle" onclick="window.toggleLanguage()">
+                    <div class="lang-option active" id="lang-fr-mob">FR</div>
+                    <div class="lang-option" id="lang-en-mob">EN</div>
+                </div>
+            </div>
+            
+            <button class="btn-share-link" onclick="window.shareCurrentPage(); window.toggleMobileMenu();" style="width:100%; text-align:center;" data-t="btnShare">
+                Copier le lien
+            </button>
+
+            <a href="index.html" class="cta-btn" style="text-align:center; justify-content:center;" data-t="btnCreate">
+                Créer ma collection
+            </a>
+        </div>
+    </div>
+
     <div class="container">
-        <div id="loading" style="text-align:center; padding:50px;" data-t="msgLoading">Chargement... 🐼</div>
+        <div id="loading" style="text-align:center; padding:60px 20px; font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-text-sub);" data-t="msgLoading">
+            Chargement de la collection...
+        </div>
 
         <div id="profile-area" style="display:none;" class="profile-summary">
-            <div class="avatar-circle" id="profile-avatar">👤</div>
+            <div class="avatar-circle" id="profile-avatar">P</div>
             <h1 class="user-title" id="profile-pseudo">Collection Hirono</h1>
             
             <div class="stats-row">
@@ -205,7 +442,15 @@
     <div id="footer-placeholder"></div>
 
     <script>
+        window.toggleMobileMenu = function() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('open');
+            }
+        };
+
         const GA_ID = 'G-RFP1HDMW49';
+
         function loadAnalytics() {
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
             const script = document.createElement('script');
@@ -229,7 +474,7 @@
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
             if (consent === 'true') { loadAnalytics(); if(banner) banner.style.display = 'none'; } 
-            else if (consent === null) { if(banner) banner.style.display = 'block'; }
+            else if (consent === null && banner) { banner.style.display = 'block'; }
             else { if(banner) banner.style.display = 'none'; }
         }
     </script>
@@ -237,8 +482,6 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        
-        // --- IMPORT OPTIMISÉ ---
         import { baseData } from './data.js';
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
@@ -247,45 +490,43 @@
 
         const translations = {
             fr: {
-                btnCreate: "Créer ma collection 🚀", msgLoading: "Chargement de la collection... 🐼",
+                btnCreate: "Créer ma collection", 
+                btnShare: "Copier le lien",
+                msgLoading: "Chargement de la collection...",
                 fAll: "Tout", fOwned: "Possédés", fWish: "Wishlist", fDouble: "Doublons", fSecret: "Secrets",
                 optAllSeries: "-- Toutes les séries --", badgeOwned: "OWNED", badgeWish: "WISH",
                 lblTotal: "Possédées", lblSecrets: "Secrets", lblDoubles: "Doublons (Dispo)",
                 searchPh: "Rechercher une figurine...",
                 footerPrivacy: "Politique de Confidentialité", footerTerms: "Mentions Légales",
                 footerRights: "Tous droits réservés.", footerLinks: "Liens utiles", footerContact: "Contact",
-                  // Footer keys
                 navReleases: "Mises à jour", 
                 footerNav: "Navigation",
                 footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
                 footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
                 legalMainTitle: "Mentions Légales",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Infos Légales",
-                cookieTitle: "🍪 Cookies ?",
+                cookieTitle: "Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
                 cookieDecline: "Non merci",
                 cookieAccept: "Accepter"  
             },
             en: {
-                btnCreate: "Start my collection 🚀", msgLoading: "Loading collection... 🐼",
+                btnCreate: "Start my collection", 
+                btnShare: "Copy link",
+                msgLoading: "Loading collection...",
                 fAll: "All", fOwned: "Owned", fWish: "Wishlist", fDouble: "Duplicates", fSecret: "Secrets",
                 optAllSeries: "-- All Series --", badgeOwned: "OWNED", badgeWish: "WISH",
                 lblTotal: "Owned", lblSecrets: "Secrets", lblDoubles: "Duplicates (Trade)",
                 searchPh: "Search a figure...",
                 footerPrivacy: "Privacy Policy", footerTerms: "Legal Notice",
                 footerRights: "All rights reserved.", footerLinks: "Useful Links", footerContact: "Contact",
-                			  // Footer keys
                 navReleases: "Updates",
                 footerNav: "Navigation",
                 footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
                 footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
                 legalMainTitle: "Legal Mentions",
-
-                // --- NOUVEAUX AJOUTS (VERSION FINALE) ---
                 footerLegalTitle: "Legal Info",
-                cookieTitle: "🍪 Cookies ?",
+                cookieTitle: "Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
                 cookieDecline: "No thanks",
                 cookieAccept: "Accept"
@@ -299,19 +540,36 @@
         function updateUIText() {
             const tr = translations[currentLang];
             if(currentLang === 'fr') {
-                document.getElementById('lang-fr').classList.add('active');
-                document.getElementById('lang-en').classList.remove('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.add('active');
+                if(enBtn) enBtn.classList.remove('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.add('active');
+                if(enMob) enMob.classList.remove('active');
             } else {
-                document.getElementById('lang-fr').classList.remove('active');
-                document.getElementById('lang-en').classList.add('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.remove('active');
+                if(enBtn) enBtn.classList.add('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.remove('active');
+                if(enMob) enMob.classList.add('active');
             }
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
                 if(tr[key]) el.innerText = tr[key];
             });
-            document.getElementById('search-box').placeholder = tr.searchPh;
+            
+            const searchBox = document.getElementById('search-box');
+            if(searchBox) searchBox.placeholder = tr.searchPh;
+            
             const select = document.getElementById('serie-filter');
-            if(select.options.length > 0) select.options[0].text = tr.optAllSeries;
+            if(select && select.options.length > 0) select.options[0].text = tr.optAllSeries;
         }
 
         window.toggleLanguage = () => {
@@ -324,19 +582,18 @@
         window.shareCurrentPage = () => {
             const url = window.location.href;
             navigator.clipboard.writeText(url).then(() => {
-                alert(currentLang === 'fr' ? "Lien copié !" : "Link copied!");
+                alert(currentLang === 'fr' ? "Lien copié dans le presse-papier !" : "Link copied to clipboard!");
             }).catch(err => {
                 prompt(currentLang === 'fr' ? "Copiez ce lien :" : "Copy this link:", url);
             });
         }
         
-        // --- INIT ---
         async function init() {
             updateUIText(); 
 
             const params = new URLSearchParams(window.location.search);
             const uid = params.get('uid');
-            if(!uid) return document.getElementById('loading').innerText = "❌ Lien invalide.";
+            if(!uid) return document.getElementById('loading').innerText = "Lien invalide ou incomplet.";
 
             try {
                 const docSnap = await getDoc(doc(db, "users", uid));
@@ -345,19 +602,18 @@
                     const userColl = data.collection || [];
                     const profile = data.profile || {};
 
-                    // PROFIL
                     if(profile.pseudo) {
                         document.getElementById('profile-pseudo').innerText = profile.pseudo;
                         document.title = `${profile.pseudo} - HRNtrack`;
-                        // Mettre à jour les meta tags pour le partage
-                        document.querySelector('meta[property="og:title"]').content = `Collection de ${profile.pseudo} - HRNtrack`;
-                        document.querySelector('meta[property="og:url"]').content = window.location.href;
+                        const ogTitle = document.querySelector('meta[property="og:title"]');
+                        const ogUrl = document.querySelector('meta[property="og:url"]');
+                        if(ogTitle) ogTitle.content = `Collection de ${profile.pseudo} - HRNtrack`;
+                        if(ogUrl) ogUrl.content = window.location.href;
                     }
                     if(profile.avatar) {
                         document.getElementById('profile-avatar').innerHTML = `<img src="${profile.avatar}">`;
                     }
 
-                    // FUSION DES DONNEES
                     rawData = baseData.map(b => {
                         const find = userColl.find(u => u.ID === b.ID);
                         if (find) {
@@ -367,7 +623,6 @@
                         return { ...b, Status: "Non possédé", Qty: 0 };
                     });
 
-                    // REMPLIR SELECT SERIES
                     const uniqueSeries = [...new Set(baseData.map(i => i.Serie))].sort();
                     const select = document.getElementById('serie-filter');
                     uniqueSeries.forEach(s => {
@@ -375,7 +630,6 @@
                         opt.value = s; opt.innerText = s; select.appendChild(opt);
                     });
 
-                    // CALCUL STATS
                     const ownedCount = rawData.filter(i => i.Status === 'Possédé').length;
                     const secretCount = rawData.filter(i => i.Status === 'Possédé' && i["Secret Rare"] === 'Yes').length;
                     
@@ -387,22 +641,23 @@
                     document.getElementById('stat-secret').innerText = secretCount;
                     document.getElementById('stat-doubles').innerText = doublesCount;
 
-                    // AFFICHAGE
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('profile-area').style.display = 'flex';
                     document.getElementById('filter-container').style.display = 'flex';
                     
                     render(rawData);
+                    document.body.classList.add('ready');
                 } else {
-                    document.getElementById('loading').innerText = "❌ Profil privé ou inexistant.";
+                    document.getElementById('loading').innerText = "Profil privé ou inexistant.";
+                    document.body.classList.add('ready');
                 }
             } catch(e) {
                 console.error(e);
-                document.getElementById('loading').innerText = "❌ Erreur serveur.";
+                document.getElementById('loading').innerText = "Erreur lors du chargement des données.";
+                document.body.classList.add('ready');
             }
         }
 
-        // --- FILTRES ---
         window.setStatusFilter = (s, btn) => {
             currentStatus = s;
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -426,7 +681,6 @@
             render(filtered);
         };
 
-        // --- RENDER (Avec Tri Spécifique) ---
         function render(data) {
             const container = document.getElementById('collection-display');
             const grouped = {};
@@ -463,22 +717,24 @@
                     html += `
                         <div class="${cls}">
                             ${badges}
-                            <img src="${item.Image}" class="card-img" loading="lazy">
+                            <img src="${item.Image}" class="card-img" loading="lazy" alt="${item.Name}">
                             <div class="card-name">${item.Name}</div>
                         </div>
                     `;
                 });
                 html += `</div></div>`;
             });
-            container.innerHTML = html || '<p style="text-align:center; padding:40px; color:#777;">Aucune figurine trouvée.</p>';
+            container.innerHTML = html || '<p style="text-align:center; padding:40px; color:var(--color-text-sub); font-size:0.85rem;">Aucune figurine ne correspond à votre recherche.</p>';
         }
 
-        // CHARGER LE FOOTER ET APPLIQUER LA TRADUCTION
-        fetch('footer.html').then(r=>r.text()).then(d=>{
-            document.getElementById('footer-placeholder').innerHTML=d;
-            if(window.initCookieLogic) window.initCookieLogic();
-            updateUIText();
-        });
+        fetch('footer.html')
+            .then(r=>r.text())
+            .then(d=>{
+                document.getElementById('footer-placeholder').innerHTML=d;
+                if(window.initCookieLogic) window.initCookieLogic();
+                updateUIText();
+            })
+            .catch(error => console.error('Erreur Footer:', error));
 
         init();
     </script>

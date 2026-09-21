@@ -5,8 +5,8 @@
         color: #9CA3AF;
         padding: 60px 20px 30px;
         font-family: 'Poppins', sans-serif;
-        border-top: 1px solid rgba(255,255,255,0.1);
-        font-size: 14px;
+        border-top: 1px solid #D8D2C5;
+        font-size: 0.85rem;
         margin-top: auto;
         position: relative;
         z-index: 10;
@@ -22,24 +22,29 @@
 
     /* Colonne 1 : Identité */
     .footer-brand h3 {
-        color: white;
-        font-size: 20px;
+        color: #FFFFFF;
+        font-size: 1.1rem;
         margin: 0 0 15px 0;
         font-weight: 700;
-        display: flex; align-items: center; gap: 10px;
+        display: flex; 
+        align-items: center; 
+        gap: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
     .footer-brand p {
         line-height: 1.6;
         margin-bottom: 20px;
-        color: #6B7280;
+        color: #8C8B85;
+        font-size: 0.82rem;
     }
 
     /* Colonne 2 & 3 : Liens */
     .footer-heading {
-        color: white;
-        font-size: 14px;
+        color: #FFFFFF;
+        font-size: 0.8rem;
         text-transform: uppercase;
-        letter-spacing: 1.5px;
+        letter-spacing: 0.1em;
         font-weight: 700;
         margin-bottom: 20px;
         position: relative;
@@ -61,58 +66,59 @@
     }
 
     .footer-links li {
-        margin-bottom: 12px;
+        margin-bottom: 10px;
     }
 
     .footer-links a {
         color: #9CA3AF;
         text-decoration: none;
-        transition: all 0.3s ease;
+        transition: all 0.25s ease;
         display: inline-flex;
         align-items: center;
-        gap: 8px;
+        font-size: 0.82rem;
+        font-weight: 500;
     }
 
     .footer-links a:hover {
-        color: #6A8C47;
-        transform: translateX(5px);
+        color: #FFFFFF;
+        transform: translateX(4px);
     }
 
     /* Réseaux sociaux */
     .footer-social {
         display: flex;
-        gap: 15px;
+        gap: 12px;
         margin-top: 20px;
     }
     .social-btn {
         width: 36px; height: 36px;
         background: rgba(255,255,255,0.05);
         display: flex; align-items: center; justify-content: center;
-        border-radius: 50%;
-        color: white;
+        color: #FFFFFF;
         text-decoration: none;
-        transition: 0.3s;
+        transition: 0.25s ease;
         border: 1px solid rgba(255,255,255,0.1);
     }
     .social-btn:hover {
         background: #6A8C47;
         border-color: #6A8C47;
-        transform: translateY(-3px);
+        transform: translateY(-2px);
     }
 
     /* Bas de footer */
     .footer-bottom {
-        border-top: 1px solid rgba(255,255,255,0.05);
-        margin-top: 50px;
+        border-top: 1px solid rgba(255,255,255,0.08);
+        margin-top: 45px;
         padding-top: 25px;
         text-align: center;
-        font-size: 12px;
-        color: #555;
+        font-size: 0.75rem;
+        color: #777777;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
         gap: 15px;
+        letter-spacing: 0.05em;
     }
 
     /* --- MODERN COOKIE BANNER CSS --- */
@@ -123,15 +129,14 @@
         left: 20px; 
         width: calc(100% - 40px);
         max-width: 340px;
-        background: rgba(26, 26, 26, 0.95);
+        background: #1A1A1A;
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white; 
-        padding: 24px;
-        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        color: #FFFFFF; 
+        padding: 22px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.3); 
         z-index: 10000;
-        animation: slideInBanner 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        animation: slideInBanner 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         font-family: 'Poppins', sans-serif;
     }
 
@@ -140,14 +145,14 @@
         to { transform: translateY(0); opacity: 1; }
     }
 
-    .cookie-content { display: flex; flex-direction: column; gap: 15px; }
-    .cookie-title { font-size: 16px; font-weight: 700; margin-bottom: 5px; display: flex; align-items: center; gap: 8px; }
-    .cookie-btns { display: flex; gap: 10px; margin-top: 10px; }
-    .btn-cookie { padding: 10px 18px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 13px; flex: 1; }
-    .btn-accept { background: #6A8C47; color: white; box-shadow: 0 4px 12px rgba(106, 140, 71, 0.3); }
-    .btn-accept:hover { background: #557235; transform: translateY(-1px); }
-    .btn-decline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #ccc; }
-    .btn-decline:hover { border-color: white; color: white; background: rgba(255,255,255,0.05); }
+    .cookie-content { display: flex; flex-direction: column; gap: 12px; }
+    .cookie-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+    .cookie-btns { display: flex; gap: 10px; margin-top: 8px; }
+    .btn-cookie { padding: 10px 14px; border: none; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 0.75rem; flex: 1; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Poppins', sans-serif; }
+    .btn-accept { background: #6A8C47; color: #FFFFFF; }
+    .btn-accept:hover { background: #557235; }
+    .btn-decline { background: transparent; border: 1px solid rgba(255,255,255,0.25); color: #CCCCCC; }
+    .btn-decline:hover { border-color: #FFFFFF; color: #FFFFFF; background: rgba(255,255,255,0.05); }
 
     @media (max-width: 768px) {
         .footer-bottom { flex-direction: column; text-align: center; }
@@ -160,20 +165,20 @@
         
         <div class="footer-brand">
             <h3>
-                <img src="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png" alt="Logo" style="width:30px; height:30px; border-radius:50%;">
+                <img src="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png" alt="Logo" style="width:28px; height:28px; object-fit:contain; filter:brightness(0) invert(1);">
                 HRNtrack
             </h3>
             <p data-t="footerDesc">
                 L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.
             </p>
             <div class="footer-social">
-                <a href="https://discord.gg/Vs9EDf98Uw" target="_blank" class="social-btn" title="Discord">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 13.46 13.46 0 0 0-.59 1.227 18.324 18.324 0 0 0-7.398 0c-.191-.424-.399-.83-.594-1.227a.072.072 0 0 0-.079-.037A19.736 19.736 0 0 0 1.685 4.37a.068.068 0 0 0-.03.078c-2.096 7.974-.08 14.82 2.766 18.995a.074.074 0 0 0 .077.025 20.077 20.077 0 0 0 6.075-3.058.077.077 0 0 0 .023-.119 14.07 14.07 0 0 1-2.029-1.558.075.075 0 0 1 .015-.125c.196-.094.39-.193.579-.297a.074.074 0 0 1 .078-.008c4.276 1.948 8.89 1.948 13.116 0a.073.073 0 0 1 .078.008c.191.104.385.203.581.297a.075.075 0 0 1 .015.125 14.28 14.28 0 0 1-2.028 1.558.076.076 0 0 0 .023.119 20.024 20.024 0 0 0 6.078 3.058.075.075 0 0 0 .077-.025c2.908-4.305 4.793-11.021 2.709-18.994a.068.068 0 0 0-.03-.078z"/></svg>
+                <a href="https://discord.gg/Vs9EDf98Uw" target="_blank" class="social-btn" title="Discord" aria-label="Discord">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037 13.46 13.46 0 0 0-.59 1.227 18.324 18.324 0 0 0-7.398 0c-.191-.424-.399-.83-.594-1.227a.072.072 0 0 0-.079-.037A19.736 19.736 0 0 0 1.685 4.37a.068.068 0 0 0-.03.078c-2.096 7.974-.08 14.82 2.766 18.995a.074.074 0 0 0 .077.025 20.077 20.077 0 0 0 6.075-3.058.077.077 0 0 0 .023-.119 14.07 14.07 0 0 1-2.029-1.558.075.075 0 0 1 .015-.125c.196-.094.39-.193.579-.297a.074.074 0 0 1 .078-.008c4.276 1.948 8.89 1.948 13.116 0a.073.073 0 0 1 .078.008c.191.104.385.203.581.297a.075.075 0 0 1 .015.125 14.28 14.28 0 0 1-2.028 1.558.076.076 0 0 0 .023.119 20.024 20.024 0 0 0 6.078 3.058.075.075 0 0 0 .077-.025c2.908-4.305 4.793-11.021 2.709-18.994a.068.068 0 0 0-.03-.078z"/></svg>
                 </a>
-                <a href="https://www.instagram.com/hrntrack/" target="_blank" class="social-btn" title="Instagram">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                <a href="https://www.instagram.com/hrntrack/" target="_blank" class="social-btn" title="Instagram" aria-label="Instagram">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                 </a>
-                <a href="https://ko-fi.com/hrntrack" target="_blank" class="social-btn" title="Soutenir">
+                <a href="https://ko-fi.com/hrntrack" target="_blank" class="social-btn" title="Soutenir" aria-label="Soutenir sur Ko-fi">
                     ☕
                 </a>
             </div>
@@ -182,42 +187,41 @@
         <div>
             <div class="footer-heading" data-t="footerNav">Navigation</div>
             <ul class="footer-links">
-                <li><a href="index.html">🏠 <span data-t="navHome">Accueil</span></a></li>
-                <li><a href="dashboard.html">📋 <span data-t="navCollection">Collection</span></a></li>
-                <li><a href="releases.html">🚀 <span data-t="navReleases">Mises à jour</span></a></li>
-                <li><a href="statistiques.html">📊 <span data-t="navStats">Statistiques</span></a></li>
-                <li><a href="donateurs.html">🎁 <span data-t="navDonors">Donateurs</span></a></li>
+                <li><a href="index.html"><span data-t="navHome">Accueil</span></a></li>
+                <li><a href="dashboard.html"><span data-t="navCollection">Collection</span></a></li>
+                <li><a href="releases.html"><span data-t="navReleases">Mises à jour</span></a></li>
+                <li><a href="statistiques.html"><span data-t="navStats">Statistiques</span></a></li>
+                <li><a href="donateurs.html"><span data-t="navDonors">Donateurs</span></a></li>
             </ul>
         </div>
 
         <div>
-            <div class="footer-heading">Infos Légales</div>
+            <div class="footer-heading" data-t="footerLegalTitle">Infos Légales</div>
             <ul class="footer-links">
-                <li><a href="privacy.html">⚖️ <span data-t="legalMainTitle">Mentions Légales</span></a></li>
-                <li><a href="contact.html">✉️ <span data-t="navContact">Contact</span></a></li>
+                <li><a href="privacy.html"><span data-t="legalMainTitle">Mentions Légales</span></a></li>
+                <li><a href="contact.html"><span data-t="navContact">Contact</span></a></li>
             </ul>
-            <p style="font-size:12px; color:#555; margin-top:15px; line-height:1.5;" data-t="footerDisclaimer">
+            <p style="font-size:0.75rem; color:#777777; margin-top:15px; line-height:1.5;" data-t="footerDisclaimer">
                 Ce site n'est pas affilié à POP MART.<br>Les images sont la propriété de leurs auteurs respectifs.
             </p>
         </div>
     </div>
 
     <div class="footer-bottom">
-        <div>&copy; 2025 HRNtrack. All rights reserved.</div>
-        <div>Made with ❤️ in France</div>
+        <div>&copy; 2026 HRNtrack. All rights reserved.</div>
+        <div>Made with passion in France</div>
     </div>
 </footer>
 
 <div id="cookie-banner">
     <div class="cookie-content">
-        <div class="cookie-title">🍪 Cookies ?</div>
+        <div class="cookie-title" data-t="cookieTitle">Cookies ?</div>
         <div>
-            <span id="txt-cookie-fr" style="font-size:13px; opacity:0.9;">Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?</span>
-            <span id="txt-cookie-en" style="color:#aaa; font-size:11px; display:block; margin-top:4px;">We use Google Analytics to improve the website. Is it OK?</span>
+            <span style="font-size:0.78rem; opacity:0.85; line-height:1.5;" data-t="cookieText">Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?</span>
         </div>
         <div class="cookie-btns">
-            <button class="btn-cookie btn-decline" onclick="handleCookie(false)">Non merci / No</button>
-            <button class="btn-cookie btn-accept" onclick="handleCookie(true)">Accepter / Accept</button>
+            <button class="btn-cookie btn-decline" onclick="handleCookie(false)" data-t="cookieDecline">Non merci</button>
+            <button class="btn-cookie btn-accept" onclick="handleCookie(true)" data-t="cookieAccept">Accepter</button>
         </div>
     </div>
 </div>

@@ -3,166 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Mon Compte</title>
+    <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --primary: #6A8C47;
-            --primary-dark: #557235;
-            --bg-body: #F5F5F0;
-            --card-bg: #ffffff;
-            --text-main: #1A1A1A;
-            --text-sub: #555555;
-            --red: #C0392B;
-            --dark-bg: #1A1A1A;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --nav-height-mobile: 80px;
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-sand: #EBE7DF;
+            --color-border: #D8D2C5;
+            --color-gold: #C6A875;
+            --color-gold-light: #F9F5EB;
+            --color-red: #C0392B; 
+            --color-green: #6A8C47;
+            --color-green-dark: #557235;
+            --color-text-sub: #5E5D59;
+            --card-bg: #FCFBF8;
+            
+            --primary: var(--color-green);
+            --primary-dark: var(--color-green-dark);
+            --bg-body: var(--color-light);
+            --text-main: var(--color-dark);
+            --text-sub: var(--color-text-sub);
+            
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --nav-height: 75px;
+            --nav-height-mobile: 70px;
+            
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body { 
             background-color: var(--bg-body); 
             color: var(--text-main); 
-            font-family: 'Poppins', sans-serif; 
+            font-family: var(--font-sans); 
             margin: 0; 
-            display: flex; flex-direction: column; min-height: 100vh;
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
             padding-bottom: var(--nav-height-mobile);
-            opacity: 0; transition: opacity 0.3s ease-in-out;
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
         }
         
         body.auth-ready { opacity: 1; }
 
         #access-denied, #main-container { display: none !important; }
 
-        /* --- HEADER & NAV --- */
+        /* --- NAVIGATION SUPÉRIEURE --- */
         .top-nav {
-            background: var(--dark-bg); color: white; padding: 10px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            height: var(--nav-height);
+            background: rgba(216, 210, 197, 0.45);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
-        .site-logo { height: 80px; }
-        
-        .nav-center {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.05); padding: 4px;
-            border-radius: 12px; display: flex; gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2000;
-        }
-        .nav-link {
-            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
-            border-radius: 8px; font-size: 12px; font-weight: 600;
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
-        }
-        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
-        .nav-right { display: flex; align-items: center; gap: 10px; }
 
-        /* LANG TOGGLE */
-        .lang-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
         }
-        .lang-option {
-            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
-            color: #9CA3AF; transition: all 0.3s ease;
+
+        .site-logo {
+            height: 100px;
+            width: auto;
+            filter: brightness(0);
+            transition: opacity 0.25s ease;
+            display: block;
         }
-        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        .site-logo:hover {
+            opacity: 0.75;
+        }
+
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s ease;
+            display: inline-block;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
 
         .btn-auth-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
-            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
+            background: transparent;
+            border: 1px solid var(--color-dark);
+            color: var(--color-dark);
+            padding: 0.5rem 1.2rem;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
         }
-        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
 
-        /* --- MOBILE NAV --- */
-        @media (min-width: 769px) { body { padding-bottom: 0; } }
-        @media (max-width: 768px) {
-            .site-logo { display: none; } 
-            .top-nav { justify-content: flex-end; padding: 10px 15px; }
-            .nav-center {
-                position: fixed; bottom: 0; top: auto; left: 0; transform: none; width: 100%;
-                background: #1A1A1A; border-radius: 0; border: none; border-top: 1px solid rgba(255,255,255,0.1);
-                padding: 8px 0 25px 0; justify-content: space-around; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-                box-sizing: border-box; z-index: 2000;
-            }
-            .nav-link { flex-direction: column; padding: 0; gap: 4px; background: transparent !important; box-shadow: none !important; color: #6B7280; }
-            .nav-link span:first-child { font-size: 20px; }
-            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
-            .nav-link.active { color: var(--primary); }
-            .nav-link:hover { background: transparent; color: white; }
+        .btn-auth-trigger:hover {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .lang-toggle {
+            display: flex;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            background: var(--color-sand);
+        }
+
+        .lang-option {
+            padding: 0.35rem 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-sub);
+            transition: all 0.2s ease;
+        }
+
+        .lang-option.active {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        /* Mobile Hamburger Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--color-dark);
+        }
+        
+        .mobile-menu-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--color-dark);
+        }
+
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0; right: 0; bottom: 0;
+            background: var(--color-light);
+            border-top: 1px solid var(--color-border);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .mobile-drawer.open {
+            display: flex;
+        }
+
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        .mobile-drawer .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+        @media (max-width: 992px) {
+            .top-nav { padding: 0 1.5rem; }
+            .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
+            .mobile-menu-btn { display: block; }
         }
 
         /* --- PAGE CONTENT --- */
         .container { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
-        .account-card { background: white; padding: 30px; border-radius: 20px; box-shadow: var(--shadow); margin-bottom: 20px; }
-        .account-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid #E5E7EB; padding-bottom: 20px; }
+        .account-card { 
+            background: #FFFFFF; 
+            padding: 35px; 
+            border: 1px solid var(--color-border); 
+            box-shadow: var(--shadow); 
+            margin-bottom: 25px; 
+        }
+        .account-header { text-align: center; margin-bottom: 30px; border-bottom: 1px solid var(--color-border); padding-bottom: 25px; }
         
         /* Avatar */
         .avatar-circle { 
-            width: 100px; height: 100px; background: #E5E7EB; border-radius: 50%; margin: 0 auto 15px; 
-            display: flex; align-items: center; justify-content: center; font-size: 35px; color: #9CA3AF; 
-            overflow: hidden; border: 4px solid var(--primary);
+            width: 95px; height: 95px; background: var(--color-sand); border-radius: 50%; margin: 0 auto 15px; 
+            display: flex; align-items: center; justify-content: center; font-size: 32px; color: var(--color-text-sub); 
+            overflow: hidden; border: 3px solid var(--color-border);
         }
         .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
 
-        .user-email { font-size: 16px; font-weight: 600; color: var(--text-main); }
+        .user-email { font-size: 1.1rem; font-weight: 700; color: var(--color-dark); }
         
-        .section-title { font-size: 14px; font-weight: 700; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .section-title { 
+            font-size: 0.75rem; 
+            font-weight: 700; 
+            color: var(--color-dark); 
+            margin-bottom: 15px; 
+            text-transform: uppercase; 
+            letter-spacing: 0.08em; 
+        }
         
         .form-group { margin-bottom: 20px; }
-        input, select { width: 100%; padding: 12px; border: 1px solid #E5E7EB; border-radius: 10px; font-family: inherit; font-size: 14px; box-sizing: border-box; transition: 0.3s; margin-bottom: 10px; }
-        input:focus, select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
+        label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--color-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+        input, select { 
+            width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); 
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: #FFFFFF;
+            color: var(--color-dark); outline: none; transition: border-color 0.25s ease; margin-bottom: 10px; 
+        }
+        input:focus, select:focus { border-color: var(--color-dark); }
 
-        .btn-action { width: 100%; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 14px; transition: 0.2s; }
-        .btn-update { background: var(--dark-bg); color: white; }
-        .btn-update:hover { background: var(--primary); }
-        .btn-save-profile { background: #4A6fa5; color: white; }
-        .btn-save-profile:hover { background: #3b5b88; }
+        .btn-action { 
+            width: 100%; padding: 12px; font-family: var(--font-sans); font-weight: 600; cursor: pointer; 
+            border: 1px solid var(--color-dark); font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.25s ease; 
+        }
+        .btn-update { background: var(--color-dark); color: var(--color-light); }
+        .btn-update:hover { background: transparent; color: var(--color-dark); }
+        .btn-save-profile { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-save-profile:hover { background: var(--primary-dark); border-color: var(--primary-dark); }
         
-        .btn-logout { background: #fff; border: 1px solid #E5E7EB; color: var(--text-main); margin-top: 10px; }
-        .btn-logout:hover { background: #F3F4F6; }
+        .btn-logout { background: transparent; border: 1px solid var(--color-border); color: var(--color-dark); margin-top: 15px; }
+        .btn-logout:hover { background: var(--color-sand); }
 
-        .danger-zone { border: 1px solid #FECACA; background: #FEF2F2; padding: 20px; border-radius: 15px; margin-top: 30px; }
-        .btn-delete { background: var(--red); color: white; width: 100%; padding: 12px; border-radius: 10px; border: none; font-weight: 600; cursor: pointer; }
-        .btn-delete:hover { background: #a93226; }
+        .danger-zone { 
+            border: 1px solid var(--color-red); 
+            background: #FFF8F8; 
+            padding: 25px; 
+            margin-top: 30px; 
+        }
+        .btn-delete { 
+            background: var(--color-red); color: white; width: 100%; padding: 12px; 
+            font-family: var(--font-sans); border: 1px solid var(--color-red); font-weight: 600; font-size: 0.82rem;
+            letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; transition: all 0.25s ease;
+        }
+        .btn-delete:hover { background: #a93226; border-color: #a93226; }
 
         /* ACCESS DENIED */
         #access-denied { flex-direction: column; align-items: center; justify-content: center; height: 60vh; text-align: center; padding: 20px; }
-        .lock-icon { font-size: 60px; margin-bottom: 20px; background: #E5E7EB; width: 100px; height: 100px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #6B7280; }
-        .btn-login-big { background: var(--primary); color: white; padding: 15px 40px; border-radius: 50px; text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; border: none; font-size: 16px; transition: 0.3s; box-shadow: 0 4px 15px rgba(106, 140, 71, 0.4); }
+        .lock-icon { font-size: 40px; margin-bottom: 20px; background: var(--color-sand); border: 1px solid var(--color-border); width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--color-dark); }
+        .btn-login-big { background: var(--color-dark); color: var(--color-light); padding: 14px 36px; border: 1px solid var(--color-dark); text-decoration: none; font-weight: 600; margin-top: 20px; cursor: pointer; font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; transition: 0.3s; }
+        .btn-login-big:hover { background: transparent; color: var(--color-dark); }
 
-        /* AUTH MODAL */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); position: relative; }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
-        .btn-cancel:hover { text-decoration: underline; }
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
-        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+        /* MODALS & INPUTS */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(26, 26, 26, 0.7); 
+            z-index: 3000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px); 
+            padding: 1rem;
+        }
+        .modal-content { 
+            background: #FCFBF8; 
+            border: 1px solid var(--color-border);
+            width: 100%; 
+            max-width: 440px; 
+            padding: 2.2rem; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+        }
+        .btn-cancel { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--color-text-sub); 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-size: 0.78rem; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .btn-cancel:hover { color: var(--color-red); }
+        .auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--color-dark); }
+        .auth-separator { margin: 1.2rem 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--color-text-sub); text-align: center; }
 
     </style>
 </head>
 <body>
 
+    <!-- NAVIGATION HEADER -->
     <nav class="top-nav">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html"><img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo"></a>
+        <div class="nav-logo-group">
+            <a href="index.html" aria-label="HRNtrack Accueil">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
+            </a>
         </div>
+
         <div class="nav-center">
-            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-            <a href="donateurs.html" class="nav-link"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+            <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
         </div>
+
         <div class="nav-right">
-             <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
-                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
             </a>
 
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -170,40 +375,74 @@
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
 
-            <!-- Modifié pour ouvrir la modale par défaut si non connecté -->
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>🐼 </span> <span id="auth-status-text" data-t="navAccount">Mon Compte</span>
+                <span id="auth-status-text" data-t="navAccount">Mon Compte</span>
             </button>
         </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </nav>
+
+    <!-- MOBILE DRAWER MENU -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+        <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+        <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+        <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
+        <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
+        
+        <div class="mobile-actions">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
+                <div class="lang-toggle" onclick="window.toggleLanguage()">
+                    <div class="lang-option active" id="lang-fr-mob">FR</div>
+                    <div class="lang-option" id="lang-en-mob">EN</div>
+                </div>
+            </div>
+            
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
+                <span id="auth-status-text-mob" data-t="navAccount">Mon Compte</span>
+            </button>
+        </div>
+    </div>
 
     <div id="access-denied">
         <div class="lock-icon">🔒</div>
-        <h2 style="font-size:24px; margin:0 0 10px 0;" data-t="deniedTitle">Accès Restreint</h2>
-        <p style="color:var(--text-sub); max-width:400px; margin:0 auto;" data-t="deniedMsg">
+        <h2 style="font-size:1.5rem; margin:0 0 10px 0;" data-t="deniedTitle">Accès Restreint</h2>
+        <p style="color:var(--text-sub); max-width:400px; margin:0 auto; font-size:0.88rem;" data-t="deniedMsg">
             Connectez-vous pour accéder aux paramètres de votre compte.
         </p>
-        <!-- Remplacement du lien vers l'accueil par l'ouverture de la modale -->
         <button class="btn-login-big" onclick="window.toggleAuthModal()" data-t="deniedBtn">Se connecter</button>
     </div>
 
     <div id="main-container" class="container">
         <div class="account-card">
             <div class="account-header">
-                <div class="avatar-circle" id="header-avatar-display">🐼</div>
+                <div class="avatar-circle" id="header-avatar-display">👤</div>
                 <div id="display-email" class="user-email">Chargement...</div>
-                <div style="font-size:12px; color:#9CA3AF; margin-top:5px;" data-t="lblMember">Membre HRNtrack</div>
+                <div style="font-size:0.75rem; color:var(--color-text-sub); margin-top:5px;" data-t="lblMember">Membre HRNtrack</div>
             </div>
 
-            <div class="section-title" style="color:#4A6fa5;" data-t="lblProfile">Profil Public</div>
+            <div class="section-title" data-t="lblProfile">Profil Public</div>
             <div class="form-group">
-                <label style="font-size:11px; font-weight:700; color:#888;" data-t="lblPseudo">Pseudo (Visible sur votre lien public)</label>
+                <label data-t="lblPseudo">Pseudo (Visible sur votre lien public)</label>
                 <input type="text" id="profile-pseudo" placeholder="Ex: HironoFan99">
             </div>
             <div class="form-group">
-                <label style="font-size:11px; font-weight:700; color:#888;" data-t="lblAvatar">Avatar (Figurine favorite)</label>
+                <label data-t="lblAvatar">Avatar (Figurine favorite)</label>
                 <div style="display:flex; align-items:center; gap:10px;">
-                    <div id="preview-avatar-mini" style="width:40px; height:40px; background:#eee; border-radius:50%; flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center;">👤</div>
+                    <div id="preview-avatar-mini" style="width:40px; height:40px; background:var(--color-sand); border:1px solid var(--color-border); flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center;">👤</div>
                     <select id="profile-avatar-select">
                         <option value="">-- Choisir une figurine --</option>
                     </select>
@@ -211,16 +450,18 @@
             </div>
             <button class="btn-action btn-save-profile" onclick="window.saveUserProfile()" data-t="btnSaveProfile">Enregistrer le profil</button>
             
-            <div style="margin: 30px 0; border-top:1px dashed #E5E7EB;"></div>
+            <div style="margin: 30px 0; border-top:1px dashed var(--color-border);"></div>
 
             <div class="section-title" data-t="lblSecurity">Sécurité</div>
             <div class="form-group">
+                <label data-t="lblNewPass">Nouveau mot de passe</label>
                 <input type="password" id="new-password" placeholder="Nouveau mot de passe">
                 <button class="btn-action btn-update" onclick="window.updateUserPassword()" data-t="btnUpdatePass">Mettre à jour le mot de passe</button>
             </div>
 
             <div class="section-title" style="margin-top:30px;" data-t="lblEmailSection">Adresse Email</div>
             <div class="form-group">
+                <label data-t="lblNewEmail">Nouvelle adresse email</label>
                 <input type="email" id="new-email" placeholder="Nouvel email">
                 <button class="btn-action btn-update" onclick="window.updateUserEmail()" data-t="btnUpdateEmail">Mettre à jour l'email</button>
             </div>
@@ -229,41 +470,39 @@
         </div>
 
         <div class="danger-zone">
-            <div class="section-title" style="color:#C0392B;" data-t="lblDanger">Zone de Danger</div>
-            <p style="font-size:12px; color:#555; margin-bottom:15px;" data-t="lblDangerDesc">
+            <div class="section-title" style="color:var(--color-red);" data-t="lblDanger">Zone de Danger</div>
+            <p style="font-size:0.8rem; color:var(--color-text-sub); margin-bottom:15px;" data-t="lblDangerDesc">
                 La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.
             </p>
             <button class="btn-delete" onclick="window.deleteUserAccount()" data-t="btnDelete">Supprimer mon compte définitivement</button>
         </div>
     </div>
 
-    <!-- NOUVEAU MODAL D'AUTHENTIFICATION -->
+    <!-- MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center;">
+        <div class="modal-content" style="text-align:center; max-width:440px;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
-            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">
                 Sauvegardez votre collection dans le cloud.
             </p>
             
-            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:10px;">
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:12px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:12px;">
 
-            <!-- Lien Mot de passe oublié -->
             <div style="text-align: right; margin-bottom: 15px;">
                 <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
             </div>
 
-            <button class="btn-action btn-update" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            <button class="btn-action btn-update" onclick="window.handleLogin()" style="background:var(--primary); border-color:var(--primary);" data-t="btnLogin">Se connecter</button>
             
             <div class="auth-separator">OU</div>
             
-            <!-- Bouton Google -->
-            <button class="btn-action btn-update" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button class="btn-action btn-update" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
 
-            <button class="btn-action btn-update" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
+            <button class="btn-action btn-update" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
                 Créer un compte (Email)
             </button>
             
@@ -273,9 +512,52 @@
 
     <div id="footer-placeholder"></div>
 
+    <script>
+        window.toggleMobileMenu = function() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('open');
+            }
+        };
+
+        const GA_ID = 'G-RFP1HDMW49';
+
+        function loadAnalytics() {
+            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', GA_ID);
+        }
+
+        window.handleCookie = function(accept) {
+            const banner = document.getElementById('cookie-banner');
+            if (accept) {
+                localStorage.setItem('cookieConsent', 'true');
+                loadAnalytics();
+            } else {
+                localStorage.setItem('cookieConsent', 'false');
+            }
+            if(banner) banner.style.display = 'none';
+        };
+
+        window.initCookieLogic = function() {
+            const consent = localStorage.getItem('cookieConsent');
+            const banner = document.getElementById('cookie-banner');
+            if (consent === 'true') {
+                loadAnalytics();
+            } else if (consent === null && banner) {
+                banner.style.display = 'block'; 
+            }
+        }
+    </script>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        // Ajout des imports nécessaires pour Google et Verification Email
         import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
@@ -286,7 +568,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- I18N DICTIONNAIRE ---
         const translations = {
             fr: {
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir", navAccount: "Mon Compte",
@@ -296,10 +577,11 @@
                 btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
 
                 lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
+                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",
                 btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
                 lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
                 lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil",
-                footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", legalMainTitle: "Mentions Légales",
+                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.", footerNav: "Navigation", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", legalMainTitle: "Mentions Légales",
                 phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",
                 alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",
                 alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
@@ -307,10 +589,6 @@
                 alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : ",
                 
                 navReleases: "Mises à jour", 
-                footerNav: "Navigation",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales",
                 footerLegalTitle: "Infos Légales",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
@@ -326,10 +604,11 @@
                 btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
 
                 lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
+                lblNewPass: "New Password", lblNewEmail: "New Email Address",
                 btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
                 lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
                 lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile",
-                footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", legalMainTitle: "Legal Mentions",
+                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.", footerNav: "Navigation", footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.", legalMainTitle: "Legal Mentions",
                 phNewPass: "New password", phNewEmail: "New email",
                 alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",
                 alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
@@ -337,10 +616,6 @@
                 alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: ",
                 
                 navReleases: "Updates",
-                footerNav: "Navigation",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions",
                 footerLegalTitle: "Legal Info",
                 cookieTitle: "🍪 Cookies ?",
                 cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
@@ -361,11 +636,25 @@
 
         window.updateUIText = function() {
             if(currentLang === 'fr') {
-                document.getElementById('lang-fr').classList.add('active');
-                document.getElementById('lang-en').classList.remove('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.add('active');
+                if(enBtn) enBtn.classList.remove('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.add('active');
+                if(enMob) enMob.classList.remove('active');
             } else {
-                document.getElementById('lang-fr').classList.remove('active');
-                document.getElementById('lang-en').classList.add('active');
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.remove('active');
+                if(enBtn) enBtn.classList.add('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.remove('active');
+                if(enMob) enMob.classList.add('active');
             }
 
             const tr = translations[currentLang];
@@ -381,8 +670,6 @@
             if(emailInput) emailInput.placeholder = tr.phNewEmail;
         };
 
-        // --- AUTH SYSTEM (MODAL & LOGIC) ---
-        
         window.toggleAuthModal = () => {
             const el = document.getElementById('auth-modal');
             el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
@@ -401,8 +688,6 @@
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                
-                // Vérification du statut de l'email
                 if (!userCredential.user.emailVerified) {
                     alert(currentLang === 'fr'
                         ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
@@ -411,7 +696,6 @@
                     await signOut(auth);
                     return;
                 }
-                
                 window.toggleAuthModal();
             } catch(e) { alert("Erreur: " + e.message); }
         };
@@ -423,18 +707,13 @@
             
             try {
                 const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                
-                // Envoi du mail de vérification
                 await sendEmailVerification(userCredential.user);
-                
                 alert(currentLang === 'fr' 
                     ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
                     : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
                 
-                // Déconnexion immédiate pour forcer la vérification
                 await signOut(auth);
                 window.toggleAuthModal();
-                
             } catch(e) { alert("Erreur: " + e.message); }
         };
 
@@ -467,8 +746,6 @@
             }
         };
 
-        // --- GESTION DU PROFIL (LOGIQUE) ---
-        
         const avatarSelect = document.getElementById('profile-avatar-select');
         baseData.sort((a,b) => a.Name.localeCompare(b.Name)).forEach(item => {
             const opt = document.createElement('option');
@@ -488,7 +765,7 @@
                 bigPreview.innerHTML = imgTag; 
             } else {
                 preview.innerHTML = "👤";
-                bigPreview.innerHTML = "🐼";
+                bigPreview.innerHTML = "👤";
             }
         };
 
@@ -556,10 +833,10 @@
             }
         };
 
-        // --- AUTH INIT ---
         onAuthStateChanged(auth, (user) => {
             updateUIText();
             const btn = document.getElementById('auth-trigger');
+            const btnMob = document.getElementById('auth-trigger-mob');
 
             if (user) {
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
@@ -570,6 +847,10 @@
                     btn.classList.add('logged-in');
                     btn.onclick = () => {}; 
                 }
+                if (btnMob) {
+                    btnMob.classList.add('logged-in');
+                    btnMob.onclick = () => {};
+                }
                 loadUserProfile(user.uid);
             } else {
                 document.getElementById('main-container').style.setProperty('display', 'none', 'important');
@@ -579,11 +860,14 @@
                     btn.classList.remove('logged-in');
                     btn.onclick = () => window.toggleAuthModal();
                 }
+                if (btnMob) {
+                    btnMob.classList.remove('logged-in');
+                    btnMob.onclick = () => { window.toggleAuthModal(); window.toggleMobileMenu(); };
+                }
             }
             document.body.classList.add('auth-ready');
         });
 
-        // --- SECURITY ACCOUNT FUNCTIONS ---
         window.handleLogout = async () => {
             if(confirm(t('confirmLogout'))) {
                 await signOut(auth);
@@ -650,7 +934,6 @@
             }
         };
 
-        // --- FOOTER LOADER ---
         fetch('footer.html')
             .then(response => {
                 if (!response.ok) throw new Error("Erreur chargement footer");

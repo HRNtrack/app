@@ -3,225 +3,382 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HRNtrack - Donators</title>
+    <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            /* PALETTE */
-            --primary: #6A8C47;
-            --primary-dark: #557235;
-            --bg-body: #F5F5F0;
-            --card-bg: #ffffff;
-            --text-main: #1A1A1A;
-            --text-sub: #555555;
-            --gold: #C6A875;
-            --gold-light: #F0EAD6;
-            --red: #C0392B;
-            --dark-bg: #1A1A1A;
+            --color-dark: #1A1A1A;
+            --color-light: #F5F5F0;
+            --color-sand: #EBE7DF;
+            --color-border: #D8D2C5;
+            --color-gold: #C6A875;
+            --color-gold-light: #F9F5EB;
+            --color-red: #C0392B; 
+            --color-green: #6A8C47;
+            --color-green-dark: #557235;
+            --color-text-sub: #5E5D59;
+            --card-bg: #FCFBF8;
             
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --nav-height-mobile: 80px;
+            --primary: var(--color-green);
+            --primary-dark: var(--color-green-dark);
+            --bg-body: var(--color-light);
+            --text-main: var(--color-dark);
+            --text-sub: var(--color-text-sub);
+            
+            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            --nav-height: 75px;
+            --nav-height-mobile: 70px;
+            
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
         }
 
         body { 
             background-color: var(--bg-body); 
             color: var(--text-main); 
-            font-family: 'Poppins', sans-serif; 
+            font-family: var(--font-sans); 
             margin: 0; 
-            display: flex; flex-direction: column; min-height: 100vh;
-            padding-bottom: var(--nav-height-mobile); /* Espace pour la nav mobile */
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
         }
+        body.auth-ready { opacity: 1; }
 
-        /* --- HEADER & NAV --- */
+        /* --- NAVIGATION SUPÉRIEURE --- */
         .top-nav {
-            background: var(--dark-bg); color: white; padding: 15px 20px;
-            display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3rem;
+            height: var(--nav-height);
+            background: rgba(216, 210, 197, 0.45);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .site-logo { height: 80px; }
+        .nav-logo-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-logo {
+            height: 100px;
+            width: auto;
+            filter: brightness(0);
+            transition: opacity 0.25s ease;
+            display: block;
+        }
+
+        .site-logo:hover {
+            opacity: 0.75;
+        }
 
         .nav-center {
-            position: absolute; left: 50%; transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.05); padding: 4px;
-            border-radius: 12px; display: flex; gap: 4px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 2000;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
         }
 
         .nav-link {
-            text-decoration: none; color: #9CA3AF; padding: 6px 16px;
-            border-radius: 8px; font-size: 12px; font-weight: 600;
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px;
+            text-decoration: none;
+            color: var(--color-dark);
+            font-size: 0.82rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.25s ease;
+            display: inline-block;
         }
-        .nav-link:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        .nav-link.active { background: var(--primary); color: white; box-shadow: 0 2px 10px rgba(106, 140, 71, 0.4); }
 
-        .nav-right { display: flex; align-items: center; gap: 10px; }
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .btn-auth-trigger {
+            background: transparent;
+            border: 1px solid var(--color-dark);
+            color: var(--color-dark);
+            padding: 0.5rem 1.2rem;
+            font-family: var(--font-sans);
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .btn-auth-trigger:hover {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
 
         .lang-toggle {
-            display: flex; background: rgba(255,255,255,0.1); border-radius: 20px;
-            padding: 2px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            border: 1px solid var(--color-border);
+            cursor: pointer;
+            background: var(--color-sand);
         }
+
         .lang-option {
-            padding: 6px 12px; border-radius: 16px; font-size: 11px; font-weight: 700;
-            color: #9CA3AF; transition: all 0.3s ease;
-        }
-        .lang-option.active { background: var(--primary); color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-
-        /* BOUTON AUTH / SUPPORT */
-        .btn-auth-trigger {
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; 
-            padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; 
-            transition: 0.2s; display: flex; align-items: center; gap: 8px; text-decoration: none;
-        }
-        .btn-auth-trigger:hover { background: rgba(255,255,255,0.2); }
-        .btn-auth-trigger.logged-in { background: rgba(106, 140, 71, 0.2); border-color: var(--primary); color: var(--primary); }
-
-        /* --- MOBILE OPTIMIZATION (APP BAR STYLE) --- */
-        @media (min-width: 769px) {
-            body { padding-bottom: 0; }
+            padding: 0.35rem 0.65rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-text-sub);
+            transition: all 0.2s ease;
         }
 
-        @media (max-width: 768px) {
-            .site-logo { display: none; } 
-            
-            /* Le Header du haut ne garde que les boutons de droite */
-            .top-nav {
-                justify-content: flex-end; 
-                padding: 10px 15px;
-            }
+        .lang-option.active {
+            background: var(--color-dark);
+            color: var(--color-light);
+        }
 
-            /* La barre de navigation devient une App Bar en bas */
-            .nav-center {
-                position: fixed; 
-                bottom: 0; 
-                top: auto; 
-                left: 0; 
-                transform: none; 
-                width: 100%;
-                background: #1A1A1A; 
-                border-radius: 0;
-                border: none;
-                border-top: 1px solid rgba(255,255,255,0.1);
-                padding: 8px 0 25px 0; 
-                justify-content: space-around; 
-                box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
-                box-sizing: border-box;
-                z-index: 2000;
-            }
+        /* Mobile Hamburger Button */
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            color: var(--color-dark);
+        }
+        
+        .mobile-menu-btn svg {
+            width: 26px;
+            height: 26px;
+            stroke: var(--color-dark);
+        }
 
-            /* Style des liens en mode Mobile */
-            .nav-link {
-                flex-direction: column; 
-                padding: 0;
-                gap: 4px;
-                background: transparent !important; 
-                box-shadow: none !important;
-                color: #6B7280; 
-            }
+        .mobile-drawer {
+            display: none;
+            position: fixed;
+            top: var(--nav-height);
+            left: 0; right: 0; bottom: 0;
+            background: var(--color-light);
+            border-top: 1px solid var(--color-border);
+            flex-direction: column;
+            padding: 2rem;
+            gap: 1.5rem;
+            z-index: 999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
 
-            .nav-link span:first-child { font-size: 20px; }
-            .nav-link span:last-child { font-size: 10px; font-weight: 500; display: block; }
+        .mobile-drawer.open {
+            display: flex;
+        }
 
-            .nav-link.active { color: var(--primary); }
-            .nav-link:hover { background: transparent; color: white; }
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        .mobile-drawer .mobile-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+        @media (max-width: 992px) {
+            .top-nav { padding: 0 1.5rem; }
+            .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
+            .mobile-menu-btn { display: block; }
         }
 
         /* --- CONTAINER & DONATIONS --- */
         .container { max-width: 800px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
-        .goal-card { background: white; padding: 40px; border-radius: 20px; box-shadow: var(--shadow); text-align: center; margin-bottom: 40px; position: relative; overflow: hidden; }
-        .goal-title { font-size: 14px; color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 10px; }
-        .goal-amount { font-size: 48px; font-weight: 800; color: var(--primary); margin: 0; }
+        .goal-card { 
+            background: #FFFFFF; 
+            padding: 40px; 
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow); 
+            text-align: center; 
+            margin-bottom: 40px; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .goal-title { font-size: 0.75rem; color: var(--color-text-sub); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; margin-bottom: 10px; }
+        .goal-amount { font-size: 3rem; font-weight: 800; color: var(--color-dark); margin: 0; }
         
-        .progress-container { height: 24px; background: #E5E7EB; border-radius: 12px; overflow: hidden; margin: 20px auto; max-width: 600px; position: relative; }
-        /* Gradient Vert Nature */
-        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), #8FBC6B); width: 0%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 12px; box-shadow: 0 0 15px rgba(106, 140, 71, 0.4); }
-        .progress-text { position: absolute; width: 100%; text-align: center; top: 0; line-height: 24px; font-size: 11px; font-weight: 800; color: #1F2937; z-index: 2; mix-blend-mode: overlay; }
+        .progress-container { height: 20px; background: var(--color-sand); border: 1px solid var(--color-border); overflow: hidden; margin: 20px auto; max-width: 600px; position: relative; }
+        .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: width 1.5s ease; }
+        .progress-text { position: absolute; width: 100%; text-align: center; top: 0; line-height: 20px; font-size: 11px; font-weight: 800; color: var(--color-dark); z-index: 2; }
 
-        .donors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .donor-card { background: white; padding: 15px; border-radius: 12px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; border-left: 4px solid var(--primary); }
-        .donor-name { font-weight: 600; font-size: 14px; }
-        .donor-amount { font-weight: 700; color: var(--primary); font-size: 16px; background: rgba(106, 140, 71, 0.15); padding: 4px 8px; border-radius: 6px; }
+        .donors-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+        .donor-card { 
+            background: #FFFFFF; 
+            padding: 16px; 
+            border: 1px solid var(--color-border); 
+            box-shadow: var(--shadow); 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            border-left: 4px solid var(--primary); 
+        }
+        .donor-name { font-weight: 600; font-size: 0.88rem; color: var(--color-dark); }
+        .donor-amount { font-weight: 700; color: var(--primary); font-size: 0.95rem; background: var(--color-sand); padding: 4px 10px; }
 
-        #admin-panel { display: none; background: var(--dark-bg); padding: 20px; border-radius: 15px; margin-bottom: 30px; color: white; }
+        #admin-panel { display: none; background: var(--color-dark); padding: 20px; border: 1px solid var(--color-dark); margin-bottom: 30px; color: white; }
         .admin-row { display: flex; gap: 10px; margin-top: 10px; }
-        .admin-input { flex: 1; padding: 10px; border-radius: 6px; border: none; } /* Pour l'admin panel */
-        .btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .admin-input { flex: 1; padding: 10px; border: 1px solid var(--color-border); background: #fff; font-family: var(--font-sans); font-size: 0.85rem; }
+        .btn-add { background: var(--primary); color: white; border: none; padding: 10px 20px; font-family: var(--font-sans); cursor: pointer; font-weight: 600; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.08em; transition: 0.25s; }
         .btn-add:hover { background: var(--primary-dark); }
 
-        /* MODALS & INPUTS (STYLE HARMONISÉ) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
-        .modal-content { background: white; width: 90%; max-width: 420px; padding: 25px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); max-height: 90vh; overflow-y: auto; position: relative; }
-        
-        /* STYLE INPUTS IDENTIQUE A LA COLLECTION */
-        input, select, textarea {
-            width: 100%; padding: 12px; border: 1px solid #E5E7EB;
-            border-radius: 10px; font-family: inherit; font-size: 14px;
-            box-sizing: border-box; transition: 0.3s;
+        /* MODALS & INPUTS */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(26, 26, 26, 0.7); 
+            z-index: 3000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px); 
+            padding: 1rem;
         }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(106, 140, 71, 0.1); }
-
-        .btn-save { width: 100%; background: var(--dark-bg); color: white; border: none; padding: 14px; border-radius: 10px; font-weight: 600; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-save:hover { background: var(--primary); }
-        .btn-cancel { width: 100%; background: transparent; border: none; color: var(--red); padding: 10px; cursor: pointer; margin-top: 5px; font-size: 12px; font-weight: 600; }
-        .btn-cancel:hover { text-decoration: underline; }
-
-        .auth-title { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; color: var(--text-main); }
-        .auth-separator { display: flex; align-items: center; margin: 20px 0; color: #9CA3AF; font-size: 12px; }
-        .auth-separator::before, .auth-separator::after { content: ""; flex: 1; height: 1px; background: #E5E7EB; margin: 0 10px; }
+        .modal-content { 
+            background: #FCFBF8; 
+            border: 1px solid var(--color-border);
+            width: 100%; 
+            max-width: 440px; 
+            padding: 2.2rem; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+        }
         
-        /* --- STYLES BOUTON KO-FI CUSTOM --- */
+        input, select, textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid var(--color-border);
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: #FFFFFF;
+            color: var(--color-dark); outline: none; transition: border-color 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--color-dark); }
+
+        .btn-save { 
+            width: 100%; 
+            background: var(--color-dark); 
+            color: var(--color-light); 
+            border: 1px solid var(--color-dark); 
+            padding: 12px; 
+            font-family: var(--font-sans);
+            font-weight: 600; 
+            font-size: 0.82rem; 
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: all 0.25s ease; 
+        }
+        .btn-save:hover { background: transparent; color: var(--color-dark); }
+        .btn-cancel { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--color-text-sub); 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-size: 0.78rem; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .btn-cancel:hover { color: var(--color-red); }
+
+        .auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--color-dark); }
+        .auth-separator { margin: 1.2rem 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--color-text-sub); text-align: center; }
+        
+        /* BOUTON KO-FI CUSTOM */
         .btn-kofi-custom {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            background-color: #6a8c47; 
-            background: linear-gradient(45deg, #6a8c47, #3e522a);
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: var(--color-dark);
             color: white; text-decoration: none;
-            padding: 12px 25px; border-radius: 50px;
-            font-weight: 700; font-size: 14px;
-            box-shadow: 0 4px 15px #2f3e20;
-            transition: all 0.3s ease;
+            padding: 12px 28px;
+            font-family: var(--font-sans);
+            font-weight: 600; font-size: 0.82rem;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            border: 1px solid var(--color-dark);
+            transition: all 0.25s ease;
             margin: 20px auto 0;
-            max-width: 250px;
-            border: 2px solid transparent;
         }
 
         .btn-kofi-custom:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 8px 20px rgba(41, 171, 224, 0.6);
+            background: transparent;
+            color: var(--color-dark);
         }
 
-        .kofi-icon { font-size: 18px; animation: kofi-wiggle 3s infinite; }
-
-        @keyframes kofi-wiggle {
-            0%, 100% { transform: rotate(0) scale(1); }
-            5% { transform: rotate(-10deg) scale(1.1); }
-            10% { transform: rotate(10deg) scale(1.1); }
-            15% { transform: rotate(-10deg) scale(1.1); }
-            20% { transform: rotate(0) scale(1); }
-        }
+        h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; border-bottom: 1px solid var(--color-border); padding-bottom: 10px; margin-bottom: 20px; }
     </style>
 </head>
 <body>
+    
+    <!-- NAVIGATION HEADER -->
     <nav class="top-nav">
-        <div style="display:flex; align-items:center; gap:10px;">
-            <a href="index.html">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="Logo">
+        <div class="nav-logo-group">
+            <a href="index.html" aria-label="HRNtrack Accueil">
+                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
             </a>
         </div>
+
         <div class="nav-center">
-            <a href="index.html" class="nav-link"><span>🏠</span> <span data-t="navHome">Accueil</span></a>
-            <a href="dashboard.html" class="nav-link"><span>📋</span> <span data-t="navCollection">Collection</span></a>
-            <a href="statistiques.html" class="nav-link"><span>📊</span> <span data-t="navStats">Stats</span></a>
-            <a href="donateurs.html" class="nav-link active"><span>🎁</span> <span data-t="navDonors">Dons</span></a>
-            <a href="contact.html" class="nav-link"><span>✉️</span> <span data-t="navContact">Contact</span></a>
+            <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+            <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+            <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+            <a href="donateurs.html" class="nav-link active"><span data-t="navDonors">Dons</span></a>
+            <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
         </div>
+
         <div class="nav-right">
-             <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="margin-right:10px; text-decoration:none;">
-                <span>☕</span> <span data-t="navSupport">Soutenir</span>
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
             </a>
 
             <div class="lang-toggle" onclick="window.toggleLanguage()">
@@ -229,16 +386,51 @@
                 <div class="lang-option" id="lang-en">EN</div>
             </div>
 
-            <!-- Bouton de connexion/compte réintégré pour permettre l'accès admin -->
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span>🐼</span> <span id="auth-status-text" data-t="authLogin">Connexion</span>
+                <span id="auth-status-text" data-t="authLogin">Connexion</span>
             </button>
         </div>
+
+        <!-- Mobile Hamburger Button -->
+        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+        </button>
     </nav>
+
+    <!-- MOBILE DRAWER MENU -->
+    <div class="mobile-drawer" id="mobile-drawer">
+        <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
+        <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
+        <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
+        <a href="donateurs.html" class="nav-link active"><span data-t="navDonors">Dons</span></a>
+        <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
+        
+        <div class="mobile-actions">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
+                <div class="lang-toggle" onclick="window.toggleLanguage()">
+                    <div class="lang-option active" id="lang-fr-mob">FR</div>
+                    <div class="lang-option" id="lang-en-mob">EN</div>
+                </div>
+            </div>
+            
+            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
+                <span data-t="navSupport">Soutenir</span>
+            </a>
+
+            <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
+                <span id="auth-status-text-mob" data-t="authLogin">Connexion</span>
+            </button>
+        </div>
+    </div>
 
     <div class="container">
         <div id="admin-panel">
-            <h3 style="margin:0 0 10px 0;">👑 Ajouter un donateur</h3>
+            <h3 style="margin:0 0 10px 0; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.08em;">👑 Ajouter un donateur</h3>
             <div class="admin-row">
                 <input type="text" id="new-name" class="admin-input" placeholder="Nom">
                 <input type="number" id="new-amount" class="admin-input" placeholder="€">
@@ -249,43 +441,45 @@
         <div class="goal-card">
             <div class="goal-title" data-t="lblGoalTitle">Objectif du moment</div>
             <h1 class="goal-amount" id="total-raised">0€</h1>
-            <div style="color:var(--text-sub);"><span data-t="lblGoalTarget">sur</span> <span id="goal-target-text">0€</span></div>
+            <div style="color:var(--text-sub); font-size:0.85rem;"><span data-t="lblGoalTarget">sur</span> <span id="goal-target-text">0€</span></div>
             <div class="progress-container">
                 <div id="progress-bar" class="progress-bar"></div>
                 <div id="progress-percent" class="progress-text">0%</div>
             </div>
-            <p style="font-size:12px; color:#9CA3AF;"><span data-t="lblGoalDesc">Merci de votre soutien ! ❤️</span></p>
+            <p style="font-size:12px; color:#9CA3AF;"><span data-t="lblGoalDesc">Merci de votre soutien !</span></p>
 
             <a href="https://ko-fi.com/U7U11QWR1G" target="_blank" class="btn-kofi-custom">
-                <span class="kofi-icon">☕</span>
                 <span data-t="btnKofi">Support me on Ko-fi</span>
             </a>
         </div>
 
-        <h2 style="font-size:18px; border-bottom:2px solid #E5E7EB; padding-bottom:10px; margin-bottom:20px;">
-            ✨ <span data-t="lblWall">Mur des Donateurs</span>
-        </h2>
+        <h2><span data-t="lblWall">Mur des Donateurs</span></h2>
         <div id="donors-list" class="donors-grid"></div>
     </div>
 
+    <!-- MODAL D'AUTHENTIFICATION -->
     <div id="auth-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center;">
+        <div class="modal-content" style="text-align:center; max-width:440px;">
             <div class="auth-title" data-t="authLogin">Connexion</div>
-            <p style="color:#6B7280; font-size:13px; margin-bottom:20px;" data-t="authDesc">
-                Sauvegardez votre collection dans le cloud.
-            </p>
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">Sauvegardez votre collection dans le cloud.</p>
             
-            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:10px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:20px;">
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:12px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:12px;">
             
-            <button class="btn-save" onclick="window.handleLogin()" style="background:var(--primary);" data-t="btnLogin">Se connecter</button>
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
+            <button class="btn-save" onclick="window.handleLogin()" data-t="btnLogin">Se connecter</button>
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid #E5E7EB;" data-t="btnRegister">
-                Créer un compte
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
-            
+
+            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">Créer un compte (Email)</button>
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>
@@ -293,10 +487,14 @@
     <div id="footer-placeholder"></div>
 
     <script>
-        // --- 1. FONCTIONS COOKIES & ANALYTICS ---
-        const GA_ID = 'G-RFP1HDMW49';
+        window.toggleMobileMenu = function() {
+            const drawer = document.getElementById('mobile-drawer');
+            if (drawer) {
+                drawer.classList.toggle('open');
+            }
+        };
 
-        // Fonction pour charger Analytics
+        const GA_ID = 'G-RFP1HDMW49';
         function loadAnalytics() {
             if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
 
@@ -309,10 +507,8 @@
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', GA_ID);
-            console.log("Analytics chargé ✅");
         }
 
-        // Fonction appelée par les boutons (doit être globale/window)
         window.handleCookie = function(accept) {
             const banner = document.getElementById('cookie-banner');
             if (accept) {
@@ -320,27 +516,25 @@
                 loadAnalytics();
             } else {
                 localStorage.setItem('cookieConsent', 'false');
-                console.log("Analytics bloqué ❌");
             }
             if(banner) banner.style.display = 'none';
         };
 
-        // Fonction d'initialisation (à lancer après le chargement du footer)
         window.initCookieLogic = function() {
             const consent = localStorage.getItem('cookieConsent');
             const banner = document.getElementById('cookie-banner');
             
             if (consent === 'true') {
                 loadAnalytics(); 
-            } else if (consent === null) {
-                if(banner) banner.style.display = 'block'; 
+            } else if (consent === null && banner) {
+                banner.style.display = 'block'; 
             }
         }
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, Timestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
@@ -355,9 +549,10 @@
             fr: { 
                 navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir",
                 authLogin: "Connexion", authAccount: "Mon Compte", authDesc: "Sauvegardez votre collection dans le cloud.",
-                btnLogin: "Se connecter", btnRegister: "Créer un compte", btnCancel: "Annuler", 
+                btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler", 
+                btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
                 footerDesc: "L'outil ultime pour suivre votre collection Hirono.", footerNav: "Navigation", footerAbout: "À propos", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", 
-                lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien ! ❤️", lblWall: "Mur des Donateurs",
+                lblGoalTitle: "Objectif du moment", lblGoalTarget: "sur", lblGoalDesc: "Merci de votre soutien !", lblWall: "Mur des Donateurs",
                 btnKofi: "Soutenez-moi sur Ko-fi",
                 legalMainTitle: "Mentions Légales",
                 navReleases: "Mises à jour", 
@@ -370,9 +565,10 @@
             en: { 
                 navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", navSupport: "Support",
                 authLogin: "Login", authAccount: "My Account", authDesc: "Save your collection to the cloud.",
-                btnLogin: "Log In", btnRegister: "Sign Up", btnCancel: "Cancel", 
+                btnLogin: "Log In", btnRegister: "Sign Up (Email)", btnCancel: "Cancel", 
+                btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
                 footerDesc: "The ultimate tool to track your Hirono collection.", footerNav: "Navigation", footerAbout: "About", footerDisclaimer: "This is a fanmade project. We are not affiliated with POP MART.", 
-                lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support! ❤️", lblWall: "Wall of Donors",
+                lblGoalTitle: "Current Goal", lblGoalTarget: "of", lblGoalDesc: "Thanks for your support!", lblWall: "Wall of Donors",
                 btnKofi: "Support me on Ko-fi",
                 legalMainTitle: "Legal Mentions",
                 navReleases: "Updates",
@@ -394,13 +590,34 @@
         };
 
         window.updateUIText = function() {
+            if(currentLang === 'fr') { 
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.add('active');
+                if(enBtn) enBtn.classList.remove('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.add('active');
+                if(enMob) enMob.classList.remove('active');
+            } else { 
+                const frBtn = document.getElementById('lang-fr');
+                const enBtn = document.getElementById('lang-en');
+                if(frBtn) frBtn.classList.remove('active');
+                if(enBtn) enBtn.classList.add('active');
+
+                const frMob = document.getElementById('lang-fr-mob');
+                const enMob = document.getElementById('lang-en-mob');
+                if(frMob) frMob.classList.remove('active');
+                if(enMob) enMob.classList.add('active');
+            }
             const t = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => { const key = el.getAttribute('data-t'); if(t[key]) el.innerText = t[key]; });
-            document.getElementById('lang-fr').className = currentLang === 'fr' ? 'lang-option active' : 'lang-option';
-            document.getElementById('lang-en').className = currentLang === 'en' ? 'lang-option active' : 'lang-option';
             const user = auth.currentUser;
             const btnText = document.getElementById('auth-status-text');
+            const btnTextMob = document.getElementById('auth-status-text-mob');
             if(btnText) btnText.innerText = user ? t.authAccount : t.authLogin;
+            if(btnTextMob) btnTextMob.innerText = user ? t.authAccount : t.authLogin;
         };
 
         window.toggleAuthModal = () => { const el = document.getElementById('auth-modal'); el.style.display = (el.style.display === 'flex') ? 'none' : 'flex'; };
@@ -417,7 +634,14 @@
             if(!email || !pass) return alert("Veuillez remplir les champs.");
             
             try { 
-                await signInWithEmailAndPassword(auth, email, pass); 
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                if (!userCredential.user.emailVerified) {
+                    alert(currentLang === 'fr'
+                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
+                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
+                    await signOut(auth);
+                    return;
+                }
                 window.toggleAuthModal(); 
             } catch(e) { 
                 alert("Erreur: " + e.message); 
@@ -429,12 +653,44 @@
             const pass = document.getElementById('auth-pass').value;
             if(!email || !pass) return alert("Veuillez remplir les champs.");
             try {
-                await createUserWithEmailAndPassword(auth, email, pass);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+                await sendEmailVerification(userCredential.user);
+                alert(currentLang === 'fr' 
+                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
+                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
+                await signOut(auth);
                 window.toggleAuthModal();
             } catch(e) { alert("Erreur: " + e.message); }
         };
-        
-        window.handleLogout = async () => { if(confirm("Déconnexion ?")) { await signOut(auth); location.reload(); } };
+
+        const googleProvider = new GoogleAuthProvider();
+
+        window.handleGoogleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                window.toggleAuthModal();
+            } catch(e) { 
+                alert("Erreur Google: " + e.message); 
+            }
+        };
+
+        window.handleResetPassword = async () => {
+            const email = document.getElementById('auth-email').value;
+            if(!email) {
+                alert(currentLang === 'fr' 
+                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
+                    : "Please enter your email address in the field above to reset your password.");
+                return;
+            }
+            try {
+                await sendPasswordResetEmail(auth, email);
+                alert(currentLang === 'fr' 
+                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
+                    : "Reset email sent! Check your spam folder.");
+            } catch(e) { 
+                alert("Erreur: " + e.message); 
+            }
+        };
 
         async function loadDonations() {
             const t = translations[currentLang];
@@ -456,15 +712,28 @@
         onAuthStateChanged(auth, (user) => {
             updateUIText();
             const btn = document.getElementById('auth-trigger');
+            const btnMob = document.getElementById('auth-trigger-mob');
             if (user) {
-                btn.classList.add('logged-in'); 
-                btn.onclick = () => window.location.href = "compte.html";
-                
+                if (btn) {
+                    btn.classList.add('logged-in'); 
+                    btn.onclick = () => window.location.href = "compte.html";
+                }
+                if (btnMob) {
+                    btnMob.classList.add('logged-in');
+                    btnMob.onclick = () => window.location.href = "compte.html";
+                }
                 if(user.email === ADMIN_EMAIL) document.getElementById('admin-panel').style.display = 'block';
             } else {
-                btn.classList.remove('logged-in'); 
-                btn.onclick = () => window.toggleAuthModal();
+                if (btn) {
+                    btn.classList.remove('logged-in'); 
+                    btn.onclick = () => window.toggleAuthModal();
+                }
+                if (btnMob) {
+                    btnMob.classList.remove('logged-in');
+                    btnMob.onclick = () => { window.toggleAuthModal(); window.toggleMobileMenu(); };
+                }
             }
+            document.body.classList.add('auth-ready');
         });
 
         window.addDonation = async () => {
@@ -483,13 +752,10 @@
             })
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
-                
                 if(window.updateUIText) window.updateUIText();
-                
                 if(window.initCookieLogic) window.initCookieLogic();
             })
             .catch(error => console.error('Erreur Footer:', error));
-
     </script>
 </body>
 </html>
