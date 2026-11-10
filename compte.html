@@ -2,46 +2,19 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     
     <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/common.css">
     
     <style>
-        :root {
-            --color-dark: #1A1A1A;
-            --color-light: #F5F5F0;
-            --color-sand: #EBE7DF;
-            --color-border: #D8D2C5;
-            --color-gold: #C6A875;
-            --color-gold-light: #F9F5EB;
-            --color-red: #C0392B; 
-            --color-green: #6A8C47;
-            --color-green-dark: #557235;
-            --color-text-sub: #5E5D59;
-            --card-bg: #FCFBF8;
-            
-            --primary: var(--color-green);
-            --primary-dark: var(--color-green-dark);
-            --bg-body: var(--color-light);
-            --text-main: var(--color-dark);
-            --text-sub: var(--color-text-sub);
-            
-            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            --nav-height: 75px;
-            --nav-height-mobile: 70px;
-            
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
-
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
 
         body { 
             background-color: var(--bg-body); 
@@ -63,88 +36,10 @@
         #access-denied, #main-container { display: none !important; }
 
         /* --- NAVIGATION SUPÉRIEURE --- */
-        .top-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            height: var(--nav-height);
-            background: rgba(216, 210, 197, 0.45);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-logo-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .site-logo {
-            height: 100px;
-            width: auto;
-            filter: brightness(0);
-            transition: opacity 0.25s ease;
-            display: block;
-        }
-
-        .site-logo:hover {
-            opacity: 0.75;
-        }
-
-        .nav-center {
-            display: flex;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--color-dark);
-            font-size: 0.82rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            padding-bottom: 4px;
-            border-bottom: 2px solid transparent;
-            transition: all 0.25s ease;
-            display: inline-block;
-        }
 
         .nav-link:hover, .nav-link.active {
             border-bottom-color: var(--color-dark);
             font-weight: 600;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .btn-auth-trigger {
-            background: transparent;
-            border: 1px solid var(--color-dark);
-            color: var(--color-dark);
-            padding: 0.5rem 1.2rem;
-            font-family: var(--font-sans);
-            font-size: 0.78rem;
-            font-weight: 600;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-        }
-
-        .btn-auth-trigger:hover {
-            background: var(--color-dark);
-            color: var(--color-light);
         }
 
         .btn-auth-trigger.logged-in {
@@ -157,60 +52,7 @@
             color: #ffffff;
         }
 
-        .lang-toggle {
-            display: flex;
-            border: 1px solid var(--color-border);
-            cursor: pointer;
-            background: var(--color-sand);
-        }
-
-        .lang-option {
-            padding: 0.35rem 0.65rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--color-text-sub);
-            transition: all 0.2s ease;
-        }
-
-        .lang-option.active {
-            background: var(--color-dark);
-            color: var(--color-light);
-        }
-
         /* Mobile Hamburger Button */
-        .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: var(--color-dark);
-        }
-        
-        .mobile-menu-btn svg {
-            width: 26px;
-            height: 26px;
-            stroke: var(--color-dark);
-        }
-
-        .mobile-drawer {
-            display: none;
-            position: fixed;
-            top: var(--nav-height);
-            left: 0; right: 0; bottom: 0;
-            background: var(--color-light);
-            border-top: 1px solid var(--color-border);
-            flex-direction: column;
-            padding: 2rem;
-            gap: 1.5rem;
-            z-index: 999;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-
-        .mobile-drawer.open {
-            display: flex;
-        }
 
         .mobile-drawer .nav-link {
             font-size: 1rem;
@@ -219,19 +61,7 @@
             width: 100%;
         }
 
-        .mobile-drawer .mobile-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
         @media (min-width: 993px) { body { padding-bottom: 0; } }
-        @media (max-width: 992px) {
-            .top-nav { padding: 0 1.5rem; }
-            .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
-            .mobile-menu-btn { display: block; }
-        }
 
         /* --- PAGE CONTENT --- */
         .container { max-width: 600px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
@@ -349,73 +179,7 @@
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
-    <nav class="top-nav">
-        <div class="nav-logo-group">
-            <a href="index.html" aria-label="HRNtrack Accueil">
-                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
-            </a>
-        </div>
-
-        <div class="nav-center">
-            <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
-            <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
-            <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
-            <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
-            <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
-        </div>
-
-        <div class="nav-right">
-            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
-                <span data-t="navSupport">Soutenir</span>
-            </a>
-
-            <div class="lang-toggle" onclick="window.toggleLanguage()">
-                <div class="lang-option active" id="lang-fr">FR</div>
-                <div class="lang-option" id="lang-en">EN</div>
-            </div>
-
-            <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
-                <span id="auth-status-text" data-t="navAccount">Mon Compte</span>
-            </button>
-        </div>
-
-        <!-- Mobile Hamburger Button -->
-        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
-        </button>
-    </nav>
-
-    <!-- MOBILE DRAWER MENU -->
-    <div class="mobile-drawer" id="mobile-drawer">
-        <a href="index.html" class="nav-link"><span data-t="navHome">Accueil</span></a>
-        <a href="dashboard.html" class="nav-link"><span data-t="navCollection">Collection</span></a>
-        <a href="statistiques.html" class="nav-link"><span data-t="navStats">Stats</span></a>
-        <a href="donateurs.html" class="nav-link"><span data-t="navDonors">Dons</span></a>
-        <a href="contact.html" class="nav-link"><span data-t="navContact">Contact</span></a>
-        
-        <div class="mobile-actions">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
-                <div class="lang-toggle" onclick="window.toggleLanguage()">
-                    <div class="lang-option active" id="lang-fr-mob">FR</div>
-                    <div class="lang-option" id="lang-en-mob">EN</div>
-                </div>
-            </div>
-            
-            <a href="https://ko-fi.com/hrntrack" target="_blank" class="btn-auth-trigger" style="text-decoration:none;">
-                <span data-t="navSupport">Soutenir</span>
-            </a>
-
-            <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
-                <span id="auth-status-text-mob" data-t="navAccount">Mon Compte</span>
-            </button>
-        </div>
-    </div>
+    <script src="assets/header.js" data-auth-label="navAccount"></script>
 
     <div id="access-denied">
         <div class="lock-icon">🔒</div>
@@ -512,117 +276,21 @@
 
     <div id="footer-placeholder"></div>
 
-    <script>
-        window.toggleMobileMenu = function() {
-            const drawer = document.getElementById('mobile-drawer');
-            if (drawer) {
-                drawer.classList.toggle('open');
-            }
-        };
-
-        const GA_ID = 'G-RFP1HDMW49';
-
-        function loadAnalytics() {
-            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
-            const script = document.createElement('script');
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-            script.async = true;
-            document.head.appendChild(script);
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', GA_ID);
-        }
-
-        window.handleCookie = function(accept) {
-            const banner = document.getElementById('cookie-banner');
-            if (accept) {
-                localStorage.setItem('cookieConsent', 'true');
-                loadAnalytics();
-            } else {
-                localStorage.setItem('cookieConsent', 'false');
-            }
-            if(banner) banner.style.display = 'none';
-        };
-
-        window.initCookieLogic = function() {
-            const consent = localStorage.getItem('cookieConsent');
-            const banner = document.getElementById('cookie-banner');
-            if (consent === 'true') {
-                loadAnalytics();
-            } else if (consent === null && banner) {
-                banner.style.display = 'block'; 
-            }
-        }
-    </script>
+    <script src="assets/site.js"></script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { app } from './assets/firebase.js';
+        import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         import { baseData } from './data.js';
 
-        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const translations = {
-            fr: {
-                navHome: "Accueil", navCollection: "Collection", navStats: "Stats", navDonors: "Dons", navContact: "Contact", navSupport: "Soutenir", navAccount: "Mon Compte",
-                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",
-                
-                authLogin: "Connexion", authDesc: "Sauvegardez votre collection dans le cloud.", btnLogin: "Se connecter", btnRegister: "Créer un compte (Email)", btnCancel: "Annuler",
-                btnGoogle: "Continuer avec Google", btnForgot: "Mot de passe oublié ?",
-
-                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",
-                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",
-                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",
-                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",
-                lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.", footerNav: "Navigation", footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.", legalMainTitle: "Mentions Légales",
-                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",
-                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",
-                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",
-                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",
-                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : ",
-                
-                navReleases: "Mises à jour", 
-                footerLegalTitle: "Infos Légales",
-                cookieTitle: "🍪 Cookies ?",
-                cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
-                cookieDecline: "Non merci",
-                cookieAccept: "Accepter"            
-
-            },
-            en: {
-                navHome: "Home", navCollection: "Collection", navStats: "Stats", navDonors: "Donors", navContact: "Contact", navSupport: "Support", navAccount: "My Account",
-                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",
-                
-                authLogin: "Login", authDesc: "Save your collection to the cloud.", btnLogin: "Log In", btnRegister: "Sign Up (Email)", btnCancel: "Cancel",
-                btnGoogle: "Continue with Google", btnForgot: "Forgot password?",
-
-                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",
-                lblNewPass: "New Password", lblNewEmail: "New Email Address",
-                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",
-                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",
-                lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.", footerNav: "Navigation", footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.", legalMainTitle: "Legal Mentions",
-                phNewPass: "New password", phNewEmail: "New email",
-                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",
-                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",
-                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",
-                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: ",
-                
-                navReleases: "Updates",
-                footerLegalTitle: "Legal Info",
-                cookieTitle: "🍪 Cookies ?",
-                cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
-                cookieDecline: "No thanks",
-                cookieAccept: "Accept"
-            }
-        };
+        const translations = withCommon({
+            fr: {                navAccount: "Mon Compte",                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",                lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil",                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : "                },            en: {                navAccount: "My Account",                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",                lblNewPass: "New Password", lblNewEmail: "New Email Address",                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",                lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile",                phNewPass: "New password", phNewEmail: "New email",                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: "                }        });
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
 
@@ -635,27 +303,7 @@
         };
 
         window.updateUIText = function() {
-            if(currentLang === 'fr') {
-                const frBtn = document.getElementById('lang-fr');
-                const enBtn = document.getElementById('lang-en');
-                if(frBtn) frBtn.classList.add('active');
-                if(enBtn) enBtn.classList.remove('active');
-
-                const frMob = document.getElementById('lang-fr-mob');
-                const enMob = document.getElementById('lang-en-mob');
-                if(frMob) frMob.classList.add('active');
-                if(enMob) enMob.classList.remove('active');
-            } else {
-                const frBtn = document.getElementById('lang-fr');
-                const enBtn = document.getElementById('lang-en');
-                if(frBtn) frBtn.classList.remove('active');
-                if(enBtn) enBtn.classList.add('active');
-
-                const frMob = document.getElementById('lang-fr-mob');
-                const enMob = document.getElementById('lang-en-mob');
-                if(frMob) frMob.classList.remove('active');
-                if(enMob) enMob.classList.add('active');
-            }
+            syncLangToggle(currentLang);
 
             const tr = translations[currentLang];
             document.querySelectorAll('[data-t]').forEach(el => {
@@ -670,81 +318,13 @@
             if(emailInput) emailInput.placeholder = tr.phNewEmail;
         };
 
-        window.toggleAuthModal = () => {
-            const el = document.getElementById('auth-modal');
-            el.style.display = (el.style.display === 'flex') ? 'none' : 'flex';
-        };
+        setupAuthModal(() => currentLang);
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
                 event.target.style.display = "none";
             }
         }
-
-        window.handleLogin = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            if(!email || !pass) return alert("Merci de remplir tous les champs.");
-            
-            try {
-                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
-                if (!userCredential.user.emailVerified) {
-                    alert(currentLang === 'fr'
-                        ? "Votre adresse email n'a pas encore été vérifiée. Veuillez cliquer sur le lien envoyé dans votre boîte mail."
-                        : "Your email address has not been verified yet. Please click the link sent to your inbox.");
-                    
-                    await signOut(auth);
-                    return;
-                }
-                window.toggleAuthModal();
-            } catch(e) { alert("Erreur: " + e.message); }
-        };
-
-        window.handleRegister = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            if(!email || !pass) return alert("Merci de remplir tous les champs.");
-            
-            try {
-                const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
-                await sendEmailVerification(userCredential.user);
-                alert(currentLang === 'fr' 
-                    ? "Compte créé avec succès ! Un lien de vérification a été envoyé. Veuillez vérifier votre boîte mail (et vos spams) pour valider votre compte avant de vous connecter."
-                    : "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.");
-                
-                await signOut(auth);
-                window.toggleAuthModal();
-            } catch(e) { alert("Erreur: " + e.message); }
-        };
-
-        const googleProvider = new GoogleAuthProvider();
-
-        window.handleGoogleLogin = async () => {
-            try {
-                await signInWithPopup(auth, googleProvider);
-                window.toggleAuthModal();
-            } catch(e) { 
-                alert("Erreur Google: " + e.message); 
-            }
-        };
-
-        window.handleResetPassword = async () => {
-            const email = document.getElementById('auth-email').value;
-            if(!email) {
-                alert(currentLang === 'fr' 
-                    ? "Veuillez entrer votre adresse email dans le champ ci-dessus pour réinitialiser le mot de passe." 
-                    : "Please enter your email address in the field above to reset your password.");
-                return;
-            }
-            try {
-                await sendPasswordResetEmail(auth, email);
-                alert(currentLang === 'fr' 
-                    ? "Email de réinitialisation envoyé ! Vérifiez vos courriers indésirables." 
-                    : "Reset email sent! Check your spam folder.");
-            } catch(e) { 
-                alert("Erreur: " + e.message); 
-            }
-        };
 
         const avatarSelect = document.getElementById('profile-avatar-select');
         baseData.sort((a,b) => a.Name.localeCompare(b.Name)).forEach(item => {
@@ -760,7 +340,7 @@
             const bigPreview = document.getElementById('header-avatar-display');
             
             if(url) {
-                const imgTag = `<img src="${url}" style="width:100%; height:100%; object-fit:cover;">`;
+                const imgTag = `<img src="${url}" alt="" style="width:100%; height:100%; object-fit:cover;">`;
                 preview.innerHTML = imgTag;
                 bigPreview.innerHTML = imgTag; 
             } else {
@@ -835,35 +415,19 @@
 
         onAuthStateChanged(auth, (user) => {
             updateUIText();
-            const btn = document.getElementById('auth-trigger');
-            const btnMob = document.getElementById('auth-trigger-mob');
 
             if (user) {
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
                 document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
                 document.getElementById('display-email').innerText = user.email; 
                 
-                if (btn) {
-                    btn.classList.add('logged-in');
-                    btn.onclick = () => {}; 
-                }
-                if (btnMob) {
-                    btnMob.classList.add('logged-in');
-                    btnMob.onclick = () => {};
-                }
+                updateAuthButtons(true, { onAccountPage: true });
                 loadUserProfile(user.uid);
             } else {
                 document.getElementById('main-container').style.setProperty('display', 'none', 'important');
                 document.getElementById('access-denied').style.setProperty('display', 'flex', 'important');
                 
-                if (btn) {
-                    btn.classList.remove('logged-in');
-                    btn.onclick = () => window.toggleAuthModal();
-                }
-                if (btnMob) {
-                    btnMob.classList.remove('logged-in');
-                    btnMob.onclick = () => { window.toggleAuthModal(); window.toggleMobileMenu(); };
-                }
+                updateAuthButtons(false);
             }
             document.body.classList.add('auth-ready');
         });

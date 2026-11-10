@@ -1,0 +1,218 @@
+/* HRNtrack — styles communs à toutes les pages (variables, en-tête, menu mobile).
+   Les styles propres à une page restent dans le <style> de cette page, chargé après ce fichier. */
+
+:root {
+    --color-dark: #1A1A1A;
+    --color-light: #F5F5F0;
+    --color-sand: #EBE7DF;
+    --color-border: #D8D2C5;
+    --color-gold: #C6A875;
+    --color-gold-light: #F9F5EB;
+    --color-red: #C0392B;
+    --color-green: #6A8C47;
+    --color-green-dark: #557235;
+    --color-text-sub: #5E5D59;
+    --card-bg: #FCFBF8;
+    --primary: var(--color-green);
+    --primary-dark: var(--color-green-dark);
+    --bg-body: var(--color-light);
+    --text-main: var(--color-dark);
+    --text-sub: var(--color-text-sub);
+    --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    --nav-height: 75px;
+    --nav-height-mobile: 70px;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 3rem;
+    height: var(--nav-height);
+    background: rgba(216, 210, 197, 0.45);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-logo-group {
+    display: flex;
+    align-items: center;
+}
+
+.site-logo {
+    height: 100px;
+    width: auto;
+    filter: brightness(0);
+    transition: opacity 0.25s ease;
+    display: block;
+}
+
+.site-logo:hover {
+    opacity: 0.75;
+}
+
+.nav-center {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--color-dark);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding-bottom: 4px;
+    border-bottom: 2px solid transparent;
+    transition: all 0.25s ease;
+    display: inline-block;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-auth-trigger {
+    background: transparent;
+    border: 1px solid var(--color-dark);
+    color: var(--color-dark);
+    padding: 0.5rem 1.2rem;
+    font-family: var(--font-sans);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.btn-auth-trigger:hover {
+    background: var(--color-dark);
+    color: var(--color-light);
+}
+
+.lang-toggle {
+    display: flex;
+    border: 1px solid var(--color-border);
+    cursor: pointer;
+    background: var(--color-sand);
+}
+
+.lang-option {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-text-sub);
+    transition: all 0.2s ease;
+}
+
+.lang-option.active {
+    background: var(--color-dark);
+    color: var(--color-light);
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: var(--color-dark);
+}
+
+.mobile-menu-btn svg {
+    width: 26px;
+    height: 26px;
+    stroke: var(--color-dark);
+}
+
+.mobile-drawer {
+    display: none;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-light);
+    border-top: 1px solid var(--color-border);
+    flex-direction: column;
+    padding: 2rem;
+    gap: 1.5rem;
+    z-index: 999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow-y: auto;
+}
+
+.mobile-drawer.open {
+    display: flex;
+}
+
+.mobile-drawer .mobile-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 992px) {
+    .top-nav { padding: 0 1.5rem; }
+    .nav-center, .nav-right .btn-auth-trigger, .nav-right .lang-toggle { display: none; }
+    .mobile-menu-btn { display: block; }
+}
+
+/* --- ACCESSIBILITÉ --- */
+
+/* Le sélecteur de langue est un vrai <button> : on retire les styles par défaut du navigateur */
+button.lang-toggle {
+    padding: 0;
+    font: inherit;
+    color: inherit;
+}
+
+/* Contour visible quand on navigue au clavier (pas au clic souris) */
+:focus-visible {
+    outline: 2px solid var(--color-dark);
+    outline-offset: 2px;
+}
+
+.modal-overlay :focus-visible {
+    outline-color: var(--color-green);
+}
+
+/* Cartes cliquables (collection, nouveautés) accessibles au clavier */
+[role="button"][tabindex]:focus-visible {
+    outline: 2px solid var(--color-dark);
+    outline-offset: 3px;
+}
+
+/* Sur mobile, un champ en dessous de 16px fait zoomer iOS automatiquement au focus */
+@media (max-width: 992px) {
+    input, select, textarea { font-size: 16px; }
+}
+
+/* Respecte le réglage système « réduire les animations » */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

@@ -2,17 +2,18 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     
     <!-- Typographies -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
     <style>
         :root {
@@ -558,7 +559,7 @@
     <div id="footer-placeholder"></div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { app } from './assets/firebase.js';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
@@ -568,8 +569,6 @@
             baseData = module.baseData || [];
         } catch(e) { console.warn("data.js non chargé, mode dégradé actif."); }
 
-        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
-        const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
 
@@ -886,7 +885,7 @@
                         feedContainer.innerHTML = allActivities.slice(0, 10).map(act => {
                             const dateStr = act.date ? act.date.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) : 'Date inconnue';
                             const imgUrl = act.img || 'https://via.placeholder.com/40';
-                            return `<div class="feed-item"><img src="${imgUrl}" class="feed-img" loading="lazy"><div class="feed-content"><p class="feed-text">Ajout : <strong>${act.name}</strong></p><span class="feed-time">📅 ${dateStr}</span></div></div>`;
+                            return `<div class="feed-item"><img src="${imgUrl}" class="feed-img" loading="lazy" alt=""><div class="feed-content"><p class="feed-text">Ajout : <strong>${act.name}</strong></p><span class="feed-time">📅 ${dateStr}</span></div></div>`;
                         }).join('');
                     }
                 }

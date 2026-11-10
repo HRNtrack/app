@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta property="og:title" content="Ma Collection Hirono - HRNtrack">
     <meta property="og:description" content="Découvre ma collection de figurines Hirono, mes doubles et mes recherches.">
@@ -14,9 +14,12 @@
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
     
     <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="assets/common.css">
     
     <style>
         :root { 
@@ -49,10 +52,6 @@
             --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
         body { 
             background-color: var(--bg-body); 
             color: var(--text-main); 
@@ -70,42 +69,7 @@
         body.ready { opacity: 1; }
 
         /* --- NAVIGATION SUPÉRIEURE --- */
-        .top-nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 3rem;
-            height: var(--nav-height);
-            background: rgba(216, 210, 197, 0.45);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
 
-        .nav-logo-group {
-            display: flex;
-            align-items: center;
-        }
-
-        .site-logo {
-            height: 100px;
-            width: auto;
-            filter: brightness(0);
-            transition: opacity 0.25s ease;
-            display: block;
-        }
-
-        .site-logo:hover {
-            opacity: 0.75;
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
 
         .cta-btn {
             background: var(--color-dark); 
@@ -142,67 +106,8 @@
         }
         .btn-share-link:hover { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
 
-        .lang-toggle {
-            display: flex;
-            border: 1px solid var(--color-border);
-            cursor: pointer;
-            background: var(--color-sand);
-        }
-
-        .lang-option {
-            padding: 0.35rem 0.65rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            color: var(--color-text-sub);
-            transition: all 0.2s ease;
-        }
-
-        .lang-option.active {
-            background: var(--color-dark);
-            color: var(--color-light);
-        }
-
         /* Mobile Hamburger Button */
-        .mobile-menu-btn {
-            display: none;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            padding: 8px;
-            color: var(--color-dark);
-        }
-        
-        .mobile-menu-btn svg {
-            width: 26px;
-            height: 26px;
-            stroke: var(--color-dark);
-        }
 
-        .mobile-drawer {
-            display: none;
-            position: fixed;
-            top: var(--nav-height);
-            left: 0; right: 0; bottom: 0;
-            background: var(--color-light);
-            border-top: 1px solid var(--color-border);
-            flex-direction: column;
-            padding: 2rem;
-            gap: 1.5rem;
-            z-index: 999;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow-y: auto;
-        }
-
-        .mobile-drawer.open {
-            display: flex;
-        }
-
-        .mobile-drawer .mobile-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
 
         @media (min-width: 993px) { body { padding-bottom: 0; } }
         @media (max-width: 992px) {
@@ -352,10 +257,10 @@
         </div>
 
         <div class="nav-right">
-            <div class="lang-toggle" onclick="window.toggleLanguage()">
-                <div class="lang-option active" id="lang-fr">FR</div>
-                <div class="lang-option" id="lang-en">EN</div>
-            </div>
+            <button type="button" class="lang-toggle" onclick="window.toggleLanguage()" aria-label="Changer de langue / Switch language">
+                    <span class="lang-option active" id="lang-fr">FR</span>
+                    <span class="lang-option" id="lang-en">EN</span>
+                </button>
             
             <button class="btn-share-link" onclick="window.shareCurrentPage()" title="Copier le lien" data-t="btnShare">
                 Copier le lien
@@ -365,7 +270,7 @@
         </div>
 
         <!-- Mobile Hamburger Button -->
-        <button class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu Mobile">
+        <button type="button" class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu" aria-controls="mobile-drawer" aria-expanded="false">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -379,10 +284,10 @@
         <div class="mobile-actions">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
-                <div class="lang-toggle" onclick="window.toggleLanguage()">
-                    <div class="lang-option active" id="lang-fr-mob">FR</div>
-                    <div class="lang-option" id="lang-en-mob">EN</div>
-                </div>
+                <button type="button" class="lang-toggle" onclick="window.toggleLanguage()" aria-label="Changer de langue / Switch language">
+                    <span class="lang-option active" id="lang-fr-mob">FR</span>
+                    <span class="lang-option" id="lang-en-mob">EN</span>
+                </button>
             </div>
             
             <button class="btn-share-link" onclick="window.shareCurrentPage(); window.toggleMobileMenu();" style="width:100%; text-align:center;" data-t="btnShare">
@@ -441,97 +346,18 @@
 
     <div id="footer-placeholder"></div>
 
-    <script>
-        window.toggleMobileMenu = function() {
-            const drawer = document.getElementById('mobile-drawer');
-            if (drawer) {
-                drawer.classList.toggle('open');
-            }
-        };
-
-        const GA_ID = 'G-RFP1HDMW49';
-
-        function loadAnalytics() {
-            if(document.querySelector(`script[src*="${GA_ID}"]`)) return;
-            const script = document.createElement('script');
-            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-            script.async = true;
-            document.head.appendChild(script);
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', GA_ID);
-        }
-
-        window.handleCookie = function(accept) {
-            const banner = document.getElementById('cookie-banner');
-            if (accept) { localStorage.setItem('cookieConsent', 'true'); loadAnalytics(); } 
-            else { localStorage.setItem('cookieConsent', 'false'); }
-            if(banner) banner.style.display = 'none';
-        };
-
-        window.initCookieLogic = function() {
-            const consent = localStorage.getItem('cookieConsent');
-            const banner = document.getElementById('cookie-banner');
-            if (consent === 'true') { loadAnalytics(); if(banner) banner.style.display = 'none'; } 
-            else if (consent === null && banner) { banner.style.display = 'block'; }
-            else { if(banner) banner.style.display = 'none'; }
-        }
-    </script>
+    <script src="assets/site.js"></script>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { app } from './assets/firebase.js';
+        import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { baseData } from './data.js';
 
-        const firebaseConfig = { apiKey: "AIzaSyB1vHxCeB4IfNWpTibp64WgNP30KlXMaAc", authDomain: "hrntrack-1cfe3.firebaseapp.com", projectId: "hrntrack-1cfe3", storageBucket: "hrntrack-1cfe3.firebasestorage.app", messagingSenderId: "1059019333826", appId: "1:1059019333826:web:fa184b796b847cc0f2db5b" };
-        const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        const translations = {
-            fr: {
-                btnCreate: "Créer ma collection", 
-                btnShare: "Copier le lien",
-                msgLoading: "Chargement de la collection...",
-                fAll: "Tout", fOwned: "Possédés", fWish: "Wishlist", fDouble: "Doublons", fSecret: "Secrets",
-                optAllSeries: "-- Toutes les séries --", badgeOwned: "OWNED", badgeWish: "WISH",
-                lblTotal: "Possédées", lblSecrets: "Secrets", lblDoubles: "Doublons (Dispo)",
-                searchPh: "Rechercher une figurine...",
-                footerPrivacy: "Politique de Confidentialité", footerTerms: "Mentions Légales",
-                footerRights: "Tous droits réservés.", footerLinks: "Liens utiles", footerContact: "Contact",
-                navReleases: "Mises à jour", 
-                footerNav: "Navigation",
-                footerDesc: "L'outil de référence pour gérer, estimer et compléter votre collection de figurines Hirono. Fait par un fan, pour les fans.",
-                footerDisclaimer: "Ce site est un projet de fan (Fanmade). Nous ne sommes pas affiliés à POP MART.",
-                legalMainTitle: "Mentions Légales",
-                footerLegalTitle: "Infos Légales",
-                cookieTitle: "Cookies ?",
-                cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
-                cookieDecline: "Non merci",
-                cookieAccept: "Accepter"  
-            },
-            en: {
-                btnCreate: "Start my collection", 
-                btnShare: "Copy link",
-                msgLoading: "Loading collection...",
-                fAll: "All", fOwned: "Owned", fWish: "Wishlist", fDouble: "Duplicates", fSecret: "Secrets",
-                optAllSeries: "-- All Series --", badgeOwned: "OWNED", badgeWish: "WISH",
-                lblTotal: "Owned", lblSecrets: "Secrets", lblDoubles: "Duplicates (Trade)",
-                searchPh: "Search a figure...",
-                footerPrivacy: "Privacy Policy", footerTerms: "Legal Notice",
-                footerRights: "All rights reserved.", footerLinks: "Useful Links", footerContact: "Contact",
-                navReleases: "Updates",
-                footerNav: "Navigation",
-                footerDesc: "The ultimate tool to manage, estimate and complete your Hirono figure collection.",
-                footerDisclaimer: "This is a fanmade project. Not affiliated with POP MART.",
-                legalMainTitle: "Legal Mentions",
-                footerLegalTitle: "Legal Info",
-                cookieTitle: "Cookies ?",
-                cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
-                cookieDecline: "No thanks",
-                cookieAccept: "Accept"
-            }
-        };
+        const translations = withCommon({
+            fr: {                btnCreate: "Créer ma collection",                 btnShare: "Copier le lien",                msgLoading: "Chargement de la collection...",                fAll: "Tout", fOwned: "Possédés", fWish: "Wishlist", fDouble: "Doublons", fSecret: "Secrets",                optAllSeries: "-- Toutes les séries --", badgeOwned: "OWNED", badgeWish: "WISH",                lblTotal: "Possédées", lblSecrets: "Secrets", lblDoubles: "Doublons (Dispo)",                searchPh: "Rechercher une figurine...",                footerPrivacy: "Politique de Confidentialité", footerTerms: "Mentions Légales",                footerRights: "Tous droits réservés.", footerLinks: "Liens utiles", footerContact: "Contact"                },            en: {                btnCreate: "Start my collection",                 btnShare: "Copy link",                msgLoading: "Loading collection...",                fAll: "All", fOwned: "Owned", fWish: "Wishlist", fDouble: "Duplicates", fSecret: "Secrets",                optAllSeries: "-- All Series --", badgeOwned: "OWNED", badgeWish: "WISH",                lblTotal: "Owned", lblSecrets: "Secrets", lblDoubles: "Duplicates (Trade)",                searchPh: "Search a figure...",                footerPrivacy: "Privacy Policy", footerTerms: "Legal Notice",                footerRights: "All rights reserved.", footerLinks: "Useful Links", footerContact: "Contact"                }        });
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
         let currentStatus = 'all';
@@ -539,27 +365,7 @@
 
         function updateUIText() {
             const tr = translations[currentLang];
-            if(currentLang === 'fr') {
-                const frBtn = document.getElementById('lang-fr');
-                const enBtn = document.getElementById('lang-en');
-                if(frBtn) frBtn.classList.add('active');
-                if(enBtn) enBtn.classList.remove('active');
-
-                const frMob = document.getElementById('lang-fr-mob');
-                const enMob = document.getElementById('lang-en-mob');
-                if(frMob) frMob.classList.add('active');
-                if(enMob) enMob.classList.remove('active');
-            } else {
-                const frBtn = document.getElementById('lang-fr');
-                const enBtn = document.getElementById('lang-en');
-                if(frBtn) frBtn.classList.remove('active');
-                if(enBtn) enBtn.classList.add('active');
-
-                const frMob = document.getElementById('lang-fr-mob');
-                const enMob = document.getElementById('lang-en-mob');
-                if(frMob) frMob.classList.remove('active');
-                if(enMob) enMob.classList.add('active');
-            }
+            syncLangToggle(currentLang);
             document.querySelectorAll('[data-t]').forEach(el => {
                 const key = el.getAttribute('data-t');
                 if(tr[key]) el.innerText = tr[key];
@@ -610,15 +416,20 @@
                         if(ogTitle) ogTitle.content = `Collection de ${profile.pseudo} - HRNtrack`;
                         if(ogUrl) ogUrl.content = window.location.href;
                     }
-                    if(profile.avatar) {
-                        document.getElementById('profile-avatar').innerHTML = `<img src="${profile.avatar}">`;
+                    // Avatar : on crée l'image via le DOM (jamais via innerHTML) et on n'accepte que des URLs http(s)
+                    if(typeof profile.avatar === 'string' && /^https?:\/\//i.test(profile.avatar)) {
+                        const avatarImg = document.createElement('img');
+                        avatarImg.src = profile.avatar;
+                        avatarImg.alt = '';
+                        document.getElementById('profile-avatar').replaceChildren(avatarImg);
                     }
 
                     rawData = baseData.map(b => {
                         const find = userColl.find(u => u.ID === b.ID);
                         if (find) {
                             let q = find.Qty ? Number(find.Qty) : (find.Status === 'Possédé' ? 1 : 0);
-                            return { ...b, ...find, Qty: q };
+                            // Nom, image et série viennent toujours du catalogue officiel, pas des données de l'utilisateur
+                            return { ...b, ...find, Qty: Number.isFinite(q) ? q : 0, ID: b.ID, Name: b.Name, Image: b.Image, Serie: b.Serie, "Secret Rare": b["Secret Rare"] };
                         }
                         return { ...b, Status: "Non possédé", Qty: 0 };
                     });
