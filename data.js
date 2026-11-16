@@ -332,4 +332,24 @@
         { "ID": "SPE-DINOP", "Name": "Dino Plush Doll", "Serie": "Special Plush Doll", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-DINOP.webp" },
         { "ID": "SPE-HUNDF", "Name": "The Hundreds Figure", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-HUNDF.webp" },
 
+        // --- Mise à jour du 16/11/2026 : Harry Potter + éditions spéciales ---
+        { "ID": "HPO-RUB", "Name": "Rubeus Hagrid", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-RUB.webp" },
+        { "ID": "HPO-SEV", "Name": "Severus Snape", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-SEV.webp" },
+        { "ID": "HPO-ALB", "Name": "Albus Dumbledore", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-ALB.webp" },
+        { "ID": "HPO-TSH", "Name": "Harry Potter and The Sorting Hat", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-TSH.webp" },
+        { "ID": "HPO-LUN", "Name": "Luna Lovegood", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-LUN.webp" },
+        { "ID": "HPO-SIR", "Name": "Sirius Black", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-SIR.webp" },
+        { "ID": "HPO-LORD", "Name": "Lord Voldemort", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-LORD.webp" },
+        { "ID": "HPO-QUID", "Name": "Harry Potter and Quidditch", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-QUID.webp" },
+        { "ID": "HPO-RON", "Name": "Ron Weasley", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-RON.webp" },
+        { "ID": "HPO-HED", "Name": "Harry Potter and Hedwig", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-HED.webp" },
+        { "ID": "HPO-DOB", "Name": "Dobby", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-DOB.webp" },
+        { "ID": "HPO-DRA", "Name": "Draco Malfoy", "Serie": "Harry Potter", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-DRA.webp" },
+        { "ID": "HPO-MAND", "Name": "Mandrake", "Serie": "Harry Potter", "Secret Rare": "Yes", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-MAND.webp" },
+        { "ID": "HPO-HPSE", "Name": "Harry Potter-Special Edition", "Serie": "Harry Potter", "Secret Rare": "Yes", "Status": "No status", "Image": "https://hrntrack.app/image/HPO-HPSE.webp" },
+        { "ID": "SPE-UVWS", "Name": "UV WWR Square Garden Patrol Figure", "Serie": "Special Blister", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-UVWS.webp" },
+        { "ID": "SPE-UVWL", "Name": "UV WWR Lucky Bertie Figurine", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-UVWL.webp" },
+        { "ID": "SPE-SNOFI", "Name": "Snowman Figurine", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-SNOFI.webp" },
+        { "ID": "SPE-KOCF", "Name": "Kodak Click Figure", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-KOCF.webp" },
+
 ]
