@@ -23,6 +23,35 @@
     --nav-height-mobile: 70px;
     --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
+    --surface: #FFFFFF;                       /* fonds « papier blanc » (cartes, champs) */
+    --nav-bg: rgba(216, 210, 197, 0.45);      /* barre du haut translucide */
+    --logo-filter: brightness(0);             /* logo en noir */
+    color-scheme: light;
+}
+
+/* --- MODE SOMBRE ---
+   Activé par assets/theme.js (attribut data-theme sur <html>).
+   On inverse l'encre et le papier : un bouton « fond --color-dark / texte --color-light »
+   devient clair sur sombre automatiquement. Sélecteur plus précis que :root
+   pour l'emporter sur les :root propres à certaines pages. */
+:root[data-theme="dark"] {
+    --color-dark: #ECE9E2;
+    --color-light: #161615;
+    --color-sand: #24231F;
+    --color-border: #3A3833;
+    --color-gold-light: #2B261C;
+    --color-text-sub: #A8A49B;
+    --card-bg: #1E1D1A;
+    --surface: #232220;
+    --nav-bg: rgba(30, 29, 26, 0.85);
+    --logo-filter: brightness(0) invert(1);
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.5);
+    color-scheme: dark;
+}
+
+:root[data-theme="dark"] img:not(.site-logo) {
+    filter: brightness(0.92);   /* adoucit les images très claires sur fond sombre */
 }
 
 *, *::before, *::after {
@@ -35,7 +64,7 @@
     justify-content: space-between;
     padding: 0 3rem;
     height: var(--nav-height);
-    background: rgba(216, 210, 197, 0.45);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-border);
     position: sticky;
@@ -51,7 +80,7 @@
 .site-logo {
     height: 100px;
     width: auto;
-    filter: brightness(0);
+    filter: var(--logo-filter);
     transition: opacity 0.25s ease;
     display: block;
 }
@@ -215,4 +244,34 @@ button.lang-toggle {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* --- BOUTON CLAIR / SOMBRE --- */
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    background: var(--color-sand);
+    color: var(--color-dark);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+.theme-toggle:hover { border-color: var(--color-dark); }
+.theme-toggle svg { width: 17px; height: 17px; }
+.theme-toggle .icon-sun { display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+:root[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+@media (max-width: 992px) {
+    .nav-right .theme-toggle { display: none; }
+}
+
+/* Écrans moyens : on resserre la barre pour que le menu ne touche pas le logo */
+@media (min-width: 993px) and (max-width: 1240px) {
+    .top-nav { padding: 0 1.5rem; }
+    .nav-center { gap: 1.2rem; }
+    .nav-right { gap: 0.6rem; }
 }

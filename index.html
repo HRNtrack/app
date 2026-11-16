@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <meta property="og:title" content="HRNtrack - Track your Hirono Collection">
@@ -93,7 +94,7 @@
         /* --- STYLES CADRES HERBIER --- */
         .herbarium-frame {
             border: 1px solid var(--color-border);
-            background: #FCFBF8;
+            background: var(--card-bg);
             padding: 18px;
             position: relative;
             box-shadow: 0 4px 20px rgba(0,0,0,0.03);
@@ -123,7 +124,7 @@
             aspect-ratio: 4/3;
             object-fit: cover;
             display: block;
-            background: #F0EDE6;
+            background: var(--color-sand);
             border: 1px solid var(--color-border);
         }
 
@@ -257,7 +258,7 @@
         }
 
         .news-card:hover {
-            background: #ffffff;
+            background: var(--surface);
             border-color: var(--color-dark);
         }
 
@@ -361,7 +362,7 @@
 
         /* --- SOCIAL SECTION --- */
         .social-section {
-            background: #ECE7DF;
+            background: var(--color-sand);
             border-top: 1px solid var(--color-border);
             border-bottom: 1px solid var(--color-border);
             padding: 5rem 6rem;
@@ -408,7 +409,7 @@
         .social-card:hover {
             border-color: var(--color-dark);
             transform: translateY(-2px);
-            background: #ffffff;
+            background: var(--surface);
         }
 
         .social-icon {
@@ -503,7 +504,7 @@
         }
 
         .modal-content {
-            background: #FCFBF8;
+            background: var(--card-bg);
             border: 1px solid var(--color-border);
             padding: 2.5rem 2rem;
             width: 100%;
@@ -525,7 +526,7 @@
             width: 100%;
             padding: 0.85rem 1rem;
             border: 1px solid var(--color-border);
-            background: #FFFFFF;
+            background: var(--surface);
             font-family: var(--font-sans);
             font-size: 0.88rem;
             color: var(--color-dark);
@@ -819,12 +820,12 @@
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
 
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
+            <button class="btn-save" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
                 Créer un compte (Email)
             </button>
             
@@ -837,7 +838,7 @@
     <script src="assets/site.js"></script>
 
     <script type="module">
-        import { app } from './assets/firebase.js';
+        import { app, firebaseConfig } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { auth, setupAuthModal, updateAuthButtons, updateAuthLabel } from './assets/auth.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -916,6 +917,26 @@
                 btnCoffee: "☕ Buy me a coffee"
                 }
         });
+
+        // --- COMPTEUR D'UTILISATEURS AUTOMATIQUE ---
+        // Lu dans market_prices/site_stats (publié par la page admin) via l'API REST de Firestore,
+        // sans charger le SDK. En cas d'échec, le texte par défaut reste affiché.
+        async function loadUserCount() {
+            try {
+                const url = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents/market_prices/site_stats?key=${firebaseConfig.apiKey}`;
+                const res = await fetch(url);
+                if (!res.ok) return;
+                const json = await res.json();
+                const n = parseInt(json.fields?.userCount?.integerValue, 10);
+                if (!Number.isFinite(n) || n < 20) return;
+                const rounded = Math.floor(n / 10) * 10;   // « Plus de 230 » pour 237 inscrits
+                const shown = rounded === n ? rounded - 10 : rounded;
+                translations.fr.userCount = `Plus de ${shown} collectionneurs nous font confiance`;
+                translations.en.userCount = `Over ${shown} collectors trust us`;
+                if (window.updateUIText) window.updateUIText();
+            } catch (e) { /* hors ligne ou bloqué : on garde le texte par défaut */ }
+        }
+        loadUserCount();
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
 

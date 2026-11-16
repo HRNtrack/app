@@ -32,6 +32,13 @@
             <span data-t="navSupport">Soutenir</span>
         </a>`;
 
+    // Bouton clair / sombre (géré par assets/theme.js) : lune en mode clair, soleil en mode sombre
+    const themeToggle = `
+        <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+        </button>`;
+
     script.insertAdjacentHTML('beforebegin', `
     <nav class="top-nav" aria-label="Navigation principale">
         <div class="nav-logo-group">
@@ -46,6 +53,7 @@
 
         <div class="nav-right">
             ${supportLink}
+            ${themeToggle}
             ${langToggle('')}
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
                 <span id="auth-status-text" data-t="${authLabelKey}">${authLabel}</span>
@@ -67,6 +75,10 @@
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Langue / Language</span>
                 ${langToggle('-mob')}
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Thème / Theme</span>
+                ${themeToggle}
             </div>
             ${supportLink}
             <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">

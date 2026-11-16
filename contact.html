@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
@@ -64,7 +65,7 @@
         .container { max-width: 600px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; box-sizing: border-box; }
         
         .contact-card {
-            background: #FFFFFF; 
+            background: var(--surface); 
             padding: 40px; 
             border: 1px solid var(--color-border);
             box-shadow: var(--shadow);
@@ -77,7 +78,7 @@
         label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--color-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
         input, textarea, select {
             width: 100%; padding: 10px 12px; border: 1px solid var(--color-border);
-            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: #FFFFFF;
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: var(--surface);
             color: var(--color-dark); outline: none; transition: border-color 0.25s ease;
         }
         input:focus, textarea:focus, select:focus { border-color: var(--color-dark); }
@@ -115,7 +116,7 @@
             padding: 1rem;
         }
         .modal-content { 
-            background: #FCFBF8; 
+            background: var(--card-bg); 
             border: 1px solid var(--color-border);
             width: 100%; 
             max-width: 440px; 
@@ -219,12 +220,12 @@
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:white; color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
 
-            <button class="btn-save" onclick="window.handleRegister()" style="background:white; color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">Créer un compte (Email)</button>
+            <button class="btn-save" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">Créer un compte (Email)</button>
             <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
         </div>
     </div>

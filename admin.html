@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
@@ -15,6 +16,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
 
+    <link rel="stylesheet" href="assets/common.css">
     <style>
         :root {
             --color-dark: #1A1A1A;
@@ -146,7 +148,7 @@
             background: var(--color-dark);
             border: 1px solid var(--color-dark);
             padding: 35px; 
-            color: white; 
+            color: var(--color-light); 
             margin-bottom: 30px;
             box-shadow: var(--shadow); 
             position: relative; 
@@ -176,7 +178,7 @@
         /* KPI GRID */
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 18px; margin-bottom: 25px; }
         .kpi-card { 
-            background: #FFFFFF; 
+            background: var(--surface); 
             padding: 22px; 
             border: 1px solid var(--color-border); 
             box-shadow: var(--shadow); 
@@ -199,7 +201,7 @@
         @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
 
         .chart-card { 
-            background: white; 
+            background: var(--surface); 
             padding: 22px; 
             border: 1px solid var(--color-border); 
             box-shadow: var(--shadow); 
@@ -225,12 +227,12 @@
             border: 1px solid var(--color-border); background: var(--color-sand); padding: 4px 10px; 
             font-family: var(--font-sans); font-size: 0.7rem; cursor: pointer; transition: 0.2s; font-weight: 700; color: var(--text-sub); text-transform: uppercase;
         }
-        .chart-btn:hover, .chart-btn.active { background: var(--color-dark); color: white; border-color: var(--color-dark); }
+        .chart-btn:hover, .chart-btn.active { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
 
         /* MODULES */
         .modules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .admin-module {
-            background: white; 
+            background: var(--surface); 
             border: 1px solid var(--color-border);
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -238,11 +240,11 @@
         .module-header {
             padding: 15px 20px; 
             display: flex; justify-content: space-between; align-items: center;
-            background: #FFFFFF; border-bottom: 1px solid var(--color-border);
+            background: var(--surface); border-bottom: 1px solid var(--color-border);
         }
         .module-header h3 { margin: 0; font-size: 0.82rem; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.05em; }
         
-        .module-content { max-height: 380px; overflow-y: auto; background: #fff; }
+        .module-content { max-height: 380px; overflow-y: auto; background: var(--surface); }
 
         @media (max-width: 768px) { .modules-grid { grid-template-columns: 1fr; } }
 
@@ -251,7 +253,7 @@
         .data-table th { text-align: left; padding: 10px 14px; color: var(--text-sub); font-weight: 700; text-transform: uppercase; font-size: 0.7rem; letter-spacing: 0.05em; background: var(--color-sand); position: sticky; top: 0; border-bottom: 1px solid var(--color-border); }
         .data-table td { padding: 10px 14px; border-bottom: 1px solid var(--color-border); color: var(--text-main); }
         .rank-badge { 
-            background: var(--text-main); color: white; width: 18px; height: 18px; 
+            background: var(--text-main); color: var(--color-light); width: 18px; height: 18px; 
             display: inline-flex; align-items: center; justify-content: center; 
             font-size: 9px; font-weight: bold; margin-right: 8px;
         }
@@ -302,7 +304,11 @@
             </a>
         </div>
         <div class="nav-right">
-            <a href="dashboard.html" class="btn-auth-trigger">Retour Site</a>
+            <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode" style="display:inline-flex;">
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+            </button>
+            <a href="dashboard.html" class="btn-auth-trigger" style="display:inline-flex;">Retour Site</a>
         </div>
     </nav>
 
@@ -311,7 +317,7 @@
         <div class="lock-icon-admin">🔒</div>
         <h2 style="color:var(--text-main); font-size:1.5rem; margin-bottom:8px; text-transform:uppercase;">Accès Restreint</h2>
         <p style="color:var(--text-sub); font-size:0.88rem; max-width:400px; margin:0 0 20px 0;">Cette zone est strictement réservée à l'administrateur du site.</p>
-        <a href="index.html" class="btn-auth-trigger" style="background:var(--color-dark); color:white; border-color:var(--color-dark);">Retour à l'accueil</a>
+        <a href="index.html" class="btn-auth-trigger" style="background:var(--color-dark); color:var(--color-light); border-color:var(--color-dark);">Retour à l'accueil</a>
     </div>
 
     <!-- MAIN ADMIN PANEL -->
@@ -651,6 +657,8 @@
         const ADMIN_UID = "OL3t9jEDaDO1uZwNrrcvi26DZ1x1"; 
 
         let stats = null;
+        let lastRateInfo = null;
+        document.addEventListener('hrn:themechange', () => { if (stats) render(stats, lastRateInfo); });
         let userChartInstance = null, volumeChartInstance = null, currencyChartInstance = null,
             conditionChartInstance = null, recencyChartInstance = null;
 
@@ -712,6 +720,18 @@
                 stats = computeStats(users, baseData, rates, new Date());
                 render(stats, { source, live });
 
+                // Chiffres publics affichés sur l'accueil (lisibles par tous) : mis à jour à chaque ouverture de la page admin
+                try {
+                    await setDoc(doc(db, 'market_prices', 'site_stats'), {
+                        userCount: stats.userCount,
+                        collectors: stats.usersWithItems,
+                        figures: stats.totalQty,
+                        catalogSize: baseData.length,
+                        updatedAt: new Date().toISOString()
+                    });
+                    log(`Compteur public mis à jour : ${stats.userCount} utilisateurs.`);
+                } catch (e) { log('⚠️ Compteur public non enregistré (droits Firestore sur market_prices/site_stats ?)'); }
+
                 log(`${Object.keys(stats.cotes).length} cotes calculées, ${stats.cotesNotEnough} figurines avec moins de ${MIN_PRICES} prix, ${stats.outliers.length} prix aberrants écartés.`);
                 if (stats.unknownIds) log(`${stats.unknownIds} entrées ignorées (ID absent du catalogue).`);
 
@@ -731,6 +751,7 @@
         };
 
         function render(s, rateInfo) {
+            lastRateInfo = rateInfo;
             // Santé & engagement
             setText('kpi-users', fmtNum(s.userCount));
             setText('kpi-active-ratio', `${s.usersWithItems} avec au moins une figurine`);
@@ -835,7 +856,9 @@
             recencyChartInstance = bars('chartRecency', recencyChartInstance, s.recency);
         }
 
-        const PALETTE = ['#1A1A1A', '#6A8C47', '#C6A875', '#C0392B', '#8E44AD', '#2980B9', '#16A085', '#D8D2C5'];
+        // Couleur d'encre du thème courant (noir en mode clair, crème en mode sombre)
+        const ink = () => getComputedStyle(document.documentElement).getPropertyValue('--color-dark').trim() || '#1A1A1A';
+        const palette = () => [ink(), '#6A8C47', '#C6A875', '#C0392B', '#8E44AD', '#2980B9', '#16A085', '#D8D2C5'];
 
         function doughnut(canvasId, instance, counts) {
             const el = document.getElementById(canvasId);
@@ -844,7 +867,7 @@
             const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
             return new Chart(el.getContext('2d'), {
                 type: 'doughnut',
-                data: { labels: entries.map(e => e[0]), datasets: [{ data: entries.map(e => e[1]), backgroundColor: PALETTE, borderWidth: 0 }] },
+                data: { labels: entries.map(e => e[0]), datasets: [{ data: entries.map(e => e[1]), backgroundColor: palette(), borderWidth: 0 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { family: 'Poppins' } } } } }
             });
         }
@@ -901,7 +924,7 @@
             activateBtn(btn);
             const map = {};
             for (const d of stats.joinDates) { const k = d.toISOString().slice(0, 10); map[k] = (map[k] || 0) + 1; }
-            userChartInstance = lineChart('chartUsers', userChartInstance, cumulativeSeries(map, period), 'Inscrits', '#1A1A1A', 'rgba(26, 26, 26, 0.08)');
+            userChartInstance = lineChart('chartUsers', userChartInstance, cumulativeSeries(map, period), 'Inscrits', ink(), 'rgba(128, 128, 128, 0.12)');
         };
 
         window.updateVolumeChart = (period, btn) => {

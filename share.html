@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <meta property="og:title" content="Ma Collection Hirono - HRNtrack">
@@ -120,7 +121,7 @@
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
         
         .profile-summary {
-            background: #FFFFFF; 
+            background: var(--surface); 
             padding: 35px; 
             border: 1px solid var(--color-border);
             margin-bottom: 30px;
@@ -168,7 +169,7 @@
         
         /* FILTRES BAR */
         .filter-bar {
-            background: #FFFFFF; 
+            background: var(--surface); 
             padding: 20px; 
             border: 1px solid var(--color-border);
             margin-bottom: 35px;
@@ -179,14 +180,14 @@
             flex: 2; min-width: 200px; padding: 10px 14px; 
             border: 1px solid var(--color-border); 
             font-family: var(--font-sans); font-size: 0.85rem; 
-            background: #FFFFFF; color: var(--color-dark); outline: none;
+            background: var(--surface); color: var(--color-dark); outline: none;
         }
         .search-input:focus { border-color: var(--color-dark); }
 
         .select-input { 
             flex: 1; min-width: 180px; padding: 10px 14px; 
             border: 1px solid var(--color-border); 
-            background: #FFFFFF; cursor: pointer; 
+            background: var(--surface); cursor: pointer; 
             font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-dark); outline: none;
         }
         .select-input:focus { border-color: var(--color-dark); }
@@ -213,7 +214,7 @@
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; }
         
         .card {
-            background: #FFFFFF; 
+            background: var(--surface); 
             border: 1px solid var(--color-border); 
             padding: 12px; text-align: center;
             box-shadow: var(--shadow); opacity: 0.45; transition: all 0.25s ease; filter: grayscale(100%);
@@ -257,6 +258,10 @@
         </div>
 
         <div class="nav-right">
+            <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode">
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+            </button>
             <button type="button" class="lang-toggle" onclick="window.toggleLanguage()" aria-label="Changer de langue / Switch language">
                     <span class="lang-option active" id="lang-fr">FR</span>
                     <span class="lang-option" id="lang-en">EN</span>
@@ -288,6 +293,13 @@
                     <span class="lang-option active" id="lang-fr-mob">FR</span>
                     <span class="lang-option" id="lang-en-mob">EN</span>
                 </button>
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Thème / Theme</span>
+                <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode">
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+            </button>
             </div>
             
             <button class="btn-share-link" onclick="window.shareCurrentPage(); window.toggleMobileMenu();" style="width:100%; text-align:center;" data-t="btnShare">
