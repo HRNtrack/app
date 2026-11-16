@@ -289,6 +289,7 @@
         .lock-icon-admin {
             font-size: 40px; margin-bottom: 20px; background: var(--color-sand); border: 1px solid var(--color-border); width: 90px; height: 90px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--color-dark);
         }
+        .chart-note { font-size: 11px; color: var(--color-text-sub); margin-top: 10px; min-height: 1em; }
     </style>
 </head>
 <body>
@@ -326,18 +327,26 @@
         <div class="kpi-grid">
             <div class="kpi-card">
                 <div>
-                    <div class="kpi-label">Utilisateurs Totaux</div>
+                    <div class="kpi-label">Utilisateurs</div>
                     <div class="kpi-value" id="kpi-users">...</div>
                 </div>
                 <div class="kpi-sub" id="kpi-active-ratio">...</div>
             </div>
-            
+
+            <div class="kpi-card" style="border-left-color: var(--color-green);">
+                <div>
+                    <div class="kpi-label">Actifs (30 derniers jours)</div>
+                    <div class="kpi-value" id="kpi-active-30">...</div>
+                </div>
+                <div class="kpi-sub" id="kpi-active-30-sub">...</div>
+            </div>
+
             <div class="kpi-card" style="border-left-color: var(--color-red);">
                 <div>
-                    <div class="kpi-label">Actifs vs Dormants</div>
+                    <div class="kpi-label">Dormants</div>
                     <div class="kpi-value" id="kpi-dormant-val">...</div>
                 </div>
-                <div class="kpi-sub">Inactifs depuis +6 mois</div>
+                <div class="kpi-sub">Aucune visite depuis plus de 6 mois</div>
             </div>
 
             <div class="kpi-card" style="border-left-color: var(--color-dark);">
@@ -356,10 +365,12 @@
                 <div>
                     <div class="kpi-label">Qualité de la Donnée</div>
                     <div style="margin-top:10px;">
-                        <div class="quality-row"><span style="font-size:10px;">Prix Renseignés</span><span style="font-size:10px;" id="val-qual-price">0%</span></div>
+                        <div class="quality-row"><span style="font-size:10px;">Prix renseignés</span><span style="font-size:10px;" id="val-qual-price">0%</span></div>
                         <div class="quality-bar-bg"><div id="bar-qual-price" class="quality-bar-fill" style="width:0%;"></div></div>
-                        <div class="quality-row" style="margin-top:5px;"><span style="font-size:10px;">Dates Renseignées</span><span style="font-size:10px;" id="val-qual-date">0%</span></div>
+                        <div class="quality-row" style="margin-top:5px;"><span style="font-size:10px;">Dates d'achat renseignées</span><span style="font-size:10px;" id="val-qual-date">0%</span></div>
                         <div class="quality-bar-bg"><div id="bar-qual-date" class="quality-bar-fill" style="width:0%; background:var(--color-purple);"></div></div>
+                        <div class="quality-row" style="margin-top:5px;"><span style="font-size:10px;">Comptes avec dates de visite</span><span style="font-size:10px;" id="val-qual-meta">0%</span></div>
+                        <div class="quality-bar-bg"><div id="bar-qual-meta" class="quality-bar-fill" style="width:0%; background:var(--color-green);"></div></div>
                     </div>
                 </div>
             </div>
@@ -372,7 +383,7 @@
                     <div class="kpi-label">Valeur Est. Globale</div>
                     <div class="kpi-value" id="kpi-market-val">...</div>
                 </div>
-                <div class="kpi-sub">Basé sur les Cotes Moyennes</div>
+                <div class="kpi-sub" id="kpi-market-cover">...</div>
             </div>
             <div class="kpi-card" style="border-left-color: var(--color-gold);">
                 <div>
@@ -381,45 +392,44 @@
                 </div>
                 <div class="kpi-sub" id="kpi-secrets-rate">...</div>
             </div>
-             <div class="kpi-card" style="border-left-color: var(--color-teal);">
+            <div class="kpi-card" style="border-left-color: var(--color-teal);">
                 <div>
-                    <div class="kpi-label">Dépense Moyenne</div>
+                    <div class="kpi-label">Dépense Médiane</div>
                     <div class="kpi-value" id="kpi-avg-spent">...</div>
                 </div>
-                <div class="kpi-sub">Par utilisateur actif</div>
+                <div class="kpi-sub" id="kpi-avg-spent-sub">...</div>
             </div>
-             <div class="kpi-card" style="border-left-color: var(--color-purple);">
+            <div class="kpi-card" style="border-left-color: var(--color-purple);">
                 <div>
                     <div class="kpi-label">Stock Doublons</div>
                     <div class="kpi-value" id="kpi-doubles">...</div>
                 </div>
-                <div class="kpi-sub">Total en circulation</div>
+                <div class="kpi-sub">Exemplaires en plus du premier</div>
             </div>
         </div>
 
-        <!-- ANALYTICS + : KPI AVANCÉS -->
-        <div class="section-label">Indicateurs de Performance Avancés (Analytics +)</div>
+        <div class="section-label">Indicateurs Avancés</div>
         <div class="kpi-grid">
             <div class="kpi-card" style="border-left-color: var(--color-green);">
                 <div>
-                    <div class="kpi-label">Complétion Moyenne</div>
+                    <div class="kpi-label">Complétion Moyenne / Série</div>
                     <div class="kpi-value" id="kpi-avg-completion">...</div>
                 </div>
-                <div class="kpi-sub">Taux moyen de remplissage / série</div>
+                <div class="kpi-sub" id="kpi-avg-completion-sub">...</div>
             </div>
             <div class="kpi-card" style="border-left-color: var(--color-gold);">
                 <div>
-                    <div class="kpi-label">Prix Moyen / Figurine</div>
+                    <div class="kpi-label">Prix Médian / Figurine</div>
                     <div class="kpi-value" id="kpi-unit-avg-price">...</div>
                 </div>
-                <div class="kpi-sub">Sur la base des achats saisis</div>
+                <div class="kpi-sub" id="kpi-unit-avg-price-sub">...</div>
             </div>
             <div class="kpi-card" style="border-left-color: var(--color-blue);">
                 <div>
-                    <div class="kpi-label">Wishlist Global</div>
+                    <div class="kpi-label">Wishlist Globale</div>
                     <div class="kpi-value" id="kpi-total-wishlist">...</div>
                 </div>
-                <div class="kpi-sub" id="kpi-wish-ratio">Demande globale</div>
+                <div class="kpi-sub" id="kpi-wish-ratio">...</div>
             </div>
             <div class="kpi-card" style="border-left-color: var(--color-dark);">
                 <div>
@@ -428,14 +438,28 @@
                 </div>
                 <div class="kpi-sub" id="kpi-top-series-count">...</div>
             </div>
+            <div class="kpi-card" style="border-left-color: var(--color-teal);">
+                <div>
+                    <div class="kpi-label">Cotes Publiables</div>
+                    <div class="kpi-value" id="kpi-cotes-count">...</div>
+                </div>
+                <div class="kpi-sub" id="kpi-cotes-sub">...</div>
+            </div>
+            <div class="kpi-card" style="border-left-color: var(--color-red);">
+                <div>
+                    <div class="kpi-label">Jamais Possédées</div>
+                    <div class="kpi-value" id="kpi-never-owned">...</div>
+                </div>
+                <div class="kpi-sub">Figurines du catalogue dans aucune collection</div>
+            </div>
         </div>
 
         <div class="section-label">Analyses Temporelles & Flux</div>
-        
+
         <div class="charts-container">
             <div class="chart-card">
                 <div class="chart-header">
-                    <div class="chart-title">Évolution du nombre d'utilisateurs</div>
+                    <div class="chart-title">Évolution du nombre d'inscrits</div>
                     <div class="chart-controls">
                         <button class="chart-btn" onclick="updateUserChart(30, this)">1 Mois</button>
                         <button class="chart-btn" onclick="updateUserChart(90, this)">3 Mois</button>
@@ -445,22 +469,24 @@
                 <div style="height: 250px; width:100%;">
                     <canvas id="chartUsers"></canvas>
                 </div>
+                <div class="chart-note" id="note-users"></div>
             </div>
 
             <div class="chart-card">
                 <div class="chart-header">
-                    <div class="chart-title">Répartition par Devises</div>
+                    <div class="chart-title">Dernière visite des utilisateurs</div>
                 </div>
-                <div style="height: 250px; width:100%; position:relative;">
-                    <canvas id="chartCurrency"></canvas>
+                <div style="height: 250px; width:100%;">
+                    <canvas id="chartRecency"></canvas>
                 </div>
+                <div class="chart-note">Basé sur la date de dernière visite enregistrée.</div>
             </div>
         </div>
 
         <div class="charts-container">
             <div class="chart-card">
                 <div class="chart-header">
-                    <div class="chart-title">Croissance du Stock (Figurines totales)</div>
+                    <div class="chart-title">Croissance du stock (achats datés)</div>
                     <div class="chart-controls">
                         <button class="chart-btn" onclick="updateVolumeChart(30, this)">1 Mois</button>
                         <button class="chart-btn" onclick="updateVolumeChart(90, this)">3 Mois</button>
@@ -470,11 +496,12 @@
                 <div style="height: 250px; width:100%;">
                     <canvas id="chartVolume"></canvas>
                 </div>
+                <div class="chart-note" id="note-volume"></div>
             </div>
 
             <div class="chart-card">
                 <div class="chart-header">
-                    <div class="chart-title">Derniers Ajouts (Flux Live)</div>
+                    <div class="chart-title">Derniers ajouts (achats datés)</div>
                 </div>
                 <div class="feed-list" id="feed-container">
                     <div style="text-align:center; color:#ccc; padding:20px;">Chargement...</div>
@@ -482,10 +509,32 @@
             </div>
         </div>
 
+        <div class="charts-container">
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Répartition par devise d'achat</div>
+                </div>
+                <div style="height: 250px; width:100%; position:relative;">
+                    <canvas id="chartCurrency"></canvas>
+                </div>
+                <div class="chart-note" id="note-rates"></div>
+            </div>
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <div class="chart-title">Répartition par état</div>
+                </div>
+                <div style="height: 250px; width:100%; position:relative;">
+                    <canvas id="chartCondition"></canvas>
+                </div>
+            </div>
+        </div>
+
         <div class="action-zone">
             <h2 style="margin-top:0; font-size:1.2rem; text-transform:uppercase; letter-spacing:0.05em;">Maintenance des Prix & Cotes</h2>
             <p style="font-size:0.85rem; color:#D1D5DB; margin-bottom:20px; max-width:650px; margin-left:auto; margin-right:auto;">
-                Ce script scanne toutes les collections, calcule le prix moyen d'achat pour chaque figurine, et met à jour la base de référence « Community Price ».
+                Calcule la cote de chaque figurine à partir des prix d'achat saisis : prix médian, convertis en euros au taux du jour,
+                avec au moins <strong id="min-prices-label">3</strong> prix et sans les prix aberrants. Met ensuite à jour la base « Community Price » utilisée par la Collection.
             </p>
             <button class="btn-calc" id="btn-calc" onclick="runAnalysis()">
                 <span></span> Mettre à jour les Cotes & Stats
@@ -497,7 +546,7 @@
 
         <div class="section-label">Classements & Détails Avancés</div>
         <div class="modules-grid">
-            
+
             <div class="admin-module">
                 <div class="module-header">
                     <h3>Top 10 - Les plus collectionnées</h3>
@@ -509,7 +558,7 @@
 
             <div class="admin-module">
                 <div class="module-header">
-                    <h3>Top 10 - Gros Collectionneurs (Whales)</h3>
+                    <h3>Top 10 - Gros Collectionneurs</h3>
                 </div>
                 <div class="module-content">
                     <table class="data-table" id="table-whales"></table>
@@ -518,7 +567,7 @@
 
             <div class="admin-module">
                 <div class="module-header">
-                    <h3>Top 10 - Les plus chères (Cote Moyenne)</h3>
+                    <h3>Top 10 - Les plus chères (Cote médiane)</h3>
                 </div>
                 <div class="module-content">
                     <table class="data-table" id="table-expensive"></table>
@@ -534,13 +583,39 @@
                 </div>
             </div>
 
-            <!-- NOUVEAU MODULE ANALYTICS + : INDICE DE TENSION -->
             <div class="admin-module">
                 <div class="module-header">
-                    <h3>Top 10 - Indice de Tension (Demande / Stock)</h3>
+                    <h3>Top 10 - Indice de Tension (Demande / Possesseurs)</h3>
                 </div>
                 <div class="module-content">
                     <table class="data-table" id="table-tension"></table>
+                </div>
+            </div>
+
+            <div class="admin-module">
+                <div class="module-header">
+                    <h3>Séries les plus complétées</h3>
+                </div>
+                <div class="module-content">
+                    <table class="data-table" id="table-series-completion"></table>
+                </div>
+            </div>
+
+            <div class="admin-module">
+                <div class="module-header">
+                    <h3>Jamais possédées (les plus recherchées d'abord)</h3>
+                </div>
+                <div class="module-content">
+                    <table class="data-table" id="table-never-owned"></table>
+                </div>
+            </div>
+
+            <div class="admin-module">
+                <div class="module-header">
+                    <h3>Prix aberrants écartés des cotes</h3>
+                </div>
+                <div class="module-content">
+                    <table class="data-table" id="table-outliers"></table>
                 </div>
             </div>
 
@@ -562,6 +637,7 @@
         import { app } from './assets/firebase.js';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { computeStats, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
         
         let baseData = [];
         try {
@@ -574,482 +650,265 @@
 
         const ADMIN_UID = "OL3t9jEDaDO1uZwNrrcvi26DZ1x1"; 
 
-        let globalUserJoinDates = []; 
-        let globalPurchaseDates = {}; 
-        let userChartInstance = null;
-        let volumeChartInstance = null;
-        let currencyChartInstance = null; 
+        let stats = null;
+        let userChartInstance = null, volumeChartInstance = null, currencyChartInstance = null,
+            conditionChartInstance = null, recencyChartInstance = null;
 
         onAuthStateChanged(auth, (user) => {
             if (user && user.uid === ADMIN_UID) {
                 document.getElementById('intruder').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
-                setTimeout(() => runAnalysis(true), 500);
+                runAnalysis(true);
             } else {
                 document.getElementById('intruder').style.display = 'flex';
                 document.getElementById('admin-panel').style.display = 'none';
             }
         });
 
-        const safeSetText = (id, text) => {
+        // Les identifiants et noms viennent en partie des données des utilisateurs : on échappe tout ce qui va dans le HTML
+        const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const setText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
+        const setBar = (id, pct) => { const el = document.getElementById(id); if (el) el.style.width = pct + '%'; };
+        const pct = (a, b) => (b > 0 ? Math.round((a / b) * 100) : 0);
+        const fmtNum = (n) => Math.round(n).toLocaleString('fr-FR');
+        const fmtEur = (n) => Math.round(n).toLocaleString('fr-FR') + ' €';
+        const catalogById = new Map(baseData.map(b => [String(b.ID), b]));
+        const nameOf = (id) => catalogById.get(String(id))?.Name || id;
+        // Nom + série (plusieurs figurines portent le même nom dans des séries différentes), déjà échappé
+        const labelOf = (id) => { const b = catalogById.get(String(id)); return b ? `${esc(b.Name)} <span style="font-size:10px; color:var(--color-text-sub);">${esc(b.Serie)}</span>` : esc(id); };
+        const rows = (id, html, empty = 'Aucune donnée') => {
             const el = document.getElementById(id);
-            if(el) el.innerText = text;
-        }
+            if (el) el.innerHTML = html || `<tr><td style="color:var(--color-text-sub);">${empty}</td></tr>`;
+        };
+        const badge = (i, color) => `<span class="rank-badge" style="background:${color}">${i + 1}</span>`;
 
         window.runAnalysis = async (readOnly = false) => {
             const btn = document.getElementById('btn-calc');
             const logDiv = document.getElementById('logs');
-            
             const log = (msg) => {
-                if(logDiv) {
-                    logDiv.innerHTML += `<div class="log-line">> ${msg}</div>`;
-                    logDiv.scrollTop = logDiv.scrollHeight;
-                }
+                if (!logDiv) return;
+                const line = document.createElement('div');
+                line.className = 'log-line';
+                line.textContent = '> ' + msg;
+                logDiv.appendChild(line);
+                logDiv.scrollTop = logDiv.scrollHeight;
             };
 
-            if(!readOnly && btn) {
+            if (!readOnly && btn) {
                 btn.disabled = true;
-                logDiv.innerHTML = ""; 
+                logDiv.innerHTML = '';
                 log("Démarrage de l'analyse...");
             }
 
-            const RATES = { "EUR": 1, "USD": 0.85, "CAD": 0.62, "GBP": 1.14, "CNY": 0.12 };
             try {
-                log("Connexion Firestore...");
-                const usersSnap = await getDocs(collection(db, "users"));
-                const userCount = usersSnap.size || 0;
-                
-                if(!readOnly) log(`Utilisateurs scannés : ${userCount}`);
-                
-                let totalItemsQty = 0; 
-                let activeUsers = 0; 
-                let totalPaidEur = 0; 
-                let totalDoubles = 0;
-                let totalSecrets = 0;
-                let totalWishlist = 0;
-                let sumPaidCount = 0;
-                
-                let popularityMap = {};    
-                let wishlistMap = {};       
-                let priceMap = {}; 
-                let serieMap = {};
-                let userCollectionsStats = []; 
-                let userCompletionRates = [];
+                const [{ rates, source, live }, usersSnap] = await Promise.all([
+                    fetchRates(),
+                    getDocs(collection(db, 'users'))
+                ]);
+                log(`Taux de change : ${source}`);
+                log(`Utilisateurs scannés : ${usersSnap.size}`);
 
-                let currencyCounts = { "EUR": 0, "USD": 0, "CAD": 0, "CNY": 0, "GBP": 0, "Others": 0 };
-                let dataQuality = { itemsWithPrice: 0, itemsWithDate: 0, totalItemsOwned: 0 };
-                let allActivities = []; 
+                const users = usersSnap.docs.map(d => ({ id: d.id, data: d.data() }));
+                stats = computeStats(users, baseData, rates, new Date());
+                render(stats, { source, live });
 
-                let dormantCount = 0;
-                let tierCounts = { empty: 0, newbie: 0, inter: 0, expert: 0 };
-                const sixMonthsAgo = new Date();
-                sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
+                log(`${Object.keys(stats.cotes).length} cotes calculées, ${stats.cotesNotEnough} figurines avec moins de ${MIN_PRICES} prix, ${stats.outliers.length} prix aberrants écartés.`);
+                if (stats.unknownIds) log(`${stats.unknownIds} entrées ignorées (ID absent du catalogue).`);
 
-                globalUserJoinDates = [];
-                globalPurchaseDates = {};
-
-                const totalCatalogItems = baseData.length || 150;
-
-                usersSnap.forEach(u => {
+                if (!readOnly) {
                     try {
-                        const d = u.data();
-                        const uidShort = u.id ? (u.id.substring(0,6) + "...") : "User";
-                        let hasItems = false;
-                        let userFirstDate = null; 
-                        let lastActiveDate = null; 
-                        let userStats = { uid: uidShort, items: [], totalQty: 0, estValue: 0, uniqueOwned: 0 }; 
-
-                        if(d.collection && Array.isArray(d.collection)) {
-                            d.collection.forEach(item => {
-                                if(!item) return;
-
-                                const itemId = item.ID ?? item.id;
-                                const status = item.Status || item.status || '';
-                                const isOwned = status === 'Possédé' || status === 'Possédée' || status === 'Owned' || status === 'owned';
-                                const isWish = status === 'Recherché' || status === 'Wishlist' || status === 'Recherche' || status === 'wishlist';
-
-                                const rawQty = parseInt(item.Quantity ?? item.quantity);
-                                const qty = !isNaN(rawQty) && rawQty > 0 ? rawQty : (isOwned ? 1 : 0);
-
-                                const rawPrice = item["Purchase price"] ?? item.purchasePrice ?? item.price;
-                                const p = parseFloat(rawPrice);
-
-                                const currRaw = item.Currency || item.currency || "EUR";
-                                const curr = currRaw.toUpperCase();
-
-                                const rawDate = item["Purchase date"] || item.purchaseDate || item.date;
-
-                                if(isOwned) {
-                                    hasItems = true;
-                                    
-                                    totalItemsQty += qty;
-                                    dataQuality.totalItemsOwned += qty; 
-                                    userStats.totalQty += qty;
-                                    userStats.uniqueOwned += 1;
-
-                                    if(itemId) popularityMap[itemId] = (popularityMap[itemId] || 0) + 1;
-                                    
-                                    const serieName = item.Serie || item.serie || (baseData.find(b => String(b.ID) === String(itemId))?.Serie);
-                                    if(serieName) serieMap[serieName] = (serieMap[serieName] || 0) + qty;
-                                    
-                                    if(qty > 1) totalDoubles += (qty - 1);
-
-                                    const isSecret = (item["Secret Rare"] && String(item["Secret Rare"]).toLowerCase() === "yes") ||
-                                                     (item.secret === true) || (item.Secret === "Yes");
-                                    if(isSecret) totalSecrets += qty;
-
-                                    if(itemId) userStats.items.push({ id: itemId, qty: qty });
-
-                                    if(currencyCounts[curr] !== undefined) currencyCounts[curr]++;
-                                    else currencyCounts["Others"]++;
-
-                                    let pDate = null;
-                                    let hasRealDate = false;
-                                    if(rawDate) {
-                                        pDate = new Date(rawDate);
-                                        if(!isNaN(pDate.getTime())) {
-                                            dataQuality.itemsWithDate += qty; 
-                                            hasRealDate = true;
-                                            
-                                            if(!lastActiveDate || pDate > lastActiveDate) {
-                                                lastActiveDate = pDate;
-                                            }
-                                        }
-                                    }
-                                    
-                                    if(hasRealDate) {
-                                        let realName = item.Name || item.name || "Figurine";
-                                        let realImg = item.Image || item.image || "";
-                                        
-                                        if(baseData && baseData.length > 0 && itemId) {
-                                            const baseItem = baseData.find(b => String(b.ID) === String(itemId));
-                                            if(baseItem) {
-                                                if(!item.Name && !item.name) realName = baseItem.Name;
-                                                if(!item.Image && !item.image) realImg = baseItem.Image;
-                                            }
-                                        }
-
-                                        allActivities.push({
-                                            user: "Collectionneur",
-                                            name: realName,
-                                            date: pDate,
-                                            img: realImg
-                                        });
-                                    }
-
-                                    let volumeDateStr = hasRealDate ? rawDate : new Date().toISOString().split('T')[0];
-                                    globalPurchaseDates[volumeDateStr] = (globalPurchaseDates[volumeDateStr] || 0) + qty;
-
-                                    if (hasRealDate) {
-                                        if(!userFirstDate || pDate < userFirstDate) {
-                                            userFirstDate = pDate;
-                                        }
-                                    }
-
-                                    if(!isNaN(p) && p > 0) {
-                                        dataQuality.itemsWithPrice += qty; 
-                                        const rate = RATES[curr] || 1;
-                                        const priceInEur = p * rate;
-                                        totalPaidEur += (priceInEur * qty);
-                                        sumPaidCount += qty;
-                                        if(itemId) {
-                                            if(!priceMap[itemId]) priceMap[itemId] = [];
-                                            priceMap[itemId].push(priceInEur);
-                                        }
-                                    }
-                                }
-                                else if (isWish) {
-                                    totalWishlist++;
-                                    if(itemId) wishlistMap[itemId] = (wishlistMap[itemId] || 0) + 1;
-                                }
-                            });
-                        }
-                        
-                        if(hasItems) {
-                            activeUsers++;
-                            userCompletionRates.push(Math.min(100, Math.round((userStats.uniqueOwned / totalCatalogItems) * 100)));
-                            if(lastActiveDate && lastActiveDate < sixMonthsAgo) {
-                                dormantCount++;
-                            }
-                        }
-
-                        if(userStats.totalQty === 0) tierCounts.empty++;
-                        else if(userStats.totalQty <= 10) tierCounts.newbie++;
-                        else if(userStats.totalQty <= 50) tierCounts.inter++;
-                        else tierCounts.expert++;
-
-                        if(!userFirstDate) userFirstDate = new Date(); 
-                        globalUserJoinDates.push(userFirstDate);
-                        userCollectionsStats.push(userStats);
-
-                    } catch (errUser) {
-                        console.error("Erreur User ignorée", errUser);
-                    }
-                });
-
-                const emptyUsersCount = userCount - globalUserJoinDates.length;
-                for(let i=0; i<emptyUsersCount; i++) globalUserJoinDates.push(new Date());
-                globalUserJoinDates.sort((a, b) => a - b);
-
-                log("Calcul des cotes et métriques avancées...");
-
-                let finalCotes = {};
-                for (const [id, prices] of Object.entries(priceMap)) {
-                    prices.sort((a, b) => a - b);
-                    let validPrices = prices;
-                    if (prices.length >= 5) {
-                        validPrices = prices.slice(1, -1);
-                    }
-                    const sum = validPrices.reduce((a, b) => a + b, 0);
-                    finalCotes[id] = validPrices.length > 0 ? Math.round(sum / validPrices.length) : 0;
+                        await setDoc(doc(db, 'market_prices', 'community'), stats.cotes);
+                        log('✅ Cotes sauvegardées avec succès.');
+                    } catch (e) { log('⚠️ Erreur de sauvegarde des cotes (droits Firestore ?)'); }
                 }
-
-                let totalEstimatedValue = 0;
-                const DEFAULT_VAL = 15; 
-                
-                userCollectionsStats.forEach(u => {
-                    u.items.forEach(item => {
-                        let unitVal = finalCotes[item.id] || DEFAULT_VAL;
-                        let itemVal = unitVal * item.qty;
-                        totalEstimatedValue += itemVal;
-                        u.estValue += itemVal; 
-                    });
-                });
-
-                if(!readOnly) {
-                    try {
-                        await setDoc(doc(db, "market_prices", "community"), finalCotes);
-                        log("✅ Cotes sauvegardées avec succès.");
-                    } catch(e) { log("⚠️ Erreur sauvegarde DB (droits?)"); }
-                    
-                    if(btn) {
-                        btn.disabled = false;
-                    }
-                }
-
-                const formatNum = (n) => n.toLocaleString('fr-FR');
-                const formatEur = (n) => Math.round(n).toLocaleString('fr-FR') + " €";
-
-                safeSetText('kpi-users', userCount);
-                safeSetText('kpi-active-ratio', `${activeUsers} actifs / ${userCount} total`);
-                safeSetText('kpi-total-items-all', formatNum(totalItemsQty));
-                safeSetText('kpi-market-val', formatEur(totalEstimatedValue));
-                safeSetText('kpi-secrets-rate', totalItemsQty > 0 ? (totalSecrets/totalItemsQty*100).toFixed(1) + "% Secrets" : "0%");
-
-                safeSetText('kpi-dormant-val', dormantCount);
-                
-                safeSetText('tier-empty', tierCounts.empty);
-                safeSetText('tier-newbie', tierCounts.newbie);
-                safeSetText('tier-inter', tierCounts.inter);
-                safeSetText('tier-expert', tierCounts.expert);
-
-                const pctPrice = totalItemsQty > 0 ? Math.round((dataQuality.itemsWithPrice / totalItemsQty) * 100) : 0;
-                const pctDate = totalItemsQty > 0 ? Math.round((dataQuality.itemsWithDate / totalItemsQty) * 100) : 0;
-                
-                safeSetText('val-qual-price', pctPrice + "%");
-                if(document.getElementById('bar-qual-price')) document.getElementById('bar-qual-price').style.width = pctPrice + "%";
-                safeSetText('val-qual-date', pctDate + "%");
-                if(document.getElementById('bar-qual-date')) document.getElementById('bar-qual-date').style.width = pctDate + "%";
-
-                const avgSpent = activeUsers > 0 ? totalPaidEur / activeUsers : 0;
-                safeSetText('kpi-avg-spent', formatEur(avgSpent));
-                safeSetText('kpi-doubles', formatNum(totalDoubles));
-
-                // METRIQUES ANALYTICS +
-                const avgCompletion = userCompletionRates.length > 0 ? Math.round(userCompletionRates.reduce((a,b)=>a+b,0) / userCompletionRates.length) : 0;
-                safeSetText('kpi-avg-completion', avgCompletion + "%");
-
-                const unitAvgPrice = sumPaidCount > 0 ? (totalPaidEur / sumPaidCount).toFixed(1) : "0";
-                safeSetText('kpi-unit-avg-price', unitAvgPrice + " €");
-
-                safeSetText('kpi-total-wishlist', formatNum(totalWishlist));
-                safeSetText('kpi-wish-ratio', activeUsers > 0 ? (totalWishlist / activeUsers).toFixed(1) + " / utilisateur" : "-");
-
-                const sortedSeries = Object.entries(serieMap).sort((a,b) => b[1] - a[1]);
-                if(sortedSeries.length > 0) {
-                    safeSetText('kpi-top-series-name', sortedSeries[0][0]);
-                    safeSetText('kpi-top-series-count', `${sortedSeries[0][1]} ex. dans le stock`);
-                }
-
-                const getName = (id) => { 
-                    if(baseData.length > 0) { const f = baseData.find(b => String(b.ID) === String(id)); return f ? f.Name : id; }
-                    return id;
-                };
-
-                allActivities.sort((a,b) => b.date - a.date);
-                const feedContainer = document.getElementById('feed-container');
-                if(feedContainer) {
-                    if(allActivities.length === 0) {
-                        feedContainer.innerHTML = `<div style="text-align:center;color:#ccc;padding:20px;">Aucune activité récente</div>`;
-                    } else {
-                        feedContainer.innerHTML = allActivities.slice(0, 10).map(act => {
-                            const dateStr = act.date ? act.date.toLocaleDateString('fr-FR', {day:'numeric', month:'short'}) : 'Date inconnue';
-                            const imgUrl = act.img || 'https://via.placeholder.com/40';
-                            return `<div class="feed-item"><img src="${imgUrl}" class="feed-img" loading="lazy" alt=""><div class="feed-content"><p class="feed-text">Ajout : <strong>${act.name}</strong></p><span class="feed-time">📅 ${dateStr}</span></div></div>`;
-                        }).join('');
-                    }
-                }
-                
-                const sortedPop = Object.entries(popularityMap).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                if(document.getElementById('table-popular')) document.getElementById('table-popular').innerHTML = sortedPop.map((([id, count], idx) => `<tr><td><span class="rank-badge">${idx+1}</span> ${getName(id)}</td><td style="text-align:right; font-weight:600;">${count}</td></tr>`)).join('');
-
-                const sortedWhales = userCollectionsStats.sort((a,b) => b.totalQty - a.totalQty).slice(0, 10);
-                if(document.getElementById('table-whales')) {
-                    document.getElementById('table-whales').innerHTML = sortedWhales.map(((w, idx) => {
-                        let rankIcon = idx + 1;
-                        let rankStyle = "background:var(--color-dark)";
-                        if(idx === 0) { rankIcon = "🥇"; rankStyle = "background:transparent; font-size:15px;"; }
-                        else if(idx === 1) { rankIcon = "🥈"; rankStyle = "background:transparent; font-size:15px;"; }
-                        else if(idx === 2) { rankIcon = "🥉"; rankStyle = "background:transparent; font-size:15px;"; }
-                        return `<tr><td><span class="rank-badge" style="${rankStyle}">${rankIcon}</span> User #${w.uid}</td><td style="text-align:right;"><div style="font-weight:700;">${w.totalQty} figs</div><div style="font-size:10px; color:var(--color-text-sub);">~${formatEur(w.estValue)}</div></td></tr>`;
-                    })).join('');
-                }
-
-                const sortedExp = Object.entries(finalCotes).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                if(document.getElementById('table-expensive')) document.getElementById('table-expensive').innerHTML = sortedExp.map((([id, price], idx) => `<tr><td><span class="rank-badge" style="background:var(--color-gold)">${idx+1}</span> ${getName(id)}</td><td style="text-align:right; color:var(--color-green); font-weight:700;">${price} €</td></tr>`)).join('');
-
-                const sortedWish = Object.entries(wishlistMap).sort((a,b) => b[1] - a[1]).slice(0, 10);
-                if(document.getElementById('table-wishlist')) document.getElementById('table-wishlist').innerHTML = sortedWish.map((([id, count], idx) => `<tr><td><span class="rank-badge" style="background:var(--color-red)">${idx+1}</span> ${getName(id)}</td><td style="text-align:right; font-weight:600;">${count}</td></tr>`)).join('');
-
-                // ANALYTICS + : INDICE DE TENSION (Demande / Stock)
-                let tensionList = [];
-                Object.keys(popularityMap).forEach(id => {
-                    const owned = popularityMap[id] || 0;
-                    const wanted = wishlistMap[id] || 0;
-                    const index = ((wanted / (owned + 1)) * 10).toFixed(1);
-                    tensionList.push({ id, owned, wanted, index: parseFloat(index) });
-                });
-                tensionList.sort((a,b) => b.index - a.index);
-                if(document.getElementById('table-tension')) {
-                    document.getElementById('table-tension').innerHTML = tensionList.slice(0, 10).map((item, idx) => `
-                        <tr>
-                            <td><span class="rank-badge" style="background:var(--color-purple)">${idx+1}</span> ${getName(item.id)}</td>
-                            <td style="text-align:right;">
-                                <span style="font-weight:700; color:var(--color-red);">${item.index}</span>
-                                <div style="font-size:9px; color:var(--color-text-sub);">${item.wanted} W / ${item.owned} S</div>
-                            </td>
-                        </tr>
-                    `).join('');
-                }
-
-                if(document.getElementById('table-series')) document.getElementById('table-series').innerHTML = sortedSeries.map((([serie, count]) => `<tr><td>${serie}</td><td style="text-align:right; font-weight:600;">${count}</td></tr>`)).join('');
-
-                try { updateUserChart('all', null); } catch(e){ console.error("Err Graph User", e); }
-                try { updateVolumeChart('all', null); } catch(e){ console.error("Err Graph Vol", e); }
-
-                const ctxCurr = document.getElementById('chartCurrency');
-                if(ctxCurr) {
-                    if(currencyChartInstance) currencyChartInstance.destroy();
-                    currencyChartInstance = new Chart(ctxCurr.getContext('2d'), {
-                        type: 'doughnut',
-                        data: {
-                            labels: ['EUR', 'USD', 'CAD', 'CNY', 'GBP', 'Autres'],
-                            datasets: [{
-                                data: [
-                                    currencyCounts['EUR'], 
-                                    currencyCounts['USD'], 
-                                    currencyCounts['CAD'], 
-                                    currencyCounts['CNY'], 
-                                    currencyCounts['GBP'], 
-                                    currencyCounts['Others']
-                                ],
-                                backgroundColor: ['#1A1A1A', '#6A8C47', '#C6A875', '#C0392B', '#8E44AD', '#D8D2C5'],
-                                borderWidth: 0
-                            }]
-                        },
-                        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: {boxWidth:10, font:{family:'Poppins'}} } } }
-                    });
-                }
-                
-                log("Analyse et synchronisation terminées avec succès.");
-
+                log('Analyse terminée.');
             } catch (e) {
-                console.error("ERREUR PRINCIPALE:", e);
+                console.error('ERREUR PRINCIPALE:', e);
                 log(`ERREUR CRITIQUE : ${e.message}`);
+            } finally {
+                if (btn) btn.disabled = false;
             }
         };
 
-        function processTimeData(datesMap, daysFilter, isCumulative = false) {
+        function render(s, rateInfo) {
+            // Santé & engagement
+            setText('kpi-users', fmtNum(s.userCount));
+            setText('kpi-active-ratio', `${s.usersWithItems} avec au moins une figurine`);
+            setText('kpi-active-30', fmtNum(s.active30));
+            setText('kpi-active-30-sub', `Visites connues pour ${s.usersWithMeta} comptes sur ${s.userCount}`);
+            setText('kpi-dormant-val', fmtNum(s.dormant));
+            setText('tier-empty', s.tiers.empty);
+            setText('tier-newbie', s.tiers.newbie);
+            setText('tier-inter', s.tiers.inter);
+            setText('tier-expert', s.tiers.expert);
+            const qPrice = pct(s.qtyWithPrice, s.totalQty), qDate = pct(s.qtyWithDate, s.totalQty), qMeta = pct(s.usersWithMeta, s.userCount);
+            setText('val-qual-price', qPrice + '%'); setBar('bar-qual-price', qPrice);
+            setText('val-qual-date', qDate + '%'); setBar('bar-qual-date', qDate);
+            setText('val-qual-meta', qMeta + '%'); setBar('bar-qual-meta', qMeta);
+
+            // Valeur & volume
+            setText('kpi-market-val', fmtEur(s.estValue));
+            setText('kpi-market-cover', `Cotes connues pour ${pct(s.qtyValued, s.totalQty)} % des figurines possédées`);
+            setText('kpi-total-items-all', fmtNum(s.totalQty));
+            setText('kpi-secrets-rate', s.totalQty ? `${(s.totalSecrets / s.totalQty * 100).toFixed(1)} % de Secrets (${fmtNum(s.totalSecrets)})` : '-');
+            setText('kpi-avg-spent', fmtEur(s.medianSpentPerPayer));
+            setText('kpi-avg-spent-sub', `Par collectionneur · ${s.usersWithPrice} ont saisi des prix`);
+            setText('kpi-doubles', fmtNum(s.totalDoubles));
+
+            // Avancés
+            setText('kpi-avg-completion', Math.round(s.avgSeriesCompletion) + ' %');
+            setText('kpi-avg-completion-sub', `Moyenne sur ${fmtNum(s.userSeriesRates.length)} séries commencées`);
+            setText('kpi-unit-avg-price', s.paidPricesEur.length ? s.medianUnitPrice.toFixed(1) + ' €' : '-');
+            setText('kpi-unit-avg-price-sub', `Sur ${fmtNum(s.paidPricesEur.length)} prix d'achat saisis`);
+            setText('kpi-total-wishlist', fmtNum(s.totalWishlist));
+            setText('kpi-wish-ratio', s.usersWithItems ? `${(s.totalWishlist / s.usersWithItems).toFixed(1)} par collectionneur` : '-');
+            const series = Object.entries(s.seriesQty).sort((a, b) => b[1] - a[1]);
+            setText('kpi-top-series-name', series[0]?.[0] || '-');
+            setText('kpi-top-series-count', series[0] ? `${fmtNum(series[0][1])} ex. possédés` : '');
+            setText('kpi-cotes-count', `${Object.keys(s.cotes).length} / ${baseData.length}`);
+            setText('kpi-cotes-sub', `Min. ${MIN_PRICES} prix · ${s.cotesNotEnough} en attente de prix`);
+            setText('kpi-never-owned', fmtNum(s.neverOwned.length));
+            setText('min-prices-label', MIN_PRICES);
+
+            // Notes sous les graphiques
+            setText('note-users', s.joinDates.length < s.userCount
+                ? `Date d'inscription connue pour ${s.joinDates.length} comptes sur ${s.userCount}. Les autres seront ajoutés à leur prochaine visite.`
+                : 'Date d\'inscription connue pour tous les comptes.');
+            setText('note-volume', s.undatedQty ? `${fmtNum(s.undatedQty)} figurines sans date d'achat ne sont pas comptées.` : '');
+            setText('note-rates', `Conversion en euros : ${rateInfo.source}.`);
+
+            // Flux
+            const feed = document.getElementById('feed-container');
+            if (feed) {
+                feed.innerHTML = s.activities.length ? s.activities.slice(0, 10).map(a => {
+                    const dateStr = a.date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+                    const img = a.img ? `<img src="${esc(a.img)}" class="feed-img" loading="lazy" alt="">` : '';
+                    return `<div class="feed-item">${img}<div class="feed-content"><p class="feed-text">Ajout : <strong>${esc(a.name)}</strong></p><span class="feed-time">📅 ${esc(dateStr)}</span></div></div>`;
+                }).join('') : '<div style="text-align:center;color:#ccc;padding:20px;">Aucun achat daté</div>';
+            }
+
+            // Tableaux
+            const popular = Object.entries(s.owners).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            rows('table-popular', popular.map(([id, n], i) =>
+                `<tr><td>${badge(i, 'var(--color-dark)')} ${labelOf(id)}</td><td style="text-align:right; font-weight:600;">${n} coll.</td></tr>`).join(''));
+
+            rows('table-whales', s.whales.slice(0, 10).map((w, i) => {
+                const medal = ['🥇', '🥈', '🥉'][i];
+                const rank = medal ? `<span class="rank-badge" style="background:transparent; font-size:15px;">${medal}</span>` : badge(i, 'var(--color-dark)');
+                return `<tr><td>${rank} User #${esc(w.uid)}…</td><td style="text-align:right;"><div style="font-weight:700;">${w.qty} figs</div><div style="font-size:10px; color:var(--color-text-sub);">~${fmtEur(w.value)}</div></td></tr>`;
+            }).join(''));
+
+            const expensive = Object.entries(s.cotes).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            rows('table-expensive', expensive.map(([id, v], i) =>
+                `<tr><td>${badge(i, 'var(--color-gold)')} ${labelOf(id)}</td><td style="text-align:right;"><div style="color:var(--color-green); font-weight:700;">${v} €</div><div style="font-size:10px; color:var(--color-text-sub);">${s.coteDetails[id].kept} prix</div></td></tr>`).join(''),
+                `Aucune figurine n'a encore ${MIN_PRICES} prix saisis`);
+
+            const wish = Object.entries(s.wishers).sort((a, b) => b[1] - a[1]).slice(0, 10);
+            rows('table-wishlist', wish.map(([id, n], i) =>
+                `<tr><td>${badge(i, 'var(--color-red)')} ${labelOf(id)}</td><td style="text-align:right; font-weight:600;">${n}</td></tr>`).join(''));
+
+            rows('table-tension', s.tension.slice(0, 10).map((t, i) =>
+                `<tr><td>${badge(i, 'var(--color-purple)')} ${labelOf(t.id)}</td><td style="text-align:right;"><span style="font-weight:700; color:var(--color-red);">${t.index.toFixed(1)}</span><div style="font-size:9px; color:var(--color-text-sub);">${t.wanted} recherchent / ${t.owned} possèdent</div></td></tr>`).join(''));
+
+            const completion = Object.entries(s.seriesCompletion)
+                .map(([serie, c]) => ({ serie, ...c, avg: c.sumPct / c.started }))
+                .sort((a, b) => b.completed - a.completed || b.avg - a.avg).slice(0, 10);
+            rows('table-series-completion', completion.map((c, i) =>
+                `<tr><td>${badge(i, 'var(--color-green)')} ${esc(c.serie)} <span style="font-size:10px; color:var(--color-text-sub);">(${c.size})</span></td><td style="text-align:right;"><div style="font-weight:700;">${c.completed} complètes</div><div style="font-size:10px; color:var(--color-text-sub);">${c.started} commencées · ${Math.round(c.avg)} % en moy.</div></td></tr>`).join(''));
+
+            rows('table-never-owned', s.neverOwned.slice(0, 10).map((n, i) =>
+                `<tr><td>${badge(i, 'var(--color-red)')} ${esc(n.name)} <span style="font-size:10px; color:var(--color-text-sub);">${esc(n.serie)}</span></td><td style="text-align:right; font-size:11px;">${n.wanted ? n.wanted + ' recherchent' : '-'}</td></tr>`).join(''),
+                'Toutes les figurines sont possédées par au moins un utilisateur');
+
+            rows('table-outliers', s.outliers.slice(0, 10).map(o =>
+                `<tr><td>${labelOf(o.id)}</td><td style="text-align:right;"><div style="font-weight:700; color:var(--color-red);">${o.price.toFixed(2)} €</div><div style="font-size:10px; color:var(--color-text-sub);">cote ${o.cote} € · ${o.n} prix</div></td></tr>`).join(''),
+                'Aucun prix aberrant détecté');
+
+            rows('table-series', series.map(([serie, n]) =>
+                `<tr><td>${esc(serie)}</td><td style="text-align:right; font-weight:600;">${fmtNum(n)}</td></tr>`).join(''));
+
+            // Graphiques
+            try { updateUserChart('all', null); } catch (e) { console.error('Graph utilisateurs', e); }
+            try { updateVolumeChart('all', null); } catch (e) { console.error('Graph volume', e); }
+            currencyChartInstance = doughnut('chartCurrency', currencyChartInstance, s.currencyCounts);
+            conditionChartInstance = doughnut('chartCondition', conditionChartInstance, s.conditionCounts);
+            recencyChartInstance = bars('chartRecency', recencyChartInstance, s.recency);
+        }
+
+        const PALETTE = ['#1A1A1A', '#6A8C47', '#C6A875', '#C0392B', '#8E44AD', '#2980B9', '#16A085', '#D8D2C5'];
+
+        function doughnut(canvasId, instance, counts) {
+            const el = document.getElementById(canvasId);
+            if (!el || typeof Chart === 'undefined') return instance;
+            if (instance) instance.destroy();
+            const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            return new Chart(el.getContext('2d'), {
+                type: 'doughnut',
+                data: { labels: entries.map(e => e[0]), datasets: [{ data: entries.map(e => e[1]), backgroundColor: PALETTE, borderWidth: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { boxWidth: 10, font: { family: 'Poppins' } } } } }
+            });
+        }
+
+        function bars(canvasId, instance, counts) {
+            const el = document.getElementById(canvasId);
+            if (!el || typeof Chart === 'undefined') return instance;
+            if (instance) instance.destroy();
+            return new Chart(el.getContext('2d'), {
+                type: 'bar',
+                data: { labels: Object.keys(counts), datasets: [{ data: Object.values(counts), backgroundColor: '#6A8C47', borderRadius: 2 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+            });
+        }
+
+        // Série cumulée jour par jour (trous comblés) à partir d'un objet { 'AAAA-MM-JJ': nombre }
+        function cumulativeSeries(datesMap, daysFilter) {
+            const keys = Object.keys(datesMap).sort();
+            if (!keys.length) return { labels: [], data: [] };
             const today = new Date();
-            const cutoffDate = new Date();
-            if(daysFilter !== 'all') {
-                cutoffDate.setDate(today.getDate() - daysFilter);
-            } else {
-                cutoffDate.setFullYear(2020); 
-            }
-            let sortedKeys = Object.keys(datesMap).sort();
-            let filteredKeys = sortedKeys.filter(d => new Date(d) >= cutoffDate);
-            let startingCount = 0;
-            if(isCumulative && daysFilter !== 'all') {
-                sortedKeys.forEach(d => { if(new Date(d) < cutoffDate) startingCount += datesMap[d]; });
-            }
-            let labels = filteredKeys;
-            let data = [];
-            if (isCumulative) {
-                let cumulative = startingCount;
-                data = filteredKeys.map(d => { cumulative += datesMap[d]; return cumulative; });
-            } else {
-                data = filteredKeys.map(d => datesMap[d]);
+            const EARLIEST = new Date('2019-01-01');   // garde-fou contre une date d'achat mal saisie (ex. 1900)
+            let start = daysFilter === 'all' ? new Date(keys[0]) : new Date(today.getTime() - daysFilter * 86400000);
+            if (start < EARLIEST) start = EARLIEST;
+            let total = 0;
+            for (const k of keys) if (new Date(k) < start) total += datesMap[k];
+            const labels = [], data = [];
+            for (let d = new Date(start.toISOString().slice(0, 10)); d <= today; d.setDate(d.getDate() + 1)) {
+                const k = d.toISOString().slice(0, 10);
+                total += datesMap[k] || 0;
+                labels.push(k); data.push(total);
             }
             return { labels, data };
         }
 
-        window.updateUserChart = (period, btn) => {
-            if(btn) {
-                btn.parentElement.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
-            let userMap = {};
-            globalUserJoinDates.forEach(dateObj => {
-                const dStr = dateObj.toISOString().split('T')[0];
-                userMap[dStr] = (userMap[dStr] || 0) + 1;
-            });
-            const processed = processTimeData(userMap, period, true);
-            const ctx = document.getElementById('chartUsers').getContext('2d');
-            if(userChartInstance) userChartInstance.destroy();
-            userChartInstance = new Chart(ctx, {
+        function lineChart(canvasId, instance, series, label, color, fill) {
+            const el = document.getElementById(canvasId);
+            if (!el || typeof Chart === 'undefined') return instance;
+            if (instance) instance.destroy();
+            return new Chart(el.getContext('2d'), {
                 type: 'line',
-                data: {
-                    labels: processed.labels,
-                    datasets: [{
-                        label: 'Utilisateurs Totaux',
-                        data: processed.data,
-                        borderColor: '#1A1A1A',
-                        backgroundColor: 'rgba(26, 26, 26, 0.08)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: processed.labels.length > 50 ? 0 : 3
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } } }
+                data: { labels: series.labels, datasets: [{ label, data: series.data, borderColor: color, backgroundColor: fill, fill: true, tension: 0.3, pointRadius: series.labels.length > 50 ? 0 : 3 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { ticks: { maxTicksLimit: 8 } }, y: { beginAtZero: true, ticks: { precision: 0 } } } }
             });
         }
 
+        const activateBtn = (btn) => {
+            if (!btn) return;
+            btn.parentElement.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        };
+
+        window.updateUserChart = (period, btn) => {
+            if (!stats) return;
+            activateBtn(btn);
+            const map = {};
+            for (const d of stats.joinDates) { const k = d.toISOString().slice(0, 10); map[k] = (map[k] || 0) + 1; }
+            userChartInstance = lineChart('chartUsers', userChartInstance, cumulativeSeries(map, period), 'Inscrits', '#1A1A1A', 'rgba(26, 26, 26, 0.08)');
+        };
+
         window.updateVolumeChart = (period, btn) => {
-            if(btn) {
-                btn.parentElement.querySelectorAll('.chart-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            }
-            const processed = processTimeData(globalPurchaseDates, period, true);
-            const ctx = document.getElementById('chartVolume').getContext('2d');
-            if(volumeChartInstance) volumeChartInstance.destroy();
-            volumeChartInstance = new Chart(ctx, {
-                type: 'line', 
-                data: {
-                    labels: processed.labels,
-                    datasets: [{
-                        label: 'Stock Total (Cumulé)',
-                        data: processed.data,
-                        borderColor: '#6A8C47',
-                        backgroundColor: 'rgba(106, 140, 71, 0.08)',
-                        fill: true,
-                        tension: 0.3,
-                        pointRadius: processed.labels.length > 50 ? 0 : 3
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: processed.labels.length < 20 }, y: { beginAtZero: true } } }
-            });
-        }
+            if (!stats) return;
+            activateBtn(btn);
+            volumeChartInstance = lineChart('chartVolume', volumeChartInstance, cumulativeSeries(stats.purchaseDates, period), 'Stock cumulé', '#6A8C47', 'rgba(106, 140, 71, 0.08)');
+        };
 
         fetch('footer.html').then(r => r.text()).then(d => {
             const el = document.getElementById('footer-placeholder');

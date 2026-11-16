@@ -281,6 +281,7 @@
     <script type="module">
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { recordVisit } from './assets/activity.js';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -414,6 +415,7 @@
         };
 
         onAuthStateChanged(auth, (user) => {
+            if (user) recordVisit(db, user);
             updateUIText();
 
             if (user) {

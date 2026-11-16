@@ -528,6 +528,7 @@
     <script type="module">
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { recordVisit } from './assets/activity.js';
         import { auth, setupAuthModal, updateAuthButtons, updateAuthLabel } from './assets/auth.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -600,6 +601,7 @@
         const badgesConfig = [...staticBadges, ...dynamicSeriesBadges];
 
         onAuthStateChanged(auth, async (user) => {
+            if (user) recordVisit(db, user);
             updateUIText();
             await loadCommunityPrices();
             if (user) {
