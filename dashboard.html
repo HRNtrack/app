@@ -639,7 +639,7 @@
         
         let baseData = [];
         try {
-            const module = await import('./data.js?v=2026-11-16');
+            const module = await import('./data.js?v=2026-11-16-2');
             baseData = module.baseData || [];
         } catch(e) {
             console.error("Erreur critique : Impossible de charger data.js", e);

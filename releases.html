@@ -150,6 +150,11 @@
             font-size: 0.72rem; font-weight: 600; padding: 4px 10px; letter-spacing: 0.05em;
         }
 
+        /* Plusieurs versions dans la même carte (même mois) */
+        .release-entry + .release-entry { border-top: 1px dashed var(--color-border); margin-top: 22px; padding-top: 22px; }
+        .release-entry-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .release-day, .release-count { font-size: 0.72rem; font-weight: 600; color: var(--color-text-sub); letter-spacing: 0.05em; text-transform: uppercase; }
+
         .release-title {
             font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.03em;
         }
@@ -296,12 +301,24 @@
         // ================================================================
         // NOTES DE MISE À JOUR — la plus récente en premier.
         // Pour publier une nouvelle version : ajouter UN bloc en tête de la liste.
-        // date : texte libre, ou { fr: "...", en: "..." }. content : HTML autorisé.
+        // month : "AAAA-MM" (les versions d'un même mois sont regroupées dans une seule carte), day : jour facultatif. content : HTML autorisé.
         // ================================================================
         const RELEASES = [
             {
+                version: "v2.2.1",
+                month: "2026-11",
+                title: {
+                    fr: "Images des accessoires détourées",
+                    en: "Cut-out accessory images"
+                },
+                content: {
+                    fr: "<ul><li>23 images d'accessoires et d'éditions spéciales n'ont plus de fond blanc : elles s'intègrent proprement dans les cartes, en mode clair comme en mode sombre</li><li>Ces images sont aussi deux fois plus légères</li><li>Les mises à jour d'un même mois sont désormais regroupées dans une seule carte sur cette page</li></ul>",
+                    en: "<ul><li>23 accessory and special edition images no longer have a white background: they blend nicely into the cards, in both light and dark mode</li><li>These images are also half the size</li><li>Updates from the same month are now grouped in a single card on this page</li></ul>"
+                }
+            },
+            {
                 version: "v2.2.0",
-                date: { fr: "Novembre 2026", en: "November 2026" },
+                month: "2026-11",
                 title: {
                     fr: "Mode sombre & Compteur en direct",
                     en: "Dark Mode & Live Counter"
@@ -313,7 +330,7 @@
             },
             {
                 version: "v2.1.0",
-                date: "Novembre 2026",
+                month: "2026-11",
                 title: {
                     fr: "Série Harry Potter & Éditions Spéciales",
                     en: "Harry Potter Series & Special Editions"
@@ -325,7 +342,7 @@
             },
             {
                 version: "v2.0.0",
-                date: "Septembre 2026",
+                month: "2026-09",
                 title: {
                     fr: "Refonte v2.0 & Nouvelles Séries After Dark",
                     en: "v2.0 Overhaul & New After Dark Series"
@@ -337,7 +354,7 @@
             },
             {
                 version: "v1.2.1",
-                date: "Août 2026",
+                month: "2026-08",
                 title: {
                     fr: "Mise à jour v1.2.1 : Ajout des Accessoires",
                     en: "Update v1.2.1: Accessories Added"
@@ -349,7 +366,7 @@
             },
             {
                 version: "v1.2.0",
-                date: "Mai 2026",
+                month: "2026-05",
                 title: {
                     fr: "Mise à jour v1.2.0 : Domaine, Connexion & Nouveautés",
                     en: "Update v1.2.0: Domain, Login & New Arrivals"
@@ -361,7 +378,7 @@
             },
             {
                 version: "v1.1.6",
-                date: "Avril 2026",
+                month: "2026-04",
                 title: {
                     fr: "Série Tamed Wildgrass & Nouveautés",
                     en: "Tamed Wildgrass Series & New Arrivals"
@@ -373,7 +390,7 @@
             },
             {
                 version: "v1.1.5",
-                date: "06 Mar 2026",
+                month: "2026-03", day: 6,
                 title: {
                     fr: "Optimisation de la page Collection",
                     en: "Collection Page Optimization"
@@ -385,7 +402,7 @@
             },
             {
                 version: "v1.1.4",
-                date: "02 Mar 2026",
+                month: "2026-03", day: 2,
                 title: {
                     fr: "Ajout du Dollar Canadien (CAD)",
                     en: "Canadian Dollar (CAD) Support"
@@ -397,7 +414,7 @@
             },
             {
                 version: "v1.1.3",
-                date: "22 Feb 2026",
+                month: "2026-02", day: 22,
                 title: {
                     fr: "Nouveaux Ajouts (Specials)",
                     en: "New Additions (Specials)"
@@ -409,7 +426,7 @@
             },
             {
                 version: "v1.1.2",
-                date: "24 Jan 2026",
+                month: "2026-01", day: 24,
                 title: {
                     fr: "Mise à jour Base de Données & Ranks",
                     en: "Database & Rank Update"
@@ -421,7 +438,7 @@
             },
             {
                 version: "v1.1.1",
-                date: "19 Jan 2026",
+                month: "2026-01", day: 19,
                 title: {
                     fr: "Fonctionnalités Majeures",
                     en: "Major Features"
@@ -433,7 +450,7 @@
             },
             {
                 version: "v1.1.0",
-                date: "13 Jan 2026",
+                month: "2026-01", day: 13,
                 title: {
                     fr: "Les Cotes Communautaires sont actives !",
                     en: "Community Prices are Live!"
@@ -445,7 +462,7 @@
             },
             {
                 version: "v1.0.1",
-                date: "12 Jan 2026",
+                month: "2026-01", day: 12,
                 title: {
                     fr: "New Arrivals",
                     en: "New Arrivals"
@@ -465,17 +482,38 @@
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const pick = (v) => (v && typeof v === 'object') ? (v[currentLang] || v.fr) : v;
 
+        const monthLabel = (ym) => {
+            const [y, m] = ym.split('-').map(Number);
+            const s = new Date(y, m - 1, 1).toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { month: 'long', year: 'numeric' });
+            return s.charAt(0).toUpperCase() + s.slice(1);
+        };
+
+        // Une carte par mois : les versions publiées le même mois sont regroupées
         function renderReleases() {
             const root = document.getElementById('timeline');
             if (!root) return;
-            root.innerHTML = RELEASES.map(r => `
+            const groups = [];
+            for (const r of RELEASES) {
+                const last = groups[groups.length - 1];
+                if (last && last.month === r.month) last.items.push(r);
+                else groups.push({ month: r.month, items: [r] });
+            }
+            const countLabel = (n) => n > 1 ? `<span class="release-count">${n} ${currentLang === 'en' ? 'updates' : 'mises à jour'}</span>` : '';
+            root.innerHTML = groups.map(g => `
             <div class="release-card">
                 <div class="release-meta">
-                    <span class="release-date">${esc(pick(r.date))}</span>
-                    <span class="version-badge">${esc(r.version)}</span>
+                    <span class="release-date">${esc(monthLabel(g.month))}</span>
+                    ${countLabel(g.items.length)}
                 </div>
-                <div class="release-title">${esc(pick(r.title))}</div>
-                <div class="release-content">${pick(r.content)}</div>
+                ${g.items.map(r => `
+                <div class="release-entry">
+                    <div class="release-entry-head">
+                        <span class="version-badge">${esc(r.version)}</span>
+                        ${r.day ? `<span class="release-day">${String(r.day).padStart(2, '0')}/${esc(g.month.slice(5))}</span>` : ''}
+                    </div>
+                    <div class="release-title">${esc(pick(r.title))}</div>
+                    <div class="release-content">${pick(r.content)}</div>
+                </div>`).join('')}
             </div>`).join('');
         }
 
