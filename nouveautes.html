@@ -290,7 +290,7 @@
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
-        import { baseData } from './data.js';
+        import { baseData } from './data.js?v=2026-11-16';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -399,7 +399,14 @@
                     </div>
                     <div class="release-grid" id="release-grid-${i}"></div>
                 </div>`).join('');
-            sections.forEach((s, i) => renderSection('release-grid-' + i, s.items));
+            sections.forEach((s, i) => {
+                if (s.items.length) return renderSection('release-grid-' + i, s.items);
+                // Aucune figurine trouvée : catalogue en cache pas encore à jour
+                const grid = document.getElementById('release-grid-' + i);
+                if (grid) grid.innerHTML = `<p style="grid-column:1/-1; color:var(--color-text-sub); font-size:0.85rem;">${currentLang === 'en'
+                    ? 'New figures are loading. Please refresh the page (Ctrl+F5).'
+                    : 'Les nouvelles figurines arrivent. Actualisez la page (Ctrl+F5).'}</p>`;
+            });
         }
 
         function renderSection(elementId, items) {
