@@ -353,3 +353,37 @@
         { "ID": "SPE-KOCF", "Name": "Kodak Click Figure", "Serie": "Special Edition", "Secret Rare": "No", "Status": "No status", "Image": "https://hrntrack.app/image/SPE-KOCF.webp" },
 
 ]
+
+// ================================================================
+// BADGES DE SÉRIE (page Statistiques) — une icône par série.
+// Chaque série « régulière » (hors Special… et Limited…) a automatiquement un badge
+// « Série complète » ; ajouter ici son icône à chaque nouvelle série (sinon 🏁).
+// ================================================================
+export const seriesBadges = {
+    "Accessories": "🎒",
+    "Monsters' Carnival": "🎪",
+    "Echo": "🎧",
+    "Echo Bag": "👜",
+    "Echo Cable": "🔌",
+    "Echo Magnet": "🧲",
+    "Echo Pendant Chain": "📿",
+    "City of Mercy": "🏙️",
+    "Clot": "🏮",
+    "Little Mischief": "😈",
+    "Le Petit Prince": "🌹",
+    "Mime": "🎭",
+    "Mist Walker": "🌫️",
+    "Mist Walker Felt Ornament": "🧶",
+    "Road Journal": "🛣️",
+    "Road Journal Bag": "🧳",
+    "Road Journal Magnet": "🗺️",
+    "Road Journal Phone Lanyard": "📱",
+    "Reshape": "🔄",
+    "Shelter": "🏠",
+    "Tamed Wildgrass": "🌾",
+    "The Other One": "👥",
+    "After Dark Charm": "🌙",
+    "After Dark Magnet": "🌃",
+    "After Dark Pendant": "🔮",
+    "Harry Potter": "⚡",
+};
