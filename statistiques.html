@@ -219,14 +219,38 @@
 
         /* --- BADGES --- */
         .badges-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 18px; padding: 12px 0 18px; text-align: center; }
-        .badge-card { display: flex; flex-direction: column; align-items: center; opacity: 0.35; filter: grayscale(100%); transition: all 0.3s ease; position: relative; }
-        .badge-card.unlocked { opacity: 1; filter: grayscale(0%); }
+        /* Le grisé d'un badge verrouillé s'applique à l'icône et au texte, PAS à la carte :
+           une opacité ou un filtre sur la carte enfermerait la bulle sous les badges voisins. */
+        .badge-card { display: flex; flex-direction: column; align-items: center; position: relative; padding: 4px 2px; outline: none; cursor: default; border-radius: 6px; }
+        .badge-card:not(.unlocked) .badge-icon, .badge-card:not(.unlocked) .badge-title { opacity: 0.4; filter: grayscale(100%); transition: opacity 0.2s ease; }
+        .badge-card:hover, .badge-card:focus-visible, .badge-card.show-tip { z-index: 50; }
+        .badge-card:not(.unlocked):hover .badge-icon, .badge-card:not(.unlocked):hover .badge-title { opacity: 0.75; }
+        .badge-card:focus-visible { box-shadow: 0 0 0 2px var(--color-dark); }
         .badge-icon { width: 54px; height: 54px; background: var(--color-sand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 8px; border: 1px solid var(--color-border); }
         .badge-card.unlocked .badge-icon { background: var(--surface); border-color: var(--color-gold); box-shadow: 0 4px 15px rgba(198, 168, 117, 0.3); }
         .badge-title { font-size: 0.7rem; font-weight: 700; color: var(--text-main); line-height: 1.25; }
         .badge-progress { font-size: 0.62rem; font-weight: 600; color: var(--text-sub); margin-top: 3px; }
-        .badge-desc { font-size: 10px; color: var(--color-light); display: none; position: absolute; top: 100%; margin-top: 6px; background: var(--color-dark); padding: 8px; z-index: 100; width: 150px; pointer-events: none; }
-        .badge-card:hover .badge-desc { display: block; }
+
+        /* Bulle : au-dessus du badge, contrastée, avec une flèche ; décalée si elle sortirait de l'écran (--shift) */
+        .badge-desc {
+            position: absolute; bottom: calc(100% + 10px); left: 50%; z-index: 60;
+            width: max-content; max-width: 200px; padding: 9px 12px;
+            background: var(--color-dark); color: var(--color-light); border-radius: 6px;
+            font-size: 0.72rem; font-weight: 500; line-height: 1.4; text-align: center;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+            visibility: hidden; opacity: 0; pointer-events: none;
+            transform: translate(calc(-50% + var(--shift, 0px)), 4px);
+            transition: opacity 0.15s ease, transform 0.15s ease, visibility 0.15s;
+        }
+        .badge-desc::after {
+            content: ''; position: absolute; top: 100%; left: calc(50% - var(--shift, 0px)); transform: translateX(-50%);
+            border: 6px solid transparent; border-top-color: var(--color-dark);
+        }
+        .badge-desc strong { display: block; font-size: 0.72rem; margin-bottom: 3px; }
+        .badge-desc .tip-status { display: block; margin-top: 5px; font-weight: 700; color: var(--color-gold); }
+        .badge-card:hover .badge-desc, .badge-card:focus-visible .badge-desc, .badge-card.show-tip .badge-desc {
+            visibility: visible; opacity: 1; transform: translate(calc(-50% + var(--shift, 0px)), 0);
+        }
 
         @media (max-width: 1100px) { .hero-grid { grid-template-columns: 1fr 1fr; } .hero-card.hero-rank { grid-column: span 2; } }
         @media (max-width: 900px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .two-col { grid-template-columns: 1fr; } }
@@ -605,7 +629,7 @@
                 badgeSerieTitle: "{s}", badgeSerieDesc: "Posséder toute la série {s}.",
                 badge_trader_title: "Négociant", badge_trader_desc: "Avoir 5 doublons à échanger.",
                 badge_centurion_title: "Centurion", badge_centurion_desc: "Posséder 100 figurines.",
-                badges: "{n} / {t} débloqués"
+                badges: "{n} / {t} débloqués", badgeUnlocked: "✓ Débloqué", badgeLocked: "🔒 À débloquer", badgeProgress: "Progression : {p}"
             },
             en: {
                 heroCompletion: "Catalog completion", heroValue: "Estimated value",
@@ -631,7 +655,7 @@
                 badgeSerieTitle: "{s}", badgeSerieDesc: "Own the whole {s} series.",
                 badge_trader_title: "Trader", badge_trader_desc: "Have 5 duplicates to trade.",
                 badge_centurion_title: "Centurion", badge_centurion_desc: "Own 100 figures.",
-                badges: "{n} / {t} unlocked"
+                badges: "{n} / {t} unlocked", badgeUnlocked: "✓ Unlocked", badgeLocked: "🔒 Locked", badgeProgress: "Progress: {p}"
             }
         };
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
@@ -678,12 +702,37 @@
             const title = b.serie ? fmt('badgeSerieTitle', { s: b.serie }) : t(`badge_${b.id}_title`);
             const desc = b.serie ? fmt('badgeSerieDesc', { s: b.serie }) : t(`badge_${b.id}_desc`);
             const prog = !unlocked && b.progress ? `<div class="badge-progress">${esc(b.progress(s))}</div>` : '';
-            return `<div class="badge-card ${unlocked ? 'unlocked' : ''}">
-                        <div class="badge-icon">${b.icon}</div>
+            const status = unlocked ? t('badgeUnlocked') : (b.progress ? fmt('badgeProgress', { p: b.progress(s) }) : t('badgeLocked'));
+            return `<div class="badge-card ${unlocked ? 'unlocked' : ''}" tabindex="0" aria-label="${esc(title)} — ${esc(desc)} (${esc(status)})">
+                        <div class="badge-icon" aria-hidden="true">${b.icon}</div>
                         <div class="badge-title">${esc(title)}</div>${prog}
-                        <div class="badge-desc">${esc(desc)}</div>
+                        <div class="badge-desc" role="tooltip"><strong>${esc(title)}</strong>${esc(desc)}<span class="tip-status">${esc(status)}</span></div>
                     </div>`;
         }
+
+        // Décale la bulle si elle dépasserait du bord de l'écran
+        function placeTip(card) {
+            const tip = card && card.querySelector('.badge-desc');
+            if (!tip) return;
+            tip.style.setProperty('--shift', '0px');
+            const r = tip.getBoundingClientRect(), margin = 8;
+            const shift = r.left < margin ? margin - r.left : r.right > innerWidth - margin ? (innerWidth - margin) - r.right : 0;
+            tip.style.setProperty('--shift', Math.round(shift) + 'px');
+        }
+        for (const id of ['badges-grid', 'badges-series']) {
+            const box = document.getElementById(id);
+            box.addEventListener('mouseover', (e) => placeTip(e.target.closest('.badge-card')));
+            box.addEventListener('focusin', (e) => placeTip(e.target.closest('.badge-card')));
+            // Toucher : un appui ouvre la bulle, un autre la ferme
+            box.addEventListener('click', (e) => {
+                const card = e.target.closest('.badge-card');
+                if (!card) return;
+                const open = !card.classList.contains('show-tip');
+                document.querySelectorAll('.badge-card.show-tip').forEach(c => c.classList.remove('show-tip'));
+                if (open) { card.classList.add('show-tip'); placeTip(card); }
+            });
+        }
+        document.addEventListener('click', (e) => { if (!e.target.closest('.badge-card')) document.querySelectorAll('.badge-card.show-tip').forEach(c => c.classList.remove('show-tip')); });
 
         function renderBadges(s) {
             // Séries : débloquées d'abord, puis les plus avancées
