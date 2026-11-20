@@ -241,3 +241,48 @@ export function computeStats(users, catalog, rates, now = new Date()) {
     s.joinDates.sort((a, b) => a - b);
     return s;
 }
+
+export const HISTORY_MONTHS = 6;
+
+/**
+ * Historique des cotes : cote de chaque figurine à la fin de chacun des N derniers mois
+ * (le dernier point = mois en cours). Chaque point utilise les achats DATÉS jusqu'à cette date,
+ * avec les mêmes règles que la cote actuelle (médiane, ≥ MIN_PRICES prix, aberrants écartés).
+ * L'historique est donc reconstitué à partir des dates d'achat, sans attendre des mois.
+ * @returns {{ months: string[], updatedAt: string, items: Record<string, (number|null)[]> }}
+ */
+export function computeCoteHistory(users, catalog, rates, now = new Date(), months = HISTORY_MONTHS) {
+    const ids = new Set(catalog.map(b => String(b.ID)));
+    const toEur = (p, cur) => p * (rates[String(cur || 'EUR').toUpperCase()] ?? 1);
+    const dated = {};   // ID -> [{ t, eur }]  (un achat par utilisateur et par figurine)
+
+    for (const u of users) {
+        const seen = new Set();
+        for (const item of Array.isArray(u.data?.collection) ? u.data.collection : []) {
+            if (!item) continue;
+            const id = String(item.ID ?? item.id ?? '');
+            if (!ids.has(id) || seen.has(id)) continue;
+            if (!OWNED.has(String(item.Status ?? item.status ?? '').toLowerCase())) continue;
+            const price = parseFloat(item['Purchase price'] ?? item.purchasePrice ?? item.price);
+            const d = parseDate(item['Purchase date'] || item.purchaseDate || item.date);
+            if (!Number.isFinite(price) || price <= 0 || !d || d < MIN_DATE || d > now) continue;
+            seen.add(id);
+            (dated[id] ||= []).push({ t: d.getTime(), eur: toEur(price, item.Currency || item.currency) });
+        }
+    }
+
+    // Fins de mois : 1er jour du mois suivant (exclu), du plus ancien au mois en cours
+    const labels = [], ends = [];
+    for (let i = months - 1; i >= 0; i--) {
+        const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        labels.push(`${start.getFullYear()}-${String(start.getMonth() + 1).padStart(2, '0')}`);
+        ends.push(new Date(start.getFullYear(), start.getMonth() + 1, 1).getTime());
+    }
+
+    const items = {};
+    for (const [id, list] of Object.entries(dated)) {
+        const series = ends.map(end => robustCote(list.filter(p => p.t < end).map(p => p.eur)).value);
+        if (series.filter(v => v !== null).length >= 2) items[id] = series;   // au moins 2 points pour tracer
+    }
+    return { months: labels, updatedAt: now.toISOString(), items };
+}

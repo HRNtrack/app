@@ -211,6 +211,14 @@
         .trend-up { color: var(--primary); }
         .trend-down { color: var(--color-red); }
         .trend-neutral { color: #9CA3AF; }
+        .cote-history { margin: 0 0 15px; padding: 10px 12px 6px; border: 1px solid var(--color-border); background: var(--surface); }
+        .cote-history-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+        .cote-history-head .form-label { margin: 0; }
+        .cote-history-trend { font-size: 0.75rem; font-weight: 700; }
+        .cote-history-trend.up { color: var(--color-green); }
+        .cote-history-trend.down { color: var(--color-red); }
+        .cote-history-trend.flat { color: var(--color-text-sub); }
+        .cote-history-empty { font-size: 0.75rem; color: var(--color-text-sub); padding: 6px 0 8px; }
         .market-diff { display: block; font-size: 0.7rem; font-weight: 600; margin-top: 3px; }
         .market-diff.good { color: var(--color-green); }
         .market-diff.bad { color: var(--color-red); }
@@ -526,6 +534,9 @@
                 </div>
             </div>
 
+            <!-- Évolution de la cote sur 6 mois (données : market_prices/history, calculées par la page admin) -->
+            <div id="modal-history" class="cote-history" hidden></div>
+
             <div class="form-row">
                 <div style="grid-column: 1 / -1;">
                     <label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date">
@@ -590,6 +601,7 @@
         import { computeCollectionStats } from './assets/collection-stats.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
         import { buildIndex, search } from './assets/search.js';
+        import { coteChartSvg, coteTrend } from './assets/cote-chart.js';
         
         let baseData = [];
         try {
@@ -652,7 +664,8 @@
                 sumSeries: "{n}/{t} séries complètes", sumSpent: "Dépensé : {n}", sumUnique: "{n} différentes", sumSecrets: "sur {n}",
                 resultCount: "{n} figurines", resultCountOne: "{n} figurine", serieDone: "série complète ✓", goalMissing: "Il manque :",
                 msgNoResults: "Aucune figurine trouvée.", msgNoResultsHint: "Essayez un autre mot, ou réinitialisez les filtres.",
-                marketBelow: "Payé {n} % sous la cote", marketAbove: "Payé {n} % au-dessus de la cote"
+                marketBelow: "Payé {n} % sous la cote", marketAbove: "Payé {n} % au-dessus de la cote",
+                histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum)."
             },
             en: {
                 kpiValue: "Estimated value", kpiCollection: "Figures", kpiDoubles: "Duplicates", kpiDoublesSub: "to trade",
@@ -664,7 +677,8 @@
                 sumSeries: "{n}/{t} series complete", sumSpent: "Spent: {n}", sumUnique: "{n} unique", sumSecrets: "out of {n}",
                 resultCount: "{n} figures", resultCountOne: "{n} figure", serieDone: "series complete ✓", goalMissing: "Missing:",
                 msgNoResults: "No figures found.", msgNoResultsHint: "Try another word, or reset the filters.",
-                marketBelow: "Paid {n}% below market", marketAbove: "Paid {n}% above market"
+                marketBelow: "Paid {n}% below market", marketAbove: "Paid {n}% above market",
+                histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum)."
             }
         };
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
@@ -984,6 +998,37 @@
             e.preventDefault(); searchBar.focus(); searchBar.select();
         });
 
+        // --- Évolution de la cote (fiche) ---
+        let coteHistory = null;          // { months: [...], items: { ID: [cotes] } }, chargé une seule fois
+        let coteHistoryPromise = null;
+        function loadCoteHistory() {
+            if (!coteHistoryPromise) {
+                coteHistoryPromise = getDoc(doc(db, "market_prices", "history"))
+                    .then(snap => { coteHistory = snap.exists() ? snap.data() : { months: [], items: {} }; })
+                    .catch(() => { coteHistory = { months: [], items: {} }; });
+            }
+            return coteHistoryPromise;
+        }
+        async function renderCoteHistory(item) {
+            const box = document.getElementById('modal-history');
+            await loadCoteHistory();
+            if (!currentItem || currentItem.ID !== item.ID) return;   // une autre fiche a été ouverte entre-temps
+            const months = coteHistory.months || [];
+            const values = [...((coteHistory.items || {})[item.ID] || [])];
+            // Le dernier point (mois en cours) = la cote affichée au-dessus, pour que les deux chiffres concordent
+            if (values.length && coteOf(item.ID) > 0) values[values.length - 1] = coteOf(item.ID);
+            const locale = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const labels = months.map(m => new Date(m + '-01T12:00:00').toLocaleDateString(locale, { month: 'short' }));
+            const svg = values.length ? coteChartSvg(values, labels, { format: eur }) : '';
+            if (!svg && !coteOf(item.ID)) { box.hidden = true; return; }   // ni cote ni historique : rien à montrer
+            const trend = coteTrend(values);
+            const cls = trend > 0 ? 'up' : trend < 0 ? 'down' : 'flat';
+            const trendHtml = trend === null ? '' : `<span class="cote-history-trend ${cls}">${trend > 0 ? '▲ +' : trend < 0 ? '▼ ' : ''}${trend} %</span>`;
+            box.innerHTML = `<div class="cote-history-head"><span class="form-label">${esc(t('histTitle'))}</span>${trendHtml}</div>` +
+                (svg || `<div class="cote-history-empty">${esc(t('histNone'))}</div>`);
+            box.hidden = false;
+        }
+
         window.openModal = (item) => {
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
@@ -1010,6 +1055,8 @@
             } else {
                 marketEl.innerText = "-";
             }
+            document.getElementById('modal-history').hidden = true;
+            renderCoteHistory(item);
 
             document.getElementById('input-date').value = item["Purchase date"] || "";
             document.getElementById('input-note').value = item.Note || "";

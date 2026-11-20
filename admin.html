@@ -643,7 +643,7 @@
         import { app } from './assets/firebase.js';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { computeStats, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
+        import { computeStats, computeCoteHistory, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
         
         let baseData = [];
         try {
@@ -740,6 +740,12 @@
                         await setDoc(doc(db, 'market_prices', 'community'), stats.cotes);
                         log('✅ Cotes sauvegardées avec succès.');
                     } catch (e) { log('⚠️ Erreur de sauvegarde des cotes (droits Firestore ?)'); }
+                    // Historique sur 6 mois (graphique dans la fiche des figurines, page Collection)
+                    try {
+                        const history = computeCoteHistory(users, baseData, rates, new Date());
+                        await setDoc(doc(db, 'market_prices', 'history'), history);
+                        log(`✅ Historique des cotes (${history.months[0]} → ${history.months[history.months.length - 1]}) : ${Object.keys(history.items).length} figurines avec une courbe.`);
+                    } catch (e) { log('⚠️ Historique des cotes non enregistré (droits Firestore sur market_prices/history ?)'); }
                 }
                 log('Analyse terminée.');
             } catch (e) {
