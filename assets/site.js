@@ -2,6 +2,13 @@
 // menu mobile, bannière cookies et Google Analytics.
 (function () {
     const GA_ID = 'G-RFP1HDMW49';
+    const CONSENT_MAX_AGE = 395 * 24 * 3600 * 1000; // 13 mois : durée maximale d'un choix cookies (CNIL)
+
+    // Anti-clickjacking : le site refuse d'être affiché dans le cadre (iframe) d'un autre site
+    if (window.top !== window.self) {
+        document.documentElement.style.display = 'none';
+        try { window.top.location = window.location.href; } catch (e) { /* bloqué par le navigateur */ }
+    }
 
     window.toggleMobileMenu = function (forceOpen) {
         const drawer = document.getElementById('mobile-drawer');
@@ -65,15 +72,49 @@
         gtag('config', GA_ID);
     }
 
+    // Choix mémorisé 13 mois au plus ; au-delà (ou sans date), on redemande.
     function readConsent() {
-        try { return localStorage.getItem('cookieConsent'); } catch (e) { return null; }
+        try {
+            const v = localStorage.getItem('cookieConsent');
+            const at = Number(localStorage.getItem('cookieConsentAt'));
+            if (v === null) return null;
+            if (!at || Date.now() - at > CONSENT_MAX_AGE) {
+                localStorage.removeItem('cookieConsent');
+                localStorage.removeItem('cookieConsentAt');
+                return null;
+            }
+            return v;
+        } catch (e) { return null; }
+    }
+
+    // Retrait du consentement : coupe Google Analytics et efface ses cookies (_ga…)
+    function stopAnalytics() {
+        window['ga-disable-' + GA_ID] = true;
+        const host = location.hostname, parts = host.split('.');
+        const domains = ['', host, '.' + host, parts.length > 1 ? '.' + parts.slice(-2).join('.') : ''];
+        document.cookie.split(';').map(c => c.split('=')[0].trim()).filter(n => /^_ga|^_gid/.test(n)).forEach(name => {
+            domains.forEach(d => { document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + (d ? '; domain=' + d : ''); });
+        });
     }
 
     window.handleCookie = function (accept) {
-        try { localStorage.setItem('cookieConsent', accept ? 'true' : 'false'); } catch (e) { /* stockage indisponible */ }
-        if (accept) loadAnalytics();
+        try {
+            localStorage.setItem('cookieConsent', accept ? 'true' : 'false');
+            localStorage.setItem('cookieConsentAt', String(Date.now()));
+        } catch (e) { /* stockage indisponible */ }
+        if (accept) { window['ga-disable-' + GA_ID] = false; loadAnalytics(); }
+        else stopAnalytics();
         const banner = document.getElementById('cookie-banner');
         if (banner) banner.style.display = 'none';
+    };
+
+    // Lien « Gérer les cookies » (footer, page Mentions légales) : rouvre la bannière
+    window.openCookieSettings = function () {
+        const banner = document.getElementById('cookie-banner');
+        if (!banner) return;
+        banner.style.display = 'block';
+        const btn = banner.querySelector('.btn-accept');
+        if (btn) btn.focus();
     };
 
     // Appelée une fois le footer (qui contient la bannière) injecté dans la page.

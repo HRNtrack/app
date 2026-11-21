@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
@@ -90,6 +92,8 @@
         .legal-block p, .legal-block li { font-size: 0.88rem; color: var(--text-sub); line-height: 1.8; margin-bottom: 10px; }
         .legal-block ul { padding-left: 20px; margin: 0; }
         .legal-block strong { color: var(--color-dark); }
+        .legal-block a { color: var(--color-dark); text-decoration: underline; }
+        .legal-block code { font-size: 0.82rem; background: var(--color-sand); padding: 1px 5px; }
 
         /* --- MODAL AUTH & INPUTS --- */
         .modal-overlay { 
@@ -165,50 +169,46 @@
     <div class="legal-container">
         <div class="legal-card">
             <h1 class="legal-title-main" data-t="legalMainTitle">Mentions Légales & Confidentialité</h1>
+            <p class="legal-updated" data-t="legalUpdated" style="font-size:0.78rem; color:var(--text-sub); margin:-10px 0 25px;">Dernière mise à jour : 21 novembre 2026</p>
 
             <div class="legal-block">
                 <h2 data-t="legalEditTitle">1. Éditeur du site</h2>
-                <p data-t="legalEditContent">
-                    Le site <strong>HRNtrack</strong> est édité par un particulier à des fins non commerciales (projet "Fanmade").<br><br>
-                    <strong>Contact :</strong> hironotrack@gmail.com<br>
-                    <strong>Directeur de publication :</strong> runwood
-                </p>
+                <p data-t="legalEditContent">Le site <strong>HRNtrack</strong> est édité par un particulier à des fins non commerciales (projet « Fanmade »).<br><br><strong>Contact :</strong> hironotrack@gmail.com<br><strong>Directeur de publication :</strong> runwood</p>
             </div>
 
             <div class="legal-block">
                 <h2 data-t="legalHostTitle">2. Hébergement</h2>
-                <p data-t="legalHostContent">
-                    Le site est hébergé par <strong>GitHub, Inc.</strong><br>
-                    Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.<br>
-                    Le site utilise la technologie GitHub Pages.
-                </p>
+                <p data-t="legalHostContent">Le site est hébergé par <strong>GitHub, Inc.</strong> (GitHub Pages)<br>Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.</p>
             </div>
 
             <div class="legal-block">
                 <h2 data-t="legalDataTitle">3. Données personnelles</h2>
-                <p data-t="legalDataContent">
-                    HRNtrack respecte votre vie privée. Voici comment sont gérées vos données :
-                </p>
+                <p data-t="legalDataContent">Le responsable du traitement est l'éditeur du site (voir § 1). Voici les données traitées, pourquoi et combien de temps :</p>
                 <ul>
-                    <li data-t="legalLi1"><strong>Authentification :</strong> Nous utilisons Google Firebase Auth pour gérer les comptes. Seul votre email et un identifiant unique (UID) sont stockés pour vous permettre de retrouver votre collection.</li>
-                    <li data-t="legalLi2"><strong>Collection :</strong> Les données relatives aux figurines que vous possédez sont stockées dans Google Firebase Firestore (Cloud Database) lié à votre identifiant.</li>
-                    <li data-t="legalLi3"><strong>Suppression :</strong> Vous pouvez demander la suppression intégrale de vos données en nous contactant par email.</li>
+                    <li data-t="legalLi1"><strong>Compte :</strong> votre email, un identifiant unique (UID), la date de création du compte et celle de votre dernière visite. Le mot de passe est géré et chiffré par Google Firebase Authentication : nous n'y avons jamais accès. <em>Finalité :</em> vous connecter et retrouver votre collection. <em>Base légale :</em> fourniture du service que vous demandez.</li>
+                    <li data-t="legalLi2"><strong>Collection & profil :</strong> les figurines possédées ou recherchées, les quantités, le prix et la date d'achat si vous les saisissez, ainsi que votre pseudo et votre avatar. Ces données sont stockées dans Google Firebase Firestore.</li>
+                    <li data-t="legalLi3"><strong>Lien de partage :</strong> votre collection, votre pseudo et votre avatar sont visibles par toute personne qui possède votre lien de partage. Choisissez un pseudo qui ne révèle pas votre identité si vous le préférez.</li>
+                    <li data-t="legalLi4"><strong>Statistiques et cotes :</strong> les cotes communautaires et les statistiques du site sont calculées à partir des collections, de façon agrégée. Aucune donnée individuelle n'y est publiée.</li>
+                    <li data-t="legalLi5"><strong>Formulaire de contact :</strong> votre nom, votre email et votre message nous sont transmis par le service FormSubmit (formsubmit.co), uniquement pour vous répondre. Ils sont conservés le temps de l'échange.</li>
+                    <li data-t="legalLi6"><strong>Durée de conservation :</strong> vos données sont conservées tant que votre compte existe, puis effacées dès sa suppression.</li>
+                    <li data-t="legalLi7"><strong>Suppression :</strong> depuis <a href="compte.html">Mon compte</a>, le bouton « Supprimer mon compte définitivement » efface immédiatement votre compte et votre collection. Vous pouvez aussi le demander par email.</li>
+                    <li data-t="legalLi8"><strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics, Google Fonts) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.</li>
                 </ul>
             </div>
 
             <div class="legal-block">
-                <h2 data-t="legalCookiesTitle">4. Cookies & Traceurs</h2>
-                <p data-t="legalCookiesContent">
-                    Nous utilisons Google Analytics (GA4) pour mesurer l'audience du site de manière anonyme. Cela nous aide à comprendre quelles pages sont les plus visitées pour améliorer l'outil.<br>
-                    Vous pouvez refuser le suivi via les paramètres de votre navigateur.
-                </p>
+                <h2 data-t="legalCookiesTitle">4. Cookies & stockage local</h2>
+                <p data-t="legalCookiesContent"><strong>Google Analytics (GA4)</strong> mesure l'audience du site. Ses cookies (<code>_ga</code>) ne sont déposés <strong>que si vous cliquez sur « Accepter »</strong>. Votre choix est mémorisé 13 mois au plus, puis vous est redemandé. Vous pouvez le modifier à tout moment : <a href="#" onclick="openCookieSettings(); return false;">Gérer les cookies</a> (lien aussi présent en bas de chaque page).<br><br>Le site enregistre aussi dans votre navigateur (stockage local) votre langue, votre thème clair/sombre, votre choix de cookies et votre session de connexion. Ces éléments sont nécessaires au fonctionnement du site et ne servent pas à vous suivre : ils ne demandent donc pas de consentement.</p>
             </div>
 
             <div class="legal-block">
-                <h2 data-t="legalPropTitle">5. Propriété Intellectuelle</h2>
-                <p data-t="legalPropContent">
-                    HRNtrack est un projet indépendant. Les images des figurines Hirono et la marque "POP MART" sont la propriété exclusive de POP MART. Elles sont utilisées ici à titre informatif (Fair Use) pour aider les collectionneurs.
-                </p>
+                <h2 data-t="legalRightsTitle">5. Vos droits</h2>
+                <p data-t="legalRightsContent">Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité, de limitation et d'opposition sur vos données. Pour les exercer, écrivez à <strong>hironotrack@gmail.com</strong> ; une réponse vous sera apportée sous un mois. Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (<a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>).</p>
+            </div>
+
+            <div class="legal-block">
+                <h2 data-t="legalPropTitle">6. Propriété Intellectuelle</h2>
+                <p data-t="legalPropContent">HRNtrack est un projet indépendant, non affilié à POP MART. Les images des figurines Hirono et la marque « POP MART » sont la propriété exclusive de POP MART. Elles sont utilisées ici à titre informatif, pour aider les collectionneurs.</p>
             </div>
         </div>
     </div>
@@ -256,7 +256,55 @@
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         const translations = withCommon({
-            fr: {                // Footer & General                // LEGAL SPECIFIC                legalMainTitle: "Mentions Légales & Confidentialité",                legalEditTitle: "1. Éditeur du site",                legalEditContent: "Le site <strong>HRNtrack</strong> est édité par un particulier à des fins non commerciales (projet 'Fanmade').<br><br><strong>Contact :</strong> hironotrack@gmail.com<br><strong>Directeur de publication :</strong> runwood",                legalHostTitle: "2. Hébergement",                legalHostContent: "Le site est hébergé par <strong>GitHub, Inc.</strong><br>Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.<br>Le site utilise la technologie GitHub Pages.",                legalDataTitle: "3. Données personnelles",                legalDataContent: "HRNtrack respecte votre vie privée. Voici comment sont gérées vos données :",                legalLi1: "<strong>Authentification :</strong> Nous utilisons Google Firebase Auth pour gérer les comptes. Seul votre email et un identifiant unique (UID) sont stockés pour vous permettre de retrouver votre collection.",                legalLi2: "<strong>Collection :</strong> Les données relatives aux figurines que vous possédez sont stockées dans Google Firebase Firestore (Cloud Database) lié à votre identifiant.",                legalLi3: "<strong>Suppression :</strong> Vous pouvez demander la suppression intégrale de vos données en nous contactant par email.",                legalCookiesTitle: "4. Cookies & Traceurs",                legalCookiesContent: "Nous utilisons Google Analytics (GA4) pour mesurer l'audience du site de manière anonyme. Cela nous aide à comprendre quelles pages sont les plus visitées pour améliorer l'outil.<br>Vous pouvez refuser le suivi via les paramètres de votre navigateur.",                legalPropTitle: "5. Propriété Intellectuelle",                legalPropContent: "HRNtrack est un projet indépendant. Les images des figurines Hirono et la marque 'POP MART' sont la propriété exclusive de POP MART. Elles sont utilisées ici à titre informatif (Fair Use) pour aider les collectionneurs."                },            en: {                // Footer & General                // LEGAL SPECIFIC                legalMainTitle: "Legal Mentions & Privacy",                legalEditTitle: "1. Site Editor",                legalEditContent: "HRNtrack is edited by an individual for non-commercial purposes (Fanmade project).<br><br><strong>Contact:</strong> hironotrack@gmail.com<br><strong>Director:</strong> runwood",                legalHostTitle: "2. Hosting",                legalHostContent: "This site is hosted by <strong>GitHub, Inc.</strong><br>Address: 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.<br>The site uses GitHub Pages technology.",                legalDataTitle: "3. Personal Data",                legalDataContent: "HRNtrack respects your privacy. Here is how your data is handled:",                legalLi1: "<strong>Auth:</strong> Email and unique ID (UID) stored via Google Firebase Auth to let you access your collection.",                legalLi2: "<strong>Collection:</strong> Figure collection data stored via Google Firebase Firestore tied to your account.",                legalLi3: "<strong>Deletion:</strong> Contact us by email to request complete data deletion.",                legalCookiesTitle: "4. Cookies & Trackers",                legalCookiesContent: "We use Google Analytics (GA4) anonymously to measure audience and improve the website.<br>You can decline tracking via your browser settings.",                legalPropTitle: "5. Intellectual Property",                legalPropContent: "HRNtrack is an independent project. Hirono figure images and the 'POP MART' trademark belong exclusively to POP MART (Fair Use)."                }        });
+            fr: {
+                legalMainTitle: "Mentions Légales & Confidentialité",
+                legalUpdated: "Dernière mise à jour : 21 novembre 2026",
+                legalEditTitle: "1. Éditeur du site",
+                legalEditContent: "Le site <strong>HRNtrack</strong> est édité par un particulier à des fins non commerciales (projet « Fanmade »).<br><br><strong>Contact :</strong> hironotrack@gmail.com<br><strong>Directeur de publication :</strong> runwood",
+                legalHostTitle: "2. Hébergement",
+                legalHostContent: "Le site est hébergé par <strong>GitHub, Inc.</strong> (GitHub Pages)<br>Adresse : 88 Colin P Kelly Jr St, San Francisco, CA 94107, États-Unis.",
+                legalDataTitle: "3. Données personnelles",
+                legalDataContent: "Le responsable du traitement est l'éditeur du site (voir § 1). Voici les données traitées, pourquoi et combien de temps :",
+                legalLi1: "<strong>Compte :</strong> votre email, un identifiant unique (UID), la date de création du compte et celle de votre dernière visite. Le mot de passe est géré et chiffré par Google Firebase Authentication : nous n'y avons jamais accès. <em>Finalité :</em> vous connecter et retrouver votre collection. <em>Base légale :</em> fourniture du service que vous demandez.",
+                legalLi2: "<strong>Collection & profil :</strong> les figurines possédées ou recherchées, les quantités, le prix et la date d'achat si vous les saisissez, ainsi que votre pseudo et votre avatar. Ces données sont stockées dans Google Firebase Firestore.",
+                legalLi3: "<strong>Lien de partage :</strong> votre collection, votre pseudo et votre avatar sont visibles par toute personne qui possède votre lien de partage. Choisissez un pseudo qui ne révèle pas votre identité si vous le préférez.",
+                legalLi4: "<strong>Statistiques et cotes :</strong> les cotes communautaires et les statistiques du site sont calculées à partir des collections, de façon agrégée. Aucune donnée individuelle n'y est publiée.",
+                legalLi5: "<strong>Formulaire de contact :</strong> votre nom, votre email et votre message nous sont transmis par le service FormSubmit (formsubmit.co), uniquement pour vous répondre. Ils sont conservés le temps de l'échange.",
+                legalLi6: "<strong>Durée de conservation :</strong> vos données sont conservées tant que votre compte existe, puis effacées dès sa suppression.",
+                legalLi7: "<strong>Suppression :</strong> depuis <a href=\"compte.html\">Mon compte</a>, le bouton « Supprimer mon compte définitivement » efface immédiatement votre compte et votre collection. Vous pouvez aussi le demander par email.",
+                legalLi8: "<strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics, Google Fonts) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.",
+                legalCookiesTitle: "4. Cookies & stockage local",
+                legalCookiesContent: "<strong>Google Analytics (GA4)</strong> mesure l'audience du site. Ses cookies (<code>_ga</code>) ne sont déposés <strong>que si vous cliquez sur « Accepter »</strong>. Votre choix est mémorisé 13 mois au plus, puis vous est redemandé. Vous pouvez le modifier à tout moment : <a href=\"#\" onclick=\"openCookieSettings(); return false;\">Gérer les cookies</a> (lien aussi présent en bas de chaque page).<br><br>Le site enregistre aussi dans votre navigateur (stockage local) votre langue, votre thème clair/sombre, votre choix de cookies et votre session de connexion. Ces éléments sont nécessaires au fonctionnement du site et ne servent pas à vous suivre : ils ne demandent donc pas de consentement.",
+                legalRightsTitle: "5. Vos droits",
+                legalRightsContent: "Conformément au RGPD et à la loi Informatique et Libertés, vous disposez d'un droit d'accès, de rectification, d'effacement, de portabilité, de limitation et d'opposition sur vos données. Pour les exercer, écrivez à <strong>hironotrack@gmail.com</strong> ; une réponse vous sera apportée sous un mois. Si vous estimez que vos droits ne sont pas respectés, vous pouvez adresser une réclamation à la CNIL (<a href=\"https://www.cnil.fr\" target=\"_blank\" rel=\"noopener\">www.cnil.fr</a>).",
+                legalPropTitle: "6. Propriété Intellectuelle",
+                legalPropContent: "HRNtrack est un projet indépendant, non affilié à POP MART. Les images des figurines Hirono et la marque « POP MART » sont la propriété exclusive de POP MART. Elles sont utilisées ici à titre informatif, pour aider les collectionneurs.",
+            },
+            en: {
+                legalMainTitle: "Legal Notice & Privacy",
+                legalUpdated: "Last updated: November 21, 2026",
+                legalEditTitle: "1. Site Publisher",
+                legalEditContent: "<strong>HRNtrack</strong> is published by an individual for non-commercial purposes (fan-made project).<br><br><strong>Contact:</strong> hironotrack@gmail.com<br><strong>Publication director:</strong> runwood",
+                legalHostTitle: "2. Hosting",
+                legalHostContent: "This site is hosted by <strong>GitHub, Inc.</strong> (GitHub Pages)<br>Address: 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.",
+                legalDataTitle: "3. Personal Data",
+                legalDataContent: "The data controller is the site publisher (see § 1). Here is what data is processed, why, and for how long:",
+                legalLi1: "<strong>Account:</strong> your email, a unique ID (UID), the account creation date and your last visit date. Your password is handled and encrypted by Google Firebase Authentication: we never have access to it. <em>Purpose:</em> logging you in and keeping your collection. <em>Legal basis:</em> providing the service you request.",
+                legalLi2: "<strong>Collection & profile:</strong> the figures you own or are looking for, quantities, purchase price and date if you enter them, plus your nickname and avatar. This data is stored in Google Firebase Firestore.",
+                legalLi3: "<strong>Share link:</strong> your collection, nickname and avatar are visible to anyone who has your share link. Pick a nickname that does not reveal your identity if you prefer.",
+                legalLi4: "<strong>Statistics and market values:</strong> community market values and site statistics are computed from collections in aggregate. No individual data is published.",
+                legalLi5: "<strong>Contact form:</strong> your name, email and message are sent to us through the FormSubmit service (formsubmit.co), only so we can reply. They are kept for the duration of the conversation.",
+                legalLi6: "<strong>Retention:</strong> your data is kept as long as your account exists and erased as soon as it is deleted.",
+                legalLi7: "<strong>Deletion:</strong> in <a href=\"compte.html\">My Account</a>, the “Delete Account Permanently” button immediately erases your account and collection. You can also ask by email.",
+                legalLi8: "<strong>Processors & transfers:</strong> Google (Firebase, Google Analytics, Google Fonts) and GitHub (hosting) may process some data, including your IP address, in the United States. These transfers are covered by the EU–US Data Privacy Framework and the European Commission's standard contractual clauses.",
+                legalCookiesTitle: "4. Cookies & Local Storage",
+                legalCookiesContent: "<strong>Google Analytics (GA4)</strong> measures site traffic. Its cookies (<code>_ga</code>) are set <strong>only if you click “Accept”</strong>. Your choice is remembered for up to 13 months, then asked again. You can change it at any time: <a href=\"#\" onclick=\"openCookieSettings(); return false;\">Manage cookies</a> (also at the bottom of every page).<br><br>The site also stores in your browser (local storage) your language, light/dark theme, cookie choice and login session. These are required for the site to work and are not used to track you, so they do not require consent.",
+                legalRightsTitle: "5. Your Rights",
+                legalRightsContent: "Under the GDPR, you have the right to access, rectify, erase, port, restrict and object to the processing of your data. To exercise them, write to <strong>hironotrack@gmail.com</strong>; you will get an answer within one month. If you believe your rights are not respected, you can lodge a complaint with the French data protection authority, the CNIL (<a href=\"https://www.cnil.fr\" target=\"_blank\" rel=\"noopener\">www.cnil.fr</a>).",
+                legalPropTitle: "6. Intellectual Property",
+                legalPropContent: "HRNtrack is an independent project, not affiliated with POP MART. Hirono figure images and the “POP MART” trademark are the exclusive property of POP MART. They are used here for information purposes, to help collectors.",
+            }
+        });
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
 

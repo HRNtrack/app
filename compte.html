@@ -2,6 +2,8 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
@@ -341,13 +343,14 @@
             const preview = document.getElementById('preview-avatar-mini');
             const bigPreview = document.getElementById('header-avatar-display');
             
-            if(url) {
-                const imgTag = `<img src="${url}" alt="" style="width:100%; height:100%; object-fit:cover;">`;
-                preview.innerHTML = imgTag;
-                bigPreview.innerHTML = imgTag; 
+            // Image créée via le DOM (jamais via innerHTML) et seulement pour une URL http(s)
+            const makeImg = () => { const img = document.createElement('img'); img.src = url; img.alt = ''; img.style.cssText = 'width:100%; height:100%; object-fit:cover;'; return img; };
+            if(url && /^https?:\/\//i.test(url)) {
+                preview.replaceChildren(makeImg());
+                bigPreview.replaceChildren(makeImg());
             } else {
-                preview.innerHTML = "👤";
-                bigPreview.innerHTML = "👤";
+                preview.textContent = "👤";
+                bigPreview.textContent = "👤";
             }
         };
 

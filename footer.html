@@ -203,6 +203,7 @@
             <ul class="footer-links">
                 <li><a href="privacy.html"><span data-t="legalMainTitle">Mentions Légales</span></a></li>
                 <li><a href="contact.html"><span data-t="navContact">Contact</span></a></li>
+                <li><a href="#" onclick="openCookieSettings(); return false;"><span data-t="cookieManage">Gérer les cookies</span></a></li>
             </ul>
             <p style="font-size:0.75rem; color:#777777; margin-top:15px; line-height:1.5;" data-t="footerDisclaimer">
                 Ce site n'est pas affilié à POP MART.<br>Les images sont la propriété de leurs auteurs respectifs.
@@ -218,11 +219,11 @@
 </footer>
 
 <!-- Bannière de Cookies moderne -->
-<div id="cookie-banner">
+<div id="cookie-banner" role="dialog" aria-live="polite" aria-labelledby="cookie-title">
     <div class="cookie-content">
-        <div class="cookie-title" data-t="cookieTitle">Cookies ?</div>
+        <div class="cookie-title" id="cookie-title" data-t="cookieTitle">Cookies ?</div>
         <div>
-            <span style="font-size:0.78rem; opacity:0.85; line-height:1.5;" data-t="cookieText">Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?</span>
+            <span style="font-size:0.78rem; opacity:0.85; line-height:1.5;" data-t="cookieText">Nous aimerions utiliser Google Analytics pour mesurer l'audience et améliorer le site. Rien n'est déposé sans votre accord, et vous pouvez changer d'avis à tout moment via « Gérer les cookies ».</span>
         </div>
         <div class="cookie-btns">
             <button class="btn-cookie btn-decline" onclick="handleCookie(false)" data-t="cookieDecline">Non merci</button>

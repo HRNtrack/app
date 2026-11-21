@@ -28,7 +28,8 @@ export const commonTranslations = {
         footerLegalTitle: "Infos Légales",
         // Cookies
         cookieTitle: "🍪 Cookies ?",
-        cookieText: "Nous utilisons Google Analytics pour améliorer le site anonymement. C'est OK pour vous ?",
+        cookieText: "Nous aimerions utiliser Google Analytics pour mesurer l'audience et améliorer le site. Rien n'est déposé sans votre accord, et vous pouvez changer d'avis à tout moment via « Gérer les cookies ».",
+        cookieManage: "Gérer les cookies",
         cookieDecline: "Non merci",
         cookieAccept: "Accepter"
     },
@@ -58,7 +59,8 @@ export const commonTranslations = {
         footerLegalTitle: "Legal Info",
         // Cookies
         cookieTitle: "🍪 Cookies ?",
-        cookieText: "We use Google Analytics to silently improve the website. Is it OK for you?",
+        cookieText: "We would like to use Google Analytics to measure traffic and improve the site. Nothing is stored without your consent, and you can change your mind at any time via “Manage cookies”.",
+        cookieManage: "Manage cookies",
         cookieDecline: "No thanks",
         cookieAccept: "Accept"
     }
