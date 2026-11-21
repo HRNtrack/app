@@ -749,7 +749,7 @@
                     const todo = users.filter(u => !samePublicProfile(existing.get(u.id), toPublicProfile(u.data)));
                     for (let i = 0; i < todo.length; i += 400) {
                         const batch = writeBatch(db);
-                        todo.slice(i, i + 400).forEach(u => batch.set(doc(db, PUBLIC_COLLECTION, u.id), publicProfileDoc(u.data)));
+                        todo.slice(i, i + 400).forEach(u => { const d = publicProfileDoc(u.data); const ref = doc(db, PUBLIC_COLLECTION, u.id); if (d) batch.set(ref, d); else batch.delete(ref); });   // collection privée : fiche supprimée
                         await batch.commit();
                     }
                     const userIds = new Set(users.map(u => u.id));

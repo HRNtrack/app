@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script src="assets/theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bourse aux échanges - HRNtrack</title>
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta name="theme-color" content="#F5F5F0" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HRNtrack">
+    
+    <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/fonts.css">
+
+    <link rel="stylesheet" href="assets/common.css">
+
+    <style>
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            margin: 0; 
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
+        }
+        body.auth-ready { opacity: 1; }
+
+        /* --- NAVIGATION SUPÉRIEURE --- */
+
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Mobile Hamburger Button */
+
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+
+        /* --- CONTAINER & DONATIONS --- */
+        /* MODALS & INPUTS */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(26, 26, 26, 0.7); 
+            z-index: 3000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px); 
+            padding: 1rem;
+        }
+        .modal-content { 
+            background: var(--card-bg); 
+            border: 1px solid var(--color-border);
+            width: 100%; 
+            max-width: 440px; 
+            padding: 2.2rem; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+        }
+        
+        input, select, textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid var(--color-border);
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: var(--surface);
+            color: var(--color-dark); outline: none; transition: border-color 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--color-dark); }
+
+        .btn-save { 
+            width: 100%; 
+            background: var(--color-dark); 
+            color: var(--color-light); 
+            border: 1px solid var(--color-dark); 
+            padding: 12px; 
+            font-family: var(--font-sans);
+            font-weight: 600; 
+            font-size: 0.82rem; 
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: all 0.25s ease; 
+        }
+        .btn-save:hover { background: transparent; color: var(--color-dark); }
+        .btn-cancel { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--color-text-sub); 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-size: 0.78rem; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .btn-cancel:hover { color: var(--color-red); }
+
+        .auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--color-dark); }
+        .auth-separator { margin: 1.2rem 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--color-text-sub); text-align: center; }
+        
+        /* BOUTON KO-FI CUSTOM */
+        /* --- BOURSE AUX ÉCHANGES --- */
+        .container { max-width: 1100px; margin: 36px auto 60px; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        .page-head { margin-bottom: 22px; }
+        .page-kicker { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-sub); margin: 0 0 6px; }
+        .page-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 6px; }
+        .page-sub { color: var(--text-sub); font-size: 0.9rem; margin: 0; max-width: 680px; line-height: 1.6; }
+        .state-box { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 50px 24px; text-align: center; color: var(--text-sub); }
+        .state-box strong { display: block; color: var(--text-main); font-size: 1.05rem; margin-bottom: 8px; }
+        .state-box .cta { margin-top: 18px; }
+        .cta { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: var(--color-dark); color: var(--color-light); border: 1px solid var(--color-dark); padding: 10px 18px; font: 600 0.78rem var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .cta:hover { background: transparent; color: var(--color-dark); }
+        .cta.ghost { background: var(--surface); color: var(--text-main); border-color: var(--color-border); }
+        .cta.ghost:hover { border-color: var(--color-dark); }
+        .spinner { width: 32px; height: 32px; margin: 0 auto 14px; border: 3px solid var(--color-border); border-top-color: var(--color-green); border-radius: 50%; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px; }
+        .sum { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 14px 16px; }
+        .sum-label { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sub); }
+        .sum-value { display: block; font-size: 1.4rem; font-weight: 800; margin-top: 2px; }
+
+        .toolbar { background: var(--card-bg); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 16px; }
+        .toolbar input[type=search] { flex: 1 1 240px; margin: 0; }
+        .chip { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--color-border); background: var(--surface); color: var(--text-sub); font: 600 0.74rem var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; white-space: nowrap; }
+        .chip.active { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
+        .result-line { font-size: 0.8rem; color: var(--text-sub); margin: 0 2px 14px; }
+
+        .matches { display: grid; gap: 16px; }
+        .match { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 18px; }
+        .match.mutual { border-color: var(--color-green); box-shadow: 0 0 0 1px var(--color-green) inset, var(--shadow); }
+        .match-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+        .match-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--color-sand); border: 2px solid var(--color-gold); overflow: hidden; display: flex; align-items: center; justify-content: center; font-weight: 800; color: var(--text-sub); flex-shrink: 0; }
+        .match-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .match-who { flex: 1; min-width: 160px; }
+        .match-name { font-size: 1.05rem; font-weight: 800; margin: 0; word-break: break-word; }
+        .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+        .tag { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 2px 8px; background: var(--color-sand); color: var(--text-sub); }
+        .tag.mutual { background: var(--color-green); color: #fff; }
+        .tag.wish { background: #E67E22; color: #fff; }
+        .match-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .match-actions .cta { padding: 8px 12px; font-size: 0.7rem; }
+        .contact { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; background: var(--color-sand); padding: 8px 10px; margin-bottom: 14px; word-break: break-word; }
+        .contact b { font-weight: 700; }
+        .contact button { margin-left: auto; background: none; border: 1px solid var(--color-border); padding: 3px 8px; font: 600 0.68rem var(--font-sans); cursor: pointer; color: var(--text-main); }
+        .contact.none { color: var(--text-sub); font-style: italic; }
+        .give { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .give h3 { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 8px; color: var(--text-sub); }
+        .give h3 span { color: var(--text-main); }
+        .figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)); gap: 8px; }
+        .fig { position: relative; background: var(--color-sand); border: 1px solid var(--color-border); padding: 4px 4px 6px; text-align: center; min-width: 0; }
+        .fig.wished { border-color: #E67E22; }
+        .fig img { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; }
+        .fig span { display: block; font-size: 0.6rem; font-weight: 600; line-height: 1.25; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .fig i { position: absolute; top: 3px; right: 3px; font-style: normal; font-size: 0.7rem; }
+        .figs-empty { font-size: 0.78rem; color: var(--text-sub); padding: 10px 0; }
+        .more { font-size: 0.72rem; color: var(--text-sub); margin-top: 6px; }
+
+        @media (max-width: 767px) {
+            .container { margin: 16px auto 40px; padding: 0 12px; }
+            .page-title { font-size: 1.4rem; }
+            .summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .give { grid-template-columns: 1fr; }
+            .match { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <script src="assets/header.js" data-active="echanges"></script>
+
+    <main class="container">
+        <div class="page-head">
+            <p class="page-kicker" data-t="kicker">Communauté</p>
+            <h1 class="page-title" data-t="title">Bourse aux échanges</h1>
+            <p class="page-sub" data-t="subtitle">HRNtrack compare vos doublons avec la wishlist des autres collectionneurs, et inversement. Contactez-les pour échanger vos figurines.</p>
+        </div>
+
+        <div id="state" class="state-box"><div class="spinner"></div><span data-t="loading">Recherche des échanges possibles…</span></div>
+
+        <div id="content" hidden>
+            <section class="summary">
+                <div class="sum"><span class="sum-label" data-t="sumMembers">Participants</span><span class="sum-value" id="s-members">0</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumMatches">Échanges possibles</span><span class="sum-value" id="s-matches">0</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumMutual">Réciproques</span><span class="sum-value" id="s-mutual">0</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumDoubles">Mes doublons</span><span class="sum-value" id="s-doubles">0</span></div>
+            </section>
+
+            <div class="toolbar">
+                <input type="search" id="search" autocomplete="off" aria-label="Rechercher">
+                <button type="button" class="chip active" data-filter="all" data-t="fAll">Tous</button>
+                <button type="button" class="chip" data-filter="mutual" data-t="fMutual">Réciproques</button>
+                <button type="button" class="chip" data-filter="wish" data-t="fWish">Ma wishlist</button>
+            </div>
+            <p class="result-line" id="result-line" aria-live="polite"></p>
+            <div class="matches" id="matches"></div>
+        </div>
+    </main>
+
+    <!-- MODAL D'AUTHENTIFICATION -->
+    <div id="auth-modal" class="modal-overlay">
+        <div class="modal-content" style="text-align:center; max-width:440px;">
+            <div class="auth-title" data-t="authLogin">Connexion</div>
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">Sauvegardez votre collection dans le cloud.</p>
+            
+            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:12px;">
+            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:12px;">
+            
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
+            <button class="btn-save" onclick="window.handleLogin()" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button class="btn-save" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button class="btn-save" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">Créer un compte (Email)</button>
+            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="assets/site.js"></script>
+
+    <script type="module">
+        import { app } from './assets/firebase.js';
+        import { db } from './assets/db.js';
+        import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { auth, setupAuthModal, updateAuthButtons, updateAuthLabel } from './assets/auth.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { collection, doc, getDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { recordVisit } from './assets/activity.js';
+        import { PUBLIC_COLLECTION, toPublicProfile } from './assets/public-profile.js';
+        import { computeTradeMatches, myTradeSummary } from './assets/trade.js';
+        import { baseData } from './data.js?v=2026-11-16-2';
+
+        const translations = withCommon({
+            fr: {
+                kicker: "Communauté", title: "Bourse aux échanges",
+                subtitle: "HRNtrack compare vos doublons avec la wishlist des autres collectionneurs, et inversement. Contactez-les pour échanger vos figurines.",
+                loading: "Recherche des échanges possibles…",
+                sumMembers: "Participants", sumMatches: "Échanges possibles", sumMutual: "Réciproques", sumDoubles: "Mes doublons",
+                fAll: "Tous", fMutual: "Réciproques", fWish: "Ma wishlist", searchPh: "Rechercher un pseudo ou une figurine…",
+                result: "{n} collectionneur(s)",
+                theyGive: "Peut te proposer", iGive: "Tu peux lui proposer", nothing: "Rien pour l'instant.", more: "+ {n} autre(s)",
+                tagMutual: "Échange réciproque", tagWish: "{n} de ta wishlist", tagWishThem: "{n} de sa wishlist",
+                contact: "Contact :", noContact: "Pas de contact indiqué : passe par sa page de collection ou le Discord HRNtrack.", copy: "Copier", copied: "Contact copié !",
+                seeColl: "Voir sa collection",
+                needLogin: "Connecte-toi pour accéder à la bourse", needLoginHint: "La bourse est réservée aux membres qui y participent.", login: "Se connecter",
+                needOptIn: "Rejoins la bourse aux échanges", needOptInHint: "Active « Participer à la bourse aux échanges » dans Mon compte. Les autres membres verront alors ton pseudo, tes doublons et ta wishlist.", goAccount: "Ouvrir Mon compte",
+                noDoubles: "Tu n'as pas encore de doublon : indique des quantités supérieures à 1 dans ta Collection pour proposer des échanges.",
+                empty: "Aucun échange possible pour le moment", emptyHint: "Reviens plus tard : de nouveaux collectionneurs rejoignent la bourse régulièrement.",
+                noResults: "Aucun résultat pour ce filtre.",
+                errLoad: "La bourse n'est pas disponible pour le moment", errLoadHint: "Réessaie dans quelques minutes.",
+                wished: "Dans la wishlist"
+            },
+            en: {
+                kicker: "Community", title: "Trading board",
+                subtitle: "HRNtrack compares your duplicates with other collectors' wishlists, and the other way round. Contact them to trade your figures.",
+                loading: "Looking for possible trades…",
+                sumMembers: "Members", sumMatches: "Possible trades", sumMutual: "Two-way", sumDoubles: "My duplicates",
+                fAll: "All", fMutual: "Two-way", fWish: "My wishlist", searchPh: "Search a nickname or a figure…",
+                result: "{n} collector(s)",
+                theyGive: "Can offer you", iGive: "You can offer", nothing: "Nothing yet.", more: "+ {n} more",
+                tagMutual: "Two-way trade", tagWish: "{n} from your wishlist", tagWishThem: "{n} from their wishlist",
+                contact: "Contact:", noContact: "No contact given: use their collection page or the HRNtrack Discord.", copy: "Copy", copied: "Contact copied!",
+                seeColl: "See their collection",
+                needLogin: "Log in to access the trading board", needLoginHint: "The board is for members who take part in it.", login: "Log in",
+                needOptIn: "Join the trading board", needOptInHint: "Turn on “Join the trading board” in My Account. Other members will then see your nickname, duplicates and wishlist.", goAccount: "Open My Account",
+                noDoubles: "You have no duplicates yet: set quantities above 1 in your Collection to offer trades.",
+                empty: "No possible trade right now", emptyHint: "Come back later: new collectors join the board regularly.",
+                noResults: "No result for this filter.",
+                errLoad: "The trading board is not available right now", errLoadHint: "Please try again in a few minutes.",
+                wished: "In the wishlist"
+            }
+        });
+
+        let currentLang = (() => { try { return localStorage.getItem('HRN_LANG') || 'fr'; } catch (e) { return 'fr'; } })();
+        const t = (k) => translations[currentLang][k] ?? translations.fr[k] ?? k;
+        const fmt = (k, v) => t(k).replace(/\{(\w+)\}/g, (_, n) => v[n] ?? '');
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const catalog = new Map(baseData.map(b => [String(b.ID), b]));
+        const catalogIds = new Set(catalog.keys());
+        const MAX_FIGS = 12;
+
+        let state = { status: 'loading', matches: [], members: 0, summary: null, filter: 'all', search: '' };
+
+        // ---------- Affichage ----------
+        function showState(titleKey, hintKey, action) {
+            const box = document.getElementById('state');
+            box.hidden = false;
+            document.getElementById('content').hidden = true;
+            box.innerHTML = `<strong>${esc(t(titleKey))}</strong>${esc(t(hintKey))}` + (action ? `<br><span class="cta-wrap">${action}</span>` : '');
+        }
+
+        function figHtml(x) {
+            const b = catalog.get(x.id);
+            if (!b) return '';
+            return `<div class="fig${x.wished ? ' wished' : ''}" title="${esc(b.Name)} · ${esc(b.Serie)}${x.wished ? ' · ' + esc(t('wished')) : ''}">
+                ${x.wished ? '<i aria-hidden="true">⭐</i>' : ''}<img src="${esc(b.Image)}" alt="${esc(b.Name)}" loading="lazy" decoding="async"><span>${esc(b.Name)}</span></div>`;
+        }
+        function figsBlock(list) {
+            if (!list.length) return `<div class="figs-empty">${esc(t('nothing'))}</div>`;
+            const shown = list.slice(0, MAX_FIGS);
+            return `<div class="figs">${shown.map(figHtml).join('')}</div>` + (list.length > MAX_FIGS ? `<div class="more">${esc(fmt('more', { n: list.length - MAX_FIGS }))}</div>` : '');
+        }
+
+        function matchHtml(m) {
+            const initial = (m.pseudo || '?').trim().charAt(0).toUpperCase() || '?';
+            const avatar = m.avatar && /^https:\/\//i.test(m.avatar) ? `<img src="${esc(m.avatar)}" alt="">` : esc(initial);
+            const wishForMe = m.theyGive.filter(x => x.wished).length, wishForThem = m.iGive.filter(x => x.wished).length;
+            const tags = [
+                m.mutual ? `<span class="tag mutual">${esc(t('tagMutual'))}</span>` : '',
+                wishForMe ? `<span class="tag wish">⭐ ${esc(fmt('tagWish', { n: wishForMe }))}</span>` : '',
+                wishForThem ? `<span class="tag">${esc(fmt('tagWishThem', { n: wishForThem }))}</span>` : ''
+            ].join('');
+            const contact = m.contact
+                ? `<div class="contact"><span>${esc(t('contact'))} <b>${esc(m.contact)}</b></span><button type="button" data-copy="${esc(m.contact)}">${esc(t('copy'))}</button></div>`
+                : `<div class="contact none">${esc(t('noContact'))}</div>`;
+            return `<article class="match${m.mutual ? ' mutual' : ''}">
+                <div class="match-head">
+                    <div class="match-avatar" aria-hidden="true">${avatar}</div>
+                    <div class="match-who"><h2 class="match-name">${esc(m.pseudo || '—')}</h2><div class="tags">${tags}</div></div>
+                    <div class="match-actions"><a class="cta ghost" href="share.html?uid=${encodeURIComponent(m.uid)}" target="_blank" rel="noopener">${esc(t('seeColl'))}</a></div>
+                </div>
+                ${contact}
+                <div class="give">
+                    <div><h3>${esc(t('theyGive'))} <span>(${m.theyGive.length})</span></h3>${figsBlock(m.theyGive)}</div>
+                    <div><h3>${esc(t('iGive'))} <span>(${m.iGive.length})</span></h3>${figsBlock(m.iGive)}</div>
+                </div>
+            </article>`;
+        }
+
+        function renderList() {
+            const q = state.search.trim().toLowerCase();
+            const nameOf = (id) => (catalog.get(id)?.Name || '').toLowerCase();
+            const list = state.matches.filter(m => {
+                if (state.filter === 'mutual' && !m.mutual) return false;
+                if (state.filter === 'wish' && !m.theyGive.some(x => x.wished)) return false;
+                if (!q) return true;
+                return m.pseudo.toLowerCase().includes(q) || m.theyGive.concat(m.iGive).some(x => nameOf(x.id).includes(q));
+            });
+            document.getElementById('result-line').textContent = fmt('result', { n: list.length });
+            document.getElementById('matches').innerHTML = list.length
+                ? list.map(matchHtml).join('')
+                : `<div class="state-box"><strong>${esc(t(state.matches.length ? 'noResults' : 'empty'))}</strong>${state.matches.length ? '' : esc(t('emptyHint'))}</div>`;
+        }
+
+        function render() {
+            if (state.status === 'login') return showState('needLogin', 'needLoginHint', `<button type="button" class="cta" onclick="window.toggleAuthModal()">${esc(t('login'))}</button>`);
+            if (state.status === 'optin') return showState('needOptIn', 'needOptInHint', `<a class="cta" href="compte.html">${esc(t('goAccount'))}</a>`);
+            if (state.status === 'error') return showState('errLoad', 'errLoadHint');
+            if (state.status !== 'ready') return;
+            document.getElementById('state').hidden = true;
+            document.getElementById('content').hidden = false;
+            document.getElementById('s-members').textContent = state.members;
+            document.getElementById('s-matches').textContent = state.matches.length;
+            document.getElementById('s-mutual').textContent = state.matches.filter(m => m.mutual).length;
+            document.getElementById('s-doubles').textContent = state.summary.doubles;
+            if (!state.summary.doubles && !document.getElementById('hint-doubles')) {
+                const p = document.createElement('p');
+                p.id = 'hint-doubles'; p.className = 'result-line';
+                document.querySelector('.toolbar').before(p);
+            }
+            const hint = document.getElementById('hint-doubles');
+            if (hint) hint.textContent = state.summary.doubles ? '' : t('noDoubles');
+            renderList();
+        }
+
+        function updateUIText() {
+            syncLangToggle(currentLang);
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-t]').forEach(el => { const v = translations[currentLang][el.getAttribute('data-t')]; if (v) el.textContent = v; });
+            document.getElementById('search').placeholder = t('searchPh');
+            updateAuthLabel(translations[currentLang]);
+            render();
+        }
+        window.updateUIText = updateUIText;
+        window.toggleLanguage = () => {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            try { localStorage.setItem('HRN_LANG', currentLang); } catch (e) { /* stockage indisponible */ }
+            updateUIText();
+        };
+        setupAuthModal(() => currentLang);
+        window.onclick = (e) => { if (e.target.classList.contains('modal-overlay')) e.target.style.display = 'none'; };
+
+        // ---------- Événements ----------
+        document.querySelector('.toolbar').addEventListener('click', (e) => {
+            const chip = e.target.closest('.chip');
+            if (!chip) return;
+            state.filter = chip.dataset.filter;
+            document.querySelectorAll('.toolbar .chip').forEach(c => c.classList.toggle('active', c === chip));
+            renderList();
+        });
+        document.getElementById('search').addEventListener('input', (e) => { state.search = e.target.value; renderList(); });
+        document.getElementById('matches').addEventListener('click', async (e) => {
+            const btn = e.target.closest('[data-copy]');
+            if (!btn) return;
+            try { await navigator.clipboard.writeText(btn.dataset.copy); hrnNotify(t('copied'), 'success'); }
+            catch (err) { prompt(t('contact'), btn.dataset.copy); }
+        });
+
+        // ---------- Données ----------
+        async function load(user) {
+            const snap = await getDoc(doc(db, 'users', user.uid));
+            const data = snap.exists() ? snap.data() : {};
+            const profile = data.profile || {};
+            if (profile.trade !== true || profile.isPublic === false) { state.status = 'optin'; return render(); }
+            const me = { uid: user.uid, ...(toPublicProfile(data) || { items: [] }) };
+            try {
+                const res = await getDocs(query(collection(db, PUBLIC_COLLECTION), where('trade', '==', true), limit(500)));
+                const others = res.docs.map(d => ({ uid: d.id, ...d.data() }));
+                state.members = others.filter(o => o.uid !== user.uid).length + 1;
+                state.matches = computeTradeMatches(me, others, catalogIds);
+                state.summary = myTradeSummary(me);
+                state.status = 'ready';
+            } catch (e) {
+                console.error(e);
+                state.status = 'error';
+            }
+            render();
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            updateAuthButtons(!!user);
+            if (user) { recordVisit(db, user); state.status = 'loading'; load(user).catch(e => { console.error(e); state.status = 'error'; render(); }); }
+            else { state.status = 'login'; render(); }
+            document.body.classList.add('auth-ready', 'ready');
+        });
+
+        fetch('footer.html').then(r => r.text()).then(d => {
+            document.getElementById('footer-placeholder').innerHTML = d;
+            if (window.initCookieLogic) window.initCookieLogic();
+            updateUIText();
+        }).catch(e => console.error('Erreur Footer:', e));
+        updateUIText();
+    </script>
+</body>
+</html>

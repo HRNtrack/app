@@ -272,8 +272,13 @@ button.lang-toggle {
 /* Écrans moyens : on resserre la barre pour que le menu ne touche pas le logo */
 @media (min-width: 993px) and (max-width: 1240px) {
     .top-nav { padding: 0 1.5rem; }
-    .nav-center { gap: 1.2rem; }
+    .nav-center { gap: 0.95rem; }
     .nav-right { gap: 0.6rem; }
+    .nav-center .nav-link { font-size: 0.76rem; letter-spacing: 0.05em; }
+}
+/* 6 liens + boutons : sous 1 140 px, le bouton « Soutenir » de la barre est masqué (il reste dans le menu mobile et le pied de page) */
+@media (min-width: 993px) and (max-width: 1140px) {
+    .nav-right a.btn-auth-trigger[href*="ko-fi"] { display: none; }
 }
 
 /* --- APPLICATION INSTALLABLE (PWA) --- */

@@ -104,3 +104,55 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
     delete s.seriesMap;
     return s;
 }
+
+/**
+ * Évolution mois par mois de la valeur estimée de la collection et de l'argent dépensé.
+ * @param {Array<object>} items    catalogue fusionné avec la collection
+ * @param {{months: string[], items: Record<string, Array<number|null>>}} history   market_prices/history ("YYYY-MM")
+ * @param {Record<string, number>} cotes   cote actuelle en € par ID (sert au dernier mois et aux trous)
+ * @param {Record<string, number>} rates   1 devise = X €
+ * Une figurine compte à partir du mois de sa date d'achat ; sans date, elle compte sur toute la période.
+ * @returns {{months: string[], value: number[], spent: number[], qty: number[], undated: number, sameStart: number, sameEnd: number} | null}
+ * sameStart / sameEnd : valeur, au premier et au dernier mois, des seules figurines déjà possédées au premier mois.
+ */
+export function computeValueHistory(items, history, cotes = {}, rates = { EUR: 1 }) {
+    const months = history && Array.isArray(history.months) ? history.months : [];
+    if (!months.length) return null;
+    const toEur = (p, cur) => p * (rates[String(cur || 'EUR').toUpperCase()] ?? 1);
+    const ends = months.map(m => { const [y, mo] = m.split('-').map(Number); return new Date(y, mo, 1).getTime(); });
+    const last = months.length - 1;
+    const value = months.map(() => 0), spent = months.map(() => 0), qtyAt = months.map(() => 0);
+    let undated = 0;
+    let sameStart = 0, sameEnd = 0;   // figurines déjà là au premier mois : évolution « à collection égale »
+
+    for (const item of items) {
+        if (!OWNED.has(String(item.Status || '').toLowerCase())) continue;
+        const rawQty = parseInt(item.Quantity, 10);
+        const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 1;
+        const price = parseFloat(item['Purchase price']);
+        const paid = Number.isFinite(price) && price > 0 ? toEur(price, item.Currency) : 0;
+        const d = item['Purchase date'] ? new Date(item['Purchase date']) : null;
+        const t = d && !isNaN(d) ? d.getTime() : null;
+        if (t === null) undated += qty;
+        const series = (history.items && history.items[item.ID]) || null;
+        const current = Number(cotes[item.ID]) || 0;
+
+        for (let k = 0; k <= last; k++) {
+            if (t !== null && t >= ends[k]) continue;   // pas encore achetée ce mois-là
+            let v = null;
+            if (k === last && current > 0) v = current;   // dernier mois aligné sur la cote affichée partout
+            if (v === null && series) {
+                v = series[k] ?? null;
+                // trou dans l'historique : valeur connue la plus proche (d'abord avant, puis après)
+                for (let j = k - 1; v === null && j >= 0; j--) v = series[j] ?? null;
+                for (let j = k + 1; v === null && j <= last; j++) v = series[j] ?? null;
+            }
+            if (v === null) v = current || paid || 0;
+            value[k] += v * qty;
+            spent[k] += paid * qty;
+            qtyAt[k] += qty;
+            if (t === null || t < ends[0]) { if (k === 0) sameStart += v * qty; if (k === last) sameEnd += v * qty; }
+        }
+    }
+    return { months, value: value.map(Math.round), spent: spent.map(Math.round), qty: qtyAt, undated, sameStart: Math.round(sameStart), sameEnd: Math.round(sameEnd) };
+}

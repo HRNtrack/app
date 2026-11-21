@@ -4,18 +4,18 @@
 //  - images et polices : CACHE D'ABORD puis mise à jour en arrière-plan ;
 //  - Firebase, Google, statistiques : jamais interceptés (Firestore a son propre cache hors ligne).
 // Changer VERSION quand la liste PRECACHE change : les anciens caches sont alors supprimés.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CODE = 'hrn-code-' + VERSION;
 const MEDIA = 'hrn-media-' + VERSION;
 const MEDIA_MAX = 600;   // nombre maximum d'images gardées
 
 const PRECACHE = [
     '/', '/index.html', '/dashboard.html', '/nouveautes.html', '/statistiques.html', '/releases.html',
-    '/share.html', '/compte.html', '/privacy.html', '/contact.html', '/donateurs.html', '/offline.html', '/footer.html',
+    '/share.html', '/echanges.html', '/compte.html', '/privacy.html', '/contact.html', '/donateurs.html', '/offline.html', '/footer.html',
     '/manifest.webmanifest',
     '/assets/common.css', '/assets/fonts.css', '/assets/theme.js', '/assets/site.js', '/assets/header.js',
     '/assets/firebase.js', '/assets/db.js', '/assets/auth.js', '/assets/i18n.js', '/assets/activity.js',
-    '/assets/collection-stats.js', '/assets/public-profile.js', '/assets/search.js', '/assets/cote-chart.js', '/assets/story.js',
+    '/assets/collection-stats.js', '/assets/public-profile.js', '/assets/search.js', '/assets/cote-chart.js', '/assets/story.js', '/assets/trade.js',
     '/assets/fonts/poppins-400-latin.woff2', '/assets/fonts/poppins-500-latin.woff2', '/assets/fonts/poppins-600-latin.woff2',
     '/assets/fonts/poppins-700-latin.woff2', '/assets/fonts/poppins-800-latin.woff2',
     '/assets/img/logo-blanc.png', '/assets/img/favicon.png', '/assets/img/icon-192.png'

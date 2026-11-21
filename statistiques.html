@@ -189,6 +189,12 @@
         .sub-h { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-sub); margin: 6px 0 4px; }
         .chart-box { position: relative; height: 260px; width: 100%; }
         .chart-box.small { height: 210px; }
+        .value-trend { font-size: 0.8rem; font-weight: 700; }
+        .value-trend.up { color: var(--color-green); }
+        .value-trend.down { color: var(--color-red); }
+        .value-trend.flat { color: var(--text-sub); }
+        .chart-note { margin: 10px 0 0; font-size: 0.72rem; color: var(--text-sub); }
+        .chart-note:empty { display: none; }
         .chart-empty { display: none; text-align: center; color: var(--text-sub); font-size: 0.82rem; padding: 40px 10px; }
         .empty-note { color: var(--text-sub); font-size: 0.82rem; text-align: center; padding: 20px 10px; }
 
@@ -449,6 +455,17 @@
             <div class="series-grid" id="series-grid"></div>
         </section>
 
+        <!-- 4 bis. ÉVOLUTION DE LA VALEUR (cotes communautaires sur 6 mois) -->
+        <section class="chart-card block">
+            <div class="card-head">
+                <h2 data-t="chartValue">Évolution de la valeur</h2>
+                <span class="value-trend" id="value-trend"></span>
+            </div>
+            <div class="chart-box" id="box-value"><canvas id="chartValue"></canvas></div>
+            <div class="chart-empty" id="empty-value" data-t="emptyValue">Pas encore assez d'historique de cotes pour tracer la courbe.</div>
+            <p class="chart-note" id="value-note"></p>
+        </section>
+
         <!-- 5. GRAPHIQUES -->
         <section class="two-col">
             <div class="chart-card">
@@ -547,7 +564,7 @@
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         import { baseData, seriesBadges } from './data.js?v=2026-11-16-2';
-        import { computeCollectionStats, isSpecialSerie } from './assets/collection-stats.js';
+        import { computeCollectionStats, isSpecialSerie, computeValueHistory } from './assets/collection-stats.js';
         import { drawStory, canvasToBlob } from './assets/story.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
 
@@ -617,6 +634,10 @@
                 storyShowValue: "Afficher la valeur et les prix", storyShare: "Partager", storyDownload: "Télécharger",
                 storyHint: "Ajoute l'image à ta story depuis ta galerie.", storyHintShare: "« Partager » ouvre directement Instagram ou tes autres applis.",
                 storyErr: "Impossible de créer l'image. Réessaie dans un instant.",
+                chartValue: "Évolution de la valeur", emptyValue: "Pas encore assez d'historique de cotes pour tracer la courbe.",
+                labelValue: "Valeur estimée", labelSpent: "Dépensé", valueTrend: "{s}{n} % en {m} mois, à collection égale",
+                valueUndated: "{n} figurine(s) sans date d'achat sont comptées sur toute la période.",
+                sharePrivate: "Votre collection est privée : activez « Collection publique » dans Mon compte pour partager votre lien.",
                 badges: "{n} / {t} débloqués", badgeUnlocked: "✓ Débloqué", badgeLocked: "🔒 À débloquer", badgeProgress: "Progression : {p}"
             },
             en: {
@@ -647,6 +668,10 @@
                 storyShowValue: "Show value and prices", storyShare: "Share", storyDownload: "Download",
                 storyHint: "Add the image to your story from your gallery.", storyHintShare: "“Share” opens Instagram or your other apps directly.",
                 storyErr: "Could not create the image. Please try again.",
+                chartValue: "Value over time", emptyValue: "Not enough market value history yet to draw the chart.",
+                labelValue: "Estimated value", labelSpent: "Spent", valueTrend: "{s}{n}% over {m} months, same figures",
+                valueUndated: "{n} figure(s) without a purchase date are counted over the whole period.",
+                sharePrivate: "Your collection is private: turn on “Public collection” in My Account to share your link.",
                 badges: "{n} / {t} unlocked", badgeUnlocked: "✓ Unlocked", badgeLocked: "🔒 Locked", badgeProgress: "Progress: {p}"
             }
         };
@@ -659,6 +684,12 @@
 
         let myCollection = [];
         let storyPseudo = '';
+        let profilePrivate = false;
+        let valueHistory = null;
+        getDoc(doc(db, 'market_prices', 'history')).then(snap => {
+            valueHistory = snap.exists() ? snap.data() : null;
+            if (lastStats) updateCharts(lastStats);
+        }).catch(() => { /* pas d'historique : le graphique affiche un message */ });
         let lastStats = null;
         let rates = { ...FALLBACK_RATES };
         let seriesFilter = 'started';
@@ -749,6 +780,7 @@
                 try {
                     const snap = await getDoc(doc(db, "users", user.uid));
                     storyPseudo = snap.exists() && snap.data().profile ? String(snap.data().profile.pseudo || '') : '';
+                    profilePrivate = !!(snap.exists() && snap.data().profile && snap.data().profile.isPublic === false);
                     const cloudData = snap.exists() ? (snap.data().collection || []) : [];
                     const byId = new Map(cloudData.map(i => [i.ID, i]));
                     myCollection = baseData.map(b => {
@@ -866,6 +898,32 @@
             charts = [];
             const base = { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } };
 
+            // Valeur estimée vs dépensé, mois par mois
+            const vh = valueHistory ? computeValueHistory(myCollection, valueHistory, communityPrices, rates) : null;
+            const trendEl = document.getElementById('value-trend');
+            trendEl.textContent = ''; trendEl.className = 'value-trend';
+            document.getElementById('value-note').textContent = '';
+            if (showChart('box-value', 'empty-value', !!vh && vh.value.some(v => v > 0))) {
+                const labels = vh.months.map(m => new Date(m + '-01').toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { month: 'short', year: '2-digit' }));
+                charts.push(new Chart(document.getElementById('chartValue'), {
+                    type: 'line',
+                    data: { labels, datasets: [
+                        { label: t('labelValue'), data: vh.value, borderColor: '#6A8C47', backgroundColor: 'rgba(106, 140, 71, 0.14)', fill: true, tension: 0.3, pointRadius: 3 },
+                        { label: t('labelSpent'), data: vh.spent, borderColor: '#C6A875', borderDash: [6, 4], fill: false, tension: 0.3, pointRadius: 2 }
+                    ] },
+                    options: { ...base, interaction: { mode: 'index', intersect: false },
+                        scales: { y: { beginAtZero: true, ticks: { callback: v => eur(v) } } },
+                        plugins: { legend: { display: true, position: 'bottom', labels: { boxWidth: 12, font: { family: 'Poppins' } } }, tooltip: { callbacks: { label: c => `${c.dataset.label} : ${eur(c.raw)}` } } } }
+                }));
+                // Évolution « à collection égale » : seules les figurines déjà possédées au premier mois (les achats ne gonflent pas le %)
+                if (vh.sameStart > 0) {
+                    const pct = Math.round((vh.sameEnd - vh.sameStart) / vh.sameStart * 100);
+                    trendEl.textContent = fmt('valueTrend', { s: pct > 0 ? '▲ +' : pct < 0 ? '▼ ' : '', n: pct, m: vh.months.length - 1 });
+                    trendEl.classList.add(pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat');
+                }
+                if (vh.undated) document.getElementById('value-note').textContent = fmt('valueUndated', { n: vh.undated });
+            }
+
             // Évolution cumulée
             const dates = Object.keys(s.timeline).sort();
             if (showChart('box-timeline', 'empty-timeline', dates.length > 0)) {
@@ -978,6 +1036,7 @@
                 hrnNotify("Vous devez être connecté pour partager votre profil !");
                 return;
             }
+            if (profilePrivate) { hrnNotify(t('sharePrivate'), 'info'); return; }
             const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
             const link = `${baseUrl}/share.html?uid=${user.uid}`;
             

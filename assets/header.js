@@ -14,6 +14,7 @@
         { page: 'index', key: 'navHome', label: 'Accueil' },
         { page: 'dashboard', key: 'navCollection', label: 'Collection' },
         { page: 'statistiques', key: 'navStats', label: 'Stats' },
+        { page: 'echanges', key: 'navTrade', label: 'Échanges' },
         { page: 'donateurs', key: 'navDonors', label: 'Dons' },
         { page: 'contact', key: 'navContact', label: 'Contact' }
     ];
