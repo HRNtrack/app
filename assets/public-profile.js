@@ -5,6 +5,7 @@
 // Les prix, dates d'achat, états, notes et dates de visite restent dans users/{uid} (privé).
 // Collection privée (profile.isPublic === false) : pas de fiche publique du tout.
 import { doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { cleanContacts } from './socials.js';
 
 export const PUBLIC_COLLECTION = 'public_profiles';
 
@@ -38,7 +39,9 @@ export function toPublicProfile(data) {
     // Champs ajoutés seulement pour les participants à la bourse (les autres fiches gardent leur forme d'origine)
     if (profile.trade === true) {
         out.trade = true;
-        out.contact = typeof profile.contact === 'string' ? profile.contact.trim().slice(0, 80) : '';
+        // Réseaux : { instagram: 'pseudo', discord: '…' } (un champ par réseau dans Mon compte) ; ancien contact texte gardé à défaut
+        const contacts = cleanContacts(profile.contacts);
+        out.contact = Object.keys(contacts).length ? contacts : (typeof profile.contact === 'string' ? profile.contact.trim().slice(0, 80) : '');
     }
     return out;
 }
@@ -46,7 +49,7 @@ export function toPublicProfile(data) {
 /** Vrai si deux fiches publiques ont le même contenu (la date de mise à jour est ignorée). null = pas de fiche. */
 export function samePublicProfile(a, b) {
     if (!a || !b) return !a && !b;
-    const strip = (p) => JSON.stringify({ pseudo: p.pseudo || '', avatar: p.avatar || '', items: p.items || [], trade: p.trade === true, contact: p.trade === true ? (p.contact || '') : '' });
+    const strip = (p) => JSON.stringify({ pseudo: p.pseudo || '', avatar: p.avatar || '', items: p.items || [], trade: p.trade === true, contact: p.trade === true ? (p.contact && typeof p.contact === 'object' ? cleanContacts(p.contact) : (p.contact || '')) : '' });   // objet : clés toujours dans le même ordre (cleanContacts)
     return strip(a) === strip(b);
 }
 

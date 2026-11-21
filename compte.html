@@ -110,6 +110,12 @@
         .toggle-row small { display: block; font-size: 0.75rem; color: var(--text-sub); line-height: 1.5; margin-top: 2px; text-transform: none; letter-spacing: normal; font-weight: 400; }
         .toggle-row.disabled { opacity: 0.5; cursor: not-allowed; }
         #trade-contact-group[hidden] { display: none; }
+        .contact-hint { font-size: 0.75rem; color: var(--text-sub); margin: -4px 0 10px; text-transform: none; letter-spacing: normal; font-weight: 400; }
+        .net-field { display: flex; align-items: stretch; margin-bottom: 8px; }
+        .net-field .net-badge { width: 42px; flex: 0 0 42px; display: flex; align-items: center; justify-content: center; background: var(--net); color: #fff; }
+        .net-field .net-badge svg { width: 18px; height: 18px; }
+        .net-field input { flex: 1; min-width: 0; margin: 0; border-left: none; }
+        .net-field input:not(:placeholder-shown) { font-weight: 600; }
         label { display: block; font-size: 0.72rem; font-weight: 700; color: var(--color-dark); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
         input, select { 
             width: 100%; padding: 10px 12px; border: 1px solid var(--color-border); 
@@ -237,8 +243,9 @@
                 <span><strong data-t="lblTrade">Participer à la bourse aux échanges</strong><small data-t="lblTradeHint">Les membres connectés voient votre pseudo, vos doublons et votre wishlist pour vous proposer des échanges.</small></span>
             </label>
             <div class="form-group" id="trade-contact-group" hidden>
-                <label data-t="lblContact">Contact pour les échanges (facultatif)</label>
-                <input type="text" id="profile-contact" maxlength="80" placeholder="Instagram @…, Discord …">
+                <label data-t="lblContact">Tes réseaux pour les échanges (facultatif)</label>
+                <p class="contact-hint" data-t="lblContactHint">Remplis seulement ceux que tu veux montrer : leur logo apparaîtra sur ta fiche dans la bourse. Tu peux coller l'adresse de ton profil, le pseudo est repris tout seul.</p>
+                <div id="contact-fields"></div>
             </div>
             <button class="btn-action btn-save-profile" onclick="window.saveUserProfile()" data-t="btnSaveProfile">Enregistrer le profil</button>
             
@@ -312,6 +319,7 @@
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
         import { syncPublicProfile, deletePublicProfile } from './assets/public-profile.js';
+        import { NETWORKS, cleanContacts, normalizeHandle } from './assets/socials.js';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -321,7 +329,7 @@
         const db = sharedDb;   // base avec cache local (assets/db.js)
 
         const translations = withCommon({
-            fr: {                navAccount: "Mon Compte",                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",                lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil", lblSharing: "Partage & échanges", lblPublic: "Collection publique", lblPublicHint: "Votre lien de partage montre vos figurines, votre pseudo et votre avatar. Décochez pour rendre votre collection privée.", lblTrade: "Participer à la bourse aux échanges", lblTradeHint: "Les membres connectés voient votre pseudo, vos doublons et votre wishlist pour vous proposer des échanges.", lblTradeNeedsPublic: "Rendez d'abord votre collection publique pour participer aux échanges.", lblContact: "Contact pour les échanges (facultatif)", msgPseudoRequired: "Le pseudo est obligatoire.", msgProfileSaved: "Profil enregistré avec succès.", msgProfilePrivate: "Profil enregistré : votre collection est maintenant privée.",                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : "                },            en: {                navAccount: "My Account",                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",                lblNewPass: "New Password", lblNewEmail: "New Email Address",                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",                lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile", lblSharing: "Sharing & trading", lblPublic: "Public collection", lblPublicHint: "Your share link shows your figures, nickname and avatar. Untick to make your collection private.", lblTrade: "Join the trading board", lblTradeHint: "Signed-in members see your nickname, duplicates and wishlist so they can offer you trades.", lblTradeNeedsPublic: "Make your collection public first to join the trading board.", lblContact: "Contact for trades (optional)", msgPseudoRequired: "A nickname is required.", msgProfileSaved: "Profile saved successfully.", msgProfilePrivate: "Profile saved: your collection is now private.",                phNewPass: "New password", phNewEmail: "New email",                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: "                }        });
+            fr: {                navAccount: "Mon Compte",                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",                lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil", lblSharing: "Partage & échanges", lblPublic: "Collection publique", lblPublicHint: "Votre lien de partage montre vos figurines, votre pseudo et votre avatar. Décochez pour rendre votre collection privée.", lblTrade: "Participer à la bourse aux échanges", lblTradeHint: "Les membres connectés voient votre pseudo, vos doublons et votre wishlist pour vous proposer des échanges.", lblTradeNeedsPublic: "Rendez d'abord votre collection publique pour participer aux échanges.", lblContact: "Tes réseaux pour les échanges (facultatif)", lblContactHint: "Remplis seulement ceux que tu veux montrer : leur logo apparaîtra sur ta fiche dans la bourse. Tu peux coller l'adresse de ton profil, le pseudo est repris tout seul.", msgPseudoRequired: "Le pseudo est obligatoire.", msgProfileSaved: "Profil enregistré avec succès.", msgProfilePrivate: "Profil enregistré : votre collection est maintenant privée.",                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : "                },            en: {                navAccount: "My Account",                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",                lblNewPass: "New Password", lblNewEmail: "New Email Address",                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",                lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile", lblSharing: "Sharing & trading", lblPublic: "Public collection", lblPublicHint: "Your share link shows your figures, nickname and avatar. Untick to make your collection private.", lblTrade: "Join the trading board", lblTradeHint: "Signed-in members see your nickname, duplicates and wishlist so they can offer you trades.", lblTradeNeedsPublic: "Make your collection public first to join the trading board.", lblContact: "Your networks for trades (optional)", lblContactHint: "Only fill in the ones you want to show: their logo will appear on your card in the trading board. You can paste your profile link, the username is picked up automatically.", msgPseudoRequired: "A nickname is required.", msgProfileSaved: "Profile saved successfully.", msgProfilePrivate: "Profile saved: your collection is now private.",                phNewPass: "New password", phNewEmail: "New email",                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: "                }        });
 
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
 
@@ -381,6 +389,21 @@
             }
         };
 
+        // Un champ par réseau (logo coloré + pseudo)
+        document.getElementById('contact-fields').innerHTML = NETWORKS.map(n => `
+            <div class="net-field" style="--net:${n.color}">
+                <span class="net-badge" title="${n.label}">${n.icon}</span>
+                <input type="text" id="contact-${n.id}" maxlength="80" placeholder="${n.label} : ${n.placeholder}" aria-label="${n.label}" autocomplete="off" spellcheck="false">
+            </div>`).join('');
+        // Ancien contact en texte libre : on le range dans le bon réseau si on le reconnaît
+        function legacyContact(text) {
+            const s = String(text || '').trim();
+            if (!s) return {};
+            const net = /tiktok/i.test(s) ? 'tiktok' : /discord/i.test(s) ? 'discord' : /vinted/i.test(s) ? 'vinted' : /facebook|fb\b/i.test(s) ? 'facebook' : /twitter|x\.com/i.test(s) ? 'x' : 'instagram';
+            const handle = normalizeHandle(net, s.replace(/^(insta(gram)?|tiktok|discord|vinted|facebook|fb|twitter|x)\s*:?\s*/i, ''));
+            return handle ? { [net]: handle } : {};
+        }
+
         function refreshSharingUI() {
             const pub = document.getElementById('profile-public');
             const trade = document.getElementById('profile-trade');
@@ -401,7 +424,8 @@
                     
                     document.getElementById('profile-public').checked = p.isPublic !== false;
                     document.getElementById('profile-trade').checked = p.trade === true && p.isPublic !== false;
-                    document.getElementById('profile-contact').value = typeof p.contact === 'string' ? p.contact : '';
+                    const contacts = p.contacts && typeof p.contacts === 'object' ? cleanContacts(p.contacts) : legacyContact(p.contact);
+                    NETWORKS.forEach(n => { document.getElementById('contact-' + n.id).value = contacts[n.id] || ''; });
                     refreshSharingUI();
                     if(p.pseudo) {
                         document.getElementById('profile-pseudo').value = p.pseudo;
@@ -442,7 +466,8 @@
 
             const isPublic = document.getElementById('profile-public').checked;
             const trade = isPublic && document.getElementById('profile-trade').checked;
-            const contact = trade ? document.getElementById('profile-contact').value.trim().slice(0, 80) : '';
+            const contacts = trade ? cleanContacts(Object.fromEntries(NETWORKS.map(n => [n.id, document.getElementById('contact-' + n.id).value]))) : {};
+            NETWORKS.forEach(n => { document.getElementById('contact-' + n.id).value = contacts[n.id] || ''; });
             if(!pseudo) { hrnNotify(t('msgPseudoRequired'), 'error'); return; }
 
             const btn = document.querySelector('.btn-save-profile');
@@ -451,7 +476,7 @@
 
             try {
                 await setDoc(doc(db, "users", user.uid), {
-                    profile: { pseudo: pseudo, avatar: avatar, isPublic: isPublic, trade: trade, contact: contact }
+                    profile: { pseudo: pseudo, avatar: avatar, isPublic: isPublic, trade: trade, contacts: contacts, contact: '' }
                 }, { merge: true });
                 await syncPublicProfile(db, user.uid);
                 
