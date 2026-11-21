@@ -43,7 +43,7 @@
     <nav class="top-nav" aria-label="Navigation principale">
         <div class="nav-logo-group">
             <a href="index.html" aria-label="HRNtrack Accueil" style="text-decoration:none; display:flex; align-items:center;">
-                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
+                <img src="assets/img/logo-blanc.png" class="site-logo" alt="HRNtrack Logo">
             </a>
         </div>
 

@@ -2,18 +2,16 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
-    <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
     
     <!-- Typographie Poppins -->
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/fonts.css">
     
     <link rel="stylesheet" href="assets/common.css">
     
@@ -192,7 +190,7 @@
                     <li data-t="legalLi5"><strong>Formulaire de contact :</strong> votre nom, votre email et votre message nous sont transmis par le service FormSubmit (formsubmit.co), uniquement pour vous répondre. Ils sont conservés le temps de l'échange.</li>
                     <li data-t="legalLi6"><strong>Durée de conservation :</strong> vos données sont conservées tant que votre compte existe, puis effacées dès sa suppression.</li>
                     <li data-t="legalLi7"><strong>Suppression :</strong> depuis <a href="compte.html">Mon compte</a>, le bouton « Supprimer mon compte définitivement » efface immédiatement votre compte et votre collection. Vous pouvez aussi le demander par email.</li>
-                    <li data-t="legalLi8"><strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics, Google Fonts) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.</li>
+                    <li data-t="legalLi8"><strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.</li>
                 </ul>
             </div>
 
@@ -272,7 +270,7 @@
                 legalLi5: "<strong>Formulaire de contact :</strong> votre nom, votre email et votre message nous sont transmis par le service FormSubmit (formsubmit.co), uniquement pour vous répondre. Ils sont conservés le temps de l'échange.",
                 legalLi6: "<strong>Durée de conservation :</strong> vos données sont conservées tant que votre compte existe, puis effacées dès sa suppression.",
                 legalLi7: "<strong>Suppression :</strong> depuis <a href=\"compte.html\">Mon compte</a>, le bouton « Supprimer mon compte définitivement » efface immédiatement votre compte et votre collection. Vous pouvez aussi le demander par email.",
-                legalLi8: "<strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics, Google Fonts) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.",
+                legalLi8: "<strong>Sous-traitants & transferts :</strong> Google (Firebase, Google Analytics) et GitHub (hébergement) peuvent traiter certaines données, dont l'adresse IP, aux États-Unis. Ces transferts sont encadrés par le Data Privacy Framework UE–États-Unis et les clauses contractuelles types de la Commission européenne.",
                 legalCookiesTitle: "4. Cookies & stockage local",
                 legalCookiesContent: "<strong>Google Analytics (GA4)</strong> mesure l'audience du site. Ses cookies (<code>_ga</code>) ne sont déposés <strong>que si vous cliquez sur « Accepter »</strong>. Votre choix est mémorisé 13 mois au plus, puis vous est redemandé. Vous pouvez le modifier à tout moment : <a href=\"#\" onclick=\"openCookieSettings(); return false;\">Gérer les cookies</a> (lien aussi présent en bas de chaque page).<br><br>Le site enregistre aussi dans votre navigateur (stockage local) votre langue, votre thème clair/sombre, votre choix de cookies et votre session de connexion. Ces éléments sont nécessaires au fonctionnement du site et ne servent pas à vous suivre : ils ne demandent donc pas de consentement.",
                 legalRightsTitle: "5. Vos droits",
@@ -296,7 +294,7 @@
                 legalLi5: "<strong>Contact form:</strong> your name, email and message are sent to us through the FormSubmit service (formsubmit.co), only so we can reply. They are kept for the duration of the conversation.",
                 legalLi6: "<strong>Retention:</strong> your data is kept as long as your account exists and erased as soon as it is deleted.",
                 legalLi7: "<strong>Deletion:</strong> in <a href=\"compte.html\">My Account</a>, the “Delete Account Permanently” button immediately erases your account and collection. You can also ask by email.",
-                legalLi8: "<strong>Processors & transfers:</strong> Google (Firebase, Google Analytics, Google Fonts) and GitHub (hosting) may process some data, including your IP address, in the United States. These transfers are covered by the EU–US Data Privacy Framework and the European Commission's standard contractual clauses.",
+                legalLi8: "<strong>Processors & transfers:</strong> Google (Firebase, Google Analytics) and GitHub (hosting) may process some data, including your IP address, in the United States. These transfers are covered by the EU–US Data Privacy Framework and the European Commission's standard contractual clauses.",
                 legalCookiesTitle: "4. Cookies & Local Storage",
                 legalCookiesContent: "<strong>Google Analytics (GA4)</strong> measures site traffic. Its cookies (<code>_ga</code>) are set <strong>only if you click “Accept”</strong>. Your choice is remembered for up to 13 months, then asked again. You can change it at any time: <a href=\"#\" onclick=\"openCookieSettings(); return false;\">Manage cookies</a> (also at the bottom of every page).<br><br>The site also stores in your browser (local storage) your language, light/dark theme, cookie choice and login session. These are required for the site to work and are not used to track you, so they do not require consent.",
                 legalRightsTitle: "5. Your Rights",

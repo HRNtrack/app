@@ -130,4 +130,61 @@
             banner.style.display = 'none';
         }
     };
+
+    // --- MESSAGES À L'ÉCRAN (remplacent les alert() du navigateur) ---
+    // hrnNotify(message, type?, { flash: true } ?) — type : 'success' | 'error' | 'info' (deviné si absent).
+    // flash : le message est gardé pour la page suivante (utile juste avant une redirection).
+    function guessType(msg) {
+        if (/erreur|error|impossible|incorrect|invalide|invalid|échec|failed|obligatoire|required/i.test(msg)) return 'error';
+        if (/succès|success|mis à jour|updated|copié|copied|envoy|sent|créé|created|supprimé|deleted|merci|thank/i.test(msg)) return 'success';
+        return 'info';
+    }
+    function notifyStyles() {
+        if (document.getElementById('hrn-notify-style')) return;
+        const st = document.createElement('style');
+        st.id = 'hrn-notify-style';
+        st.textContent =
+            '#hrn-notify{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:5000;display:flex;flex-direction:column;gap:8px;width:min(440px,calc(100vw - 32px));pointer-events:none}' +
+            '.hrn-note{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;background:var(--color-dark,#1A1A1A);color:var(--color-light,#F5F5F0);border-left:4px solid #9CA3AF;padding:12px 14px;box-shadow:0 10px 30px rgba(0,0,0,.25);font:500 .84rem/1.45 var(--font-sans,sans-serif);white-space:pre-line;word-break:break-word;animation:hrnIn .2s ease}' +
+            '.hrn-note.success{border-left-color:#6A8C47}.hrn-note.error{border-left-color:#C0392B}' +
+            '.hrn-note .ico{font-weight:800;flex:0 0 auto}.hrn-note .txt{flex:1}' +
+            '.hrn-note button{background:none;border:0;color:inherit;opacity:.7;cursor:pointer;font-size:15px;line-height:1;padding:2px 4px}.hrn-note button:hover{opacity:1}' +
+            '@keyframes hrnIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}';
+        document.head.appendChild(st);
+    }
+    window.hrnNotify = function (message, type, opts) {
+        const msg = String(message == null ? '' : message);
+        type = type || guessType(msg);
+        if (opts && opts.flash) {
+            try { sessionStorage.setItem('hrnFlash', JSON.stringify({ msg: msg, type: type })); } catch (e) { /* stockage indisponible */ }
+            return;
+        }
+        if (!document.body) { document.addEventListener('DOMContentLoaded', function () { window.hrnNotify(msg, type); }); return; }
+        notifyStyles();
+        let box = document.getElementById('hrn-notify');
+        if (!box) {
+            box = document.createElement('div');
+            box.id = 'hrn-notify';
+            box.setAttribute('aria-live', 'polite');
+            document.body.appendChild(box);
+        }
+        const note = document.createElement('div');
+        note.className = 'hrn-note ' + type;
+        note.setAttribute('role', type === 'error' ? 'alert' : 'status');
+        const ico = document.createElement('span'); ico.className = 'ico'; ico.textContent = type === 'success' ? '✓' : type === 'error' ? '!' : 'i';
+        const txt = document.createElement('span'); txt.className = 'txt'; txt.textContent = msg;
+        const close = document.createElement('button'); close.type = 'button'; close.setAttribute('aria-label', 'Fermer'); close.textContent = '✕';
+        close.onclick = function () { note.remove(); };
+        note.append(ico, txt, close);
+        box.appendChild(note);
+        while (box.children.length > 3) box.firstChild.remove();
+        setTimeout(function () { note.remove(); }, type === 'error' ? 8000 : 4500);
+    };
+    // Message laissé par la page précédente (ex. « Compte supprimé » avant le retour à l'accueil)
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            const f = sessionStorage.getItem('hrnFlash');
+            if (f) { sessionStorage.removeItem('hrnFlash'); const o = JSON.parse(f); window.hrnNotify(o.msg, o.type); }
+        } catch (e) { /* rien */ }
+    });
 })();

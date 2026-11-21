@@ -1,14 +1,13 @@
 // HRNtrack — image « Story Instagram » (1080 × 1920) dessinée directement sur un <canvas>.
 // Plus fiable que la capture d'une page HTML : rendu identique partout, images nettes, aucune dépendance.
-// Toutes les images utilisées (catalogue, logo) sont servies avec « Access-Control-Allow-Origin: * » :
-// le canvas reste exportable.
+// Logo local et images du catalogue chargées depuis la même origine : le canvas reste exportable.
 
 const W = 1080, H = 1920;
 const C = {
     bg1: '#141413', bg2: '#22211d', text: '#F5F5F0', sub: '#A8A49B', faint: 'rgba(255,255,255,0.07)',
     line: 'rgba(255,255,255,0.14)', green: '#7FA65A', gold: '#C6A875', track: '#2F2E2A'
 };
-const LOGO = 'https://i.postimg.cc/yNdVZYsy/logo1-blanc.png';
+const LOGO = 'assets/img/logo-blanc.png';
 const FONT = "'Poppins', 'Segoe UI', Arial, sans-serif";
 
 const TEXT = {

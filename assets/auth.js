@@ -120,43 +120,43 @@ export function setupAuthModal(getLang) {
 
     window.handleLogin = async () => {
         const email = field('auth-email'), pass = field('auth-pass');
-        if (!email || !pass) return alert(m().fill);
+        if (!email || !pass) return hrnNotify(m().fill);
         try {
             const cred = await signInWithEmailAndPassword(auth, email, pass);
             if (!cred.user.emailVerified) {
-                alert(m().notVerified);
+                hrnNotify(m().notVerified);
                 await signOut(auth);
                 return;
             }
             window.toggleAuthModal();
-        } catch (e) { alert(m().error + e.message); }
+        } catch (e) { hrnNotify(m().error + e.message); }
     };
 
     window.handleRegister = async () => {
         const email = field('auth-email'), pass = field('auth-pass');
-        if (!email || !pass) return alert(m().fill);
+        if (!email || !pass) return hrnNotify(m().fill);
         try {
             const cred = await createUserWithEmailAndPassword(auth, email, pass);
             await sendEmailVerification(cred.user);
-            alert(m().created);
+            hrnNotify(m().created);
             await signOut(auth);
             window.toggleAuthModal();
-        } catch (e) { alert(m().error + e.message); }
+        } catch (e) { hrnNotify(m().error + e.message); }
     };
 
     window.handleGoogleLogin = async () => {
         try {
             await signInWithPopup(auth, googleProvider);
             window.toggleAuthModal();
-        } catch (e) { alert(m().googleError + e.message); }
+        } catch (e) { hrnNotify(m().googleError + e.message); }
     };
 
     window.handleResetPassword = async () => {
         const email = field('auth-email');
-        if (!email) return alert(m().resetNeedEmail);
+        if (!email) return hrnNotify(m().resetNeedEmail);
         try {
             await sendPasswordResetEmail(auth, email);
-            alert(m().resetSent);
-        } catch (e) { alert(m().error + e.message); }
+            hrnNotify(m().resetSent);
+        } catch (e) { hrnNotify(m().error + e.message); }
     };
 }

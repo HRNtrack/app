@@ -2,18 +2,16 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
-    <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
     
     <!-- Typographie Poppins -->
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/fonts.css">
     
     <link rel="stylesheet" href="assets/common.css">
     
@@ -398,7 +396,7 @@
             const pseudo = document.getElementById('profile-pseudo').value;
             const avatar = document.getElementById('profile-avatar-select').value;
 
-            if(!pseudo) { alert("Le pseudo est obligatoire !"); return; }
+            if(!pseudo) { hrnNotify("Le pseudo est obligatoire !"); return; }
 
             const btn = document.querySelector('.btn-save-profile');
             const originalText = btn.innerText;
@@ -411,10 +409,10 @@
                 await syncPublicProfile(db, user.uid);
                 
                 document.getElementById('display-email').innerText = pseudo; 
-                alert("Profil mis à jour avec succès !");
+                hrnNotify("Profil mis à jour avec succès !");
                 
             } catch(e) {
-                alert("Erreur: " + e.message);
+                hrnNotify("Erreur: " + e.message);
             } finally {
                 btn.innerText = originalText;
             }
@@ -455,38 +453,38 @@
                 await reauthenticateWithCredential(auth.currentUser, credential);
                 return true;
             } catch (error) {
-                alert(t('alertReauthErr'));
+                hrnNotify(t('alertReauthErr'));
                 return false;
             }
         }
 
         window.updateUserPassword = async () => {
             const newPass = document.getElementById('new-password').value;
-            if (newPass.length < 6) return alert(t('alertPassLength'));
+            if (newPass.length < 6) return hrnNotify(t('alertPassLength'));
             try {
                 await updatePassword(auth.currentUser, newPass);
-                alert(t('alertPassUpdated'));
+                hrnNotify(t('alertPassUpdated'));
                 document.getElementById('new-password').value = "";
             } catch (error) {
                 if(error.code === 'auth/requires-recent-login') {
                     const success = await reauth();
                     if(success) window.updateUserPassword();
-                } else alert(t('alertErr') + error.message);
+                } else hrnNotify(t('alertErr') + error.message);
             }
         };
 
         window.updateUserEmail = async () => {
             const newEmail = document.getElementById('new-email').value;
-            if (!newEmail) return alert(t('alertEmailInvalid'));
+            if (!newEmail) return hrnNotify(t('alertEmailInvalid'));
             try {
                 await updateEmail(auth.currentUser, newEmail);
-                alert(t('alertEmailUpdated'));
+                hrnNotify(t('alertEmailUpdated'));
                 document.getElementById('display-email').innerText = newEmail;
             } catch (error) {
                 if(error.code === 'auth/requires-recent-login') {
                     const success = await reauth();
                     if(success) window.updateUserEmail();
-                } else alert(t('alertErr') + error.message);
+                } else hrnNotify(t('alertErr') + error.message);
             }
         };
 
@@ -497,13 +495,13 @@
                 await deletePublicProfile(db, user.uid);
                 await deleteDoc(doc(db, "users", user.uid));
                 await deleteUser(user);
-                alert(t('alertDeleteSuccess'));
+                hrnNotify(t('alertDeleteSuccess'), 'success', { flash: true });
                 window.location.href = "index.html";
             } catch (error) {
                 if(error.code === 'auth/requires-recent-login') {
                     const success = await reauth();
                     if(success) window.deleteUserAccount();
-                } else alert(t('alertErr') + error.message);
+                } else hrnNotify(t('alertErr') + error.message);
             }
         };
 
