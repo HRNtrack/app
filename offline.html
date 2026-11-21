@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'self'">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex">
+    <script src="assets/theme.js"></script>
+    <title>Hors ligne - HRNtrack</title>
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="stylesheet" href="assets/fonts.css">
+    <link rel="stylesheet" href="assets/common.css">
+    <style>
+        body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-body); color: var(--text-main); font-family: var(--font-sans); padding: 20px; box-sizing: border-box; }
+        .box { max-width: 420px; text-align: center; background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 36px 28px; }
+        .box img { width: 84px; height: 84px; border-radius: 50%; }
+        h1 { font-size: 1.3rem; margin: 16px 0 8px; }
+        p { color: var(--text-sub); font-size: 0.9rem; line-height: 1.6; margin: 0 0 20px; }
+        .actions { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .btn { background: var(--color-dark); color: var(--color-light); border: 1px solid var(--color-dark); padding: 10px 18px; font: 600 0.78rem var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; }
+        .btn.ghost { background: transparent; color: var(--text-main); border-color: var(--color-border); }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <img src="assets/img/icon-192.png" alt="">
+        <h1 id="t-title">Vous êtes hors ligne</h1>
+        <p id="t-text">Cette page n'a pas encore été enregistrée sur cet appareil. Les pages déjà ouvertes, comme votre collection, restent consultables.</p>
+        <div class="actions">
+            <a class="btn" href="dashboard.html" id="t-coll">Ma collection</a>
+            <button class="btn ghost" type="button" onclick="location.reload()" id="t-retry">Réessayer</button>
+        </div>
+    </div>
+    <script>
+        // Petite traduction locale (la page doit fonctionner sans réseau ni module)
+        try {
+            if (localStorage.getItem('HRN_LANG') === 'en') {
+                document.documentElement.lang = 'en';
+                document.getElementById('t-title').textContent = "You're offline";
+                document.getElementById('t-text').textContent = "This page hasn't been saved on this device yet. Pages you already opened, like your collection, are still available.";
+                document.getElementById('t-coll').textContent = 'My collection';
+                document.getElementById('t-retry').textContent = 'Try again';
+            }
+        } catch (e) { /* stockage indisponible */ }
+        window.addEventListener('online', () => location.reload());
+    </script>
+</body>
+</html>

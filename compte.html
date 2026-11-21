@@ -8,6 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HRNtrack</title>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta name="theme-color" content="#F5F5F0" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HRNtrack">
     
     <!-- Typographie Poppins -->
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
@@ -281,6 +289,7 @@
 
     <script type="module">
         import { app } from './assets/firebase.js';
+        import { db as sharedDb } from './assets/db.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
         import { syncPublicProfile, deletePublicProfile } from './assets/public-profile.js';
@@ -290,7 +299,7 @@
         
         import { baseData } from './data.js?v=2026-11-16-2';
 
-        const db = getFirestore(app);
+        const db = sharedDb;   // base avec cache local (assets/db.js)
 
         const translations = withCommon({
             fr: {                navAccount: "Mon Compte",                deniedTitle: "Accès Restreint", deniedMsg: "Connectez-vous pour accéder aux paramètres de votre compte.", deniedBtn: "Se connecter",                lblMember: "Membre HRNtrack", lblSecurity: "Sécurité", lblEmailSection: "Adresse Email",                lblNewPass: "Nouveau mot de passe", lblNewEmail: "Nouvelle adresse email",                btnUpdatePass: "Mettre à jour le mot de passe", btnUpdateEmail: "Mettre à jour l'email", btnLogout: "Se déconnecter",                lblDanger: "Zone de Danger", lblDangerDesc: "La suppression de votre compte est irréversible. Toutes vos données de collection seront perdues.", btnDelete: "Supprimer mon compte définitivement",                lblProfile: "Profil Public", lblPseudo: "Pseudo (Visible sur votre lien public)", lblAvatar: "Avatar (Figurine favorite)", btnSaveProfile: "Enregistrer le profil",                phNewPass: "Nouveau mot de passe", phNewEmail: "Nouvel email",                alertPassLength: "Le mot de passe doit faire au moins 6 caractères.", alertPassUpdated: "Mot de passe mis à jour !",                alertEmailInvalid: "Veuillez entrer un email valide.", alertEmailUpdated: "Email mis à jour !",                confirmLogout: "Voulez-vous vraiment vous déconnecter ?", confirmDelete: "ATTENTION : Cette action est irréversible. Voulez-vous vraiment supprimer votre compte et toutes vos données ?",                alertDeleteSuccess: "Compte supprimé avec succès.", alertReauth: "Pour votre sécurité, veuillez confirmer votre mot de passe actuel :", alertReauthErr: "Mot de passe incorrect ou erreur d'authentification.", alertErr: "Erreur : "                },            en: {                navAccount: "My Account",                deniedTitle: "Access Restricted", deniedMsg: "Please log in to access your account settings.", deniedBtn: "Log In",                lblMember: "HRNtrack Member", lblSecurity: "Security", lblEmailSection: "Email Address",                lblNewPass: "New Password", lblNewEmail: "New Email Address",                btnUpdatePass: "Update Password", btnUpdateEmail: "Update Email", btnLogout: "Log Out",                lblDanger: "Danger Zone", lblDangerDesc: "Deleting your account is irreversible. All your collection data will be lost.", btnDelete: "Delete Account Permanently",                lblProfile: "Public Profile", lblPseudo: "Nickname (Visible on public link)", lblAvatar: "Avatar (Favorite Figure)", btnSaveProfile: "Save Profile",                phNewPass: "New password", phNewEmail: "New email",                alertPassLength: "Password must be at least 6 characters long.", alertPassUpdated: "Password updated successfully!",                alertEmailInvalid: "Please enter a valid email.", alertEmailUpdated: "Email updated successfully!",                confirmLogout: "Are you sure you want to log out?", confirmDelete: "WARNING: This action is irreversible. Do you really want to delete your account and all data?",                alertDeleteSuccess: "Account deleted successfully.", alertReauth: "For your security, please confirm your current password:", alertReauthErr: "Incorrect password or authentication error.", alertErr: "Error: "                }        });

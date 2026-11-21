@@ -30,6 +30,7 @@ export const commonTranslations = {
         cookieTitle: "🍪 Cookies ?",
         cookieText: "Nous aimerions utiliser Google Analytics pour mesurer l'audience et améliorer le site. Rien n'est déposé sans votre accord, et vous pouvez changer d'avis à tout moment via « Gérer les cookies ».",
         cookieManage: "Gérer les cookies",
+        installApp: "📲 Installer l'appli",
         cookieDecline: "Non merci",
         cookieAccept: "Accepter"
     },
@@ -61,6 +62,7 @@ export const commonTranslations = {
         cookieTitle: "🍪 Cookies ?",
         cookieText: "We would like to use Google Analytics to measure traffic and improve the site. Nothing is stored without your consent, and you can change your mind at any time via “Manage cookies”.",
         cookieManage: "Manage cookies",
+        installApp: "📲 Install the app",
         cookieDecline: "No thanks",
         cookieAccept: "Accept"
     }

@@ -119,6 +119,7 @@
 
     // Appelée une fois le footer (qui contient la bannière) injecté dans la page.
     window.initCookieLogic = function () {
+        if (window.initInstallButtons) window.initInstallButtons();
         const consent = readConsent();
         const banner = document.getElementById('cookie-banner');
         if (consent === 'true') {
@@ -186,5 +187,45 @@
             const f = sessionStorage.getItem('hrnFlash');
             if (f) { sessionStorage.removeItem('hrnFlash'); const o = JSON.parse(f); window.hrnNotify(o.msg, o.type); }
         } catch (e) { /* rien */ }
+    });
+
+    // --- APPLICATION INSTALLABLE (PWA) ---
+    const isEn = function () { try { return localStorage.getItem('HRN_LANG') === 'en'; } catch (e) { return false; } };
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () { /* sans PWA */ }); });
+    }
+    let installPrompt = null;
+    const isStandalone = function () { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; };
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    function refreshInstallButtons() {
+        const show = !isStandalone() && (!!installPrompt || isIos);
+        document.querySelectorAll('.pwa-install').forEach(function (el) { el.hidden = !show; });
+    }
+    window.initInstallButtons = refreshInstallButtons;
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; refreshInstallButtons(); });
+    window.addEventListener('appinstalled', function () {
+        installPrompt = null; refreshInstallButtons();
+        window.hrnNotify(isEn() ? 'HRNtrack is installed! Find it on your home screen.' : 'HRNtrack est installé ! Retrouvez-le sur votre écran d\'accueil.', 'success');
+    });
+    window.installApp = async function () {
+        if (installPrompt) {
+            installPrompt.prompt();
+            try { await installPrompt.userChoice; } catch (e) { /* fermé */ }
+            installPrompt = null; refreshInstallButtons();
+        } else if (isIos) {
+            window.hrnNotify(isEn()
+                ? 'On iPhone / iPad: tap the Share button (square with an arrow) in Safari, then « Add to Home Screen ».'
+                : 'Sur iPhone / iPad : touchez le bouton Partager (carré avec une flèche) dans Safari, puis « Sur l\'écran d\'accueil ».', 'info');
+        }
+    };
+    document.addEventListener('DOMContentLoaded', refreshInstallButtons);
+
+    // Hors ligne : on prévient que les données peuvent dater
+    window.addEventListener('offline', function () {
+        window.hrnNotify(isEn() ? 'You are offline: data shown may not be up to date.' : 'Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.', 'info');
+    });
+    window.addEventListener('online', function () { window.hrnNotify(isEn() ? 'Back online.' : 'De retour en ligne.', 'success'); });
+    document.addEventListener('DOMContentLoaded', function () {
+        if (navigator.onLine === false) window.hrnNotify(isEn() ? 'You are offline: data shown may not be up to date.' : 'Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.', 'info');
     });
 })();

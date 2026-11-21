@@ -81,6 +81,9 @@
                 ${themeToggle}
             </div>
             ${supportLink}
+            <button type="button" class="btn-auth-trigger pwa-install" hidden onclick="window.installApp(); window.toggleMobileMenu();">
+                <span data-t="installApp">📲 Installer l'appli</span>
+            </button>
             <button id="auth-trigger-mob" class="btn-auth-trigger" onclick="window.toggleAuthModal(); window.toggleMobileMenu();">
                 <span id="auth-status-text-mob" data-t="${authLabelKey}">${authLabel}</span>
             </button>

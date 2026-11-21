@@ -275,3 +275,6 @@ button.lang-toggle {
     .nav-center { gap: 1.2rem; }
     .nav-right { gap: 0.6rem; }
 }
+
+/* --- APPLICATION INSTALLABLE (PWA) --- */
+.pwa-install[hidden] { display: none !important; }
