@@ -16,8 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.6.1/dist/chart.umd.min.js" integrity="sha384-Emf5ZVIUiarAdhkgtqK+5/Z5qIvM6QoVrS+qAVtfyZVuD5lIHrac0me485+Antp0" crossorigin="anonymous"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous"></script>
-    
+        
     <link rel="stylesheet" href="assets/common.css">
     
     <style>
@@ -318,30 +317,22 @@
 
         @media (max-width: 768px) { .chart-section { grid-template-columns: 1fr; } .chart-card.full-width { grid-column: span 1; } }
 
-        /* --- EXPORT STORY STYLE --- */
-        #story-container {
-            position: fixed; left: -9999px; top: 0;
-            width: 1080px; height: 1920px;
-            background: #0f0f0f; color: white;
-            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-            padding: 100px 60px; box-sizing: border-box; font-family: 'Poppins', sans-serif; text-align: center; z-index: -1;
-        }
-        .story-header { margin-bottom: 50px; }
-        .story-title { font-size: 40px; color: #666; text-transform: uppercase; letter-spacing: 8px; font-weight: 400; margin-top: 20px; }
-        .story-main-stat {
-            background: rgba(255, 255, 255, 0.03); border-radius: 40px; padding: 60px;
-            width: 100%; box-sizing: border-box; border: 1px solid rgba(255, 255, 255, 0.2); margin-bottom: 60px;
-        }
-        .story-percent { font-size: 180px; font-weight: 800; color: white; line-height: 1; margin: 20px 0; letter-spacing: -5px; }
-        .story-label { font-size: 30px; color: #6A8C47; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
-        .story-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; width: 100%; }
-        .story-card { 
-            background: rgba(255, 255, 255, 0.03); border-radius: 30px; padding: 40px; 
-            border: 1px solid rgba(255, 255, 255, 0.2); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        }
-        .story-val { font-size: 70px; font-weight: 700; color: white; display: block; line-height:1.1; }
-        .story-sub { font-size: 18px; color: #aaa; text-transform: uppercase; font-weight: 500; margin-top: 10px; letter-spacing: 1px; }
-        .story-footer { font-size: 24px; color: var(--color-text-sub); margin-top: 50px; font-weight: 400; letter-spacing: 1px;}
+        /* --- STORY INSTAGRAM : fenêtre d'aperçu --- */
+        .story-modal { max-width: 460px; padding: 1.6rem; text-align: center; }
+        .story-modal h3 { margin: 0 0 4px; font-size: 1rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-main); }
+        .story-modal .story-sub { margin: 0 0 14px; font-size: 0.78rem; color: var(--text-sub); }
+        .story-close { position: absolute; top: 10px; right: 12px; background: none; border: none; font-size: 18px; color: var(--text-sub); cursor: pointer; padding: 6px; }
+        .story-preview { position: relative; margin: 0 auto; width: min(100%, calc(58vh * 9 / 16)); aspect-ratio: 9 / 16; background: #141413; border: 1px solid var(--color-border); }
+        .story-preview canvas { width: 100%; height: 100%; display: block; }
+        .story-busy { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #F5F5F0; font-size: 0.8rem; background: rgba(20,20,19,0.75); }
+        .story-busy[hidden] { display: none; }
+        .story-opt { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 14px 0 4px; font-size: 0.8rem; color: var(--text-main); cursor: pointer; }
+        .story-opt input { width: auto; height: auto; margin: 0; flex: 0 0 auto; accent-color: var(--color-green); }
+        .story-actions { display: flex; gap: 10px; margin-top: 12px; }
+        .story-actions .btn-story-action { flex: 1; justify-content: center; }
+        .story-actions .btn-story-action[hidden] { display: none; }
+        .story-actions .btn-story-action.secondary { background: var(--surface); color: var(--text-main); border-color: var(--color-border); }
+        .story-hint { margin: 10px 0 0; font-size: 0.72rem; color: var(--text-sub); }
 
         /* --- LOADING SPINNER --- */
         #loading-overlay {
@@ -490,39 +481,22 @@
         </section>
     </div>
 
-    <!-- EXPORT CONTAINER STORY -->
-    <div id="story-container">
-        <div class="story-header">
-            <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" style="width:250px; background:transparent;" alt="Logo">
-            <div class="story-title">COLLECTION STATS</div>
-        </div>
-        <div class="story-main-stat">
-            <div class="story-label">TOTAL FIGURES</div>
-            <div class="story-percent" id="story-total-val">0</div>
-            <div style="font-size:30px; color:#888; font-weight:300;">Hirono Collection</div>
-        </div>
-        <div class="story-grid">
-            <div class="story-card">
-                <span class="story-val" style="color:#C6A875" id="story-secret-val">0</span>
-                <span class="story-sub">SECRETS</span>
+    <!-- STORY INSTAGRAM : aperçu, puis partage ou téléchargement -->
+    <div id="story-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="story-modal-title">
+        <div class="modal-content story-modal">
+            <button type="button" class="story-close" onclick="window.closeStory()" aria-label="Fermer">✕</button>
+            <h3 id="story-modal-title" data-t="storyTitle">Ta story Instagram</h3>
+            <p class="story-sub" data-t="storySub">Format 1080 × 1920, prêt à publier.</p>
+            <div class="story-preview">
+                <canvas id="story-canvas" width="1080" height="1920" aria-label="Aperçu de la story"></canvas>
+                <div class="story-busy" id="story-busy" data-t="storyBusy">Création de l'image…</div>
             </div>
-            <div class="story-card">
-                <span class="story-val" style="color:#6A8C47" id="story-value-val">0€</span>
-                <span class="story-sub">VALUE</span>
+            <label class="story-opt"><input type="checkbox" id="story-show-value" checked> <span data-t="storyShowValue">Afficher la valeur et les prix</span></label>
+            <div class="story-actions">
+                <button type="button" class="btn-story-action" id="story-share" hidden><span data-t="storyShare">Partager</span></button>
+                <button type="button" class="btn-story-action" id="story-download"><span data-t="storyDownload">Télécharger</span></button>
             </div>
-            <div class="story-card">
-                <span class="story-val" id="story-top-price" style="color:#fff; font-size:50px;">-</span>
-                <span style="font-size:16px; color:#999; margin-top:5px; font-weight:400; display:block; max-width:250px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" id="story-top-name">-</span>
-                <span class="story-sub" style="color:#C6A875">MOST EXPENSIVE</span>
-            </div>
-            <div class="story-card">
-                <span class="story-val" style="color:#C0392B" id="story-wish-val">0</span>
-                <span class="story-sub">WISHLIST</span>
-            </div>
-        </div>
-        <div class="story-footer">
-            <p>Track yours on <strong>hrntrack.github.io/app/</strong></p>
-            <p id="story-date" style="font-size:18px; margin-top:10px; color:var(--text-main);"></p>
+            <p class="story-hint" id="story-hint" data-t="storyHint">Ajoute l'image à ta story depuis ta galerie.</p>
         </div>
     </div>
 
@@ -567,6 +541,7 @@
         
         import { baseData, seriesBadges } from './data.js?v=2026-11-16-2';
         import { computeCollectionStats, isSpecialSerie } from './assets/collection-stats.js';
+        import { drawStory, canvasToBlob } from './assets/story.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
 
         const db = getFirestore(app);
@@ -631,6 +606,10 @@
                 badgeSerieTitle: "{s}", badgeSerieDesc: "Posséder toute la série {s}.",
                 badge_trader_title: "Négociant", badge_trader_desc: "Avoir 5 doublons à échanger.",
                 badge_centurion_title: "Centurion", badge_centurion_desc: "Posséder 100 figurines.",
+                storyTitle: "Ta story Instagram", storySub: "Format 1080 × 1920, prêt à publier.", storyBusy: "Création de l'image…",
+                storyShowValue: "Afficher la valeur et les prix", storyShare: "Partager", storyDownload: "Télécharger",
+                storyHint: "Ajoute l'image à ta story depuis ta galerie.", storyHintShare: "« Partager » ouvre directement Instagram ou tes autres applis.",
+                storyErr: "Impossible de créer l'image. Réessaie dans un instant.",
                 badges: "{n} / {t} débloqués", badgeUnlocked: "✓ Débloqué", badgeLocked: "🔒 À débloquer", badgeProgress: "Progression : {p}"
             },
             en: {
@@ -657,6 +636,10 @@
                 badgeSerieTitle: "{s}", badgeSerieDesc: "Own the whole {s} series.",
                 badge_trader_title: "Trader", badge_trader_desc: "Have 5 duplicates to trade.",
                 badge_centurion_title: "Centurion", badge_centurion_desc: "Own 100 figures.",
+                storyTitle: "Your Instagram story", storySub: "1080 × 1920, ready to post.", storyBusy: "Creating image…",
+                storyShowValue: "Show value and prices", storyShare: "Share", storyDownload: "Download",
+                storyHint: "Add the image to your story from your gallery.", storyHintShare: "“Share” opens Instagram or your other apps directly.",
+                storyErr: "Could not create the image. Please try again.",
                 badges: "{n} / {t} unlocked", badgeUnlocked: "✓ Unlocked", badgeLocked: "🔒 Locked", badgeProgress: "Progress: {p}"
             }
         };
@@ -668,6 +651,7 @@
         const muted = () => getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#D8D2C5';
 
         let myCollection = [];
+        let storyPseudo = '';
         let lastStats = null;
         let rates = { ...FALLBACK_RATES };
         let seriesFilter = 'started';
@@ -757,6 +741,7 @@
                 document.getElementById('main-container').style.setProperty('display', 'block', 'important');
                 try {
                     const snap = await getDoc(doc(db, "users", user.uid));
+                    storyPseudo = snap.exists() && snap.data().profile ? String(snap.data().profile.pseudo || '') : '';
                     const cloudData = snap.exists() ? (snap.data().collection || []) : [];
                     const byId = new Map(cloudData.map(i => [i.ID, i]));
                     myCollection = baseData.map(b => {
@@ -919,24 +904,66 @@
         // Le thème change : on redessine (couleurs lues au moment du dessin)
         document.addEventListener('hrn:themechange', () => { if (lastStats) updateCharts(lastStats); });
 
+        // --- STORY INSTAGRAM ---
+        let storyBlob = null;
+        function storyData(showValue) {
+            const s = lastStats;
+            const money = (n) => eur(n);
+            // Pépites : les 3 plus belles cotes ; sinon 3 figurines possédées (les secrètes d'abord)
+            let picks = s.topItems.slice(0, 3).map(x => ({ name: x.name, image: x.image, priceText: showValue ? money(Math.max(x.cote, x.paid)) : '' }));
+            const picksAreTop = picks.length > 0;
+            if (!picks.length) {
+                const owned = myCollection.filter(i => /^(possédé|possédée|owned)$/i.test(String(i.Status || '')));
+                owned.sort((x, y) => (y['Secret Rare'] === 'Yes') - (x['Secret Rare'] === 'Yes'));
+                picks = owned.slice(0, 3).map(i => ({ name: i.Name, image: i.Image, priceText: '' }));
+            }
+            const value = s.valuedQty ? s.marketValue : s.spentEur;
+            return {
+                lang: currentLang, pseudo: storyPseudo, rank: s.rank,
+                ownedUnique: s.ownedUnique, catalogSize: s.catalogSize, totalQty: s.totalQty,
+                secretsOwned: s.secretsOwned, secretsTotal: s.secretsTotal,
+                seriesComplete: s.seriesComplete, seriesCountable: s.seriesCountable,
+                value: showValue && value > 0 ? value : null, valueText: money(value),
+                wish: s.wish, doubles: s.doubles, picks, picksAreTop,
+                dateText: new Date().toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+            };
+        }
+        async function renderStoryPreview() {
+            const busy = document.getElementById('story-busy');
+            busy.hidden = false; storyBlob = null;
+            try {
+                const canvas = document.getElementById('story-canvas');
+                await drawStory(canvas, storyData(document.getElementById('story-show-value').checked));
+                storyBlob = await canvasToBlob(canvas);
+            } catch (err) {
+                console.error(err);
+                alert(t('storyErr'));
+            } finally { busy.hidden = true; }
+        }
+        const storyFile = () => new File([storyBlob], `hrntrack-story-${new Date().toISOString().slice(0, 10)}.png`, { type: 'image/png' });
         window.exportStory = async () => {
             if (!lastStats) return;
-            const btn = document.querySelector('button[onclick="window.exportStory()"] span:last-child');
-            const originalText = btn.innerText; btn.innerText = "⏳";
-            const s = lastStats;
-            document.getElementById('story-total-val').innerText = s.totalQty;
-            document.getElementById('story-value-val').innerText = eur(s.valuedQty ? s.marketValue : s.spentEur);
-            document.getElementById('story-secret-val').innerText = s.secretsOwned;
-            document.getElementById('story-wish-val').innerText = s.wish;
-            const best = s.topItems[0];
-            document.getElementById('story-top-name').innerText = best ? best.name : '-';
-            document.getElementById('story-top-price').innerText = best ? eur(Math.max(best.cote, best.paid)) : '-';
-            document.getElementById('story-date').innerText = new Date().toLocaleDateString('en-GB');
-            try {
-                const canvas = await html2canvas(document.getElementById("story-container"), { scale: 1, useCORS: true, backgroundColor: "#0f0f0f" });
-                const link = document.createElement('a'); link.download = `hrntrack_export_story_${Date.now()}.jpg`; link.href = canvas.toDataURL("image/jpeg", 0.9); link.click();
-            } catch (err) { alert("Erreur lors de la génération de l'image."); } finally { btn.innerText = originalText; }
+            const modal = document.getElementById('story-modal');
+            modal.style.display = 'flex';
+            const canShare = !!(navigator.canShare && navigator.canShare({ files: [new File([new Blob()], 'x.png', { type: 'image/png' })] }));
+            document.getElementById('story-share').hidden = !canShare;
+            document.getElementById('story-hint').innerText = t(canShare ? 'storyHintShare' : 'storyHint');
+            await renderStoryPreview();
         };
+        window.closeStory = () => { document.getElementById('story-modal').style.display = 'none'; };
+        document.getElementById('story-show-value').addEventListener('change', renderStoryPreview);
+        document.getElementById('story-download').addEventListener('click', () => {
+            if (!storyBlob) return;
+            const url = URL.createObjectURL(storyBlob);
+            const link = document.createElement('a');
+            link.download = storyFile().name; link.href = url; link.click();
+            setTimeout(() => URL.revokeObjectURL(url), 2000);
+        });
+        document.getElementById('story-share').addEventListener('click', async () => {
+            if (!storyBlob) return;
+            try { await navigator.share({ files: [storyFile()], title: 'HRNtrack' }); }
+            catch (e) { if (e.name !== 'AbortError') document.getElementById('story-download').click(); }
+        });
 
         window.copyPublicLink = () => {
             const user = auth.currentUser;
