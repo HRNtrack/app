@@ -345,27 +345,58 @@
         .features-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
-        .feature-card .herbarium-frame {
-            margin-bottom: 1.5rem;
+        .feature-card {
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+            outline-offset: 4px;
         }
-
+        .feature-card .herbarium-frame { margin-bottom: 1.2rem; }
+        .feature-card .specimen-image { object-fit: contain; padding: 6px; box-sizing: border-box; transition: transform 0.35s ease; }
+        .feature-card:hover .herbarium-frame { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+        .feature-card:hover .specimen-image { transform: scale(1.04); }
+        .feature-kicker {
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--color-green);
+        }
         .feature-card h3 {
             font-family: var(--font-sans);
-            font-size: 1.35rem;
-            font-weight: 600;
-            margin: 0.6rem 0 0.8rem 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 0.4rem 0 0.6rem 0;
             color: var(--color-dark);
         }
-
         .feature-card p {
             font-size: 0.88rem;
             color: var(--color-text-sub);
             line-height: 1.65;
-            margin: 0;
+            margin: 0 0 1rem;
             font-weight: 400;
+            flex: 1;
+        }
+        .feature-cta {
+            align-self: flex-start;
+            font-size: 0.76rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--color-dark);
+            border-bottom: 2px solid var(--color-gold);
+            padding-bottom: 3px;
+            transition: gap 0.2s ease, border-color 0.2s ease;
+            display: inline-flex;
+            gap: 6px;
+        }
+        .feature-card:hover .feature-cta { gap: 10px; border-color: var(--color-green); }
+        @media (max-width: 1200px) and (min-width: 993px) {
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         /* --- SOCIAL SECTION --- */
@@ -636,8 +667,22 @@
             }
             .features-grid {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+                gap: 1rem;
             }
+            .feature-card {
+                display: grid;
+                grid-template-columns: 96px 1fr;
+                column-gap: 14px;
+                align-items: start;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--color-border);
+            }
+            .feature-card .herbarium-frame { grid-row: 1 / span 4; margin: 0; padding: 6px; }
+            .feature-card .herbarium-frame .specimen-tag { display: none; }
+            .feature-card .specimen-image { aspect-ratio: 1; }
+            .feature-card h3 { font-size: 1.05rem; margin: 0.2rem 0 0.3rem; }
+            .feature-card p { font-size: 0.82rem; margin-bottom: 0.6rem; }
+            .feature-cta { justify-self: start; }
             .section-header-editorial {
                 flex-direction: column;
                 align-items: flex-start;
@@ -706,57 +751,102 @@
             <div class="news-content">
                 <span class="badge-news update" data-t="newsSysBadge">UPDATE</span>
                 <h3 data-t="newsSysTitle">Mises à jour du site</h3>
-                <p data-t="newsSysDesc">Découvrez les nouvelles fonctions (Cotes, Graphiques...)</p>
+                <p data-t="newsSysDesc">Bourse aux échanges, appli installable, évolution de la valeur… tout le journal des nouveautés.</p>
             </div>
             <a href="releases.html" class="btn-news-arrow">→</a>
         </div>
     </section>
 
-    <section class="features-section">
+    <section class="features-section" id="fonctionnalites">
         <div class="section-header-editorial">
-            <h2>Features</h2>
-            <span>[ SYSTEM FEATURES ]</span>
+            <h2 data-t="featTitle">Fonctionnalités</h2>
+            <span data-t="featKicker">[ Tout ce que HRNtrack fait pour vous ]</span>
         </div>
 
         <div class="features-grid">
-            <!-- Feature 1 -->
-            <div class="feature-card">
+            <a class="feature-card" href="dashboard.html">
                 <div class="herbarium-frame">
-                    <img id="feat-img-1" class="specimen-image" loading="lazy" decoding="async" alt="Figurine aléatoire 1">
+                    <img id="feat-img-1" class="specimen-image" loading="lazy" decoding="async" alt="">
                     <div class="specimen-tag">
-                        <span id="feat-tag-1">EXHIBIT A</span>
+                        <span id="feat-tag-1">COLLECTION</span>
                         <span class="tag-no">FIG-01</span>
                     </div>
                 </div>
-                <h3 data-t="feat1Title">Tracker Intelligent</h3>
-                <p data-t="feat1Desc">Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.</p>
-            </div>
+                <span class="feature-kicker">01 · <span data-t="f1Tag">Collection</span></span>
+                <h3 data-t="f1Title">Votre collection, série par série</h3>
+                <p data-t="f1Desc">Cochez vos figurines, votre wishlist et vos doublons. Recherche, filtres, et la cote de chaque figurine avec son évolution.</p>
+                <span class="feature-cta"><span data-t="f1Cta">Ouvrir ma collection</span> <span aria-hidden="true">→</span></span>
+            </a>
 
-            <!-- Feature 2 -->
-            <div class="feature-card">
+            <a class="feature-card" href="statistiques.html">
                 <div class="herbarium-frame">
-                    <img id="feat-img-2" class="specimen-image" loading="lazy" decoding="async" alt="Figurine aléatoire 2">
+                    <img id="feat-img-2" class="specimen-image" loading="lazy" decoding="async" alt="">
                     <div class="specimen-tag">
-                        <span id="feat-tag-2">EXHIBIT B</span>
+                        <span id="feat-tag-2">STATS</span>
                         <span class="tag-no">FIG-02</span>
                     </div>
                 </div>
-                <h3 data-t="feat2Title">Statistiques & Valeur</h3>
-                <p data-t="feat2Desc">Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.</p>
-            </div>
+                <span class="feature-kicker">02 · <span data-t="f2Tag">Statistiques</span></span>
+                <h3 data-t="f2Title">Valeur, rang et trophées</h3>
+                <p data-t="f2Desc">Valeur estimée de votre collection et son évolution sur 6 mois, rang de collectionneur, badges par série et prochains objectifs.</p>
+                <span class="feature-cta"><span data-t="f2Cta">Voir mes statistiques</span> <span aria-hidden="true">→</span></span>
+            </a>
 
-            <!-- Feature 3 -->
-            <div class="feature-card">
+            <a class="feature-card" href="echanges.html">
                 <div class="herbarium-frame">
-                    <img id="feat-img-3" class="specimen-image" loading="lazy" decoding="async" alt="Figurine aléatoire 3">
+                    <img id="feat-img-3" class="specimen-image" loading="lazy" decoding="async" alt="">
                     <div class="specimen-tag">
-                        <span id="feat-tag-3">EXHIBIT C</span>
+                        <span id="feat-tag-3">TRADE</span>
                         <span class="tag-no">FIG-03</span>
                     </div>
                 </div>
-                <h3 data-t="feat3Title">Wishlist & Doubles</h3>
-                <p data-t="feat3Desc">Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.</p>
-            </div>
+                <span class="feature-kicker">03 · <span data-t="f3Tag">Communauté</span></span>
+                <h3 data-t="f3Title">Bourse aux échanges</h3>
+                <p data-t="f3Desc">HRNtrack croise vos doublons avec la wishlist des autres collectionneurs, et inversement. Contactez-les via leurs réseaux.</p>
+                <span class="feature-cta"><span data-t="f3Cta">Trouver des échanges</span> <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="feature-card" href="nouveautes.html">
+                <div class="herbarium-frame">
+                    <img id="feat-img-4" class="specimen-image" loading="lazy" decoding="async" alt="">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-4">NEW</span>
+                        <span class="tag-no">FIG-04</span>
+                    </div>
+                </div>
+                <span class="feature-kicker">04 · <span data-t="f4Tag">Catalogue</span></span>
+                <h3 data-t="f4Title">Les dernières sorties</h3>
+                <p data-t="f4Desc">Toutes les nouvelles figurines Hirono dès leur arrivée dans le catalogue, à ajouter en un clic à votre collection.</p>
+                <span class="feature-cta"><span data-t="f4Cta">Voir les nouveautés</span> <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="feature-card" href="statistiques.html">
+                <div class="herbarium-frame">
+                    <img id="feat-img-5" class="specimen-image" loading="lazy" decoding="async" alt="">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-5">SHARE</span>
+                        <span class="tag-no">FIG-05</span>
+                    </div>
+                </div>
+                <span class="feature-kicker">05 · <span data-t="f5Tag">Partage</span></span>
+                <h3 data-t="f5Title">Partage & story Instagram</h3>
+                <p data-t="f5Desc">Un lien public vers votre collection (ou privée, au choix) et une story Instagram prête à publier.</p>
+                <span class="feature-cta"><span data-t="f5Cta">Partager ma collection</span> <span aria-hidden="true">→</span></span>
+            </a>
+
+            <a class="feature-card" href="#" onclick="window.homeInstall(); return false;">
+                <div class="herbarium-frame">
+                    <img id="feat-img-6" class="specimen-image" loading="lazy" decoding="async" alt="">
+                    <div class="specimen-tag">
+                        <span id="feat-tag-6">APP</span>
+                        <span class="tag-no">FIG-06</span>
+                    </div>
+                </div>
+                <span class="feature-kicker">06 · <span data-t="f6Tag">Appli</span></span>
+                <h3 data-t="f6Title">HRNtrack dans votre poche</h3>
+                <p data-t="f6Desc">Installez HRNtrack sur votre téléphone comme une vraie appli : plein écran, et votre collection reste consultable hors ligne.</p>
+                <span class="feature-cta"><span data-t="f6Cta">Installer l'appli</span> <span aria-hidden="true">→</span></span>
+            </a>
         </div>
     </section>
 
@@ -856,11 +946,12 @@
         function initRandomFeatureImages() {
             if (!baseData || baseData.length === 0) return;
             
-            // Mélanger et prendre 3 figurines uniques
+            // Mélanger et prendre une figurine différente par carte
+            const count = document.querySelectorAll('.feature-card').length;
             const shuffled = [...baseData].sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, 3);
+            const selected = shuffled.slice(0, count);
 
-            for (let i = 0; i < 3; i++) {
+            for (let i = 0; i < count; i++) {
                 const imgEl = document.getElementById(`feat-img-${i + 1}`);
                 const tagEl = document.getElementById(`feat-tag-${i + 1}`);
                 if (imgEl && selected[i]) {
@@ -870,10 +961,17 @@
                 if (tagEl && selected[i]) {
                     tagEl.innerText = selected[i].Name;
                 }
+                if (imgEl) imgEl.closest('.herbarium-frame').title = selected[i] ? selected[i].Name : '';
             }
         }
 
         initRandomFeatureImages();
+
+        window.homeInstall = () => {
+            const canPrompt = document.querySelector('.pwa-install') && !document.querySelector('.pwa-install').hidden;
+            if (canPrompt && window.installApp) window.installApp();
+            else hrnNotify(translations[currentLang].installHow, 'info');
+        };
 
         const translations = withCommon({
             fr: {
@@ -886,13 +984,34 @@
                 newsFigDesc: "Le catalogue a été mis à jour. Vérifiez vos séries !",
                 newsSysBadge: "UPDATE",
                 newsSysTitle: "Mises à jour du site",
-                newsSysDesc: "Découvrez les nouvelles fonctions (Cotes, Graphiques...)",
-                feat1Title: "Tracker Intelligent",
-                feat1Desc: "Cochez les figurines que vous possédez. L'outil calcule automatiquement ce qu'il vous manque pour finir les séries.",
-                feat2Title: "Statistiques & Valeur",
-                feat2Desc: "Visualisez l'évolution de votre collection et estimez le montant total de votre investissement.",
-                feat3Title: "Wishlist & Doubles",
-                feat3Desc: "Gérez vos figurines en double pour les échanges et gardez un œil sur celles que vous recherchez.",
+                newsSysDesc: "Bourse aux échanges, appli installable, évolution de la valeur… tout le journal des nouveautés.",
+                featTitle: "Fonctionnalités",
+                featKicker: "[ Tout ce que HRNtrack fait pour vous ]",
+                f1Tag: "Collection",
+                f1Title: "Votre collection, série par série",
+                f1Desc: "Cochez vos figurines, votre wishlist et vos doublons. Recherche, filtres, et la cote de chaque figurine avec son évolution.",
+                f1Cta: "Ouvrir ma collection",
+                f2Tag: "Statistiques",
+                f2Title: "Valeur, rang et trophées",
+                f2Desc: "Valeur estimée de votre collection et son évolution sur 6 mois, rang de collectionneur, badges par série et prochains objectifs.",
+                f2Cta: "Voir mes statistiques",
+                f3Tag: "Communauté",
+                f3Title: "Bourse aux échanges",
+                f3Desc: "HRNtrack croise vos doublons avec la wishlist des autres collectionneurs, et inversement. Contactez-les via leurs réseaux.",
+                f3Cta: "Trouver des échanges",
+                f4Tag: "Catalogue",
+                f4Title: "Les dernières sorties",
+                f4Desc: "Toutes les nouvelles figurines Hirono dès leur arrivée dans le catalogue, à ajouter en un clic à votre collection.",
+                f4Cta: "Voir les nouveautés",
+                f5Tag: "Partage",
+                f5Title: "Partage & story Instagram",
+                f5Desc: "Un lien public vers votre collection (ou privée, au choix) et une story Instagram prête à publier.",
+                f5Cta: "Partager ma collection",
+                f6Tag: "Appli",
+                f6Title: "HRNtrack dans votre poche",
+                f6Desc: "Installez HRNtrack sur votre téléphone comme une vraie appli : plein écran, et votre collection reste consultable hors ligne.",
+                f6Cta: "Installer l'appli",
+                installHow: "Pour installer HRNtrack : sur Android, menu ⋮ de Chrome → « Installer l'application ». Sur iPhone, bouton Partager de Safari → « Sur l'écran d'accueil ». Sur ordinateur, icône d'installation dans la barre d'adresse.",
                 socialTitle: "Rejoignez la communauté",
                 socialDesc: "Suivez les actualités, les sorties et partagez votre collection avec nous.",
                 discordBtn: "Rejoindre !",
@@ -910,13 +1029,34 @@
                 newsFigDesc: "The catalog has been updated. Check your series!",
                 newsSysBadge: "UPDATE",
                 newsSysTitle: "Website Updates",
-                newsSysDesc: "Discover new features (Values, Charts...)",
-                feat1Title: "Smart Tracker",
-                feat1Desc: "Mark the figures you own. The tool automatically calculates what you're missing to finish the series.",
-                feat2Title: "Stats & Value",
-                feat2Desc: "Visualize the evolution of your collection and estimate your total investment.",
-                feat3Title: "Wishlist & Duplicates",
-                feat3Desc: "Manage your duplicate figures for trading and keep an eye on the ones you are actively looking for.",
+                newsSysDesc: "Trading board, installable app, value over time… the full changelog.",
+                featTitle: "Features",
+                featKicker: "[ Everything HRNtrack does for you ]",
+                f1Tag: "Collection",
+                f1Title: "Your collection, series by series",
+                f1Desc: "Tick your figures, wishlist and duplicates. Search, filters, and each figure's market value with its trend.",
+                f1Cta: "Open my collection",
+                f2Tag: "Statistics",
+                f2Title: "Value, rank and trophies",
+                f2Desc: "Your collection's estimated value and its trend over 6 months, collector rank, series badges and next goals.",
+                f2Cta: "See my statistics",
+                f3Tag: "Community",
+                f3Title: "Trading board",
+                f3Desc: "HRNtrack matches your duplicates with other collectors' wishlists, and the other way round. Reach them through their socials.",
+                f3Cta: "Find trades",
+                f4Tag: "Catalog",
+                f4Title: "Latest releases",
+                f4Desc: "Every new Hirono figure as soon as it lands in the catalog, added to your collection in one click.",
+                f4Cta: "See new releases",
+                f5Tag: "Sharing",
+                f5Title: "Sharing & Instagram story",
+                f5Desc: "A public link to your collection (or keep it private) and an Instagram story ready to post.",
+                f5Cta: "Share my collection",
+                f6Tag: "App",
+                f6Title: "HRNtrack in your pocket",
+                f6Desc: "Install HRNtrack on your phone like a real app: full screen, and your collection stays available offline.",
+                f6Cta: "Install the app",
+                installHow: "To install HRNtrack: on Android, Chrome's ⋮ menu → “Install app”. On iPhone, Safari's Share button → “Add to Home Screen”. On a computer, the install icon in the address bar.",
                 socialTitle: "Join the community",
                 socialDesc: "Follow news, releases and share your collection with us.",
                 discordBtn: "Join us!",
