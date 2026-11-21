@@ -6,287 +6,250 @@
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <meta property="og:title" content="Ma Collection Hirono - HRNtrack">
-    <meta property="og:description" content="Découvre ma collection de figurines Hirono, mes doubles et mes recherches.">
+
+    <meta property="og:title" content="Ma collection Hirono - HRNtrack">
+    <meta property="og:description" content="Découvre ma collection de figurines Hirono, mes doublons à échanger et ma wishlist.">
     <meta property="og:image" content="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    <meta property="og:url" content=""> 
     <meta property="og:type" content="website">
 
-    <title>HRNtrack</title>
+    <title>Collection partagée - HRNtrack</title>
     <link rel="icon" type="image/vnd.icon" href="https://i.postimg.cc/pLqpbbHb/IMG-0226f.png">
-    
-    <!-- Typographie Poppins -->
+
     <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="assets/common.css">
-    
-    <style>
-        :root { 
-            --color-dark: #1A1A1A;
-            --color-light: #F5F5F0;
-            --color-sand: #EBE7DF;
-            --color-border: #D8D2C5;
-            --color-gold: #C6A875;
-            --color-gold-light: #F9F5EB;
-            --color-red: #C0392B; 
-            --color-green: #6A8C47;
-            --color-green-dark: #557235;
-            --color-text-sub: #5E5D59;
-            --card-bg: #FCFBF8;
-            
-            --primary: var(--color-green);
-            --primary-dark: var(--color-green-dark);
-            --bg-body: var(--color-light);
-            --text-main: var(--color-dark);
-            --text-sub: var(--color-text-sub);
-            
-            --accent-double: #D97706; 
-            --accent-secret: #8E44AD; 
-            
-            --font-sans: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            --nav-height: 75px;
-            --nav-height-mobile: 70px;
-            
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            --shadow-hover: 0 10px 25px rgba(0, 0, 0, 0.08);
-        }
 
-        body { 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            font-family: var(--font-sans); 
-            margin: 0; 
-            padding: 0;
-            -webkit-font-smoothing: antialiased; 
-            display: flex; 
-            flex-direction: column; 
-            min-height: 100vh;
-            padding-bottom: var(--nav-height-mobile);
-            opacity: 0; 
-            transition: opacity 0.3s ease-in-out;
+    <link rel="stylesheet" href="assets/common.css">
+
+    <style>
+        body {
+            background-color: var(--bg-body); color: var(--text-main); font-family: var(--font-sans);
+            margin: 0; padding: 0; -webkit-font-smoothing: antialiased;
+            display: flex; flex-direction: column; min-height: 100vh;
+            opacity: 0; transition: opacity 0.3s ease-in-out;
         }
         body.ready { opacity: 1; }
-
-        /* --- NAVIGATION SUPÉRIEURE --- */
-
+        [hidden] { display: none !important; }
 
         .cta-btn {
-            background: var(--color-dark); 
-            color: var(--color-light); 
-            border: 1px solid var(--color-dark);
-            text-decoration: none; 
-            padding: 0.5rem 1.2rem; 
-            font-size: 0.78rem; 
-            font-weight: 600; 
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            transition: all 0.25s ease; 
-            white-space: nowrap;
-            display: inline-flex;
-            align-items: center;
+            background: var(--color-dark); color: var(--color-light); border: 1px solid var(--color-dark);
+            text-decoration: none; padding: 0.5rem 1.2rem; font-size: 0.78rem; font-weight: 600;
+            letter-spacing: 0.08em; text-transform: uppercase; transition: all 0.25s ease; white-space: nowrap;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; font-family: inherit;
         }
         .cta-btn:hover { background: transparent; color: var(--color-dark); }
+        .ghost-btn {
+            background: var(--surface); color: var(--text-main); border: 1px solid var(--color-border);
+            padding: 0.5rem 1rem; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+            display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-family: inherit; transition: border-color 0.2s;
+        }
+        .ghost-btn:hover { border-color: var(--color-dark); }
+        .ghost-btn svg, .cta-btn svg { width: 15px; height: 15px; }
+        @media (max-width: 992px) { .nav-right .cta-btn { display: none; } }
 
-        .btn-share-link {
-            background: var(--color-sand); 
-            color: var(--color-dark); 
-            border: 1px solid var(--color-border);
-            padding: 8px 12px; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-            font-family: var(--font-sans);
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            transition: all 0.25s ease;
-        }
-        .btn-share-link:hover { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
+        .container { max-width: 1200px; margin: 32px auto 60px; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
 
-        /* Mobile Hamburger Button */
+        /* --- ÉTAT : chargement / erreur --- */
+        .state-box {
+            text-align: center; padding: 70px 20px; background: var(--surface); border: 1px solid var(--color-border);
+            box-shadow: var(--shadow); color: var(--text-sub);
+        }
+        .state-box strong { display: block; color: var(--text-main); font-size: 1.1rem; margin-bottom: 8px; }
+        .state-box .cta-btn { margin-top: 20px; }
+        .spinner { width: 34px; height: 34px; margin: 0 auto 16px; border: 3px solid var(--color-border); border-top-color: var(--color-green); border-radius: 50%; animation: spin 0.9s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
+        /* --- EN-TÊTE DU PROFIL --- */
+        .hero {
+            position: relative; overflow: hidden; background: var(--surface); border: 1px solid var(--color-border);
+            box-shadow: var(--shadow); padding: 28px 30px; display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0 0 auto 0; height: 4px;
+            background: linear-gradient(90deg, var(--color-green), var(--color-gold));
+        }
+        .hero-avatar {
+            width: 96px; height: 96px; border-radius: 50%; background: var(--color-sand); border: 3px solid var(--color-gold);
+            display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: var(--text-sub); overflow: hidden;
+        }
+        .hero-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .hero-kicker { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-sub); margin: 0 0 4px; }
+        .hero-name { font-size: 1.8rem; font-weight: 800; margin: 0; line-height: 1.15; word-break: break-word; }
+        .rank-badge {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 4px 10px;
+            background: var(--color-gold-light); border: 1px solid var(--color-gold); font-size: 0.72rem; font-weight: 700; color: var(--text-main);
+        }
+        .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
 
-        @media (min-width: 993px) { body { padding-bottom: 0; } }
-        @media (max-width: 992px) {
-            .top-nav { padding: 0 1.5rem; }
-            .nav-right .cta-btn, .nav-right .lang-toggle { display: none; }
-            .mobile-menu-btn { display: block; }
+        .big-ring {
+            --pct: 0; width: 128px; height: 128px; border-radius: 50%; position: relative; flex-shrink: 0;
+            background: conic-gradient(var(--color-green) calc(var(--pct) * 1%), var(--color-border) 0);
+            display: flex; align-items: center; justify-content: center; transition: --pct 1s ease;
         }
+        .big-ring::before { content: ''; position: absolute; inset: 10px; border-radius: 50%; background: var(--surface); }
+        .big-ring div { position: relative; text-align: center; }
+        .big-ring b { display: block; font-size: 1.6rem; font-weight: 800; line-height: 1; }
+        .big-ring span { font-size: 0.66rem; font-weight: 600; color: var(--text-sub); text-transform: uppercase; letter-spacing: 0.06em; }
 
-        /* --- CONTAINER & PROFILE --- */
-        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
-        
-        .profile-summary {
-            background: var(--surface); 
-            padding: 35px; 
-            border: 1px solid var(--color-border);
-            margin-bottom: 30px;
-            box-shadow: var(--shadow); 
-            text-align: center; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center;
+        /* --- CHIFFRES CLÉS --- */
+        .kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 14px 0 26px; }
+        .kpi {
+            background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow);
+            padding: 14px 16px; display: flex; align-items: center; gap: 12px; min-width: 0; cursor: pointer;
+            transition: border-color 0.2s, transform 0.2s; font-family: inherit; text-align: left; color: inherit;
         }
+        .kpi:hover { border-color: var(--color-dark); transform: translateY(-2px); }
+        .kpi-icon { width: 40px; height: 40px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.15rem; background: var(--color-sand); }
+        .kpi-text { display: flex; flex-direction: column; min-width: 0; }
+        .kpi-label { font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-sub); }
+        .kpi-value { font-size: 1.35rem; font-weight: 800; line-height: 1.2; }
+        .kpi-value small { font-size: 0.8rem; font-weight: 600; color: var(--text-sub); }
 
-        .avatar-circle {
-            width: 90px; height: 90px; 
-            background: var(--color-sand); 
-            border-radius: 50%; 
-            display: flex; align-items: center; justify-content: center; 
-            font-size: 32px; margin-bottom: 15px;
-            border: 2px solid var(--color-dark); 
-            overflow: hidden;
-            color: var(--color-text-sub);
+        /* --- SÉRIES --- */
+        .section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 2px 12px; }
+        .section-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin: 0; }
+        .section-sub { font-size: 0.75rem; color: var(--text-sub); }
+        .series-strip { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(180px, 1fr); gap: 10px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 26px; scrollbar-width: thin; }
+        .serie-chip {
+            background: var(--surface); border: 1px solid var(--color-border); padding: 12px 14px; cursor: pointer;
+            text-align: left; font-family: inherit; color: inherit; transition: border-color 0.2s; min-width: 0;
         }
-        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .user-title { 
-            font-size: 1.5rem; 
-            font-weight: 800; 
-            margin: 0 0 20px 0; 
-            color: var(--color-dark); 
-            text-transform: uppercase; 
-            letter-spacing: 0.05em; 
-        }
-        
-        /* STATS ROW */
-        .stats-row {
-            display: flex; gap: 15px; width: 100%; max-width: 650px; justify-content: center; flex-wrap: wrap;
-        }
-        .stat-box {
-            flex: 1; min-width: 120px; 
-            background: var(--color-sand); 
-            border: 1px solid var(--color-border);
-            padding: 12px 16px; 
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .stat-val { font-size: 1.3rem; font-weight: 800; color: var(--text-main); }
-        .stat-lbl { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-sub); font-weight: 700; margin-top: 4px; }
-        
-        /* FILTRES BAR */
-        .filter-bar {
-            background: var(--surface); 
-            padding: 20px; 
-            border: 1px solid var(--color-border);
-            margin-bottom: 35px;
-            box-shadow: var(--shadow); 
-            display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
-        }
-        .search-input { 
-            flex: 2; min-width: 200px; padding: 10px 14px; 
-            border: 1px solid var(--color-border); 
-            font-family: var(--font-sans); font-size: 0.85rem; 
-            background: var(--surface); color: var(--color-dark); outline: none;
-        }
-        .search-input:focus { border-color: var(--color-dark); }
+        .serie-chip:hover, .serie-chip.active { border-color: var(--color-dark); }
+        .serie-chip.active { box-shadow: inset 0 0 0 1px var(--color-dark); }
+        .serie-chip-name { font-size: 0.78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+        .serie-chip-count { font-size: 0.7rem; color: var(--text-sub); display: flex; justify-content: space-between; margin: 3px 0 7px; }
+        .bar { display: block; height: 5px; background: var(--color-sand); overflow: hidden; }
+        .bar i { display: block; height: 100%; background: var(--color-green); }
+        .serie-chip.done .bar i, .series-head.done .bar i { background: var(--color-gold); }
+        .done-mark { color: var(--color-gold); font-weight: 800; }
 
-        .select-input { 
-            flex: 1; min-width: 180px; padding: 10px 14px; 
-            border: 1px solid var(--color-border); 
-            background: var(--surface); cursor: pointer; 
-            font-family: var(--font-sans); font-size: 0.85rem; color: var(--color-dark); outline: none;
+        /* --- RECHERCHE & FILTRES --- */
+        .toolbar {
+            background: var(--card-bg); padding: 14px 16px; border: 1px solid var(--color-border); box-shadow: var(--shadow);
+            display: grid; grid-template-columns: minmax(220px, 1fr) 220px; gap: 12px; margin-bottom: 12px;
+            position: sticky; top: calc(var(--nav-height) + 8px); z-index: 100;
         }
-        .select-input:focus { border-color: var(--color-dark); }
-        
-        .filter-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .search-wrapper { position: relative; display: flex; align-items: center; }
+        .search-icon { position: absolute; left: 12px; width: 16px; height: 16px; color: var(--text-sub); pointer-events: none; }
+        .search-bar {
+            width: 100%; box-sizing: border-box; padding: 10px 36px 10px 38px; border: 1px solid var(--color-border); font-family: inherit;
+            font-size: 0.88rem; outline: none; background: var(--surface); color: var(--text-main);
+        }
+        .search-bar::-webkit-search-cancel-button { display: none; }
+        .search-bar:focus { border-color: var(--color-dark); }
+        .search-clear { position: absolute; right: 4px; background: none; border: none; font-size: 15px; color: var(--text-sub); cursor: pointer; display: none; padding: 6px 8px; }
+        .search-wrapper.has-text .search-clear { display: block; }
+        .control-select { padding: 10px 12px; border: 1px solid var(--color-border); background: var(--surface); font-family: inherit; font-size: 0.82rem; color: var(--text-main); cursor: pointer; outline: none; min-width: 0; }
+        .filters { grid-column: 1 / -1; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+        .filters::-webkit-scrollbar { display: none; }
         .filter-btn {
-            padding: 8px 14px; 
-            border: 1px solid var(--color-border);
-            background: var(--color-sand); 
-            cursor: pointer; font-family: var(--font-sans); font-size: 0.75rem; font-weight: 600; 
-            letter-spacing: 0.05em; text-transform: uppercase; color: var(--color-text-sub);
-            transition: all 0.25s ease;
+            display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1px solid var(--color-border);
+            background: var(--surface); color: var(--text-sub); font-family: inherit; font-weight: 600; font-size: 0.74rem;
+            letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; transition: 0.2s; white-space: nowrap;
         }
-        .filter-btn:hover { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
+        .filter-btn:hover { color: var(--color-dark); border-color: var(--color-dark); }
         .filter-btn.active { background: var(--color-dark); color: var(--color-light); border-color: var(--color-dark); }
+        .chip-count { font-size: 0.68rem; font-weight: 700; padding: 1px 6px; background: var(--color-sand); color: var(--text-sub); }
+        .filter-btn.active .chip-count { background: rgba(128, 128, 128, 0.35); color: inherit; }
+        .result-bar { margin: 0 2px 18px; font-size: 0.8rem; color: var(--text-sub); }
+        .result-bar strong { color: var(--text-main); }
 
-        /* GRID & CARDS */
-        .series-section { margin-bottom: 45px; }
-        .series-title { 
-            font-size: 0.95rem; font-weight: 700; text-transform: uppercase; margin-bottom: 20px; 
-            border-left: 4px solid var(--color-dark); padding-left: 12px; color: var(--color-dark);
-            letter-spacing: 0.08em;
-        }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px; }
-        
+        /* --- GRILLE --- */
+        .series-block { margin-bottom: 34px; }
+        .series-head { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 4px 12px; margin-bottom: 14px; padding-left: 12px; border-left: 4px solid var(--color-dark); }
+        .series-head h2 { font-size: 0.92rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin: 0; }
+        .series-head .count { font-size: 0.75rem; font-weight: 700; color: var(--text-sub); }
+        .series-head .bar { grid-column: 1 / -1; max-width: 260px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
         .card {
-            background: var(--surface); 
-            border: 1px solid var(--color-border); 
-            padding: 12px; text-align: center;
-            box-shadow: var(--shadow); opacity: 0.45; transition: all 0.25s ease; filter: grayscale(100%);
-            position: relative;
+            background: var(--surface); border: 1px solid var(--color-border); padding: 10px 10px 12px; position: relative;
+            display: flex; flex-direction: column; min-width: 0; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            content-visibility: auto; contain-intrinsic-size: 150px 230px;
         }
-        .card.owned { opacity: 1; filter: grayscale(0%); border-color: var(--primary); }
-        .card.wish { opacity: 1; filter: grayscale(0%); border: 1px dashed var(--color-gold); }
-        
-        .card-img { width: 100%; height: 110px; object-fit: contain; margin-bottom: 10px; background: var(--color-sand); border: 1px solid var(--color-border); }
-        .card-name { font-size: 0.78rem; font-weight: 600; line-height: 1.3; min-height: 32px; display: flex; align-items: center; justify-content: center; color: var(--color-dark); }
-        
-        /* BADGES */
-        .badge {
-            position: absolute; top: 10px; right: 10px; font-size: 0.62rem; font-weight: 700; 
-            padding: 2px 6px; letter-spacing: 0.08em; text-transform: uppercase; color: white; z-index: 2;
-        }
-        .badge.owned { background: var(--primary); }
-        .badge.wish { background: var(--color-gold); color: white; }
+        .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .card.owned { border-color: var(--color-green); }
+        .card.wish { border-color: #E67E22; }
+        .card-media { aspect-ratio: 1; background: var(--color-sand); position: relative; overflow: hidden; }
+        .card-media img { width: 100%; height: 100%; object-fit: contain; display: block; transition: transform 0.35s ease; }
+        .card:hover .card-media img { transform: scale(1.05); }
+        .card.missing .card-media img { filter: grayscale(1) opacity(0.45); }
+        .card.wish .card-media img { filter: grayscale(0.4) opacity(0.85); }
+        .pill { position: absolute; top: 6px; left: 6px; padding: 2px 7px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #fff; z-index: 2; }
+        .pill.owned { background: var(--color-green); }
+        .pill.wish { background: #E67E22; }
+        .secret-badge { position: absolute; top: 6px; right: 6px; background: var(--color-gold); color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2; }
+        .qty-badge { position: absolute; bottom: 6px; right: 6px; background: #D97706; color: #fff; font-size: 0.68rem; font-weight: 800; padding: 2px 7px; z-index: 2; }
+        .card-name { font-weight: 600; font-size: 0.78rem; margin: 10px 0 0; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .empty-state { text-align: center; padding: 50px 20px; color: var(--text-sub); background: var(--surface); border: 1px dashed var(--color-border); }
+        .empty-state strong { display: block; color: var(--text-main); font-size: 1rem; margin-bottom: 6px; }
 
-        .qty-badge {
-            position: absolute; top: 10px; left: 10px; background: var(--accent-double); color: white;
-            font-size: 0.65rem; font-weight: 800; padding: 2px 6px; z-index: 2;
+        /* --- APPEL À L'ACTION --- */
+        .join {
+            margin-top: 40px; padding: 28px; background: var(--color-dark); color: var(--color-light);
+            display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;
         }
+        .join h3 { margin: 0 0 4px; font-size: 1.1rem; }
+        .join p { margin: 0; font-size: 0.85rem; opacity: 0.8; }
+        .join .cta-btn { background: var(--color-light); color: var(--color-dark); border-color: var(--color-light); }
+        .join .cta-btn:hover { background: transparent; color: var(--color-light); }
 
-        @media(max-width: 600px) { 
-            .grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } 
-            .filter-bar { flex-direction: column; align-items: stretch; }
-            .stats-row { gap: 10px; }
-            .stat-val { font-size: 1.1rem; }
+        .toast {
+            position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); background: var(--color-dark); color: var(--color-light);
+            padding: 10px 18px; font-size: 0.82rem; font-weight: 600; box-shadow: var(--shadow-hover); opacity: 0; pointer-events: none;
+            transition: opacity 0.2s, transform 0.2s; z-index: 3000;
+        }
+        .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+        @media (max-width: 992px) {
+            .toolbar { top: var(--nav-height); grid-template-columns: 1fr; padding: 12px; }
+            .search-bar { font-size: 16px; }
+        }
+        @media (max-width: 767px) {
+            .container { margin: 16px auto 40px; padding: 0 12px; }
+            .hero { grid-template-columns: auto 1fr; padding: 22px 18px; gap: 16px; }
+            .hero-avatar { width: 68px; height: 68px; font-size: 1.5rem; }
+            .hero-name { font-size: 1.35rem; }
+            .hero-progress { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; }
+            .big-ring { width: 84px; height: 84px; }
+            .big-ring::before { inset: 8px; }
+            .big-ring b { font-size: 1.15rem; }
+            .hero-actions { grid-column: 1 / -1; margin-top: 0; }
+            .hero-actions > * { flex: 1; justify-content: center; }
+            .kpis { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .kpi { padding: 10px 12px; gap: 10px; }
+            .kpi-icon { width: 34px; height: 34px; font-size: 1rem; }
+            .kpi-value { font-size: 1.1rem; }
+            .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+            .card:hover { transform: none; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <nav class="top-nav">
         <div class="nav-logo-group">
             <a href="index.html" aria-label="HRNtrack Accueil">
-                 <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
+                <img src="https://i.postimg.cc/yNdVZYsy/logo1-blanc.png" class="site-logo" alt="HRNtrack Logo">
             </a>
         </div>
-
         <div class="nav-right">
             <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode">
                 <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
             </button>
             <button type="button" class="lang-toggle" onclick="window.toggleLanguage()" aria-label="Changer de langue / Switch language">
-                    <span class="lang-option active" id="lang-fr">FR</span>
-                    <span class="lang-option" id="lang-en">EN</span>
-                </button>
-            
-            <button class="btn-share-link" onclick="window.shareCurrentPage()" title="Copier le lien" data-t="btnShare">
-                Copier le lien
+                <span class="lang-option active" id="lang-fr">FR</span>
+                <span class="lang-option" id="lang-en">EN</span>
             </button>
-            
             <a href="index.html" class="cta-btn" data-t="btnCreate">Créer ma collection</a>
         </div>
-
-        <!-- Mobile Hamburger Button -->
         <button type="button" class="mobile-menu-btn" onclick="window.toggleMobileMenu()" aria-label="Menu" aria-controls="mobile-drawer" aria-expanded="false">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
     </nav>
 
-    <!-- MOBILE DRAWER MENU -->
     <div class="mobile-drawer" id="mobile-drawer">
         <div class="mobile-actions">
             <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -299,267 +262,380 @@
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Thème / Theme</span>
                 <button type="button" class="theme-toggle" onclick="window.toggleTheme && window.toggleTheme()" aria-label="Mode sombre / Dark mode">
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
-            </button>
+                    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+                </button>
             </div>
-            
-            <button class="btn-share-link" onclick="window.shareCurrentPage(); window.toggleMobileMenu();" style="width:100%; text-align:center;" data-t="btnShare">
-                Copier le lien
-            </button>
-
-            <a href="index.html" class="cta-btn" style="text-align:center; justify-content:center;" data-t="btnCreate">
-                Créer ma collection
-            </a>
+            <a href="index.html" class="cta-btn" data-t="btnCreate">Créer ma collection</a>
         </div>
     </div>
 
-    <div class="container">
-        <div id="loading" style="text-align:center; padding:60px 20px; font-weight:600; font-size:0.9rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--color-text-sub);" data-t="msgLoading">
-            Chargement de la collection...
-        </div>
+    <main class="container">
+        <div id="state" class="state-box"><div class="spinner"></div><span data-t="msgLoading">Chargement de la collection…</span></div>
 
-        <div id="profile-area" style="display:none;" class="profile-summary">
-            <div class="avatar-circle" id="profile-avatar">P</div>
-            <h1 class="user-title" id="profile-pseudo">Collection Hirono</h1>
-            
-            <div class="stats-row">
-                <div class="stat-box">
-                    <div class="stat-val" id="stat-total" style="color:var(--primary);">0</div>
-                    <div class="stat-lbl" data-t="lblTotal">Total</div>
+        <div id="content" hidden>
+            <!-- En-tête : qui, rang, progression, actions -->
+            <section class="hero">
+                <div class="hero-avatar" id="avatar" aria-hidden="true">?</div>
+                <div class="hero-main">
+                    <p class="hero-kicker" data-t="kicker">Collection Hirono</p>
+                    <h1 class="hero-name" id="pseudo">Collectionneur</h1>
+                    <div class="rank-badge" id="rank"></div>
+                    <div class="hero-actions">
+                        <button type="button" class="cta-btn" id="btn-copy">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                            <span data-t="btnCopy">Copier le lien</span>
+                        </button>
+                        <button type="button" class="ghost-btn" id="btn-share" hidden>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"></path></svg>
+                            <span data-t="btnShare">Partager</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-val" id="stat-secret" style="color:var(--accent-secret);">0</div>
-                    <div class="stat-lbl" data-t="lblSecrets">Secrets</div>
+                <div class="hero-progress">
+                    <div class="big-ring" id="ring" role="img"><div><b id="ring-pct">0%</b><span data-t="lblComplete">complété</span></div></div>
+                    <div class="section-sub" id="ring-sub"></div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-val" id="stat-doubles" style="color:var(--accent-double);">0</div>
-                    <div class="stat-lbl" data-t="lblDoubles">Doublons</div>
+            </section>
+
+            <!-- Chiffres clés (cliquables = filtre) -->
+            <section class="kpis">
+                <button type="button" class="kpi" data-goto="owned"><span class="kpi-icon">🧸</span><span class="kpi-text"><span class="kpi-label" data-t="kOwned">Possédées</span><span class="kpi-value" id="k-owned">0</span></span></button>
+                <button type="button" class="kpi" data-goto="secret"><span class="kpi-icon">✨</span><span class="kpi-text"><span class="kpi-label" data-t="kSecrets">Secrètes</span><span class="kpi-value" id="k-secret">0</span></span></button>
+                <button type="button" class="kpi" data-goto="double"><span class="kpi-icon">🔁</span><span class="kpi-text"><span class="kpi-label" data-t="kDoubles">À échanger</span><span class="kpi-value" id="k-double">0</span></span></button>
+                <button type="button" class="kpi" data-goto="wish"><span class="kpi-icon">💛</span><span class="kpi-text"><span class="kpi-label" data-t="kWish">Recherchées</span><span class="kpi-value" id="k-wish">0</span></span></button>
+            </section>
+
+            <!-- Progression par série -->
+            <div class="section-head">
+                <h2 class="section-title" data-t="seriesTitle">Progression par série</h2>
+                <span class="section-sub" id="series-sub"></span>
+            </div>
+            <div class="series-strip" id="series-strip"></div>
+
+            <!-- Recherche & filtres -->
+            <div class="toolbar">
+                <div class="search-wrapper" id="search-wrapper">
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="M21 21l-4.35-4.35"></path></svg>
+                    <input type="search" id="search" class="search-bar" autocomplete="off" aria-label="Rechercher">
+                    <button type="button" class="search-clear" id="search-clear" aria-label="Effacer">✕</button>
+                </div>
+                <select id="serie-filter" class="control-select" aria-label="Série"></select>
+                <div class="filters" id="filters" role="group">
+                    <button type="button" class="filter-btn active" data-filter="all"><span data-t="fAll">Tout</span><span class="chip-count" id="c-all"></span></button>
+                    <button type="button" class="filter-btn" data-filter="owned"><span data-t="fOwned">Possédées</span><span class="chip-count" id="c-owned"></span></button>
+                    <button type="button" class="filter-btn" data-filter="wish"><span data-t="fWish">Wishlist</span><span class="chip-count" id="c-wish"></span></button>
+                    <button type="button" class="filter-btn" data-filter="double"><span data-t="fDouble">Doublons</span><span class="chip-count" id="c-double"></span></button>
+                    <button type="button" class="filter-btn" data-filter="secret"><span data-t="fSecret">Secrètes</span><span class="chip-count" id="c-secret"></span></button>
+                    <button type="button" class="filter-btn" data-filter="missing"><span data-t="fMissing">Manquantes</span><span class="chip-count" id="c-missing"></span></button>
                 </div>
             </div>
+            <div class="result-bar" id="result-bar" aria-live="polite"></div>
+            <div id="collection"></div>
+
+            <section class="join">
+                <div>
+                    <h3 data-t="joinTitle">Toi aussi, collectionnes-tu les Hirono ?</h3>
+                    <p data-t="joinText">Suis ta collection, ta wishlist et tes doublons gratuitement, puis partage-la en un lien.</p>
+                </div>
+                <a href="index.html" class="cta-btn" data-t="btnCreateFree">Créer ma collection gratuitement</a>
+            </section>
         </div>
+    </main>
 
-        <div class="filter-bar" id="filter-container" style="display:none;">
-            <input type="text" id="search-box" class="search-input" placeholder="Rechercher..." oninput="window.applyFilters()">
-            
-            <select id="serie-filter" class="select-input" onchange="window.applyFilters()">
-                <option value="all" data-t="optAllSeries">-- Toutes les séries --</option>
-            </select>
-
-            <div class="filter-group">
-                <button class="filter-btn active" onclick="window.setStatusFilter('all', this)" data-t="fAll">Tout</button>
-                <button class="filter-btn" onclick="window.setStatusFilter('owned', this)" data-t="fOwned">Possédés</button>
-                <button class="filter-btn" onclick="window.setStatusFilter('wish', this)" data-t="fWish">Wishlist</button>
-                <button class="filter-btn" onclick="window.setStatusFilter('double', this)" data-t="fDouble">Doublons</button>
-                <button class="filter-btn" onclick="window.setStatusFilter('secret', this)" data-t="fSecret">Secrets</button>
-            </div>
-        </div>
-
-        <div id="collection-display"></div>
-    </div>
-
+    <div class="toast" id="toast" role="status"></div>
     <div id="footer-placeholder"></div>
 
     <script src="assets/site.js"></script>
-
     <script type="module">
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { rankFor, isSpecialSerie } from './assets/collection-stats.js';
+        import { PUBLIC_COLLECTION, toPublicProfile } from './assets/public-profile.js';
         import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { baseData } from './data.js?v=2026-11-16-2';
 
         const db = getFirestore(app);
 
         const translations = withCommon({
-            fr: {                btnCreate: "Créer ma collection",                 btnShare: "Copier le lien",                msgLoading: "Chargement de la collection...",                fAll: "Tout", fOwned: "Possédés", fWish: "Wishlist", fDouble: "Doublons", fSecret: "Secrets",                optAllSeries: "-- Toutes les séries --", badgeOwned: "OWNED", badgeWish: "WISH",                lblTotal: "Possédées", lblSecrets: "Secrets", lblDoubles: "Doublons (Dispo)",                searchPh: "Rechercher une figurine...",                footerPrivacy: "Politique de Confidentialité", footerTerms: "Mentions Légales",                footerRights: "Tous droits réservés.", footerLinks: "Liens utiles", footerContact: "Contact"                },            en: {                btnCreate: "Start my collection",                 btnShare: "Copy link",                msgLoading: "Loading collection...",                fAll: "All", fOwned: "Owned", fWish: "Wishlist", fDouble: "Duplicates", fSecret: "Secrets",                optAllSeries: "-- All Series --", badgeOwned: "OWNED", badgeWish: "WISH",                lblTotal: "Owned", lblSecrets: "Secrets", lblDoubles: "Duplicates (Trade)",                searchPh: "Search a figure...",                footerPrivacy: "Privacy Policy", footerTerms: "Legal Notice",                footerRights: "All rights reserved.", footerLinks: "Useful Links", footerContact: "Contact"                }        });
+            fr: {
+                btnCreate: "Créer ma collection", btnCreateFree: "Créer ma collection gratuitement",
+                btnCopy: "Copier le lien", btnShare: "Partager", copied: "Lien copié !", copyPrompt: "Copiez ce lien :",
+                msgLoading: "Chargement de la collection…", kicker: "Collection Hirono", defaultName: "Collectionneur Hirono",
+                titleOf: "Collection de {name}", lblComplete: "complété", ringSub: "{n} / {t} figurines",
+                kOwned: "Possédées", kSecrets: "Secrètes", kDoubles: "À échanger", kWish: "Recherchées",
+                seriesTitle: "Progression par série", seriesSub: "{n} série(s) complète(s) sur {t}",
+                fAll: "Tout", fOwned: "Possédées", fWish: "Wishlist", fDouble: "Doublons", fSecret: "Secrètes", fMissing: "Manquantes",
+                searchPh: "Rechercher une figurine…", allSeries: "Toutes les séries",
+                resultCount: "<strong>{n}</strong> figurine(s)", badgeOwned: "Possédée", badgeWish: "Recherchée",
+                rank: "Rang {emoji} {name}",
+                noResults: "Aucune figurine ne correspond", noResultsHint: "Essayez une autre recherche ou un autre filtre.",
+                errNoLink: "Lien incomplet", errNoLinkHint: "Ce lien de partage ne contient pas d'identifiant de collection.",
+                errNotFound: "Collection introuvable", errNotFoundHint: "Cette collection n'est pas partagée, ou son propriétaire n'a pas encore ouvert HRNtrack depuis la dernière mise à jour.",
+                errLoad: "Chargement impossible", errLoadHint: "Vérifiez votre connexion puis rechargez la page.",
+                joinTitle: "Toi aussi, tu collectionnes les Hirono ?", joinText: "Suis ta collection, ta wishlist et tes doublons gratuitement, puis partage-la en un lien."
+            },
+            en: {
+                btnCreate: "Start my collection", btnCreateFree: "Start my collection for free",
+                btnCopy: "Copy link", btnShare: "Share", copied: "Link copied!", copyPrompt: "Copy this link:",
+                msgLoading: "Loading collection…", kicker: "Hirono collection", defaultName: "Hirono collector",
+                titleOf: "{name}'s collection", lblComplete: "complete", ringSub: "{n} / {t} figures",
+                kOwned: "Owned", kSecrets: "Secrets", kDoubles: "For trade", kWish: "Wanted",
+                seriesTitle: "Progress by series", seriesSub: "{n} of {t} series complete",
+                fAll: "All", fOwned: "Owned", fWish: "Wishlist", fDouble: "Duplicates", fSecret: "Secrets", fMissing: "Missing",
+                searchPh: "Search a figure…", allSeries: "All series",
+                resultCount: "<strong>{n}</strong> figure(s)", badgeOwned: "Owned", badgeWish: "Wanted",
+                rank: "Rank {emoji} {name}",
+                noResults: "No figure matches", noResultsHint: "Try another search or filter.",
+                errNoLink: "Incomplete link", errNoLinkHint: "This share link does not contain a collection ID.",
+                errNotFound: "Collection not found", errNotFoundHint: "This collection is not shared, or its owner has not opened HRNtrack since the latest update.",
+                errLoad: "Unable to load", errLoadHint: "Check your connection and reload the page.",
+                joinTitle: "Do you collect Hirono too?", joinText: "Track your collection, wishlist and duplicates for free, then share it with one link."
+            }
+        });
 
-        let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
-        let currentStatus = 'all';
-        let rawData = [];
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        let lang = (() => { try { return localStorage.getItem('HRN_LANG') || 'fr'; } catch (e) { return 'fr'; } })();
+        const t = (k) => translations[lang][k] ?? translations.fr[k] ?? k;
+        const fmt = (k, vars) => t(k).replace(/\{(\w+)\}/g, (_, v) => vars[v] ?? '');
+
+        const state = { filter: 'all', serie: 'all', search: '' };
+        let profile = null, items = [], stats = null, errorKey = null;
+
+        // ---------- Données ----------
+        async function loadProfile(uid) {
+            try {
+                const snap = await getDoc(doc(db, PUBLIC_COLLECTION, uid));
+                if (snap.exists()) return snap.data();
+            } catch (e) { /* règle pas encore publiée : on tente l'ancienne lecture */ }
+            // Comptes pas encore recopiés : ancienne lecture, tant que les règles l'autorisent
+            try {
+                const old = await getDoc(doc(db, 'users', uid));
+                if (old.exists()) return toPublicProfile(old.data());
+            } catch (e) { /* fiche privée : refusé, c'est normal */ }
+            return null;
+        }
+
+        function buildItems(pub) {
+            const byId = new Map((pub.items || []).map(i => [String(i.ID), i]));
+            return baseData.map(b => {
+                const p = byId.get(String(b.ID));
+                const status = p ? p.s : 'none';
+                const qty = status === 'owned' ? Math.max(1, Number(p.q) || 1) : 0;
+                return { id: String(b.ID), name: b.Name, serie: b.Serie, image: b.Image, secret: b['Secret Rare'] === 'Yes', status, qty };
+            });
+        }
+
+        function computeStats(list) {
+            const s = { total: list.length, owned: 0, secretOwned: 0, secretTotal: 0, doubles: 0, wish: 0, missing: 0, series: new Map() };
+            for (const it of list) {
+                const sm = s.series.get(it.serie) || { name: it.serie, total: 0, owned: 0, special: isSpecialSerie(it.serie) };
+                sm.total++;
+                if (it.secret) s.secretTotal++;
+                if (it.status === 'owned') {
+                    s.owned++; sm.owned++;
+                    if (it.secret) s.secretOwned++;
+                    s.doubles += it.qty - 1;
+                } else {
+                    s.missing++;
+                    if (it.status === 'wish') s.wish++;
+                }
+                s.series.set(it.serie, sm);
+            }
+            // Séries standard d'abord, éditions spéciales ensuite
+            s.seriesList = [...s.series.values()].sort((a, b) => (a.special - b.special) || a.name.localeCompare(b.name));
+            s.complete = s.seriesList.filter(x => x.owned === x.total).length;
+            s.score = s.owned * 10 + s.secretOwned * 100 + s.complete * 50;
+            return s;
+        }
+
+        const MATCH = {
+            all: () => true,
+            owned: i => i.status === 'owned',
+            wish: i => i.status === 'wish',
+            double: i => i.qty > 1,
+            secret: i => i.secret && i.status === 'owned',
+            missing: i => i.status !== 'owned'
+        };
+
+        // ---------- Affichage ----------
+        function renderHeader() {
+            const name = profile.pseudo || t('defaultName');
+            document.getElementById('pseudo').textContent = profile.pseudo ? fmt('titleOf', { name: profile.pseudo }) : name;
+            document.title = `${profile.pseudo ? fmt('titleOf', { name: profile.pseudo }) : name} - HRNtrack`;
+
+            const av = document.getElementById('avatar');
+            if (profile.avatar && /^https:\/\//i.test(profile.avatar)) {
+                const img = document.createElement('img');
+                img.src = profile.avatar; img.alt = '';
+                av.replaceChildren(img);
+            } else av.textContent = name.trim().charAt(0).toUpperCase() || '?';
+
+            const r = rankFor(stats.score);
+            document.getElementById('rank').textContent = fmt('rank', { emoji: r.emoji, name: r.name });
+
+            const pct = stats.total ? Math.round(stats.owned / stats.total * 100) : 0;
+            const ring = document.getElementById('ring');
+            ring.style.setProperty('--pct', pct);
+            ring.setAttribute('aria-label', `${pct}%`);
+            document.getElementById('ring-pct').textContent = pct + '%';
+            document.getElementById('ring-sub').textContent = fmt('ringSub', { n: stats.owned, t: stats.total });
+
+            document.getElementById('k-owned').innerHTML = `${stats.owned}<small> / ${stats.total}</small>`;
+            document.getElementById('k-secret').innerHTML = `${stats.secretOwned}<small> / ${stats.secretTotal}</small>`;
+            document.getElementById('k-double').textContent = stats.doubles;
+            document.getElementById('k-wish').textContent = stats.wish;
+
+            document.getElementById('series-sub').textContent = fmt('seriesSub', { n: stats.complete, t: stats.seriesList.length });
+            document.getElementById('series-strip').innerHTML = stats.seriesList.map(sm => {
+                const p = Math.round(sm.owned / sm.total * 100), done = sm.owned === sm.total;
+                return `<button type="button" class="serie-chip${done ? ' done' : ''}${state.serie === sm.name ? ' active' : ''}" data-serie="${esc(sm.name)}">
+                    <span class="serie-chip-name">${esc(sm.name)}</span>
+                    <span class="serie-chip-count"><span>${sm.owned} / ${sm.total}</span><span class="${done ? 'done-mark' : ''}">${done ? '✓ ' : ''}${p}%</span></span>
+                    <span class="bar"><i style="width:${p}%"></i></span>
+                </button>`;
+            }).join('');
+
+            const select = document.getElementById('serie-filter');
+            select.innerHTML = `<option value="all">${esc(t('allSeries'))}</option>` +
+                stats.seriesList.map(sm => `<option value="${esc(sm.name)}">${esc(sm.name)}</option>`).join('');
+            select.value = state.serie;
+        }
+
+        function cardHtml(it) {
+            const cls = it.status === 'owned' ? 'owned' : it.status === 'wish' ? 'wish' : 'missing';
+            const pill = it.status === 'owned' ? `<span class="pill owned">${esc(t('badgeOwned'))}</span>`
+                : it.status === 'wish' ? `<span class="pill wish">${esc(t('badgeWish'))}</span>` : '';
+            return `<div class="card ${cls}" title="${esc(it.name)}">
+                <div class="card-media">${pill}${it.secret ? '<span class="secret-badge" aria-label="Secret">★</span>' : ''}${it.qty > 1 ? `<span class="qty-badge">×${it.qty}</span>` : ''}
+                    <img src="${esc(it.image)}" alt="${esc(it.name)}" loading="lazy" decoding="async"></div>
+                <p class="card-name">${esc(it.name)}</p>
+            </div>`;
+        }
+
+        function renderGrid() {
+            const q = state.search.trim().toLowerCase();
+            const inScope = items.filter(i => (state.serie === 'all' || i.serie === state.serie) && (!q || i.name.toLowerCase().includes(q)));
+            for (const k of Object.keys(MATCH)) document.getElementById('c-' + k).textContent = inScope.filter(MATCH[k]).length;
+            const list = inScope.filter(MATCH[state.filter]);
+            document.getElementById('result-bar').innerHTML = fmt('resultCount', { n: list.length });
+
+            const box = document.getElementById('collection');
+            if (!list.length) {
+                box.innerHTML = `<div class="empty-state"><strong>${esc(t('noResults'))}</strong>${esc(t('noResultsHint'))}</div>`;
+                return;
+            }
+            const bySerie = new Map();
+            list.forEach(i => { if (!bySerie.has(i.serie)) bySerie.set(i.serie, []); bySerie.get(i.serie).push(i); });
+            box.innerHTML = stats.seriesList.filter(sm => bySerie.has(sm.name)).map(sm => {
+                const p = Math.round(sm.owned / sm.total * 100), done = sm.owned === sm.total;
+                return `<section class="series-block">
+                    <div class="series-head${done ? ' done' : ''}"><h2>${esc(sm.name)}</h2><span class="count">${done ? '✓ ' : ''}${sm.owned} / ${sm.total}</span><span class="bar"><i style="width:${p}%"></i></span></div>
+                    <div class="grid">${bySerie.get(sm.name).map(cardHtml).join('')}</div>
+                </section>`;
+            }).join('');
+        }
+
+        function setFilter(f) {
+            state.filter = f;
+            document.querySelectorAll('#filters .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === f));
+            renderGrid();
+        }
+        function setSerie(s) {
+            state.serie = s;
+            document.getElementById('serie-filter').value = s;
+            document.querySelectorAll('.serie-chip').forEach(c => c.classList.toggle('active', c.dataset.serie === s));
+            renderGrid();
+        }
+
+        function showState(key) {
+            const box = document.getElementById('state');
+            box.hidden = false;
+            box.innerHTML = `<strong>${esc(t(key))}</strong>${esc(t(key + 'Hint'))}<br><a href="index.html" class="cta-btn">${esc(t('btnCreate'))}</a>`;
+        }
 
         function updateUIText() {
-            const tr = translations[currentLang];
-            syncLangToggle(currentLang);
-            document.querySelectorAll('[data-t]').forEach(el => {
-                const key = el.getAttribute('data-t');
-                if(tr[key]) el.innerText = tr[key];
-            });
-            
-            const searchBox = document.getElementById('search-box');
-            if(searchBox) searchBox.placeholder = tr.searchPh;
-            
-            const select = document.getElementById('serie-filter');
-            if(select && select.options.length > 0) select.options[0].text = tr.optAllSeries;
+            syncLangToggle(lang);
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-t]').forEach(el => { const v = translations[lang][el.getAttribute('data-t')]; if (v) el.textContent = v; });
+            document.getElementById('search').placeholder = t('searchPh');
+            if (errorKey) showState(errorKey);
+            if (profile) { renderHeader(); renderGrid(); }
         }
 
+        function toast(msg) {
+            const el = document.getElementById('toast');
+            el.textContent = msg; el.classList.add('show');
+            clearTimeout(toast.timer); toast.timer = setTimeout(() => el.classList.remove('show'), 2200);
+        }
+
+        // ---------- Événements ----------
         window.toggleLanguage = () => {
-            currentLang = (currentLang === 'fr') ? 'en' : 'fr';
-            localStorage.setItem('HRN_LANG', currentLang);
+            lang = lang === 'fr' ? 'en' : 'fr';
+            try { localStorage.setItem('HRN_LANG', lang); } catch (e) { /* stockage indisponible */ }
             updateUIText();
-            render(rawData);
         };
+        document.getElementById('filters').addEventListener('click', (e) => { const b = e.target.closest('.filter-btn'); if (b) setFilter(b.dataset.filter); });
+        document.querySelector('.kpis').addEventListener('click', (e) => {
+            const k = e.target.closest('.kpi'); if (!k) return;
+            setFilter(k.dataset.goto);
+            document.querySelector('.toolbar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        document.getElementById('series-strip').addEventListener('click', (e) => {
+            const c = e.target.closest('.serie-chip'); if (!c) return;
+            setSerie(state.serie === c.dataset.serie ? 'all' : c.dataset.serie);
+        });
+        document.getElementById('serie-filter').addEventListener('change', (e) => setSerie(e.target.value));
+        const search = document.getElementById('search');
+        search.addEventListener('input', () => {
+            state.search = search.value;
+            document.getElementById('search-wrapper').classList.toggle('has-text', !!search.value);
+            renderGrid();
+        });
+        document.getElementById('search-clear').addEventListener('click', () => { search.value = ''; search.dispatchEvent(new Event('input')); search.focus(); });
 
-        window.shareCurrentPage = () => {
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
-                alert(currentLang === 'fr' ? "Lien copié dans le presse-papier !" : "Link copied to clipboard!");
-            }).catch(err => {
-                prompt(currentLang === 'fr' ? "Copiez ce lien :" : "Copy this link:", url);
-            });
+        const shareUrl = () => location.href.split('#')[0];
+        document.getElementById('btn-copy').addEventListener('click', async () => {
+            try { await navigator.clipboard.writeText(shareUrl()); toast(t('copied')); }
+            catch (e) { prompt(t('copyPrompt'), shareUrl()); }
+        });
+        if (navigator.share) {
+            const btn = document.getElementById('btn-share');
+            btn.hidden = false;
+            btn.addEventListener('click', () => navigator.share({ title: document.title, url: shareUrl() }).catch(() => {}));
         }
-        
+
+        // ---------- Démarrage ----------
         async function init() {
-            updateUIText(); 
-
-            const params = new URLSearchParams(window.location.search);
-            const uid = params.get('uid');
-            if(!uid) return document.getElementById('loading').innerText = "Lien invalide ou incomplet.";
-
+            updateUIText();
+            const uid = new URLSearchParams(location.search).get('uid');
             try {
-                const docSnap = await getDoc(doc(db, "users", uid));
-                if (docSnap.exists()) {
-                    const data = docSnap.data();
-                    const userColl = data.collection || [];
-                    const profile = data.profile || {};
-
-                    if(profile.pseudo) {
-                        document.getElementById('profile-pseudo').innerText = profile.pseudo;
-                        document.title = `${profile.pseudo} - HRNtrack`;
-                        const ogTitle = document.querySelector('meta[property="og:title"]');
-                        const ogUrl = document.querySelector('meta[property="og:url"]');
-                        if(ogTitle) ogTitle.content = `Collection de ${profile.pseudo} - HRNtrack`;
-                        if(ogUrl) ogUrl.content = window.location.href;
-                    }
-                    // Avatar : on crée l'image via le DOM (jamais via innerHTML) et on n'accepte que des URLs http(s)
-                    if(typeof profile.avatar === 'string' && /^https?:\/\//i.test(profile.avatar)) {
-                        const avatarImg = document.createElement('img');
-                        avatarImg.src = profile.avatar;
-                        avatarImg.alt = '';
-                        document.getElementById('profile-avatar').replaceChildren(avatarImg);
-                    }
-
-                    rawData = baseData.map(b => {
-                        const find = userColl.find(u => u.ID === b.ID);
-                        if (find) {
-                            let q = find.Qty ? Number(find.Qty) : (find.Status === 'Possédé' ? 1 : 0);
-                            // Nom, image et série viennent toujours du catalogue officiel, pas des données de l'utilisateur
-                            return { ...b, ...find, Qty: Number.isFinite(q) ? q : 0, ID: b.ID, Name: b.Name, Image: b.Image, Serie: b.Serie, "Secret Rare": b["Secret Rare"] };
-                        }
-                        return { ...b, Status: "Non possédé", Qty: 0 };
-                    });
-
-                    const uniqueSeries = [...new Set(baseData.map(i => i.Serie))].sort();
-                    const select = document.getElementById('serie-filter');
-                    uniqueSeries.forEach(s => {
-                        const opt = document.createElement('option');
-                        opt.value = s; opt.innerText = s; select.appendChild(opt);
-                    });
-
-                    const ownedCount = rawData.filter(i => i.Status === 'Possédé').length;
-                    const secretCount = rawData.filter(i => i.Status === 'Possédé' && i["Secret Rare"] === 'Yes').length;
-                    
-                    const doublesCount = rawData.reduce((acc, curr) => {
-                        return acc + (curr.Qty > 1 ? (curr.Qty - 1) : 0);
-                    }, 0);
-
-                    document.getElementById('stat-total').innerText = ownedCount;
-                    document.getElementById('stat-secret').innerText = secretCount;
-                    document.getElementById('stat-doubles').innerText = doublesCount;
-
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('profile-area').style.display = 'flex';
-                    document.getElementById('filter-container').style.display = 'flex';
-                    
-                    render(rawData);
-                    document.body.classList.add('ready');
-                } else {
-                    document.getElementById('loading').innerText = "Profil privé ou inexistant.";
-                    document.body.classList.add('ready');
+                if (!uid || !/^[A-Za-z0-9_-]{6,128}$/.test(uid)) { errorKey = 'errNoLink'; }
+                else {
+                    profile = await loadProfile(uid);
+                    if (!profile) errorKey = 'errNotFound';
                 }
-            } catch(e) {
+            } catch (e) {
                 console.error(e);
-                document.getElementById('loading').innerText = "Erreur lors du chargement des données.";
-                document.body.classList.add('ready');
+                errorKey = 'errLoad';
             }
+            if (errorKey) showState(errorKey);
+            else {
+                items = buildItems(profile);
+                stats = computeStats(items);
+                document.getElementById('state').hidden = true;
+                document.getElementById('content').hidden = false;
+                renderHeader();
+                renderGrid();
+            }
+            document.body.classList.add('ready', 'auth-ready');
         }
 
-        window.setStatusFilter = (s, btn) => {
-            currentStatus = s;
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            window.applyFilters();
-        };
-
-        window.applyFilters = () => {
-            const search = document.getElementById('search-box').value.toLowerCase();
-            const serie = document.getElementById('serie-filter').value;
-
-            let filtered = rawData.filter(i => i.Name.toLowerCase().includes(search));
-
-            if(serie !== 'all') filtered = filtered.filter(i => i.Serie === serie);
-
-            if(currentStatus === 'owned') filtered = filtered.filter(i => i.Status === 'Possédé');
-            if(currentStatus === 'wish') filtered = filtered.filter(i => i.Status === 'Recherché' || i.Status === 'Wishlist');
-            if(currentStatus === 'double') filtered = filtered.filter(i => i.Qty > 1);
-            if(currentStatus === 'secret') filtered = filtered.filter(i => i["Secret Rare"] === 'Yes');
-
-            render(filtered);
-        };
-
-        function render(data) {
-            const container = document.getElementById('collection-display');
-            const grouped = {};
-            data.forEach(i => { if(!grouped[i.Serie]) grouped[i.Serie] = []; grouped[i.Serie].push(i); });
-
-            const allSeries = Object.keys(grouped);
-            
-            const standardSeries = allSeries.filter(s => !s.toLowerCase().includes('special') && !s.toLowerCase().includes('limited'));
-            const specialSeries = allSeries.filter(s => s.toLowerCase().includes('special') || s.toLowerCase().includes('limited'));
-            
-            standardSeries.sort();
-            specialSeries.sort();
-            
-            const finalSortedSeries = [...standardSeries, ...specialSeries];
-
-            let html = '';
-            finalSortedSeries.forEach(serie => {
-                html += `<div class="series-section"><div class="series-title">${serie}</div><div class="grid">`;
-                grouped[serie].forEach(item => {
-                    let cls = "card";
-                    let badges = "";
-                    
-                    if(item.Status === "Possédé") { 
-                        cls += " owned"; 
-                        badges += `<div class="badge owned">${translations[currentLang].badgeOwned}</div>`; 
-                        if(item.Qty > 1) {
-                            badges += `<div class="qty-badge">x${item.Qty}</div>`;
-                        }
-                    } else if(item.Status === "Recherché" || item.Status === "Wishlist") { 
-                        cls += " wish"; 
-                        badges += `<div class="badge wish">${translations[currentLang].badgeWish}</div>`; 
-                    }
-
-                    html += `
-                        <div class="${cls}">
-                            ${badges}
-                            <img src="${item.Image}" class="card-img" loading="lazy" alt="${item.Name}">
-                            <div class="card-name">${item.Name}</div>
-                        </div>
-                    `;
-                });
-                html += `</div></div>`;
-            });
-            container.innerHTML = html || '<p style="text-align:center; padding:40px; color:var(--color-text-sub); font-size:0.85rem;">Aucune figurine ne correspond à votre recherche.</p>';
-        }
-
-        fetch('footer.html')
-            .then(r=>r.text())
-            .then(d=>{
-                document.getElementById('footer-placeholder').innerHTML=d;
-                if(window.initCookieLogic) window.initCookieLogic();
-                updateUIText();
-            })
-            .catch(error => console.error('Erreur Footer:', error));
+        fetch('footer.html').then(r => r.text()).then(d => {
+            document.getElementById('footer-placeholder').innerHTML = d;
+            if (window.initCookieLogic) window.initCookieLogic();
+            updateUIText();
+        }).catch(e => console.error('Erreur Footer:', e));
 
         init();
     </script>

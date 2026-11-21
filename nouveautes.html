@@ -293,6 +293,7 @@
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
+        import { syncPublicProfile } from './assets/public-profile.js';
         import { baseData } from './data.js?v=2026-11-16-2';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
@@ -547,6 +548,7 @@
 
             try {
                 await setDoc(doc(db, "users", currentUser.uid), { collection: collectionPropre }, { merge: true });
+                syncPublicProfile(db, currentUser.uid);
                 userCollection = collectionPropre;
                 renderGrids();
                 window.fermer();

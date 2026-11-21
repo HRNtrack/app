@@ -644,7 +644,8 @@
     <script type="module">
         import { app } from './assets/firebase.js';
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { PUBLIC_COLLECTION, toPublicProfile, samePublicProfile, publicProfileDoc } from './assets/public-profile.js';
         import { computeStats, computeCoteHistory, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
         
         let baseData = [];
@@ -733,6 +734,26 @@
                     });
                     log(`Compteur public mis à jour : ${stats.userCount} utilisateurs.`);
                 } catch (e) { log('⚠️ Compteur public non enregistré (droits Firestore sur market_prices/site_stats ?)'); }
+
+                // Fiches publiques (page de partage) : copie sans prix, dates, états ni notes
+                try {
+                    const pubSnap = await getDocs(collection(db, PUBLIC_COLLECTION));
+                    const existing = new Map(pubSnap.docs.map(d => [d.id, d.data()]));
+                    const todo = users.filter(u => !samePublicProfile(existing.get(u.id), toPublicProfile(u.data)));
+                    for (let i = 0; i < todo.length; i += 400) {
+                        const batch = writeBatch(db);
+                        todo.slice(i, i + 400).forEach(u => batch.set(doc(db, PUBLIC_COLLECTION, u.id), publicProfileDoc(u.data)));
+                        await batch.commit();
+                    }
+                    const userIds = new Set(users.map(u => u.id));
+                    const orphans = [...existing.keys()].filter(id => !userIds.has(id));
+                    for (let i = 0; i < orphans.length; i += 400) {
+                        const batch = writeBatch(db);
+                        orphans.slice(i, i + 400).forEach(id => batch.delete(doc(db, PUBLIC_COLLECTION, id)));
+                        await batch.commit();
+                    }
+                    log(`Fiches publiques : ${todo.length} mises à jour, ${orphans.length} supprimées, ${users.length - todo.length} déjà à jour.`);
+                } catch (e) { log('⚠️ Fiches publiques non mises à jour (règle Firestore « public_profiles » publiée ?)'); }
 
                 log(`${Object.keys(stats.cotes).length} cotes calculées, ${stats.cotesNotEnough} figurines avec moins de ${MIN_PRICES} prix, ${stats.outliers.length} prix aberrants écartés.`);
                 if (stats.unknownIds) log(`${stats.unknownIds} entrées ignorées (ID absent du catalogue).`);

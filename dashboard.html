@@ -597,6 +597,7 @@
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
+        import { syncPublicProfile } from './assets/public-profile.js';
         import { auth, setupAuthModal, updateAuthButtons, updateAuthLabel } from './assets/auth.js';
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -720,17 +721,8 @@
         const publicUid = urlParams.get('uid');
 
         if (publicUid) {
-            isReadOnly = true;
-            document.body.classList.add('auth-ready'); 
-            document.getElementById('access-denied').style.setProperty('display', 'none', 'important');
-            document.getElementById('main-container').style.setProperty('display', 'block', 'important');
-            if(document.getElementById('auth-trigger')) document.getElementById('auth-trigger').style.display = 'none';
-            const banner = document.createElement('div');
-            banner.style.cssText = "background:var(--color-dark); color:var(--color-light); text-align:center; padding:10px; font-weight:600; margin-bottom:20px; text-transform:uppercase; font-size:0.8rem; letter-spacing:0.08em;";
-            banner.innerHTML = "Vous consultez la collection d'un autre collectionneur";
-            document.getElementById('summary').before(banner);
-            loadUserCollection(publicUid);
-            loadCommunityPrices();
+            // Ancienne adresse de partage : la page dédiée lit la fiche publique (la collection complète reste privée)
+            location.replace('share.html?uid=' + encodeURIComponent(publicUid));
         } else {
             onAuthStateChanged(auth, async (user) => {
             if (user) recordVisit(db, user);
@@ -1116,6 +1108,7 @@
                 if (auth.currentUser) { 
                     // merge: true = on ne remplace que la collection, sans effacer le profil (pseudo, avatar) ni les dates
                     await setDoc(doc(db, "users", auth.currentUser.uid), { collection: collectionPropre }, { merge: true });
+                    syncPublicProfile(db, auth.currentUser.uid);
                 } else { 
                     localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre)); 
                 }

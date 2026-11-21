@@ -2,6 +2,7 @@
 // dans users/{uid}.meta, pour que la page admin ait de vraies statistiques d'activité.
 // Une seule écriture par jour et par appareil, pour limiter les écritures Firestore.
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { syncPublicProfile } from './public-profile.js';
 
 export async function recordVisit(db, user) {
     if (!user) return;
@@ -17,6 +18,8 @@ export async function recordVisit(db, user) {
     try {
         await setDoc(doc(db, 'users', user.uid), { meta }, { merge: true });
         try { localStorage.setItem(key, today); } catch (e) { /* stockage indisponible */ }
+        // Une fois par jour : la fiche publique (page de partage) suit la collection et le profil
+        syncPublicProfile(db, user.uid);
     } catch (e) {
         // Ex. règles Firestore qui refusent le champ : sans conséquence pour l'utilisateur
         console.warn('Visite non enregistrée :', e.code || e.message);

@@ -285,6 +285,7 @@
         import { app } from './assets/firebase.js';
         import { withCommon, syncLangToggle } from './assets/i18n.js';
         import { recordVisit } from './assets/activity.js';
+        import { syncPublicProfile, deletePublicProfile } from './assets/public-profile.js';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signOut, updatePassword, updateEmail, deleteUser, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, deleteDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -407,6 +408,7 @@
                 await setDoc(doc(db, "users", user.uid), {
                     profile: { pseudo: pseudo, avatar: avatar }
                 }, { merge: true });
+                await syncPublicProfile(db, user.uid);
                 
                 document.getElementById('display-email').innerText = pseudo; 
                 alert("Profil mis à jour avec succès !");
@@ -492,6 +494,7 @@
             if (!confirm(t('confirmDelete'))) return;
             try {
                 const user = auth.currentUser;
+                await deletePublicProfile(db, user.uid);
                 await deleteDoc(doc(db, "users", user.uid));
                 await deleteUser(user);
                 alert(t('alertDeleteSuccess'));
