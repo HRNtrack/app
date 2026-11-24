@@ -156,3 +156,43 @@ export function computeValueHistory(items, history, cotes = {}, rates = { EUR: 1
     }
     return { months, value: value.map(Math.round), spent: spent.map(Math.round), qty: qtyAt, undated, sameStart: Math.round(sameStart), sameEnd: Math.round(sameEnd) };
 }
+
+/**
+ * Journal de collection : achats regroupés par mois (le plus récent d'abord).
+ * @param {Array<object>} items  catalogue fusionné avec la collection
+ * @param {Record<string, number>} rates  1 devise = X €
+ * @returns {{ months: Array<{ key: string, qty: number, spent: number, bySerie: Array<{ serie: string, qty: number }>,
+ *            items: Array<{ id: string, name: string, image: string, serie: string, qty: number, day: string, secret: boolean }> }>,
+ *            undated: number, firstKey: string|null }}
+ *   undated : nombre de figurines possédées sans date d'achat (non placées sur la frise)
+ */
+export function computeJournal(items, rates = { EUR: 1 }, now = new Date()) {
+    const toEur = (p, cur) => p * (rates[String(cur || 'EUR').toUpperCase()] ?? 1);
+    const byMonth = new Map();
+    let undated = 0;
+    for (const item of items) {
+        if (!OWNED.has(String(item.Status || '').toLowerCase())) continue;
+        const rawQty = parseInt(item.Quantity, 10);
+        const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 1;
+        const d = item['Purchase date'] ? new Date(item['Purchase date']) : null;
+        if (!d || isNaN(d) || d.getFullYear() < 2019 || d > now) { undated += qty; continue; }
+        const day = d.toISOString().slice(0, 10), key = day.slice(0, 7);
+        const price = parseFloat(item['Purchase price']);
+        const paid = Number.isFinite(price) && price > 0 ? toEur(price, item.Currency) * qty : 0;
+        const m = byMonth.get(key) || { key, qty: 0, spent: 0, series: new Map(), items: [] };
+        m.qty += qty;
+        m.spent += paid;
+        const serie = item.Serie || '—';
+        m.series.set(serie, (m.series.get(serie) || 0) + qty);
+        m.items.push({ id: String(item.ID), name: item.Name, image: item.Image, serie, qty, day, secret: String(item['Secret Rare']).toLowerCase() === 'yes' });
+        byMonth.set(key, m);
+    }
+    const months = [...byMonth.values()]
+        .sort((a, b) => b.key.localeCompare(a.key))
+        .map(m => ({
+            key: m.key, qty: m.qty, spent: Math.round(m.spent),
+            bySerie: [...m.series].map(([serie, qty]) => ({ serie, qty })).sort((a, b) => b.qty - a.qty || a.serie.localeCompare(b.serie)),
+            items: m.items.sort((a, b) => b.day.localeCompare(a.day) || a.name.localeCompare(b.name))
+        }));
+    return { months, undated, firstKey: months.length ? months[months.length - 1].key : null };
+}

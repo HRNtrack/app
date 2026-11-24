@@ -194,6 +194,41 @@
         .value-trend.down { color: var(--color-red); }
         .value-trend.flat { color: var(--text-sub); }
         .chart-note { margin: 10px 0 0; font-size: 0.72rem; color: var(--text-sub); }
+        /* Journal de collection : un <details> par mois */
+        .journal-sum { font-size: 0.78rem; color: var(--text-sub); }
+        .journal-list { display: flex; flex-direction: column; gap: 8px; }
+        .journal-month { border: 1px solid var(--color-border); background: var(--surface); }
+        .journal-month[open] { border-color: var(--color-dark); }
+        .journal-month summary {
+            list-style: none; cursor: pointer; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+            padding: 12px 14px; font-size: 0.85rem;
+        }
+        .journal-month summary::-webkit-details-marker { display: none; }
+        .journal-month summary::before {
+            content: ''; width: 0.55em; height: 0.55em; flex-shrink: 0;
+            border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+            rotate: -45deg; margin-right: 2px;
+        }
+        .journal-month[open] > summary::before { rotate: 45deg; }
+        @media (prefers-reduced-motion: no-preference) { .journal-month summary::before { transition: rotate 0.2s; } }
+        .journal-month summary:focus-visible { outline: 2px solid var(--color-dark); outline-offset: -2px; }
+        .journal-date { font-weight: 800; text-transform: capitalize; min-width: 8.5em; }
+        .journal-line { flex: 1; min-width: 12em; color: var(--text-main); }
+        .journal-meta { font-size: 0.75rem; color: var(--text-sub); white-space: nowrap; }
+        .journal-meta b { color: var(--text-main); }
+        .journal-month::details-content { interpolate-size: allow-keywords; overflow: clip; contain: layout; }
+        .journal-month:not([open])::details-content { block-size: 0; }
+        @media (prefers-reduced-motion: no-preference) {
+            .journal-month::details-content { transition: block-size, content-visibility, display; transition-duration: 0.25s; transition-timing-function: ease-in-out; transition-behavior: allow-discrete; }
+        }
+        .journal-figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px; padding: 0 14px 14px; }
+        .journal-fig { position: relative; background: var(--color-sand); border: 1px solid var(--color-border); padding: 4px 4px 6px; text-align: center; min-width: 0; }
+        .journal-fig.secret { border-color: var(--color-gold); }
+        .journal-fig img { width: 100%; aspect-ratio: 1; object-fit: contain; display: block; }
+        .journal-fig span { display: block; font-size: 0.62rem; font-weight: 600; line-height: 1.25; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .journal-fig small { display: block; font-size: 0.58rem; color: var(--text-sub); }
+        .journal-fig i { position: absolute; top: 3px; right: 3px; font-style: normal; font-size: 0.62rem; font-weight: 800; background: #D97706; color: #fff; padding: 0 4px; }
+        .journal-more { margin-top: 12px; }
         .chart-note:empty { display: none; }
         .chart-empty { display: none; text-align: center; color: var(--text-sub); font-size: 0.82rem; padding: 40px 10px; }
         .empty-note { color: var(--text-sub); font-size: 0.82rem; text-align: center; padding: 20px 10px; }
@@ -466,6 +501,18 @@
             <p class="chart-note" id="value-note"></p>
         </section>
 
+        <!-- 4 ter. JOURNAL DE COLLECTION (achats par mois) -->
+        <section class="chart-card block" aria-labelledby="journal-title">
+            <div class="card-head">
+                <h2 id="journal-title" data-t="journalTitle">Journal de collection</h2>
+                <span class="journal-sum" id="journal-sum"></span>
+            </div>
+            <div class="journal-list" id="journal-list"></div>
+            <button type="button" class="seg-btn journal-more" id="journal-more" hidden></button>
+            <div class="chart-empty" id="journal-empty" data-t="journalEmpty">Ajoutez des dates d'achat à vos figurines (page Collection) pour voir votre journal se remplir.</div>
+            <p class="chart-note" id="journal-note"></p>
+        </section>
+
         <!-- 5. GRAPHIQUES -->
         <section class="two-col">
             <div class="chart-card">
@@ -567,7 +614,7 @@
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         
         import { baseData, seriesBadges } from './data.js?v=2026-11-16-2';
-        import { computeCollectionStats, isSpecialSerie, computeValueHistory } from './assets/collection-stats.js';
+        import { computeCollectionStats, isSpecialSerie, computeValueHistory, computeJournal } from './assets/collection-stats.js';
         import { drawStory, canvasToBlob } from './assets/story.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
 
@@ -637,6 +684,9 @@
                 storyShowValue: "Afficher la valeur et les prix", storyShare: "Partager", storyDownload: "Télécharger",
                 storyHint: "Ajoute l'image à ta story depuis ta galerie.", storyHintShare: "« Partager » ouvre directement Instagram ou tes autres applis.",
                 storyErr: "Impossible de créer l'image. Réessaie dans un instant.",
+                journalTitle: "Journal de collection", journalEmpty: "Ajoutez des dates d'achat à vos figurines (page Collection) pour voir votre journal se remplir.",
+                journalSum: "{n} achats depuis {d}", journalQty: "{n} figurine(s)", journalMore: "Afficher tout l'historique ({n} mois de plus)", journalLess: "Réduire",
+                journalUndated: "{n} figurine(s) sans date d'achat n'apparaissent pas dans le journal.",
                 chartValue: "Évolution de la valeur", emptyValue: "Pas encore assez d'historique de cotes pour tracer la courbe.",
                 labelValue: "Valeur estimée", labelSpent: "Dépensé", valueTrend: "{s}{n} % en {m} mois, à collection égale",
                 valueUndated: "{n} figurine(s) sans date d'achat sont comptées sur toute la période.",
@@ -671,6 +721,9 @@
                 storyShowValue: "Show value and prices", storyShare: "Share", storyDownload: "Download",
                 storyHint: "Add the image to your story from your gallery.", storyHintShare: "“Share” opens Instagram or your other apps directly.",
                 storyErr: "Could not create the image. Please try again.",
+                journalTitle: "Collection journal", journalEmpty: "Add purchase dates to your figures (Collection page) to fill your journal.",
+                journalSum: "{n} purchases since {d}", journalQty: "{n} figure(s)", journalMore: "Show full history ({n} more months)", journalLess: "Show less",
+                journalUndated: "{n} figure(s) without a purchase date are not shown in the journal.",
                 chartValue: "Value over time", emptyValue: "Not enough market value history yet to draw the chart.",
                 labelValue: "Estimated value", labelSpent: "Spent", valueTrend: "{s}{n}% over {m} months, same figures",
                 valueUndated: "{n} figure(s) without a purchase date are counted over the whole period.",
@@ -870,9 +923,42 @@
             }).join('') : `<div class="empty-note">${esc(t('txtNoPrice'))}</div>`;
 
             renderSeries();
+            renderJournal();
             renderBadges(s);
             updateCharts(s);
         }
+
+        // --- JOURNAL DE COLLECTION ---
+        const JOURNAL_VISIBLE = 6;
+        let journalAll = false;
+        function renderJournal() {
+            const j = computeJournal(myCollection, rates);
+            const list = document.getElementById('journal-list');
+            const more = document.getElementById('journal-more');
+            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const monthLabel = (key) => new Date(key + '-01T12:00:00').toLocaleDateString(loc, { month: 'long', year: 'numeric' });
+            const dayLabel = (day) => new Date(day + 'T12:00:00').toLocaleDateString(loc, { day: 'numeric', month: 'short' });
+            document.getElementById('journal-empty').style.display = j.months.length ? 'none' : 'block';
+            const total = j.months.reduce((n, m) => n + m.qty, 0);
+            document.getElementById('journal-sum').textContent = j.months.length ? fmt('journalSum', { n: total, d: monthLabel(j.firstKey) }) : '';
+            document.getElementById('journal-note').textContent = j.undated ? fmt('journalUndated', { n: j.undated }) : '';
+            const shown = journalAll ? j.months : j.months.slice(0, JOURNAL_VISIBLE);
+            list.innerHTML = shown.map((m, i) => {
+                // « 3 Lost Paradise, 1 Monsters » : 3 séries au plus dans la ligne
+                const line = m.bySerie.slice(0, 3).map(s => `${s.qty} ${esc(s.serie)}`).join(', ') + (m.bySerie.length > 3 ? '…' : '');
+                const figs = m.items.map(it => `<div class="journal-fig${it.secret ? ' secret' : ''}" title="${esc(it.name)} · ${esc(it.serie)}">
+                        ${it.qty > 1 ? `<i>×${it.qty}</i>` : ''}<img src="${esc(it.image)}" alt="" loading="lazy" decoding="async"><span>${esc(it.name)}</span><small>${esc(dayLabel(it.day))}</small></div>`).join('');
+                return `<details class="journal-month"${i === 0 ? ' open' : ''}>
+                    <summary><span class="journal-date">${esc(monthLabel(m.key))}</span><span class="journal-line">${line}</span>
+                        <span class="journal-meta">${esc(fmt('journalQty', { n: m.qty }))}${m.spent ? ` · <b>${esc(eur(m.spent))}</b>` : ''}</span></summary>
+                    <div class="journal-figs">${figs}</div>
+                </details>`;
+            }).join('');
+            const hiddenCount = j.months.length - JOURNAL_VISIBLE;
+            more.hidden = hiddenCount <= 0;
+            more.textContent = journalAll ? t('journalLess') : fmt('journalMore', { n: hiddenCount });
+        }
+        document.getElementById('journal-more').addEventListener('click', () => { journalAll = !journalAll; renderJournal(); });
 
         function renderSeries() {
             if (!lastStats) return;

@@ -76,7 +76,19 @@
             font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;
             text-transform: uppercase; letter-spacing: 0.05em;
         }
-        .hero-subtitle { color: var(--text-sub); margin-bottom: 35px; font-size: 0.88rem; }
+        .hero-subtitle { color: var(--text-sub); margin-bottom: 16px; font-size: 0.88rem; }
+        /* Alertes nouveautés */
+        .push-box { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+        .push-btn {
+            display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; cursor: pointer;
+            border: 1px solid var(--color-dark); background: var(--color-dark); color: var(--color-light);
+            font: 600 0.76rem var(--font-sans); letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .push-btn:hover { background: transparent; color: var(--color-dark); }
+        .push-btn[aria-pressed="true"] { background: var(--surface); color: var(--text-main); border-color: var(--color-green); }
+        .push-btn[aria-disabled="true"] { opacity: 0.6; cursor: progress; }
+        .push-btn[hidden] { display: none; }
+        .push-hint { font-size: 0.78rem; color: var(--text-sub); max-width: 520px; }
 
         .release-section { margin-bottom: 45px; }
         .section-header { 
@@ -208,6 +220,10 @@
     <div class="container">
         <div class="hero-title" data-t="pageTitle">Dernières Sorties</div>
         <div class="hero-subtitle" data-t="pageSub">Les nouveautés Hirono les plus récentes.</div>
+        <div class="push-box">
+            <button type="button" class="push-btn" id="push-btn" aria-pressed="false" hidden>🔔 <span id="push-label">Me prévenir des nouveautés</span></button>
+            <span class="push-hint" id="push-hint" role="status"></span>
+        </div>
 
         <!-- Sections générées depuis NEW_SECTIONS (voir le script plus bas) -->
         <div id="release-sections"></div>
@@ -305,6 +321,7 @@
         import { recordVisit } from './assets/activity.js';
         import { syncPublicProfile } from './assets/public-profile.js';
         import { baseData } from './data.js?v=2026-11-16-2';
+        import { pushStatus, enablePush, disablePush } from './assets/push.js';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -351,7 +368,59 @@
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
         function t(key) { return translations[currentLang]?.[key] || key; }
 
-        window.toggleLanguage = () => {
+        // --- ALERTES NOUVEAUTÉS (notification sur l'appareil, assets/push.js) ---
+        const PUSH_TEXT = {
+            fr: { on: "Alertes activées", off: "Me prévenir des nouveautés", busy: "Activation…",
+                hintOn: "Vous recevrez une notification à chaque arrivée de nouvelles figurines. Recliquez pour les désactiver.",
+                hintOff: "Recevez une notification sur cet appareil quand de nouvelles figurines arrivent dans le catalogue.",
+                denied: "Les notifications sont bloquées pour HRNtrack dans votre navigateur : autorisez-les dans les réglages du site.",
+                ios: "Sur iPhone / iPad, installez d'abord HRNtrack sur l'écran d'accueil (Partager → Sur l'écran d'accueil), puis activez les alertes depuis l'appli.",
+                unsupported: "Votre navigateur ne permet pas encore les notifications.",
+                enabled: "Alertes activées : vous serez prévenu des prochaines sorties.", disabled: "Alertes désactivées sur cet appareil.",
+                error: "Impossible d'activer les alertes pour le moment. Réessayez plus tard." },
+            en: { on: "Alerts on", off: "Notify me of new releases", busy: "Turning on…",
+                hintOn: "You'll get a notification whenever new figures arrive. Click again to turn them off.",
+                hintOff: "Get a notification on this device when new figures arrive in the catalog.",
+                denied: "Notifications are blocked for HRNtrack in your browser: allow them in the site settings.",
+                ios: "On iPhone / iPad, first add HRNtrack to your home screen (Share → Add to Home Screen), then turn on alerts from the app.",
+                unsupported: "Your browser doesn't support notifications yet.",
+                enabled: "Alerts on: you'll hear about the next releases.", disabled: "Alerts turned off on this device.",
+                error: "Couldn't turn on alerts right now. Please try again later." }
+        };
+        const pt = (k) => (PUSH_TEXT[currentLang] || PUSH_TEXT.fr)[k];
+        let pushState = 'unconfigured';
+        async function refreshPush() {
+            pushState = await pushStatus();
+            const btn = document.getElementById('push-btn'), hint = document.getElementById('push-hint');
+            // Clé Web Push pas encore renseignée : rien n'est affiché
+            btn.hidden = pushState === 'unconfigured' || pushState === 'unsupported';
+            btn.setAttribute('aria-pressed', String(pushState === 'on'));
+            document.getElementById('push-label').textContent = pushState === 'on' ? pt('on') : pt('off');
+            hint.textContent = { on: pt('hintOn'), off: pt('hintOff'), denied: pt('denied'), 'ios-install': pt('ios'), unsupported: '', unconfigured: '' }[pushState] || '';
+            if (pushState === 'ios-install' || pushState === 'denied') btn.hidden = true;
+        }
+        document.getElementById('push-btn').addEventListener('click', async (e) => {
+            const btn = e.currentTarget;
+            if (btn.getAttribute('aria-disabled') === 'true') return;
+            btn.setAttribute('aria-disabled', 'true');   // pas « disabled » : le focus reste sur le bouton
+            try {
+                if (pushState === 'on') { await disablePush(); hrnNotify(pt('disabled'), 'info'); }
+                else {
+                    document.getElementById('push-label').textContent = pt('busy');
+                    const r = await enablePush();   // demande d'autorisation : uniquement après ce clic
+                    if (r === 'on') hrnNotify(pt('enabled'), 'success');
+                }
+            } catch (err) {
+                console.error('Alertes :', err);
+                hrnNotify(pt('error'), 'error');
+            } finally {
+                btn.removeAttribute('aria-disabled');
+                refreshPush();
+            }
+        });
+        refreshPush();
+
+        window.toggleLanguage = () => { setTimeout(() => refreshPush && refreshPush(), 0);
             currentLang = (currentLang === 'fr') ? 'en' : 'fr';
             localStorage.setItem('HRN_LANG', currentLang);
             updateUI();

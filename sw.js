@@ -4,7 +4,7 @@
 //  - images et polices : CACHE D'ABORD puis mise à jour en arrière-plan ;
 //  - Firebase, Google, statistiques : jamais interceptés (Firestore a son propre cache hors ligne).
 // Changer VERSION quand la liste PRECACHE change : les anciens caches sont alors supprimés.
-const VERSION = 'v3';
+const VERSION = 'v4';
 const CODE = 'hrn-code-' + VERSION;
 const MEDIA = 'hrn-media-' + VERSION;
 const MEDIA_MAX = 600;   // nombre maximum d'images gardées
@@ -15,7 +15,7 @@ const PRECACHE = [
     '/manifest.webmanifest',
     '/assets/common.css', '/assets/fonts.css', '/assets/theme.js', '/assets/site.js', '/assets/header.js',
     '/assets/firebase.js', '/assets/db.js', '/assets/auth.js', '/assets/i18n.js', '/assets/activity.js',
-    '/assets/collection-stats.js', '/assets/public-profile.js', '/assets/search.js', '/assets/cote-chart.js', '/assets/story.js', '/assets/trade.js', '/assets/socials.js',
+    '/assets/collection-stats.js', '/assets/public-profile.js', '/assets/search.js', '/assets/cote-chart.js', '/assets/story.js', '/assets/trade.js', '/assets/socials.js', '/assets/push.js',
     '/assets/fonts/poppins-400-latin.woff2', '/assets/fonts/poppins-500-latin.woff2', '/assets/fonts/poppins-600-latin.woff2',
     '/assets/fonts/poppins-700-latin.woff2', '/assets/fonts/poppins-800-latin.woff2',
     '/assets/img/logo-blanc.png', '/assets/img/favicon.png', '/assets/img/icon-192.png'
@@ -88,4 +88,40 @@ self.addEventListener('fetch', (event) => {
     if (req.mode === 'navigate') { event.respondWith(networkFirst(req, true)); return; }
     if (/\.(png|jpe?g|webp|gif|svg|ico|woff2?)$/i.test(url.pathname)) { event.respondWith(staleWhileRevalidate(req)); return; }
     event.respondWith(networkFirst(req, false));
+});
+
+// --- ALERTES NOUVEAUTÉS (Firebase Cloud Messaging) ---
+// Message envoyé depuis la console Firebase (Messaging) : titre, texte, image facultative ;
+// « Données personnalisées » : clé « link » (ex. /nouveautes.html) pour la page à ouvrir au clic.
+self.addEventListener('push', (event) => {
+    let payload = {};
+    try { payload = event.data ? event.data.json() : {}; } catch (e) { payload = { notification: { body: event.data && event.data.text() } }; }
+    const n = payload.notification || {};
+    const data = payload.data || {};
+    const link = data.link || n.click_action || (payload.fcmOptions && payload.fcmOptions.link) || '/nouveautes.html';
+    const title = n.title || data.title || 'HRNtrack';
+    const options = {
+        body: n.body || data.body || 'De nouvelles figurines sont arrivées dans le catalogue !',
+        icon: n.icon || '/assets/img/icon-192.png',
+        badge: '/assets/img/icon-192.png',
+        image: n.image || data.image || undefined,
+        tag: 'hrn-nouveautes',          // une nouvelle alerte remplace la précédente
+        renotify: true,
+        data: { link }
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+});
+
+// Clic sur l'alerte : on ouvre (ou on réutilise) un onglet HRNtrack sur la page indiquée
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const target = new URL((event.notification.data && event.notification.data.link) || '/nouveautes.html', self.location.origin);
+    if (target.origin !== self.location.origin) target.href = new URL('/nouveautes.html', self.location.origin).href;   // jamais vers un autre site
+    event.waitUntil((async () => {
+        const wins = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+        for (const w of wins) {
+            if (new URL(w.url).origin === self.location.origin && 'focus' in w) { await w.focus(); if ('navigate' in w) return w.navigate(target.href); return; }
+        }
+        return self.clients.openWindow(target.href);
+    })());
 });
