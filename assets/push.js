@@ -8,7 +8,7 @@ import { getMessaging, getToken, deleteToken, isSupported } from "https://www.gs
 
 // Clé publique « Web Push » du projet : console Firebase → Paramètres du projet → Cloud Messaging →
 // Configuration Web → Certificats push Web → Générer une paire de clés. (Clé publique : sans danger dans le code.)
-export const VAPID_KEY = '';
+export const VAPID_KEY = 'BENnx0ILaRQybIL9S9tMNoZqQOD-BxHaNGnVjn3MQDBhR5S_A6S_CoZG6ikY6am5kG-v06sBqjNddb2VYOTu318';
 
 const KEY = 'HRN_PUSH';
 const remember = (v) => { try { if (v) localStorage.setItem(KEY, v); else localStorage.removeItem(KEY); } catch (e) { /* stockage indisponible */ } };
