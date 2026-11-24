@@ -398,8 +398,8 @@
                 types: { serie: "New series", special: "Special edition", collab: "Collaboration", autre: "Release" } }
         };
         function renderUpcoming() {
-            const T = UPCOMING_TEXT[currentLang] || UPCOMING_TEXT.fr;
-            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const T = UPCOMING_TEXT[currentLang] || { ...UPCOMING_TEXT.en, ...((window.HRN_PACK && window.HRN_PACK.modules && window.HRN_PACK.modules.upcoming) || {}) };
+            const loc = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             const e = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
             const safeUrl = (u) => (/^https:\/\//i.test(String(u || '')) ? String(u) : '');
             const thisMonth = new Date().toISOString().slice(0, 7);
@@ -411,7 +411,7 @@
                 const big = u.date.length === 10 ? d.getDate() : d.toLocaleDateString(loc, { month: 'short' }).replace('.', '');
                 const small = u.date.length === 10 ? d.toLocaleDateString(loc, { month: 'short', year: 'numeric' }) : d.getFullYear();
                 const img = safeUrl(u.image), link = safeUrl(u.link);
-                const note = currentLang === 'en' && u.noteEn ? u.noteEn : u.note;
+                const note = currentLang !== 'fr' && u.noteEn ? u.noteEn : u.note;
                 return `<li class="upcoming-item">
                     <div class="upcoming-date"><b>${e(big)}</b><span>${e(small)}</span></div>
                     <div class="upcoming-body"><strong>${e(u.name)}</strong>${note ? `<small>${e(note)}</small>` : ''}${u.date.length === 7 ? `<small>${e(T.day)}</small>` : ''}
@@ -441,7 +441,7 @@
                 enabled: "Alerts on: you'll hear about the next releases.", disabled: "Alerts turned off on this device.",
                 error: "Couldn't turn on alerts right now. Please try again later." }
         };
-        const pt = (k) => (PUSH_TEXT[currentLang] || PUSH_TEXT.fr)[k];
+        const pt = (k) => (PUSH_TEXT[currentLang] || { ...PUSH_TEXT.en, ...((window.HRN_PACK && window.HRN_PACK.modules && window.HRN_PACK.modules.push) || {}) })[k];
         let pushState = 'unconfigured';
         async function refreshPush() {
             pushState = await pushStatus();
@@ -531,8 +531,8 @@
             root.innerHTML = sections.map((s, i) => `
                 <div class="release-section">
                     <div class="section-header">
-                        <span class="section-name">${esc(s.title[currentLang] || s.title.fr)}</span>
-                        <span class="section-tag tag-new">${esc(s.tag[currentLang] || s.tag.fr)}</span>
+                        <span class="section-name">${esc(s.title[currentLang] || s.title.en || s.title.fr)}</span>
+                        <span class="section-tag tag-new">${esc(s.tag[currentLang] || s.tag.en || s.tag.fr)}</span>
                     </div>
                     <div class="release-grid" id="release-grid-${i}"></div>
                 </div>`).join('');
@@ -540,7 +540,7 @@
                 if (s.items.length) return renderSection('release-grid-' + i, s.items);
                 // Aucune figurine trouvée : catalogue en cache pas encore à jour
                 const grid = document.getElementById('release-grid-' + i);
-                if (grid) grid.innerHTML = `<p style="grid-column:1/-1; color:var(--color-text-sub); font-size:0.85rem;">${currentLang === 'en'
+                if (grid) grid.innerHTML = `<p style="grid-column:1/-1; color:var(--color-text-sub); font-size:0.85rem;">${currentLang !== 'fr'
                     ? 'New figures are loading. Please refresh the page (Ctrl+F5).'
                     : 'Les nouvelles figurines arrivent. Actualisez la page (Ctrl+F5).'}</p>`;
             });

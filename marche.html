@@ -320,7 +320,7 @@
         const t = (k) => translations[currentLang][k] ?? translations.fr[k] ?? k;
         const fmt = (k, v) => t(k).replace(/\{(\w+)\}/g, (_, n) => v[n] ?? '');
         const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const loc = () => (currentLang === 'en' ? 'en-GB' : 'fr-FR');
+        const loc = () => (window.HRN_LOCALES[currentLang] || 'fr-FR');
         const eur = (n) => (n || 0).toLocaleString(loc(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
         const pct = (n) => Number(n).toLocaleString(loc());
         let market = null, rarity = null, updatedAt = null;

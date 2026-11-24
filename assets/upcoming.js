@@ -13,4 +13,5 @@
 export const UPCOMING = [
     // Exemple :
     // { name: 'Hirono Nouvelle Série', date: '2027-01', type: 'serie', note: '12 figurines + 1 secrète', noteEn: '12 figures + 1 secret', link: 'https://…' },
+    { name: 'Hirono Between Places', date: '2026-11-27', type: 'serie' },
 ];

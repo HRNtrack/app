@@ -22,6 +22,54 @@ const TEXT = {
         unique: '{n} / {t} unique figures', figs: 'Figures', secrets: 'Secrets', series: 'Complete series',
         value: 'Estimated value', wish: 'Wishlist', doubles: 'For trade', top: 'MY TOP PICKS', favs: 'IN MY COLLECTION',
         footer: 'Track yours on', pts: 'pts'
+    },
+    es: {
+        kicker: "MI COLECCIÓN HIRONO",
+        collector: "Coleccionista Hirono",
+        ofCatalog: "del catálogo",
+        unique: "{n} / {t} figuras distintas",
+        figs: "Figuras",
+        secrets: "Secretas",
+        series: "Series completas",
+        value: "Valor estimado",
+        wish: "Wishlist",
+        doubles: "Para cambiar",
+        top: "MIS JOYAS",
+        favs: "EN MI COLECCIÓN",
+        footer: "Sigue tu colección en",
+        pts: "pts"
+    },
+    de: {
+        kicker: "MEINE HIRONO-SAMMLUNG",
+        collector: "Hirono-Sammler",
+        ofCatalog: "des Katalogs",
+        unique: "{n} / {t} verschiedene Figuren",
+        figs: "Figuren",
+        secrets: "Secrets",
+        series: "Komplette Serien",
+        value: "Geschätzter Wert",
+        wish: "Wunschliste",
+        doubles: "Zum Tauschen",
+        top: "MEINE HIGHLIGHTS",
+        favs: "IN MEINER SAMMLUNG",
+        footer: "Verfolge deine Sammlung auf",
+        pts: "Pkt."
+    },
+    zh: {
+        kicker: "我的 HIRONO 收藏",
+        collector: "Hirono 收藏家",
+        ofCatalog: "图鉴完成度",
+        unique: "{n} / {t} 款不同手办",
+        figs: "手办",
+        secrets: "隐藏款",
+        series: "集齐系列",
+        value: "估计价值",
+        wish: "心愿单",
+        doubles: "可交换",
+        top: "我的珍品",
+        favs: "我的收藏",
+        footer: "记录你的收藏：",
+        pts: "分"
     }
 };
 
@@ -89,7 +137,7 @@ function drawContain(ctx, img, x, y, w, h) {
  *                      seriesComplete, seriesCountable, value (en € ou null), valueText, wish, doubles, picks:[{name,image,priceText}], picksAreTop, dateText }
  */
 export async function drawStory(canvas, d) {
-    const L = TEXT[d.lang] || TEXT.fr;
+    const L = TEXT[d.lang] || TEXT.en;
     const fmt = (k, v) => L[k].replace(/\{(\w+)\}/g, (_, n) => v[n] ?? '');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');

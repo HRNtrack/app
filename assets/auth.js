@@ -25,6 +25,33 @@ const messages = {
         created: "Account successfully created! A verification link has been sent. Please check your inbox (and spam) to validate your account before logging in.",
         resetNeedEmail: "Please enter your email address in the field above to reset your password.",
         resetSent: "Reset email sent! Check your spam folder."
+    },
+    es: {
+        fill: "Rellena todos los campos.",
+        error: "Error: ",
+        googleError: "Error de Google: ",
+        notVerified: "Tu dirección de correo aún no está verificada. Haz clic en el enlace enviado a tu bandeja de entrada.",
+        created: "¡Cuenta creada! Te hemos enviado un enlace de verificación. Revisa tu correo (y la carpeta de spam) para validar tu cuenta antes de iniciar sesión.",
+        resetNeedEmail: "Introduce tu correo en el campo de arriba para restablecer la contraseña.",
+        resetSent: "¡Correo de restablecimiento enviado! Revisa también la carpeta de spam."
+    },
+    de: {
+        fill: "Bitte fülle alle Felder aus.",
+        error: "Fehler: ",
+        googleError: "Google-Fehler: ",
+        notVerified: "Deine E-Mail-Adresse ist noch nicht bestätigt. Bitte klicke auf den Link in deinem Postfach.",
+        created: "Konto erstellt! Wir haben dir einen Bestätigungslink geschickt. Prüfe dein Postfach (und den Spam-Ordner), um dein Konto vor der Anmeldung zu bestätigen.",
+        resetNeedEmail: "Bitte gib oben deine E-Mail-Adresse ein, um das Passwort zurückzusetzen.",
+        resetSent: "E-Mail zum Zurücksetzen gesendet! Schau auch im Spam-Ordner nach."
+    },
+    zh: {
+        fill: "请填写所有字段。",
+        error: "错误：",
+        googleError: "Google 登录错误：",
+        notVerified: "你的邮箱尚未验证。请点击我们发送到你邮箱中的链接。",
+        created: "账户创建成功！验证链接已发送，请查收邮件（包括垃圾邮件），验证后再登录。",
+        resetNeedEmail: "请先在上方输入你的邮箱地址，以重置密码。",
+        resetSent: "重置密码的邮件已发送！请同时检查垃圾邮件。"
     }
 };
 
@@ -70,7 +97,7 @@ function makeModalAccessible(getLang) {
  * @param {() => string} getLang renvoie la langue courante de la page ('fr' ou 'en')
  */
 export function setupAuthModal(getLang) {
-    const m = () => messages[getLang()] || messages.fr;
+    const m = () => messages[getLang()] || messages.en;
     const field = (id) => document.getElementById(id).value;
     const googleProvider = new GoogleAuthProvider();
 

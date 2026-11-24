@@ -79,22 +79,39 @@ export const commonTranslations = {
 };
 
 /** Met en surbrillance FR ou EN dans les sélecteurs de langue (en-tête + menu mobile). */
+// --- LANGUES DU SITE ---
+// fr et en sont écrits dans chaque page ; es, de et zh viennent d'un fichier par langue (assets/lang/xx.js),
+// chargé seulement quand cette langue est choisie. Un texte absent d'une traduction s'affiche en anglais.
+export const LANGS = ['fr', 'en', 'es', 'de', 'zh'];
+export const LOCALES = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES', de: 'de-DE', zh: 'zh-CN' };
+const EXTRA_LANGS = ['es', 'de', 'zh'];
+export const siteLang = (() => { try { const l = localStorage.getItem('HRN_LANG'); return LANGS.includes(l) ? l : 'fr'; } catch (e) { return 'fr'; } })();
+let pack = null;
+if (EXTRA_LANGS.includes(siteLang)) {
+    try { pack = (await import('./lang/' + siteLang + '.js')).default; } catch (e) { console.warn('Traduction indisponible :', siteLang, e); }
+}
+globalThis.HRN_PACK = pack;
+// Identifiant de la page (nom du fichier sans .html) : choisit la partie « pages » du paquet de traduction
+const pageId = (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '') || 'index';
+
 export function syncLangToggle(lang) {
     // Langue déclarée de la page : utilisée par les lecteurs d'écran et la traduction automatique
-    document.documentElement.lang = lang === 'en' ? 'en' : 'fr';
-    for (const suffix of ['', '-mob']) {
-        const fr = document.getElementById('lang-fr' + suffix);
-        const en = document.getElementById('lang-en' + suffix);
-        if (fr) fr.classList.toggle('active', lang === 'fr');
-        if (en) en.classList.toggle('active', lang !== 'fr');
-    }
+    document.documentElement.lang = LANGS.includes(lang) ? (lang === 'zh' ? 'zh-Hans' : lang) : 'fr';
+    document.querySelectorAll('.lang-select').forEach(s => { s.value = LANGS.includes(lang) ? lang : 'fr'; });
 }
 
-/** Fusionne les textes communs avec ceux propres à la page. */
+/** Fusionne les textes communs avec ceux propres à la page ; ajoute es / de / zh (repli : anglais). */
 export function withCommon(pageTranslations) {
     const out = {};
     for (const lang of Object.keys(commonTranslations)) {
         out[lang] = { ...commonTranslations[lang], ...(pageTranslations[lang] || {}) };
+    }
+    for (const lang of EXTRA_LANGS) {
+        const own = lang === siteLang && pack ? { ...(pack.common || {}), ...((pack.pages || {})[pageId] || {}) } : {};
+        out[lang] = new Proxy(own, {
+            get: (t, k) => (k in t ? t[k] : out.en[k]),
+            has: (t, k) => k in t || k in out.en
+        });
     }
     return out;
 }

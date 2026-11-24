@@ -823,7 +823,7 @@
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
         const fmt = (key, vars = {}) => String(t(key)).replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m);
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const eur = (n, digits = 0) => (n || 0).toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: digits });
+        const eur = (n, digits = 0) => (n || 0).toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { style: 'currency', currency: 'EUR', maximumFractionDigits: digits });
         const ink = () => getComputedStyle(document.documentElement).getPropertyValue('--color-dark').trim() || '#1A1A1A';
         const muted = () => getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#D8D2C5';
 
@@ -1036,7 +1036,7 @@
             const j = computeJournal(myCollection, rates);
             const list = document.getElementById('journal-list');
             const more = document.getElementById('journal-more');
-            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const loc = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             const monthLabel = (key) => new Date(key + '-01T12:00:00').toLocaleDateString(loc, { month: 'long', year: 'numeric' });
             const dayLabel = (day) => new Date(day + 'T12:00:00').toLocaleDateString(loc, { day: 'numeric', month: 'short' });
             document.getElementById('journal-empty').style.display = j.months.length ? 'none' : 'block';
@@ -1071,7 +1071,7 @@
             } catch (e) { console.error(e); hrnNotify(t('goalErr'), 'error'); }
         }
         function renderGoals(s) {
-            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const loc = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             // Budget du mois
             const bv = document.getElementById('budget-view');
             document.getElementById('budget-input').value = myGoals.budget || '';
@@ -1134,7 +1134,7 @@
         function renderRare() {
             const section = document.getElementById('rare-section');
             if (!rarity || !rarity.owned) { section.hidden = true; return; }
-            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const loc = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             const owned = myCollection.filter(i => /^(possédé|possédée|owned)$/i.test(String(i.Status || '')) && rarity.owned[String(i.ID)] != null);
             const top = owned.sort((a, b) => rarity.owned[String(a.ID)] - rarity.owned[String(b.ID)]).slice(0, 5);
             section.hidden = !top.length;
@@ -1193,7 +1193,7 @@
             trendEl.textContent = ''; trendEl.className = 'value-trend';
             document.getElementById('value-note').textContent = '';
             if (showChart('box-value', 'empty-value', !!vh && vh.value.some(v => v > 0))) {
-                const labels = vh.months.map(m => new Date(m + '-01').toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { month: 'short', year: '2-digit' }));
+                const labels = vh.months.map(m => new Date(m + '-01').toLocaleDateString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { month: 'short', year: '2-digit' }));
                 charts.push(new Chart(document.getElementById('chartValue'), {
                     type: 'line',
                     data: { labels, datasets: [
@@ -1230,7 +1230,7 @@
             const d = new Date(); d.setDate(1);
             for (let i = 11; i >= 0; i--) { const m = new Date(d.getFullYear(), d.getMonth() - i, 1); months.push(`${m.getFullYear()}-${String(m.getMonth() + 1).padStart(2, '0')}`); }
             const monthly = months.map(m => Math.round(s.monthly[m] || 0));
-            const monthLabel = (m) => new Date(m + '-01').toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { month: 'short' });
+            const monthLabel = (m) => new Date(m + '-01').toLocaleDateString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { month: 'short' });
             if (showChart('box-monthly', 'empty-monthly', monthly.some(v => v > 0))) {
                 charts.push(new Chart(document.getElementById('chartMonthly'), {
                     type: 'bar',
@@ -1279,7 +1279,7 @@
                 seriesComplete: s.seriesComplete, seriesCountable: s.seriesCountable,
                 value: showValue && value > 0 ? value : null, valueText: money(value),
                 wish: s.wish, doubles: s.doubles, picks, picksAreTop,
-                dateText: new Date().toLocaleDateString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+                dateText: new Date().toLocaleDateString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { day: 'numeric', month: 'long', year: 'numeric' })
             };
         }
         async function renderStoryPreview() {

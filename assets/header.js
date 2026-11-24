@@ -22,11 +22,12 @@
         `<a href="${l.page}.html" class="nav-link${l.page === active ? ' active' : ''}"><span data-t="${l.key}">${l.label}</span></a>`
     ).join('\n');
 
+    // Choix de la langue : une liste (5 langues) ; le choix recharge la page (assets/site.js → setSiteLanguage)
+    const currentLang = (function () { try { return localStorage.getItem('HRN_LANG') || 'fr'; } catch (e) { return 'fr'; } })();
     const langToggle = (suffix) => `
-        <button type="button" class="lang-toggle" onclick="window.toggleLanguage()" aria-label="Changer de langue / Switch language">
-            <span class="lang-option active" id="lang-fr${suffix}">FR</span>
-            <span class="lang-option" id="lang-en${suffix}">EN</span>
-        </button>`;
+            <select class="lang-select" id="lang-select${suffix}" aria-label="Langue / Language / Idioma / Sprache / 语言" onchange="window.setSiteLanguage(this.value)">
+                <option value="fr">FR</option><option value="en">EN</option><option value="es">ES</option><option value="de">DE</option><option value="zh">中文</option>
+            </select>`.replace('id="lang-select"', 'id="lang-select' + suffix + '"').replace('value="' + currentLang + '"', 'value="' + currentLang + '" selected');
 
     const supportLink = `
         <a href="https://ko-fi.com/hrntrack" target="_blank" rel="noopener" class="btn-auth-trigger" style="text-decoration:none;">

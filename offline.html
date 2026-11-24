@@ -34,7 +34,7 @@
     <script>
         // Petite traduction locale (la page doit fonctionner sans réseau ni module)
         try {
-            if (localStorage.getItem('HRN_LANG') === 'en') {
+            if ((localStorage.getItem('HRN_LANG') || 'fr') !== 'fr') {
                 document.documentElement.lang = 'en';
                 document.getElementById('t-title').textContent = "You're offline";
                 document.getElementById('t-text').textContent = "This page hasn't been saved on this device yet. Pages you already opened, like your collection, are still available.";

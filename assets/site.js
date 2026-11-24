@@ -2,6 +2,76 @@
 // menu mobile, bannière cookies et Google Analytics.
 (function () {
     const GA_ID = 'G-RFP1HDMW49';
+
+    // --- LANGUE DU SITE (fr, en, es, de, zh) ---
+    const SITE_LANGS = ['fr', 'en', 'es', 'de', 'zh'];
+    const SITE_LANG = (function () { try { const l = localStorage.getItem('HRN_LANG'); return SITE_LANGS.indexOf(l) >= 0 ? l : 'fr'; } catch (e) { return 'fr'; } })();
+    window.HRN_LANG = SITE_LANG;
+    window.HRN_LOCALES = { fr: 'fr-FR', en: 'en-GB', es: 'es-ES', de: 'de-DE', zh: 'zh-CN' };
+    const SITE_TEXT = {
+            "fr": {
+                    "installed": "HRNtrack est installé ! Retrouvez-le sur votre écran d'accueil.",
+                    "iosHow": "Sur iPhone / iPad : touchez le bouton Partager (carré avec une flèche) dans Safari, puis « Sur l'écran d'accueil ».",
+                    "offline": "Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.",
+                    "online": "De retour en ligne.",
+                    "search": "Rechercher une figurine",
+                    "searchPh": "Nom d'une figurine ou d'une série…",
+                    "close": "Fermer",
+                    "searchHint": "Entrée : ouvrir le premier résultat · Échap : fermer",
+                    "noMatch": "Aucune figurine ne correspond."
+            },
+            "en": {
+                    "installed": "HRNtrack is installed! Find it on your home screen.",
+                    "iosHow": "On iPhone / iPad: tap the Share button (square with an arrow) in Safari, then « Add to Home Screen ».",
+                    "offline": "You are offline: data shown may not be up to date.",
+                    "online": "Back online.",
+                    "search": "Search a figure",
+                    "searchPh": "Figure or series name…",
+                    "close": "Close",
+                    "searchHint": "Enter: open the first result · Esc: close",
+                    "noMatch": "No figure matches."
+            },
+            "es": {
+                    "installed": "¡HRNtrack está instalado! Lo encontrarás en tu pantalla de inicio.",
+                    "iosHow": "En iPhone / iPad: toca el botón Compartir (cuadrado con una flecha) en Safari y luego « Añadir a pantalla de inicio ».",
+                    "offline": "Estás sin conexión: los datos mostrados pueden no estar actualizados.",
+                    "online": "Conexión recuperada.",
+                    "search": "Buscar una figura",
+                    "searchPh": "Nombre de una figura o de una serie…",
+                    "close": "Cerrar",
+                    "searchHint": "Intro: abrir el primer resultado · Esc: cerrar",
+                    "noMatch": "Ninguna figura coincide."
+            },
+            "de": {
+                    "installed": "HRNtrack ist installiert! Du findest es auf deinem Startbildschirm.",
+                    "iosHow": "Auf iPhone / iPad: Tippe in Safari auf Teilen (Quadrat mit Pfeil) und dann auf « Zum Home-Bildschirm ».",
+                    "offline": "Du bist offline: Die angezeigten Daten sind möglicherweise nicht aktuell.",
+                    "online": "Wieder online.",
+                    "search": "Figur suchen",
+                    "searchPh": "Name einer Figur oder Serie…",
+                    "close": "Schließen",
+                    "searchHint": "Enter: ersten Treffer öffnen · Esc: schließen",
+                    "noMatch": "Keine passende Figur."
+            },
+            "zh": {
+                    "installed": "HRNtrack 已安装！可在主屏幕上找到它。",
+                    "iosHow": "在 iPhone / iPad 上：点击 Safari 的分享按钮（带箭头的方框），然后选择「添加到主屏幕」。",
+                    "offline": "你目前处于离线状态：显示的数据可能不是最新的。",
+                    "online": "已恢复联网。",
+                    "search": "搜索手办",
+                    "searchPh": "手办或系列名称…",
+                    "close": "关闭",
+                    "searchHint": "回车：打开第一个结果 · Esc：关闭",
+                    "noMatch": "没有匹配的手办。"
+            }
+    };
+    const st = function (k) { return (SITE_TEXT[SITE_LANG] || SITE_TEXT.en)[k] || SITE_TEXT.en[k]; };
+    // Changement de langue (sélecteur du menu) : on mémorise et on recharge la page dans la nouvelle langue
+    window.setSiteLanguage = function (lang) {
+        if (SITE_LANGS.indexOf(lang) < 0) return;
+        try { localStorage.setItem('HRN_LANG', lang); } catch (e) { /* stockage indisponible */ }
+        location.reload();
+    };
     const CONSENT_MAX_AGE = 395 * 24 * 3600 * 1000; // 13 mois : durée maximale d'un choix cookies (CNIL)
 
     // Anti-clickjacking : le site refuse d'être affiché dans le cadre (iframe) d'un autre site
@@ -200,7 +270,7 @@
         note.setAttribute('role', type === 'error' ? 'alert' : 'status');
         const ico = document.createElement('span'); ico.className = 'ico'; ico.textContent = type === 'success' ? '✓' : type === 'error' ? '!' : 'i';
         const txt = document.createElement('span'); txt.className = 'txt'; txt.textContent = msg;
-        const close = document.createElement('button'); close.type = 'button'; close.setAttribute('aria-label', 'Fermer'); close.textContent = '✕';
+        const close = document.createElement('button'); close.type = 'button'; close.setAttribute('aria-label', st('close')); close.textContent = '✕';
         close.onclick = function () { note.remove(); };
         note.append(ico, txt, close);
         box.appendChild(note);
@@ -238,7 +308,7 @@
     window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); installPrompt = e; refreshInstallButtons(); });
     window.addEventListener('appinstalled', function () {
         installPrompt = null; refreshInstallButtons();
-        window.hrnNotify(isEn() ? 'HRNtrack is installed! Find it on your home screen.' : 'HRNtrack est installé ! Retrouvez-le sur votre écran d\'accueil.', 'success');
+        window.hrnNotify(st('installed'), 'success');
     });
     window.installApp = async function () {
         if (typeof navigator.install === 'function') {
@@ -250,20 +320,18 @@
             try { await installPrompt.userChoice; } catch (e) { /* fermé */ }
             installPrompt = null; refreshInstallButtons();
         } else if (isIos) {
-            window.hrnNotify(isEn()
-                ? 'On iPhone / iPad: tap the Share button (square with an arrow) in Safari, then « Add to Home Screen ».'
-                : 'Sur iPhone / iPad : touchez le bouton Partager (carré avec une flèche) dans Safari, puis « Sur l\'écran d\'accueil ».', 'info');
+            window.hrnNotify(st('iosHow'), 'info');
         }
     };
     document.addEventListener('DOMContentLoaded', refreshInstallButtons);
 
     // Hors ligne : on prévient que les données peuvent dater
     window.addEventListener('offline', function () {
-        window.hrnNotify(isEn() ? 'You are offline: data shown may not be up to date.' : 'Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.', 'info');
+        window.hrnNotify(st('offline'), 'info');
     });
-    window.addEventListener('online', function () { window.hrnNotify(isEn() ? 'Back online.' : 'De retour en ligne.', 'success'); });
+    window.addEventListener('online', function () { window.hrnNotify(st('online'), 'success'); });
     document.addEventListener('DOMContentLoaded', function () {
-        if (navigator.onLine === false) window.hrnNotify(isEn() ? 'You are offline: data shown may not be up to date.' : 'Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.', 'info');
+        if (navigator.onLine === false) window.hrnNotify(st('offline'), 'info');
     });
 
     // --- RECHERCHE GLOBALE (Ctrl + K) ---
@@ -281,17 +349,16 @@
     function searchDialog() {
         let d = document.getElementById('global-search');
         if (d) return d;
-        const en = isEnLang();
         d = document.createElement('dialog');
         d.id = 'global-search';
         d.className = 'hrn-dialog gsearch';
-        d.setAttribute('aria-label', en ? 'Search a figure' : 'Rechercher une figurine');
+        d.setAttribute('aria-label', st('search'));
         d.innerHTML = '<div class="gsearch-box"><form method="dialog" class="gsearch-form" role="search">' +
-            '<label for="gsearch-input" class="sr-only">' + (en ? 'Search a figure' : 'Rechercher une figurine') + '</label>' +
-            '<input type="search" id="gsearch-input" autocomplete="off" spellcheck="false" enterkeyhint="go" placeholder="' + (en ? 'Figure or series name…' : 'Nom d\'une figurine ou d\'une série…') + '">' +
-            '<button type="button" class="gsearch-close" aria-label="' + (en ? 'Close' : 'Fermer') + '">✕</button></form>' +
+            '<label for="gsearch-input" class="sr-only">' + st('search') + '</label>' +
+            '<input type="search" id="gsearch-input" autocomplete="off" spellcheck="false" enterkeyhint="go" placeholder="' + st('searchPh') + '">' +
+            '<button type="button" class="gsearch-close" aria-label="' + st('close') + '">✕</button></form>' +
             '<ul class="gsearch-results" id="gsearch-results" aria-live="polite"></ul>' +
-            '<p class="gsearch-hint">' + (en ? 'Enter: open the first result · Esc: close' : 'Entrée : ouvrir le premier résultat · Échap : fermer') + '</p></div>';
+            '<p class="gsearch-hint">' + st('searchHint') + '</p></div>';
         document.body.appendChild(d);
         const input = d.querySelector('#gsearch-input');
         const list = d.querySelector('#gsearch-results');
@@ -307,7 +374,7 @@
             list.innerHTML = found.length ? found.map(b => '<li><a href="/dashboard.html?focus=' + encodeURIComponent(b.ID) + '">' +
                 '<img src="' + escHtml(b.Image) + '" alt="" loading="lazy" decoding="async"><span><strong>' + escHtml(b.Name) + '</strong><small>' + escHtml(b.Serie) +
                 (String(b['Secret Rare']).toLowerCase() === 'yes' ? ' · ★ Secret' : '') + '</small></span></a></li>').join('')
-                : '<li class="gsearch-empty">' + (isEnLang() ? 'No figure matches.' : 'Aucune figurine ne correspond.') + '</li>';
+                : '<li class="gsearch-empty">' + st('noMatch') + '</li>';
         };
         input.addEventListener('input', render);
         // Entrée : ouvre le premier résultat
@@ -327,7 +394,6 @@
         });
         return d;
     }
-    function isEnLang() { try { return localStorage.getItem('HRN_LANG') === 'en'; } catch (e) { return false; } }
     window.openGlobalSearch = function () {
         const d = searchDialog();
         if (!d.open) d.showModal();

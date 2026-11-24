@@ -824,7 +824,7 @@
         // ================================================================
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const fmtT = (key, vars = {}) => String(t(key)).replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m);
-        const eur = (n) => Math.round(n || 0).toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+        const eur = (n) => Math.round(n || 0).toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
         const currencySymbols = { "EUR": "€", "USD": "$", "CAD": "CA$", "GBP": "£", "CNY": "¥" };
         const isOwned = (i) => i.Status === 'Possédé';
         const isWish = (i) => i.Status === 'Recherché' || i.Status === 'Wishlist';
@@ -1057,7 +1057,7 @@
             const values = [...((coteHistory.items || {})[item.ID] || [])];
             // Le dernier point (mois en cours) = la cote affichée au-dessus, pour que les deux chiffres concordent
             if (values.length && coteOf(item.ID) > 0) values[values.length - 1] = coteOf(item.ID);
-            const locale = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const locale = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             const labels = months.map(m => new Date(m + '-01T12:00:00').toLocaleDateString(locale, { month: 'short' }));
             const svg = values.length ? coteChartSvg(values, labels, { format: eur }) : '';
             if (!svg && !coteOf(item.ID)) { box.hidden = true; return; }   // ni cote ni historique : rien à montrer
@@ -1089,7 +1089,7 @@
             rarEl.hidden = rar === null;
             if (rar !== null) {
                 const wanted = rarity.wanted && rarity.wanted[String(item.ID)];
-                rarEl.textContent = fmtT('rarityLine', { p: rar.toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR') }) + (wanted ? ' · ' + fmtT('rarityWanted', { p: Number(wanted).toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR') }) : '');
+                rarEl.textContent = fmtT('rarityLine', { p: rar.toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR')) }) + (wanted ? ' · ' + fmtT('rarityWanted', { p: Number(wanted).toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR')) }) : '');
             }
             document.getElementById('input-condition').value = item.Condition || "Inconnu";
             document.getElementById('input-qty').value = item.Quantity || 0;
