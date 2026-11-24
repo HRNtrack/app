@@ -253,6 +253,7 @@ button.lang-toggle {
     justify-content: center;
     width: 34px;
     height: 34px;
+    flex-shrink: 0; /* ne pas se faire écraser quand la barre du menu est pleine (page Collection) */
     padding: 0;
     border: 1px solid var(--color-border);
     background: var(--color-sand);
