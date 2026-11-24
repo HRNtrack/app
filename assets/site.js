@@ -18,10 +18,20 @@
         if (btn) btn.setAttribute('aria-expanded', String(open));
     };
 
+    document.addEventListener('close', function (e) {
+        const zone = e.target instanceof HTMLDialogElement ? e.target.querySelector('.dialog-msg') : null;
+        if (zone) zone.textContent = '';
+    }, true);
+    document.addEventListener('click', function (e) {
+        const d = e.target;
+        if (d instanceof HTMLDialogElement && d.classList.contains('hrn-dialog') && d.open) d.close();
+    });
+
     // Touche Échap : ferme la fenêtre ouverte (connexion, fiche…) ou le menu mobile
     document.addEventListener('keydown', function (e) {
         if (e.key !== 'Escape') return;
-        const openModal = [...document.querySelectorAll('.modal-overlay')].find(m => getComputedStyle(m).display !== 'none');
+        if (document.querySelector('dialog[open]')) return;   // <dialog> native : le navigateur la ferme lui-même
+        const openModal = [...document.querySelectorAll('.modal-overlay:not(dialog)')].find(m => getComputedStyle(m).display !== 'none');
         if (openModal) {
             if (openModal.id === 'auth-modal' && window.toggleAuthModal) window.toggleAuthModal(false);
             else openModal.style.display = 'none';
@@ -136,8 +146,8 @@
     // hrnNotify(message, type?, { flash: true } ?) — type : 'success' | 'error' | 'info' (deviné si absent).
     // flash : le message est gardé pour la page suivante (utile juste avant une redirection).
     function guessType(msg) {
-        if (/erreur|error|impossible|incorrect|invalide|invalid|échec|failed|obligatoire|required/i.test(msg)) return 'error';
-        if (/succès|success|mis à jour|updated|copié|copied|envoy|sent|créé|created|supprimé|deleted|merci|thank/i.test(msg)) return 'success';
+        if (/erreur|error|impossible|incorrect|invalide|invalid|échec|failed|obligatoire|required|remplir|fill in/i.test(msg)) return 'error';
+        if (/succès|success|mis à jour|updated|copié|copied|envoy|sent|créé|created|supprimé|deleted|thank you/i.test(msg)) return 'success';
         return 'info';
     }
     function notifyStyles() {
@@ -161,12 +171,28 @@
             return;
         }
         if (!document.body) { document.addEventListener('DOMContentLoaded', function () { window.hrnNotify(msg, type); }); return; }
+        // Une fenêtre modale est ouverte : le reste de la page est inerte, on écrit le message dans la fenêtre
+        const openDialog = document.querySelector('dialog.hrn-dialog[open]');
+        if (openDialog) {
+            let zone = openDialog.querySelector('.dialog-msg');
+            if (!zone) {
+                zone = document.createElement('p');
+                zone.className = 'dialog-msg';
+                zone.setAttribute('role', 'status');
+                zone.setAttribute('aria-live', 'polite');
+                (openDialog.firstElementChild || openDialog).prepend(zone);
+            }
+            zone.className = 'dialog-msg ' + type;
+            zone.textContent = msg;
+            return;
+        }
         notifyStyles();
         let box = document.getElementById('hrn-notify');
         if (!box) {
             box = document.createElement('div');
             box.id = 'hrn-notify';
-            box.setAttribute('aria-live', 'polite');
+            box.setAttribute('role', 'region');
+            box.setAttribute('aria-label', 'Notifications');
             document.body.appendChild(box);
         }
         const note = document.createElement('div');
@@ -179,7 +205,14 @@
         note.append(ico, txt, close);
         box.appendChild(note);
         while (box.children.length > 3) box.firstChild.remove();
-        setTimeout(function () { note.remove(); }, type === 'error' ? 8000 : 4500);
+        if (typeof document.ariaNotify === 'function') { try { document.ariaNotify(msg); } catch (e) { /* rôle status/alert à défaut */ } }
+        // Disparition automatique, mise en pause tant que la souris ou le focus clavier est sur le message
+        let left = type === 'error' ? 8000 : 4500, started = Date.now(), timer = null;
+        const run = function () { started = Date.now(); timer = setTimeout(function () { note.remove(); }, left); };
+        const pause = function () { clearTimeout(timer); left = Math.max(1500, left - (Date.now() - started)); };
+        note.addEventListener('mouseenter', pause); note.addEventListener('mouseleave', run);
+        note.addEventListener('focusin', pause); note.addEventListener('focusout', run);
+        run();
     };
     // Message laissé par la page précédente (ex. « Compte supprimé » avant le retour à l'accueil)
     document.addEventListener('DOMContentLoaded', function () {
@@ -198,7 +231,7 @@
     const isStandalone = function () { return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true; };
     const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
     function refreshInstallButtons() {
-        const show = !isStandalone() && (!!installPrompt || isIos);
+        const show = !isStandalone() && (typeof navigator.install === 'function' || !!installPrompt || isIos);
         document.querySelectorAll('.pwa-install').forEach(function (el) { el.hidden = !show; });
     }
     window.initInstallButtons = refreshInstallButtons;
@@ -208,6 +241,10 @@
         window.hrnNotify(isEn() ? 'HRNtrack is installed! Find it on your home screen.' : 'HRNtrack est installé ! Retrouvez-le sur votre écran d\'accueil.', 'success');
     });
     window.installApp = async function () {
+        if (typeof navigator.install === 'function') {
+            try { await navigator.install(); refreshInstallButtons(); return; }
+            catch (e) { if (e && e.name === 'AbortError') return; /* sinon on essaie la méthode suivante */ }
+        }
         if (installPrompt) {
             installPrompt.prompt();
             try { await installPrompt.userChoice; } catch (e) { /* fermé */ }

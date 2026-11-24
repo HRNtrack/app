@@ -56,39 +56,13 @@ export function updateAuthLabel(t) {
     }
 }
 
-/**
- * Ajoute à la fenêtre de connexion ce qu'il faut pour les lecteurs d'écran et le clavier :
- * rôle « dialog », libellés des champs, remplissage automatique, Entrée pour valider,
- * et Tab qui reste à l'intérieur de la fenêtre tant qu'elle est ouverte.
- */
 function makeModalAccessible(getLang) {
-    const overlay = document.getElementById('auth-modal');
-    if (!overlay) return;
-    const box = overlay.querySelector('.modal-content') || overlay;
-    const title = overlay.querySelector('.auth-title');
-    box.setAttribute('role', 'dialog');
-    box.setAttribute('aria-modal', 'true');
-    if (title) {
-        title.id = title.id || 'auth-modal-title';
-        box.setAttribute('aria-labelledby', title.id);
-    }
+    // Le balisage des pages porte déjà <dialog>, <form>, les libellés et l'autocomplete ;
+    // ici, seulement un filet de sécurité si une page ancienne n'avait pas ces attributs.
     const email = document.getElementById('auth-email');
     const pass = document.getElementById('auth-pass');
-    const fr = () => getLang() !== 'en';
-    if (email) { email.setAttribute('autocomplete', 'email'); email.setAttribute('aria-label', 'Email'); }
-    if (pass) {
-        pass.setAttribute('autocomplete', 'current-password');
-        pass.setAttribute('aria-label', fr() ? 'Mot de passe' : 'Password');
-        pass.addEventListener('keydown', (e) => { if (e.key === 'Enter') window.handleLogin(); });
-    }
-    overlay.addEventListener('keydown', (e) => {
-        if (e.key !== 'Tab') return;
-        const focusables = [...box.querySelectorAll('button, input, a[href], select, textarea')].filter(el => !el.disabled && el.offsetParent !== null);
-        if (!focusables.length) return;
-        const first = focusables[0], last = focusables[focusables.length - 1];
-        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    });
+    if (email && !email.getAttribute('autocomplete')) email.setAttribute('autocomplete', 'username');
+    if (pass && !pass.getAttribute('autocomplete')) pass.setAttribute('autocomplete', 'current-password');
 }
 
 /**
@@ -107,6 +81,16 @@ export function setupAuthModal(getLang) {
     window.toggleAuthModal = (force) => {
         const el = document.getElementById('auth-modal');
         if (!el) return;
+        if (el instanceof HTMLDialogElement) {
+            // <dialog> native : focus, Échap et retour du focus gérés par le navigateur
+            const open = typeof force === 'boolean' ? force : !el.open;
+            if (open && !el.open) {
+                el.showModal();
+                const email = document.getElementById('auth-email');
+                if (email) email.focus();
+            } else if (!open && el.open) el.close();
+            return;
+        }
         const open = typeof force === 'boolean' ? force : el.style.display !== 'flex';
         el.style.display = open ? 'flex' : 'none';
         if (open) {

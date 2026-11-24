@@ -37,8 +37,8 @@
 
     function apply(theme) {
         document.documentElement.setAttribute('data-theme', theme);
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', theme === 'dark' ? '#161615' : '#1A1A1A');
+        var metas = document.querySelectorAll('meta[name="theme-color"]');
+        for (var m = 0; m < metas.length; m++) metas[m].setAttribute('content', theme === 'dark' ? '#161615' : '#F5F5F0');
         syncButtons(theme);
         syncCharts(theme);
         // Prévient les pages (ex. admin) pour qu'elles redessinent leurs graphiques
@@ -47,9 +47,16 @@
 
     window.toggleTheme = function () {
         var next = current() === 'dark' ? 'light' : 'dark';
-        try { localStorage.setItem(KEY, next); } catch (e) { /* stockage indisponible */ }
+        var system = media && media.matches ? 'dark' : 'light';
+        try {
+            // Même thème que le système : on efface le choix pour suivre à nouveau le système ;
+            // sinon on le mémorise tel quel (et on le garde même si le système change ensuite).
+            if (next === system) localStorage.removeItem(KEY); else localStorage.setItem(KEY, next);
+        } catch (e) { /* stockage indisponible : le thème s'applique quand même */ }
         apply(next);
     };
+    // Choix fait dans un autre onglet : on suit
+    window.addEventListener('storage', function (e) { if (e.key === KEY) apply(current()); });
 
     // Le système change de thème (ex. passage en mode nuit) : on suit, sauf si un choix a été fait
     if (media) {

@@ -221,11 +221,11 @@
 
             <div class="section-title" data-t="lblProfile">Profil Public</div>
             <div class="form-group">
-                <label data-t="lblPseudo">Pseudo (Visible sur votre lien public)</label>
-                <input type="text" id="profile-pseudo" placeholder="Ex: HironoFan99">
+                <label for="profile-pseudo" data-t="lblPseudo">Pseudo (Visible sur votre lien public)</label>
+                <input type="text" id="profile-pseudo" name="nickname" autocomplete="nickname" spellcheck="false" maxlength="40" placeholder="Ex: HironoFan99">
             </div>
             <div class="form-group">
-                <label data-t="lblAvatar">Avatar (Figurine favorite)</label>
+                <label for="profile-avatar-select" data-t="lblAvatar">Avatar (Figurine favorite)</label>
                 <div style="display:flex; align-items:center; gap:10px;">
                     <div id="preview-avatar-mini" style="width:40px; height:40px; background:var(--color-sand); border:1px solid var(--color-border); flex-shrink:0; overflow:hidden; display:flex; align-items:center; justify-content:center;">👤</div>
                     <select id="profile-avatar-select">
@@ -253,15 +253,15 @@
 
             <div class="section-title" data-t="lblSecurity">Sécurité</div>
             <div class="form-group">
-                <label data-t="lblNewPass">Nouveau mot de passe</label>
-                <input type="password" id="new-password" placeholder="Nouveau mot de passe">
+                <label for="new-password" data-t="lblNewPass">Nouveau mot de passe</label>
+                <input type="password" id="new-password" name="new-password" autocomplete="new-password" minlength="6" placeholder="Nouveau mot de passe">
                 <button class="btn-action btn-update" onclick="window.updateUserPassword()" data-t="btnUpdatePass">Mettre à jour le mot de passe</button>
             </div>
 
             <div class="section-title" style="margin-top:30px;" data-t="lblEmailSection">Adresse Email</div>
             <div class="form-group">
-                <label data-t="lblNewEmail">Nouvelle adresse email</label>
-                <input type="email" id="new-email" placeholder="Nouvel email">
+                <label for="new-email" data-t="lblNewEmail">Nouvelle adresse email</label>
+                <input type="email" id="new-email" name="new-email" autocomplete="email" spellcheck="false" placeholder="Nouvel email">
                 <button class="btn-action btn-update" onclick="window.updateUserEmail()" data-t="btnUpdateEmail">Mettre à jour l'email</button>
             </div>
 
@@ -278,36 +278,39 @@
     </div>
 
     <!-- MODAL D'AUTHENTIFICATION -->
-    <div id="auth-modal" class="modal-overlay">
-        <div class="modal-content" style="text-align:center; max-width:440px;">
-            <div class="auth-title" data-t="authLogin">Connexion</div>
+    <dialog id="auth-modal" class="modal-overlay hrn-dialog" aria-labelledby="auth-modal-title">
+        <form class="modal-content" style="text-align:center; max-width:440px;" id="auth-form" method="post" onsubmit="event.preventDefault(); window.handleLogin();">
+            <div class="auth-title" id="auth-modal-title" data-t="authLogin">Connexion</div>
             <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">
                 Sauvegardez votre collection dans le cloud.
             </p>
             
-            <input type="email" id="auth-email" placeholder="Email" style="margin-bottom:12px;">
-            <input type="password" id="auth-pass" placeholder="Mot de passe" style="margin-bottom:12px;">
+            <label for="auth-email" class="sr-only" data-t="lblEmail">Email</label>
+            <input type="email" id="auth-email" name="email" autocomplete="username" spellcheck="false" required placeholder="Email" style="margin-bottom:12px;">
+            <label for="auth-pass" class="sr-only" data-t="lblPassword">Mot de passe</label>
+            <input type="password" id="auth-pass" name="password" autocomplete="current-password" required placeholder="Mot de passe" style="margin-bottom:12px;">
 
             <div style="text-align: right; margin-bottom: 15px;">
-                <button class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+                <button type="button" class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
             </div>
 
-            <button class="btn-action btn-update" onclick="window.handleLogin()" style="background:var(--primary); border-color:var(--primary);" data-t="btnLogin">Se connecter</button>
+            <p class="dialog-msg" role="status" aria-live="polite"></p>
+            <button type="submit" class="btn-action btn-update" style="background:var(--primary); border-color:var(--primary);" data-t="btnLogin">Se connecter</button>
             
             <div class="auth-separator">OU</div>
             
-            <button class="btn-action btn-update" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            <button type="button" class="btn-action btn-update" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
                 <span data-t="btnGoogle">Continuer avec Google</span>
             </button>
 
-            <button class="btn-action btn-update" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
+            <button type="button" class="btn-action btn-update" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">
                 Créer un compte (Email)
             </button>
             
-            <button class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 15px;">Annuler</button>
-        </div>
-    </div>
+            <button type="button" class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel" style="margin-top: 15px;">Annuler</button>
+        </form>
+    </dialog>
 
     <div id="footer-placeholder"></div>
 
@@ -361,7 +364,7 @@
 
         window.onclick = function(event) {
             if (event.target.classList.contains('modal-overlay')) {
-                event.target.style.display = "none";
+                event.target.close ? event.target.close() : (event.target.style.display = "none");
             }
         }
 
