@@ -286,3 +286,20 @@ export function computeCoteHistory(users, catalog, rates, now = new Date(), mont
     }
     return { months: labels, updatedAt: now.toISOString(), items };
 }
+
+/**
+ * Rareté communautaire publiée dans market_prices/rarity (lisible par tous, sans aucune donnée personnelle) :
+ * pour chaque figurine, la part des collectionneurs (comptes ayant au moins une figurine) qui la possèdent
+ * et la part qui la recherchent, en % arrondi à 1 décimale.
+ */
+export function computeRarity(stats, catalog, now = new Date()) {
+    const base = stats.usersWithItems || 0;
+    const pct = (n) => (base ? Math.round((n / base) * 1000) / 10 : 0);
+    const owned = {}, wanted = {};
+    for (const b of catalog) {
+        const id = String(b.ID);
+        owned[id] = pct(stats.owners[id] || 0);
+        if (stats.wishers[id]) wanted[id] = pct(stats.wishers[id]);
+    }
+    return { collectors: base, updatedAt: now.toISOString(), owned, wanted };
+}

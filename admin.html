@@ -653,7 +653,7 @@
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, setDoc, writeBatch } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { PUBLIC_COLLECTION, toPublicProfile, samePublicProfile, publicProfileDoc } from './assets/public-profile.js';
-        import { computeStats, computeCoteHistory, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
+        import { computeStats, computeCoteHistory, computeRarity, fetchRates, MIN_PRICES } from './assets/admin-stats.js';
         
         let baseData = [];
         try {
@@ -740,6 +740,9 @@
                         updatedAt: new Date().toISOString()
                     });
                     log(`Compteur public mis à jour : ${stats.userCount} utilisateurs.`);
+                    // Rareté communautaire (pages Collection, Marché, Statistiques) : % de collectionneurs par figurine
+                    await setDoc(doc(db, 'market_prices', 'rarity'), computeRarity(stats, baseData, new Date()));
+                    log(`Rareté publiée (${stats.usersWithItems} collectionneurs).`);
                 } catch (e) { log('⚠️ Compteur public non enregistré (droits Firestore sur market_prices/site_stats ?)'); }
 
                 // Fiches publiques (page de partage) : copie sans prix, dates, états ni notes

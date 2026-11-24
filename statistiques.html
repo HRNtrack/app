@@ -194,6 +194,36 @@
         .value-trend.down { color: var(--color-red); }
         .value-trend.flat { color: var(--text-sub); }
         .chart-note { margin: 10px 0 0; font-size: 0.72rem; color: var(--text-sub); }
+        .rare-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        .rare-card { border: 1px solid var(--color-border); background: var(--surface); padding: 8px 8px 10px; text-align: center; min-width: 0; }
+        .rare-card img { width: 100%; aspect-ratio: 1; object-fit: contain; background: var(--color-sand); display: block; }
+        .rare-card strong { display: block; font-size: 0.72rem; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .rare-card span { display: block; font-size: 0.68rem; font-weight: 700; color: var(--color-gold); }
+        @media (max-width: 767px) { .rare-list { grid-template-columns: repeat(3, 1fr); } }
+        .mygoals { display: grid; grid-template-columns: 1fr 1.4fr; gap: 18px; }
+        .goal-form label { display: block; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sub); margin-bottom: 6px; }
+        .goal-form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+        .goal-form-row input, .goal-form-row select { flex: 1 1 120px; min-width: 0; margin: 0; padding: 8px 10px; border: 1px solid var(--color-border); background: var(--surface); color: var(--text-main); font: inherit; font-size: 0.82rem; }
+        .goal-form-row input[type=number] { max-width: 120px; }
+        .mygoal { border: 1px solid var(--color-border); padding: 10px 12px; margin-bottom: 8px; background: var(--surface); }
+        .mygoal-head { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; font-size: 0.82rem; }
+        .mygoal-head strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .mygoal-sub { font-size: 0.72rem; color: var(--text-sub); margin-top: 4px; }
+        .mygoal.done { border-color: var(--color-gold); }
+        .mygoal.late .mygoal-sub { color: var(--color-red); }
+        .mygoal .progress { margin-top: 6px; }
+        .progress-fill.over { background: var(--color-red); }
+        .goal-remove { background: none; border: none; color: var(--text-sub); cursor: pointer; font-size: 0.9rem; padding: 0 2px; }
+        .goal-remove:hover { color: var(--color-red); }
+        @media (max-width: 767px) { .mygoals { grid-template-columns: 1fr; } }
+        .goal-cost { margin-top: 4px; font-size: 0.72rem; font-weight: 700; color: var(--color-gold); }
+        .series-cost { font-weight: 600; color: var(--color-gold); margin-left: 4px; }
+        .prio-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .prio-card { border: 1px solid var(--color-border); background: var(--surface); padding: 12px 14px; border-top: 4px solid var(--prio, var(--color-border)); }
+        .prio-card .prio-label { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sub); }
+        .prio-card .prio-count { display: block; font-size: 1.25rem; font-weight: 800; margin-top: 2px; }
+        .prio-card .prio-cost { display: block; font-size: 0.75rem; color: var(--text-sub); }
+        @media (max-width: 767px) { .prio-list { grid-template-columns: repeat(2, 1fr); } }
         /* Journal de collection : un <details> par mois */
         .journal-sum { font-size: 0.78rem; color: var(--text-sub); }
         .journal-list { display: flex; flex-direction: column; gap: 8px; }
@@ -501,6 +531,30 @@
             <p class="chart-note" id="value-note"></p>
         </section>
 
+        <!-- 4 bis². MES OBJECTIFS (budget mensuel, séries à finir) -->
+        <section class="chart-card block" aria-labelledby="mygoals-title">
+            <div class="card-head"><h2 id="mygoals-title" data-t="myGoalsTitle">Mes objectifs</h2></div>
+            <div class="mygoals">
+                <form class="goal-form" id="budget-form">
+                    <label for="budget-input" data-t="budgetLabel">Budget mensuel (€)</label>
+                    <div class="goal-form-row">
+                        <input type="number" id="budget-input" min="0" step="1" inputmode="numeric" placeholder="50">
+                        <button type="submit" class="seg-btn" data-t="goalSave">Enregistrer</button>
+                    </div>
+                    <div id="budget-view"></div>
+                </form>
+                <form class="goal-form" id="serie-goal-form">
+                    <label for="serie-goal-select" data-t="serieGoalLabel">Finir une série</label>
+                    <div class="goal-form-row">
+                        <select id="serie-goal-select" required></select>
+                        <input type="month" id="serie-goal-date" aria-label="Échéance" data-t-aria="serieGoalBy">
+                        <button type="submit" class="seg-btn" data-t="goalAdd">Ajouter</button>
+                    </div>
+                    <div id="serie-goals-view"></div>
+                </form>
+            </div>
+        </section>
+
         <!-- 4 ter. JOURNAL DE COLLECTION (achats par mois) -->
         <section class="chart-card block" aria-labelledby="journal-title">
             <div class="card-head">
@@ -511,6 +565,19 @@
             <button type="button" class="seg-btn journal-more" id="journal-more" hidden></button>
             <div class="chart-empty" id="journal-empty" data-t="journalEmpty">Ajoutez des dates d'achat à vos figurines (page Collection) pour voir votre journal se remplir.</div>
             <p class="chart-note" id="journal-note"></p>
+        </section>
+
+        <!-- 4 quinquies. RARETÉ -->
+        <section class="chart-card block" aria-labelledby="rare-title" id="rare-section" hidden>
+            <div class="card-head"><h2 id="rare-title" data-t="rareTitle">Vos figurines les plus rares</h2><span class="journal-sum" id="rare-sum"></span></div>
+            <div class="rare-list" id="rare-list"></div>
+        </section>
+
+        <!-- 4 quater. WISHLIST PAR PRIORITÉ -->
+        <section class="chart-card block" aria-labelledby="prio-title">
+            <div class="card-head"><h2 id="prio-title" data-t="prioTitle">Wishlist par priorité</h2></div>
+            <div class="prio-list" id="prio-list"></div>
+            <p class="chart-note" id="prio-note"></p>
         </section>
 
         <!-- 5. GRAPHIQUES -->
@@ -672,6 +739,17 @@
                 rankNext: "Plus que {n} pts avant {r}", rankMax: "Rang maximum atteint !",
                 complSub: "{n} secrets sur {t}", valueSub: "Dépensé : {spent} · cotes connues pour {pct} % de vos figurines",
                 valueNone: "Pas encore de cote pour vos figurines", dealGood: "▲ {n} % sous la cote à l'achat", dealBad: "▼ {n} % au-dessus de la cote à l'achat",
+                costFinish: "≈ {c} pour la compléter", costFinishPartial: "≈ {c} pour {p} des {n} manquantes (cote connue)", costNone: "Pas encore de cote pour les manquantes",
+                kWishCost: "≈ {c} selon les cotes", seriesCostTitle: "≈ {c} pour finir la série (cotes connues)",
+                myGoalsTitle: "Mes objectifs", budgetLabel: "Budget mensuel (€)", goalSave: "Enregistrer", serieGoalLabel: "Finir une série", goalAdd: "Ajouter",
+                serieGoalBy: "Échéance (facultative)", budgetView: "Ce mois-ci : {s} sur {b}", budgetLeft: "Reste {r} à dépenser", budgetOver: "Budget dépassé de {r}",
+                budgetNone: "Fixez un budget pour suivre vos dépenses du mois.", goalsNone: "Choisissez une série à compléter, avec une date si vous voulez.",
+                goalDone: "✓ Objectif atteint !", goalLeft: "Il manque {n} figurine(s)", goalBy: "avant fin {d}", goalDaysLeft: "({n} jours)", goalLate: "échéance dépassée",
+                goalRemove: "Retirer cet objectif", goalSaved: "Objectifs enregistrés.", goalErr: "Impossible d'enregistrer vos objectifs pour le moment.", goalPick: "— Choisir une série —",
+                rareTitle: "Vos figurines les plus rares", rarePct: "{p} % l'ont", rareSum: "Sur {n} collectionneurs HRNtrack",
+                prioTitle: "Wishlist par priorité", prioHigh: "Priorité haute", prioMedium: "Priorité moyenne", prioLow: "Priorité basse", prioNone: "Sans priorité",
+                prioCount: "{n} figurine(s)", prioEmpty: "Votre wishlist est vide. Ajoutez des figurines « Recherchées » dans votre Collection.",
+                prioHint: "Choisissez la priorité de chaque figurine recherchée dans sa fiche (page Collection).",
                 goalMissing: "Il manque :", goalsEmpty: "Commencez une série pour voir vos prochains objectifs.",
                 goalsAllDone: "Toutes vos séries commencées sont complètes. Bravo !",
                 topCote: "Cote", topPaid: "Payé", seriesNone: "Aucune série commencée pour l'instant.",
@@ -709,6 +787,17 @@
                 rankNext: "{n} pts to {r}", rankMax: "Highest rank reached!",
                 complSub: "{n} secrets out of {t}", valueSub: "Spent: {spent} · values known for {pct}% of your figures",
                 valueNone: "No market value for your figures yet", dealGood: "▲ bought {n}% below market", dealBad: "▼ bought {n}% above market",
+                costFinish: "≈ {c} to complete it", costFinishPartial: "≈ {c} for {p} of the {n} missing (known value)", costNone: "No market value yet for the missing ones",
+                kWishCost: "≈ {c} at market value", seriesCostTitle: "≈ {c} to finish the series (known values)",
+                myGoalsTitle: "My goals", budgetLabel: "Monthly budget (€)", goalSave: "Save", serieGoalLabel: "Finish a series", goalAdd: "Add",
+                serieGoalBy: "Deadline (optional)", budgetView: "This month: {s} of {b}", budgetLeft: "{r} left to spend", budgetOver: "Budget exceeded by {r}",
+                budgetNone: "Set a budget to track this month's spending.", goalsNone: "Pick a series to complete, with a date if you like.",
+                goalDone: "✓ Goal reached!", goalLeft: "{n} figure(s) missing", goalBy: "by end of {d}", goalDaysLeft: "({n} days)", goalLate: "deadline passed",
+                goalRemove: "Remove this goal", goalSaved: "Goals saved.", goalErr: "Couldn't save your goals right now.", goalPick: "— Pick a series —",
+                rareTitle: "Your rarest figures", rarePct: "{p}% own it", rareSum: "Among {n} HRNtrack collectors",
+                prioTitle: "Wishlist by priority", prioHigh: "High priority", prioMedium: "Medium priority", prioLow: "Low priority", prioNone: "No priority",
+                prioCount: "{n} figure(s)", prioEmpty: "Your wishlist is empty. Mark figures as “Wanted” in your Collection.",
+                prioHint: "Set each wanted figure's priority in its card (Collection page).",
                 goalMissing: "Missing:", goalsEmpty: "Start a series to see your next goals.",
                 goalsAllDone: "All your started series are complete. Well done!",
                 topCote: "Value", topPaid: "Paid", seriesNone: "No series started yet.",
@@ -741,7 +830,13 @@
         let myCollection = [];
         let storyPseudo = '';
         let profilePrivate = false;
+        let myGoals = { budget: 0, series: [] };   // users/{uid}.goals
         let valueHistory = null;
+        let rarity = null;
+        getDoc(doc(db, 'market_prices', 'rarity')).then(snap => {
+            rarity = snap.exists() ? snap.data() : null;
+            if (lastStats) renderRare();
+        }).catch(() => { /* rareté pas encore publiée */ });
         getDoc(doc(db, 'market_prices', 'history')).then(snap => {
             valueHistory = snap.exists() ? snap.data() : null;
             if (lastStats) updateCharts(lastStats);
@@ -837,11 +932,13 @@
                     const snap = await getDoc(doc(db, "users", user.uid));
                     storyPseudo = snap.exists() && snap.data().profile ? String(snap.data().profile.pseudo || '') : '';
                     profilePrivate = !!(snap.exists() && snap.data().profile && snap.data().profile.isPublic === false);
+                    const g = snap.exists() && snap.data().goals ? snap.data().goals : {};
+                    myGoals = { budget: Number(g.budget) || 0, series: Array.isArray(g.series) ? g.series.filter(x => x && typeof x.serie === 'string').slice(0, 10) : [] };
                     const cloudData = snap.exists() ? (snap.data().collection || []) : [];
                     const byId = new Map(cloudData.map(i => [i.ID, i]));
                     myCollection = baseData.map(b => {
                         const saved = byId.get(b.ID);
-                        return saved ? { ...b, Status: saved.Status || b.Status, Quantity: saved.Quantity, "Purchase price": saved["Purchase price"], Currency: saved.Currency, "Purchase date": saved["Purchase date"], Condition: saved.Condition } : { ...b };
+                        return saved ? { ...b, Status: saved.Status || b.Status, Quantity: saved.Quantity, "Purchase price": saved["Purchase price"], Currency: saved.Currency, "Purchase date": saved["Purchase date"], Condition: saved.Condition, Priority: saved.Priority } : { ...b };
                     });
                 } catch (error) { myCollection = baseData.map(b => ({ ...b })); }
                 renderStats(myCollection);
@@ -889,7 +986,7 @@
                 { k: 'kSecrets', v: s.secretsOwned, sub: fmt('kSecretsSub', { n: s.secretsTotal }), color: 'var(--color-gold)' },
                 { k: 'kSeries', v: `${s.seriesComplete} / ${s.seriesCountable}`, sub: fmt('kSeriesSub', { n: s.seriesStarted }), color: 'var(--color-green)' },
                 { k: 'kDoubles', v: s.doubles, sub: t('kDoublesSub') },
-                { k: 'kWish', v: s.wish, sub: t('kWishSub'), color: 'var(--color-red)' },
+                { k: 'kWish', v: s.wish, sub: s.wishCost > 0 ? fmt('kWishCost', { c: eur(s.wishCost) }) : t('kWishSub'), color: 'var(--color-red)' },
                 { k: 'kMonth', v: s.thisMonthQty, sub: fmt('kMonthSub', { n: eur(s.thisMonthSpent) }) }
             ];
             document.getElementById('stats-grid').innerHTML = tiles.map(c => `<div class="kpi-card"><span class="kpi-label">${esc(t(c.k))}</span><span class="kpi-value"${c.color ? ` style="color:${c.color}"` : ''}>${esc(c.v)}</span><div class="kpi-sub">${esc(c.sub)}</div></div>`).join('');
@@ -906,6 +1003,7 @@
                         <div class="goal-head"><span class="goal-name">${seriesBadges[g.name] || '🏁'} ${esc(g.name)}</span><span class="goal-count">${g.owned} / ${g.total}</span></div>
                         <div class="progress"><div class="progress-fill" style="width:${g.pct}%"></div></div>
                         <div class="goal-missing"><strong>${esc(t('goalMissing'))}</strong> ${shown}${more}</div>
+                        <div class="goal-cost">${esc(g.missingCost > 0 ? (g.missingPriced >= g.missingCount ? fmt('costFinish', { c: eur(g.missingCost) }) : fmt('costFinishPartial', { c: eur(g.missingCost), p: g.missingPriced, n: g.missingCount })) : t('costNone'))}</div>
                     </div>`;
                 }).join('');
             }
@@ -924,6 +1022,9 @@
 
             renderSeries();
             renderJournal();
+            renderPriorities(s);
+            renderRare();
+            renderGoals(s);
             renderBadges(s);
             updateCharts(s);
         }
@@ -960,6 +1061,105 @@
         }
         document.getElementById('journal-more').addEventListener('click', () => { journalAll = !journalAll; renderJournal(); });
 
+        // --- MES OBJECTIFS ---
+        async function saveGoals() {
+            const user = auth.currentUser;
+            if (!user) return;
+            try {
+                await setDoc(doc(db, 'users', user.uid), { goals: { budget: myGoals.budget, series: myGoals.series } }, { merge: true });
+                hrnNotify(t('goalSaved'), 'success');
+            } catch (e) { console.error(e); hrnNotify(t('goalErr'), 'error'); }
+        }
+        function renderGoals(s) {
+            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            // Budget du mois
+            const bv = document.getElementById('budget-view');
+            document.getElementById('budget-input').value = myGoals.budget || '';
+            if (myGoals.budget > 0) {
+                const spent = s.thisMonthSpent || 0, ratio = Math.min(100, Math.round(spent / myGoals.budget * 100)), over = spent > myGoals.budget;
+                bv.innerHTML = `<div class="mygoal${over ? ' late' : ''}"><div class="mygoal-head"><strong>${esc(fmt('budgetView', { s: eur(spent), b: eur(myGoals.budget) }))}</strong><span>${ratio} %</span></div>
+                    <div class="progress"><div class="progress-fill${over ? ' over' : ''}" style="width:${ratio}%"></div></div>
+                    <div class="mygoal-sub">${esc(over ? fmt('budgetOver', { r: eur(spent - myGoals.budget) }) : fmt('budgetLeft', { r: eur(myGoals.budget - spent) }))}</div></div>`;
+            } else bv.innerHTML = `<div class="mygoal-sub">${esc(t('budgetNone'))}</div>`;
+            // Séries à finir
+            const sel = document.getElementById('serie-goal-select');
+            const chosen = new Set(myGoals.series.map(g => g.serie));
+            sel.innerHTML = `<option value="">${esc(t('goalPick'))}</option>` + s.series.filter(x => x.owned < x.total && !chosen.has(x.name))
+                .sort((a, b) => a.name.localeCompare(b.name)).map(x => `<option value="${esc(x.name)}">${esc(x.name)} (${x.owned}/${x.total})</option>`).join('');
+            const view = document.getElementById('serie-goals-view');
+            if (!myGoals.series.length) { view.innerHTML = `<div class="mygoal-sub">${esc(t('goalsNone'))}</div>`; return; }
+            view.innerHTML = myGoals.series.map((g, idx) => {
+                const x = s.series.find(y => y.name === g.serie) || { owned: 0, total: 0, pct: 0, missingCost: 0 };
+                const done = x.total > 0 && x.owned >= x.total;
+                let sub = done ? t('goalDone') : fmt('goalLeft', { n: x.total - x.owned }) + (x.missingCost > 0 ? ' · ≈ ' + eur(x.missingCost) : '');
+                let late = false;
+                if (!done && g.by) {
+                    const end = new Date(g.by + '-01T12:00:00'); end.setMonth(end.getMonth() + 1);
+                    const days = Math.ceil((end - new Date()) / 86400000);
+                    late = days < 0;
+                    sub += ' · ' + fmt('goalBy', { d: new Date(g.by + '-01T12:00:00').toLocaleDateString(loc, { month: 'long', year: 'numeric' }) }) + ' ' + (late ? t('goalLate') : fmt('goalDaysLeft', { n: days }));
+                }
+                return `<div class="mygoal${done ? ' done' : ''}${late ? ' late' : ''}"><div class="mygoal-head"><strong>${seriesBadges[g.serie] || '🏁'} ${esc(g.serie)}</strong>
+                    <span>${x.owned}/${x.total} <button type="button" class="goal-remove" data-remove="${idx}" aria-label="${esc(t('goalRemove'))}" title="${esc(t('goalRemove'))}">✕</button></span></div>
+                    <div class="progress"><div class="progress-fill${done ? ' done' : ''}" style="width:${x.pct}%"></div></div>
+                    <div class="mygoal-sub">${esc(sub)}</div></div>`;
+            }).join('');
+        }
+        document.getElementById('budget-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const v = Math.max(0, Math.round(Number(document.getElementById('budget-input').value) || 0));
+            myGoals.budget = v;
+            if (lastStats) renderGoals(lastStats);
+            saveGoals();
+        });
+        document.getElementById('serie-goal-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const serie = document.getElementById('serie-goal-select').value;
+            if (!serie) return;
+            const by = document.getElementById('serie-goal-date').value || '';
+            myGoals.series.push({ serie, by: /^\d{4}-\d{2}$/.test(by) ? by : '' });
+            document.getElementById('serie-goal-date').value = '';
+            if (lastStats) renderGoals(lastStats);
+            saveGoals();
+        });
+        document.getElementById('serie-goals-view').addEventListener('click', (e) => {
+            const b = e.target.closest('[data-remove]');
+            if (!b) return;
+            myGoals.series.splice(Number(b.dataset.remove), 1);
+            if (lastStats) renderGoals(lastStats);
+            saveGoals();
+        });
+
+        // --- RARETÉ : les 5 figurines possédées que le moins de collectionneurs ont ---
+        function renderRare() {
+            const section = document.getElementById('rare-section');
+            if (!rarity || !rarity.owned) { section.hidden = true; return; }
+            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const owned = myCollection.filter(i => /^(possédé|possédée|owned)$/i.test(String(i.Status || '')) && rarity.owned[String(i.ID)] != null);
+            const top = owned.sort((a, b) => rarity.owned[String(a.ID)] - rarity.owned[String(b.ID)]).slice(0, 5);
+            section.hidden = !top.length;
+            document.getElementById('rare-sum').textContent = fmt('rareSum', { n: rarity.collectors });
+            document.getElementById('rare-list').innerHTML = top.map(i => `<div class="rare-card" title="${esc(i.Name)} · ${esc(i.Serie)}">
+                <img src="${esc(i.Image)}" alt="" loading="lazy" decoding="async"><strong>${esc(i.Name)}</strong>
+                <span>💎 ${esc(fmt('rarePct', { p: Number(rarity.owned[String(i.ID)]).toLocaleString(loc) }))}</span></div>`).join('');
+        }
+
+        // --- WISHLIST PAR PRIORITÉ ---
+        const PRIO_COLORS = { high: '#C0392B', medium: '#E67E22', low: '#C6A875', none: 'var(--color-border)' };
+        function renderPriorities(s) {
+            const box = document.getElementById('prio-list');
+            const note = document.getElementById('prio-note');
+            if (!s.wish) { box.innerHTML = ''; note.textContent = t('prioEmpty'); return; }
+            const label = { high: 'prioHigh', medium: 'prioMedium', low: 'prioLow', none: 'prioNone' };
+            box.innerHTML = ['high', 'medium', 'low', 'none'].map(p => {
+                const w = s.wishByPriority[p];
+                return `<div class="prio-card" style="--prio:${PRIO_COLORS[p]}"><span class="prio-label">${esc(t(label[p]))}</span>
+                    <span class="prio-count">${esc(fmt('prioCount', { n: w.count }))}</span>
+                    <span class="prio-cost">${w.cost > 0 ? '≈ ' + esc(eur(w.cost)) : '—'}</span></div>`;
+            }).join('');
+            note.textContent = s.wishByPriority.none.count === s.wish ? t('prioHint') : '';
+        }
+
         function renderSeries() {
             if (!lastStats) return;
             document.querySelectorAll('.seg-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === seriesFilter));
@@ -967,7 +1167,7 @@
             document.getElementById('series-grid').innerHTML = list.length ? list.map(x => {
                 const done = x.owned >= x.total;
                 return `<div class="series-row${done ? ' done' : ''}">
-                    <div class="series-head"><span class="series-name">${x.special ? '' : (seriesBadges[x.name] || '🏁') + ' '}${esc(x.name)}</span><span class="series-count">${done ? '✓ ' : ''}${x.owned}/${x.total}</span></div>
+                    <div class="series-head"><span class="series-name">${x.special ? '' : (seriesBadges[x.name] || '🏁') + ' '}${esc(x.name)}</span><span class="series-count"${!done && x.missingCost > 0 ? ` title="${esc(fmt('seriesCostTitle', { c: eur(x.missingCost) }))}"` : ''}>${done ? '✓ ' : ''}${x.owned}/${x.total}${!done && x.missingCost > 0 ? ` <small class="series-cost">≈ ${esc(eur(x.missingCost))}</small>` : ''}</span></div>
                     <div class="progress"><div class="progress-fill${done ? ' done' : ''}" style="width:${x.pct}%"></div></div>
                 </div>`;
             }).join('') : `<div class="empty-note">${esc(t('seriesNone'))}</div>`;

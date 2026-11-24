@@ -89,6 +89,21 @@
         .push-btn[aria-disabled="true"] { opacity: 0.6; cursor: progress; }
         .push-btn[hidden] { display: none; }
         .push-hint { font-size: 0.78rem; color: var(--text-sub); max-width: 520px; }
+        /* Calendrier des sorties à venir */
+        .upcoming { margin: 0 0 34px; }
+        .upcoming-title { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px; }
+        .upcoming-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+        .upcoming-item { display: flex; gap: 12px; align-items: stretch; background: var(--surface); border: 1px solid var(--color-border); border-left: 4px solid var(--color-gold); padding: 12px; min-width: 0; }
+        .upcoming-date { flex: 0 0 auto; min-width: 54px; text-align: center; background: var(--color-sand); padding: 6px 4px; display: flex; flex-direction: column; justify-content: center; }
+        .upcoming-date b { display: block; font-size: 1.2rem; font-weight: 800; line-height: 1; }
+        .upcoming-date span { display: block; font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-sub); margin-top: 3px; }
+        .upcoming-body { min-width: 0; flex: 1; }
+        .upcoming-body strong { display: block; font-size: 0.9rem; }
+        .upcoming-body small { display: block; font-size: 0.74rem; color: var(--text-sub); margin-top: 2px; }
+        .upcoming-tag { display: inline-block; margin-top: 6px; font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 1px 6px; background: var(--color-gold-light); border: 1px solid var(--color-gold); }
+        .upcoming-body a { font-size: 0.72rem; color: var(--text-main); }
+        .upcoming-img { width: 56px; height: 56px; object-fit: contain; background: var(--color-sand); flex-shrink: 0; }
+        .upcoming-empty { color: var(--text-sub); font-size: 0.82rem; padding: 14px; border: 1px dashed var(--color-border); background: var(--surface); }
 
         .release-section { margin-bottom: 45px; }
         .section-header { 
@@ -225,6 +240,12 @@
             <span class="push-hint" id="push-hint" role="status"></span>
         </div>
 
+        <!-- Sorties annoncées (assets/upcoming.js) -->
+        <section class="upcoming" id="a-venir" aria-labelledby="upcoming-title">
+            <h2 class="upcoming-title" id="upcoming-title" data-t="upcomingTitle">🗓️ À venir</h2>
+            <ol class="upcoming-list" id="upcoming-list"></ol>
+        </section>
+
         <!-- Sections générées depuis NEW_SECTIONS (voir le script plus bas) -->
         <div id="release-sections"></div>
     </div>
@@ -322,6 +343,7 @@
         import { syncPublicProfile } from './assets/public-profile.js';
         import { baseData } from './data.js?v=2026-11-16-2';
         import { pushStatus, enablePush, disablePush } from './assets/push.js';
+        import { UPCOMING } from './assets/upcoming.js';
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -367,6 +389,38 @@
         
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
         function t(key) { return translations[currentLang]?.[key] || key; }
+
+        // --- CALENDRIER DES SORTIES À VENIR ---
+        const UPCOMING_TEXT = {
+            fr: { title: "🗓️ À venir", empty: "Aucune sortie annoncée pour le moment. Activez les alertes pour être prévenu dès l'arrivée des nouvelles figurines.", announce: "Voir l'annonce", day: "jour à confirmer",
+                types: { serie: "Nouvelle série", special: "Édition spéciale", collab: "Collaboration", autre: "Sortie" } },
+            en: { title: "🗓️ Coming soon", empty: "No release announced yet. Turn on alerts to hear as soon as new figures arrive.", announce: "See the announcement", day: "day to be confirmed",
+                types: { serie: "New series", special: "Special edition", collab: "Collaboration", autre: "Release" } }
+        };
+        function renderUpcoming() {
+            const T = UPCOMING_TEXT[currentLang] || UPCOMING_TEXT.fr;
+            const loc = currentLang === 'en' ? 'en-GB' : 'fr-FR';
+            const e = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const safeUrl = (u) => (/^https:\/\//i.test(String(u || '')) ? String(u) : '');
+            const thisMonth = new Date().toISOString().slice(0, 7);
+            const list = UPCOMING.filter(u => u && u.name && /^\d{4}-\d{2}(-\d{2})?$/.test(u.date || '') && u.date.slice(0, 7) >= thisMonth)
+                .sort((a, b) => a.date.localeCompare(b.date));
+            document.getElementById('upcoming-title').textContent = T.title;
+            document.getElementById('upcoming-list').innerHTML = list.length ? list.map(u => {
+                const d = new Date((u.date.length === 7 ? u.date + '-01' : u.date) + 'T12:00:00');
+                const big = u.date.length === 10 ? d.getDate() : d.toLocaleDateString(loc, { month: 'short' }).replace('.', '');
+                const small = u.date.length === 10 ? d.toLocaleDateString(loc, { month: 'short', year: 'numeric' }) : d.getFullYear();
+                const img = safeUrl(u.image), link = safeUrl(u.link);
+                const note = currentLang === 'en' && u.noteEn ? u.noteEn : u.note;
+                return `<li class="upcoming-item">
+                    <div class="upcoming-date"><b>${e(big)}</b><span>${e(small)}</span></div>
+                    <div class="upcoming-body"><strong>${e(u.name)}</strong>${note ? `<small>${e(note)}</small>` : ''}${u.date.length === 7 ? `<small>${e(T.day)}</small>` : ''}
+                        <span class="upcoming-tag">${e(T.types[u.type] || T.types.serie)}</span>${link ? ` <a href="${e(link)}" target="_blank" rel="noopener noreferrer">${e(T.announce)} ↗</a>` : ''}</div>
+                    ${img ? `<img class="upcoming-img" src="${e(img)}" alt="" loading="lazy" decoding="async">` : ''}
+                </li>`;
+            }).join('') : `<li class="upcoming-empty">${e(T.empty)}</li>`;
+        }
+        renderUpcoming();
 
         // --- ALERTES NOUVEAUTÉS (notification sur l'appareil, assets/push.js) ---
         const PUSH_TEXT = {
@@ -420,7 +474,7 @@
         });
         refreshPush();
 
-        window.toggleLanguage = () => { setTimeout(() => refreshPush && refreshPush(), 0);
+        window.toggleLanguage = () => { setTimeout(() => { refreshPush && refreshPush(); renderUpcoming && renderUpcoming(); }, 0);
             currentLang = (currentLang === 'fr') ? 'en' : 'fr';
             localStorage.setItem('HRN_LANG', currentLang);
             updateUI();
@@ -622,7 +676,8 @@
                 "Purchase price": item["Purchase price"] || 0,
                 Currency: item.Currency || "EUR",
                 "Purchase date": item["Purchase date"] || "",
-                Note: item.Note ?? item.Notes ?? ""
+                Note: item.Note ?? item.Notes ?? "",
+                Priority: item.Priority || ""
             }));
 
             try {

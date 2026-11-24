@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <script src="assets/theme.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marché des cotes Hirono - HRNtrack</title>
+    <meta name="description" content="Cotes des figurines Hirono calculées par la communauté HRNtrack : les plus chères, les plus fortes hausses et baisses, les plus rares.">
+    <link rel="icon" type="image/png" href="assets/img/favicon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+    <meta name="theme-color" content="#F5F5F0" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#161615" media="(prefers-color-scheme: dark)">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="HRNtrack">
+    
+    <!-- Typographie Poppins -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preload" href="assets/fonts/poppins-400-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="assets/fonts/poppins-700-latin.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="assets/fonts.css">
+
+    <link rel="stylesheet" href="assets/common.css">
+
+    <style>
+
+        body { 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            font-family: var(--font-sans); 
+            margin: 0; 
+            padding: 0;
+            -webkit-font-smoothing: antialiased; 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
+            padding-bottom: var(--nav-height-mobile);
+            opacity: 0; 
+            transition: opacity 0.3s ease-in-out;
+        }
+        body.auth-ready { opacity: 1; }
+
+        /* --- NAVIGATION SUPÉRIEURE --- */
+
+        .nav-link:hover, .nav-link.active {
+            border-bottom-color: var(--color-dark);
+            font-weight: 600;
+        }
+
+        .btn-auth-trigger.logged-in {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-auth-trigger.logged-in:hover {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        /* Mobile Hamburger Button */
+
+        .mobile-drawer .nav-link {
+            font-size: 1rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid var(--color-border);
+            width: 100%;
+        }
+
+        @media (min-width: 993px) { body { padding-bottom: 0; } }
+
+        /* --- CONTAINER & DONATIONS --- */
+        /* MODALS & INPUTS */
+        .modal-overlay { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(26, 26, 26, 0.7); 
+            z-index: 3000; 
+            align-items: center; 
+            justify-content: center; 
+            backdrop-filter: blur(4px); 
+            padding: 1rem;
+        }
+        .modal-content { 
+            background: var(--card-bg); 
+            border: 1px solid var(--color-border);
+            width: 100%; 
+            max-width: 440px; 
+            padding: 2.2rem; 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15); 
+            max-height: 90vh; 
+            overflow-y: auto; 
+            position: relative; 
+        }
+        
+        input, select, textarea {
+            width: 100%; padding: 10px 12px; border: 1px solid var(--color-border);
+            font-family: var(--font-sans); font-size: 0.85rem; box-sizing: border-box; background: var(--surface);
+            color: var(--color-dark); outline: none; transition: border-color 0.2s ease;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--color-dark); }
+
+        .btn-save { 
+            width: 100%; 
+            background: var(--color-dark); 
+            color: var(--color-light); 
+            border: 1px solid var(--color-dark); 
+            padding: 12px; 
+            font-family: var(--font-sans);
+            font-weight: 600; 
+            font-size: 0.82rem; 
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer; 
+            margin-top: 15px; 
+            transition: all 0.25s ease; 
+        }
+        .btn-save:hover { background: transparent; color: var(--color-dark); }
+        .btn-cancel { 
+            width: 100%; 
+            background: transparent; 
+            border: none; 
+            color: var(--color-text-sub); 
+            padding: 10px; 
+            cursor: pointer; 
+            margin-top: 5px; 
+            font-size: 0.78rem; 
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: underline;
+        }
+        .btn-cancel:hover { color: var(--color-red); }
+
+        .auth-title { text-align: center; font-size: 1.5rem; font-weight: 700; margin-bottom: 8px; color: var(--color-dark); }
+        .auth-separator { margin: 1.2rem 0; font-size: 0.75rem; letter-spacing: 0.15em; color: var(--color-text-sub); text-align: center; }
+        
+        /* BOUTON KO-FI CUSTOM */
+        /* --- PAGE MARCHÉ --- */
+        .container { max-width: 1100px; margin: 36px auto 60px; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
+        .page-kicker { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-sub); margin: 0 0 6px; }
+        .page-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 6px; }
+        .page-sub { color: var(--text-sub); font-size: 0.88rem; margin: 0 0 22px; max-width: 720px; line-height: 1.6; }
+        .summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 22px; }
+        .sum { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 14px 16px; min-width: 0; }
+        .sum-label { display: block; font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sub); }
+        .sum-value { display: block; font-size: 1.35rem; font-weight: 800; margin-top: 2px; }
+        .block { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 18px; margin-bottom: 18px; min-width: 0; }
+        .block h2 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+        .block h2 small { font-size: 0.72rem; font-weight: 500; letter-spacing: 0; text-transform: none; color: var(--text-sub); }
+        .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        .two .block { margin-bottom: 0; }
+        .rows { list-style: none; margin: 0; padding: 0; }
+        .row { display: grid; grid-template-columns: 28px 44px 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--color-sand); }
+        .row:last-child { border-bottom: none; }
+        .row .rank { font-weight: 800; color: var(--text-sub); font-size: 0.8rem; text-align: center; }
+        .row img { width: 44px; height: 44px; object-fit: contain; background: var(--color-sand); }
+        .row .who { min-width: 0; }
+        .row .who strong { display: block; font-size: 0.82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .row .who span { display: block; font-size: 0.7rem; color: var(--text-sub); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .row .val { text-align: right; font-weight: 800; font-size: 0.88rem; white-space: nowrap; }
+        .row .val small { display: block; font-size: 0.7rem; font-weight: 700; }
+        .up { color: var(--color-green); } .down { color: var(--color-red); } .flat { color: var(--text-sub); }
+        .secret-dot { color: var(--color-gold); }
+        .empty { color: var(--text-sub); font-size: 0.82rem; padding: 10px 0; }
+        table.series { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+        table.series th { text-align: left; font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-sub); padding: 6px 8px; border-bottom: 1px solid var(--color-border); }
+        table.series td { padding: 8px; border-bottom: 1px solid var(--color-sand); }
+        table.series td.num, table.series th.num { text-align: right; white-space: nowrap; }
+        .table-wrap { overflow-x: auto; }
+        .finder { display: flex; gap: 10px; margin-bottom: 12px; }
+        .finder input { margin: 0; flex: 1; }
+        .note { font-size: 0.75rem; color: var(--text-sub); line-height: 1.6; margin: 4px 0 0; }
+        .state { text-align: center; padding: 50px 20px; color: var(--text-sub); background: var(--surface); border: 1px solid var(--color-border); }
+        @media (max-width: 767px) {
+            .container { margin: 16px auto 40px; padding: 0 12px; }
+            .summary { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+            .two { grid-template-columns: 1fr; }
+            .page-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <script src="assets/header.js" data-active="marche"></script>
+
+    <main class="container">
+        <p class="page-kicker" data-t="kicker">Marché</p>
+        <h1 class="page-title" data-t="title">Les cotes Hirono</h1>
+        <p class="page-sub" data-t="subtitle">Cotes calculées à partir des prix d'achat déclarés par les collectionneurs HRNtrack (prix médian, hors valeurs aberrantes, en euros). Mises à jour chaque mois.</p>
+
+        <div id="state" class="state" data-t="loading">Chargement des cotes…</div>
+
+        <div id="content" hidden>
+            <section class="summary">
+                <div class="sum"><span class="sum-label" data-t="sumPriced">Figurines cotées</span><span class="sum-value" id="s-priced">–</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumAvg">Cote moyenne</span><span class="sum-value" id="s-avg">–</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumCollectors">Collectionneurs</span><span class="sum-value" id="s-collectors">–</span></div>
+                <div class="sum"><span class="sum-label" data-t="sumUpdated">Mise à jour</span><span class="sum-value" id="s-updated">–</span></div>
+            </section>
+
+            <section class="block" aria-labelledby="find-title">
+                <h2 id="find-title" data-t="findTitle">Chercher une figurine</h2>
+                <div class="finder"><input type="search" id="finder" autocomplete="off" aria-labelledby="find-title" enterkeyhint="search"></div>
+                <ul class="rows" id="find-results"></ul>
+            </section>
+
+            <section class="block" aria-labelledby="top-title">
+                <h2 id="top-title"><span data-t="topTitle">🏆 Les plus chères</span></h2>
+                <ol class="rows" id="list-top"></ol>
+            </section>
+
+            <div class="two">
+                <section class="block" aria-labelledby="up-title">
+                    <h2 id="up-title"><span data-t="upTitle">📈 Plus fortes hausses</span> <small id="period"></small></h2>
+                    <ol class="rows" id="list-up"></ol>
+                </section>
+                <section class="block" aria-labelledby="down-title">
+                    <h2 id="down-title"><span data-t="downTitle">📉 Plus fortes baisses</span></h2>
+                    <ol class="rows" id="list-down"></ol>
+                </section>
+            </div>
+            <div style="height:18px"></div>
+
+            <section class="block" aria-labelledby="series-title">
+                <h2 id="series-title" data-t="seriesTitle">📊 Les séries</h2>
+                <div class="table-wrap"><table class="series" id="series-table"></table></div>
+            </section>
+
+            <div class="two">
+                <section class="block" aria-labelledby="rare-title">
+                    <h2 id="rare-title"><span data-t="rareTitle">💎 Les plus rares</span></h2>
+                    <ol class="rows" id="list-rare"></ol>
+                </section>
+                <section class="block" aria-labelledby="wanted-title">
+                    <h2 id="wanted-title"><span data-t="wantedTitle">❤️ Les plus recherchées</span></h2>
+                    <ol class="rows" id="list-wanted"></ol>
+                </section>
+            </div>
+            <p class="note" data-t="method">Méthode : chaque cote est le prix médian payé par les collectionneurs qui ont renseigné un prix, après exclusion des valeurs aberrantes, converti en euros au taux de la BCE. La rareté indique la part des collectionneurs HRNtrack qui possèdent (ou recherchent) la figurine. Aucune donnée personnelle n'est publiée.</p>
+        </div>
+    </main>
+
+    <!-- MODAL D'AUTHENTIFICATION -->
+    <dialog id="auth-modal" class="modal-overlay hrn-dialog" aria-labelledby="auth-modal-title">
+        <form class="modal-content" style="text-align:center; max-width:440px;" id="auth-form" method="post" onsubmit="event.preventDefault(); window.handleLogin();">
+            <div class="auth-title" id="auth-modal-title" data-t="authLogin">Connexion</div>
+            <p style="color:var(--color-text-sub); font-size:13px; margin-bottom:20px;" data-t="authDesc">Sauvegardez votre collection dans le cloud.</p>
+            
+            <label for="auth-email" class="sr-only" data-t="lblEmail">Email</label>
+            <input type="email" id="auth-email" name="email" autocomplete="username" spellcheck="false" required placeholder="Email" style="margin-bottom:12px;">
+            <label for="auth-pass" class="sr-only" data-t="lblPassword">Mot de passe</label>
+            <input type="password" id="auth-pass" name="password" autocomplete="current-password" required placeholder="Mot de passe" style="margin-bottom:12px;">
+            
+            <div style="text-align: right; margin-bottom: 15px;">
+                <button type="button" class="btn-cancel" style="display:inline; padding:0; margin:0; width:auto; font-size:11px;" onclick="window.handleResetPassword()" data-t="btnForgot">Mot de passe oublié ?</button>
+            </div>
+
+            <p class="dialog-msg" role="status" aria-live="polite"></p>
+            <button type="submit" class="btn-save" data-t="btnLogin">Se connecter</button>
+            
+            <div class="auth-separator">OU</div>
+            
+            <button type="button" class="btn-save" onclick="window.handleGoogleLogin()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border); margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px; height:18px;" alt="Google">
+                <span data-t="btnGoogle">Continuer avec Google</span>
+            </button>
+
+            <button type="button" class="btn-save" onclick="window.handleRegister()" style="background:var(--surface); color:var(--text-main); border:1px solid var(--color-border);" data-t="btnRegister">Créer un compte (Email)</button>
+            <button type="button" class="btn-cancel" onclick="window.toggleAuthModal()" data-t="btnCancel">Annuler</button>
+        </form>
+    </dialog>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="assets/site.js"></script>
+
+    <script type="module">
+        import { app } from './assets/firebase.js';
+        import { db } from './assets/db.js';
+        import { withCommon, syncLangToggle } from './assets/i18n.js';
+        import { auth, setupAuthModal, updateAuthButtons, updateAuthLabel } from './assets/auth.js';
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { computeMarket } from './assets/market.js';
+        import { baseData } from './data.js?v=2026-11-16-2';
+
+        const translations = withCommon({
+            fr: {
+                kicker: "Marché", title: "Les cotes Hirono", loading: "Chargement des cotes…",
+                subtitle: "Cotes calculées à partir des prix d'achat déclarés par les collectionneurs HRNtrack (prix médian, hors valeurs aberrantes, en euros). Mises à jour chaque mois.",
+                sumPriced: "Figurines cotées", sumAvg: "Cote moyenne", sumCollectors: "Collectionneurs", sumUpdated: "Mise à jour",
+                findTitle: "Chercher une figurine", findPh: "Nom ou série…",
+                topTitle: "🏆 Les plus chères", upTitle: "📈 Plus fortes hausses", downTitle: "📉 Plus fortes baisses",
+                seriesTitle: "📊 Les séries", rareTitle: "💎 Les plus rares", wantedTitle: "❤️ Les plus recherchées",
+                colSerie: "Série", colCount: "Cotées", colAvg: "Cote moyenne", colTrend: "Tendance", colMax: "La plus chère",
+                period: "sur {n} mois", ownedBy: "{p} % l'ont", wantedBy: "{p} % la recherchent", noCote: "pas encore de cote",
+                emptyTrend: "Pas encore assez d'historique pour calculer les tendances.", emptyRare: "La rareté n'est pas encore publiée.",
+                none: "Aucune figurine ne correspond.", errLoad: "Les cotes ne sont pas disponibles pour le moment.",
+                method: "Méthode : chaque cote est le prix médian payé par les collectionneurs qui ont renseigné un prix, après exclusion des valeurs aberrantes, converti en euros au taux de la BCE. La rareté indique la part des collectionneurs HRNtrack qui possèdent (ou recherchent) la figurine. Aucune donnée personnelle n'est publiée."
+            },
+            en: {
+                kicker: "Market", title: "Hirono market values", loading: "Loading market values…",
+                subtitle: "Values computed from the purchase prices reported by HRNtrack collectors (median price, outliers excluded, in euros). Updated every month.",
+                sumPriced: "Priced figures", sumAvg: "Average value", sumCollectors: "Collectors", sumUpdated: "Updated",
+                findTitle: "Find a figure", findPh: "Name or series…",
+                topTitle: "🏆 Most valuable", upTitle: "📈 Biggest rises", downTitle: "📉 Biggest drops",
+                seriesTitle: "📊 Series", rareTitle: "💎 Rarest", wantedTitle: "❤️ Most wanted",
+                colSerie: "Series", colCount: "Priced", colAvg: "Average value", colTrend: "Trend", colMax: "Most valuable",
+                period: "over {n} months", ownedBy: "{p}% own it", wantedBy: "{p}% want it", noCote: "no value yet",
+                emptyTrend: "Not enough history yet to compute trends.", emptyRare: "Rarity isn't published yet.",
+                none: "No figure matches.", errLoad: "Market values are not available right now.",
+                method: "Method: each value is the median price paid by collectors who entered a price, outliers excluded, converted to euros at the ECB rate. Rarity is the share of HRNtrack collectors who own (or want) the figure. No personal data is published."
+            }
+        });
+
+        let currentLang = (() => { try { return localStorage.getItem('HRN_LANG') || 'fr'; } catch (e) { return 'fr'; } })();
+        const t = (k) => translations[currentLang][k] ?? translations.fr[k] ?? k;
+        const fmt = (k, v) => t(k).replace(/\{(\w+)\}/g, (_, n) => v[n] ?? '');
+        const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        const loc = () => (currentLang === 'en' ? 'en-GB' : 'fr-FR');
+        const eur = (n) => (n || 0).toLocaleString(loc(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+        const pct = (n) => Number(n).toLocaleString(loc());
+        let market = null, rarity = null, updatedAt = null;
+
+        const trendHtml = (tr) => tr === null ? '' : `<small class="${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${tr > 0 ? '▲ +' : tr < 0 ? '▼ ' : ''}${tr} %</small>`;
+        const row = (i, n, val) => `<li class="row"><span class="rank">${n ?? ''}</span><img src="${esc(i.image)}" alt="" loading="lazy" decoding="async">
+            <span class="who"><strong>${i.secret ? '<span class="secret-dot" title="Secret">★</span> ' : ''}${esc(i.name)}</strong><span>${esc(i.serie)}</span></span>
+            <span class="val">${val}</span></li>`;
+        const list = (id, items, val, emptyKey) => {
+            document.getElementById(id).innerHTML = items.length ? items.map((i, k) => row(i, k + 1, val(i))).join('') : `<li class="empty">${esc(t(emptyKey))}</li>`;
+        };
+
+        function renderFinder() {
+            const q = document.getElementById('finder').value.trim().toLowerCase();
+            const box = document.getElementById('find-results');
+            if (!q || !market) { box.innerHTML = ''; return; }
+            const found = market.items.filter(i => i.name.toLowerCase().includes(q) || i.serie.toLowerCase().includes(q)).slice(0, 8);
+            box.innerHTML = found.length ? found.map(i => row(i, null,
+                (i.cote ? eur(i.cote) : `<small class="flat">${esc(t('noCote'))}</small>`) + trendHtml(i.trend) +
+                (i.owned !== null ? `<small class="flat">${esc(fmt('ownedBy', { p: pct(i.owned) }))}</small>` : ''))).join('')
+                : `<li class="empty">${esc(t('none'))}</li>`;
+        }
+
+        function render() {
+            if (!market) return;
+            document.getElementById('state').hidden = true;
+            document.getElementById('content').hidden = false;
+            document.getElementById('s-priced').textContent = market.count;
+            document.getElementById('s-avg').textContent = market.count ? eur(market.avg) : '–';
+            document.getElementById('s-collectors').textContent = rarity ? rarity.collectors : '–';
+            document.getElementById('s-updated').textContent = updatedAt ? new Date(updatedAt).toLocaleDateString(loc(), { day: 'numeric', month: 'short', year: 'numeric' }) : '–';
+            document.getElementById('period').textContent = market.months.length > 1 ? fmt('period', { n: market.months.length - 1 }) : '';
+            list('list-top', market.top, i => eur(i.cote) + trendHtml(i.trend), 'none');
+            list('list-up', market.risers, i => eur(i.cote) + trendHtml(i.trend), 'emptyTrend');
+            list('list-down', market.fallers, i => eur(i.cote) + trendHtml(i.trend), 'emptyTrend');
+            list('list-rare', market.rare, i => `<small class="up">${esc(fmt('ownedBy', { p: pct(i.owned) }))}</small>`, 'emptyRare');
+            list('list-wanted', market.wanted, i => `<small class="down">${esc(fmt('wantedBy', { p: pct(i.wanted) }))}</small>`, 'emptyRare');
+            document.getElementById('series-table').innerHTML = `<thead><tr><th>${esc(t('colSerie'))}</th><th class="num">${esc(t('colCount'))}</th><th class="num">${esc(t('colAvg'))}</th><th class="num">${esc(t('colTrend'))}</th><th>${esc(t('colMax'))}</th></tr></thead><tbody>` +
+                market.series.map(s => `<tr><td>${esc(s.serie)}</td><td class="num">${s.count}</td><td class="num"><strong>${eur(s.avg)}</strong></td>
+                    <td class="num">${s.trend === null ? '–' : `<span class="${s.trend > 0 ? 'up' : s.trend < 0 ? 'down' : 'flat'}">${s.trend > 0 ? '+' : ''}${s.trend} %</span>`}</td>
+                    <td>${esc(s.max.name)} · ${eur(s.max.cote)}</td></tr>`).join('') + '</tbody>';
+            renderFinder();
+        }
+
+        function updateUIText() {
+            syncLangToggle(currentLang);
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-t]').forEach(el => { const v = translations[currentLang][el.getAttribute('data-t')]; if (v) el.textContent = v; });
+            document.getElementById('finder').placeholder = t('findPh');
+            updateAuthLabel(translations[currentLang]);
+            render();
+        }
+        window.updateUIText = updateUIText;
+        window.toggleLanguage = () => {
+            currentLang = currentLang === 'fr' ? 'en' : 'fr';
+            try { localStorage.setItem('HRN_LANG', currentLang); } catch (e) { /* stockage indisponible */ }
+            updateUIText();
+        };
+        setupAuthModal(() => currentLang);
+        document.getElementById('finder').addEventListener('input', renderFinder);
+        onAuthStateChanged(auth, (user) => { updateAuthButtons(!!user); updateAuthLabel(translations[currentLang]); });
+
+        async function load() {
+            const get = async (id) => { try { const s = await getDoc(doc(db, 'market_prices', id)); return s.exists() ? s.data() : null; } catch (e) { return null; } };
+            const [community, history, rar] = await Promise.all([get('community'), get('history'), get('rarity')]);
+            if (!community) { document.getElementById('state').textContent = t('errLoad'); document.body.classList.add('ready', 'auth-ready'); return; }
+            rarity = rar;
+            updatedAt = (history && history.updatedAt) || (rar && rar.updatedAt) || null;
+            market = computeMarket(baseData, community, history, rar);
+            render();
+            document.body.classList.add('ready', 'auth-ready');
+        }
+
+        fetch('footer.html').then(r => r.text()).then(d => {
+            document.getElementById('footer-placeholder').innerHTML = d;
+            if (window.initCookieLogic) window.initCookieLogic();
+            updateUIText();
+        }).catch(e => console.error('Erreur Footer:', e));
+        updateUIText();
+        load();
+    </script>
+</body>
+</html>

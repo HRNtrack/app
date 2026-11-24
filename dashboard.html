@@ -219,6 +219,9 @@
         .trend-up { color: var(--primary); }
         .trend-down { color: var(--color-red); }
         .trend-neutral { color: #9CA3AF; }
+        .rarity-line { margin: -6px 0 14px; font-size: 0.75rem; font-weight: 600; color: var(--color-gold); }
+        .rarity-line::before { content: '💎 '; }
+        .pill.wish.prio-high { background: #C0392B; }
         .cote-history { margin: 0 0 15px; padding: 10px 12px 6px; border: 1px solid var(--color-border); background: var(--surface); }
         .cote-history-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
         .cote-history-head .form-label { margin: 0; }
@@ -457,6 +460,8 @@
                     <option value="price_desc" data-t="sortPriceDesc">Prix payé (décroissant)</option>
                     <option value="price_asc" data-t="sortPriceAsc">Prix payé (croissant)</option>
                     <option value="cote_desc" data-t="sortCoteDesc">Cote (décroissante)</option>
+                    <option value="rarity_asc" data-t="sortRarity">Les plus rares d'abord</option>
+                    <option value="priority" data-t="sortPriority">Priorité de wishlist</option>
                 </select>
             </div>
             <div class="filters-container" role="group" aria-label="Filtres">
@@ -500,6 +505,16 @@
                 <option value="Possédé" data-t="optOwned">Dans ma collection</option>
                 <option value="Recherché" data-t="optWish">Wishlist</option>
             </select>
+            <div id="priority-row" hidden>
+                <label class="form-label" for="input-priority" data-t="lblPriority">Priorité dans la wishlist</label>
+                <select id="input-priority" style="margin-bottom:15px;">
+                    <option value="" data-t="prioNone">Sans priorité</option>
+                    <option value="high" data-t="prioHigh">🔴 Haute</option>
+                    <option value="medium" data-t="prioMedium">🟠 Moyenne</option>
+                    <option value="low" data-t="prioLow">🟡 Basse</option>
+                </select>
+            </div>
+            <p class="rarity-line" id="modal-rarity" hidden></p>
 
             <div class="form-row">
                 <div>
@@ -678,6 +693,9 @@
                 resultCount: "{n} figurines", resultCountOne: "{n} figurine", serieDone: "série complète ✓", goalMissing: "Il manque :",
                 msgNoResults: "Aucune figurine trouvée.", msgNoResultsHint: "Essayez un autre mot, ou réinitialisez les filtres.",
                 marketBelow: "Payé {n} % sous la cote", marketAbove: "Payé {n} % au-dessus de la cote",
+                lblPriority: "Priorité dans la wishlist", prioNone: "Sans priorité", prioHigh: "🔴 Haute", prioMedium: "🟠 Moyenne", prioLow: "🟡 Basse",
+                rarityLine: "Possédée par {p} % des collectionneurs", rarityWanted: "recherchée par {p} %",
+                sortRarity: "Les plus rares d'abord", sortPriority: "Priorité de wishlist",
                 histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum)."
             },
             en: {
@@ -691,6 +709,9 @@
                 resultCount: "{n} figures", resultCountOne: "{n} figure", serieDone: "series complete ✓", goalMissing: "Missing:",
                 msgNoResults: "No figures found.", msgNoResultsHint: "Try another word, or reset the filters.",
                 marketBelow: "Paid {n}% below market", marketAbove: "Paid {n}% above market",
+                lblPriority: "Wishlist priority", prioNone: "No priority", prioHigh: "🔴 High", prioMedium: "🟠 Medium", prioLow: "🟡 Low",
+                rarityLine: "Owned by {p}% of collectors", rarityWanted: "wanted by {p}%",
+                sortRarity: "Rarest first", sortPriority: "Wishlist priority",
                 histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum)."
             }
         };
@@ -714,13 +735,19 @@
             if (cards.size || myCollection.length) refreshAll();
         };
 
+        let rarity = null;   // market_prices/rarity : { collectors, owned: {ID: %}, wanted: {ID: %} }
         async function loadCommunityPrices() {
             try {
                 const docRef = doc(db, "market_prices", "community");
                 const snap = await getDoc(docRef);
                 if (snap.exists()) communityPrices = snap.data();
             } catch (e) { console.log("Pas de prix dispos"); }
+            try {
+                const r = await getDoc(doc(db, "market_prices", "rarity"));
+                if (r.exists()) rarity = r.data();
+            } catch (e) { /* rareté pas encore publiée */ }
         }
+        const rarityOf = (id) => (rarity && rarity.owned && rarity.owned[String(id)] != null ? Number(rarity.owned[String(id)]) : null);
 
         let myCollection = [...baseData];
         let currentItem = null;
@@ -780,6 +807,12 @@
                 } else { myCollection = [...baseData]; }
             } catch (error) { myCollection = [...baseData]; }
             refreshAll();
+            // Venant de la recherche globale : on ouvre directement la fiche demandée
+            const focusId = urlParams.get('focus');
+            if (focusId) {
+                const item = myCollection.find(i => String(i.ID) === focusId);
+                if (item) { window.openModal(item); history.replaceState(null, '', location.pathname); }
+            }
         }
 
         setupAuthModal(() => currentLang);
@@ -839,7 +872,7 @@
         function cardMarkup(item) {
             const owned = isOwned(item), wish = isWish(item), secret = item["Secret Rare"] === "Yes", qty = qtyOf(item);
             const cote = coteOf(item.ID), paid = owned ? paidOf(item) : 0;
-            const pill = owned ? `<span class="pill owned">✓${qty > 1 ? ' x' + qty : ''}</span>` : wish ? `<span class="pill wish">♥ ${esc(t('optWish'))}</span>` : '';
+            const pill = owned ? `<span class="pill owned">✓${qty > 1 ? ' x' + qty : ''}</span>` : wish ? `<span class="pill wish${item.Priority ? ' prio-' + esc(item.Priority) : ''}">${{ high: '🔴', medium: '🟠', low: '🟡' }[item.Priority] || '♥'} ${esc(t('optWish'))}</span>` : '';
             const prices = [
                 cote ? `<span class="price-cote">${esc(t('lblCardCote'))} <b>${eur(cote)}</b></span>` : '',
                 paid ? `<span class="price-paid">${esc(t('lblCardPaid'))} <b>${paid.toFixed(paid % 1 ? 2 : 0)}${currencySymbols[item.Currency] || '€'}</b></span>` : ''
@@ -923,6 +956,7 @@
             const serie = (a, b) => (a.Serie || '').localeCompare(b.Serie || '') || name(a, b);
             const date = (i) => (i["Purchase date"] ? new Date(i["Purchase date"]).getTime() || 0 : 0);
             const paidEur = (i) => isOwned(i) ? toEur(paidOf(i), i.Currency) : 0;
+            const prioRank = (i) => (String(i.Status) === 'Recherché' ? ({ high: 0, medium: 1, low: 2 }[i.Priority] ?? 3) : 4);
             const cmp = {
                 serie_asc: serie,
                 name_asc: name,
@@ -930,7 +964,9 @@
                 date_desc: (a, b) => date(b) - date(a) || serie(a, b),
                 price_desc: (a, b) => paidEur(b) - paidEur(a) || serie(a, b),
                 price_asc: (a, b) => (paidEur(a) || Infinity) - (paidEur(b) || Infinity) || serie(a, b),
-                cote_desc: (a, b) => coteOf(b.ID) - coteOf(a.ID) || serie(a, b)
+                cote_desc: (a, b) => coteOf(b.ID) - coteOf(a.ID) || serie(a, b),
+                rarity_asc: (a, b) => (rarityOf(a.ID) ?? 101) - (rarityOf(b.ID) ?? 101) || serie(a, b),
+                priority: (a, b) => prioRank(a) - prioRank(b) || serie(a, b)
             }[mode] || serie;
             return list.sort(cmp);
         }
@@ -1033,6 +1069,12 @@
             box.hidden = false;
         }
 
+        // La priorité n'a de sens que pour une figurine recherchée
+        function syncPriorityRow() {
+            document.getElementById('priority-row').hidden = document.getElementById('input-status').value !== 'Recherché';
+        }
+        document.getElementById('input-status').addEventListener('change', syncPriorityRow);
+
         window.openModal = (item) => {
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
@@ -1041,6 +1083,14 @@
             document.getElementById('edit-secret-badge').style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
 
             document.getElementById('input-status').value = item.Status || "No status";
+            document.getElementById('input-priority').value = ['high', 'medium', 'low'].includes(item.Priority) ? item.Priority : '';
+            syncPriorityRow();
+            const rar = rarityOf(item.ID), rarEl = document.getElementById('modal-rarity');
+            rarEl.hidden = rar === null;
+            if (rar !== null) {
+                const wanted = rarity.wanted && rarity.wanted[String(item.ID)];
+                rarEl.textContent = fmtT('rarityLine', { p: rar.toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR') }) + (wanted ? ' · ' + fmtT('rarityWanted', { p: Number(wanted).toLocaleString(currentLang === 'en' ? 'en-GB' : 'fr-FR') }) : '');
+            }
             document.getElementById('input-condition').value = item.Condition || "Inconnu";
             document.getElementById('input-qty').value = item.Quantity || 0;
             document.getElementById('modal-price').value = item["Purchase price"] || "";
@@ -1088,6 +1138,7 @@
                 const newCurrency = document.getElementById('modal-currency').value;
                 const newDate = document.getElementById('input-date').value || "";
                 const newNote = document.getElementById('input-note').value || "";
+                const newPriority = newStatus === 'Recherché' ? document.getElementById('input-priority').value : '';
 
                 const index = myCollection.findIndex(i => i.ID === currentItem.ID);
                 if (index !== -1) {
@@ -1098,6 +1149,7 @@
                     myCollection[index].Currency = newCurrency;
                     myCollection[index]["Purchase date"] = newDate;
                     myCollection[index].Note = newNote;
+                    myCollection[index].Priority = newPriority;
                 }
                 const saveBtn = document.querySelector('.btn-save');
                 saveBtn.innerText = t('btnSaving'); saveBtn.disabled = true;
@@ -1111,7 +1163,8 @@
                         "Purchase price": item["Purchase price"] || 0, 
                         Currency: item.Currency || "EUR", 
                         "Purchase date": item["Purchase date"] || "",
-                        Note: item.Note || ""
+                        Note: item.Note || "",
+                        Priority: item.Priority || ""
                     };
                 });
 

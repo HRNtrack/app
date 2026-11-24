@@ -265,4 +265,81 @@
     document.addEventListener('DOMContentLoaded', function () {
         if (navigator.onLine === false) window.hrnNotify(isEn() ? 'You are offline: data shown may not be up to date.' : 'Vous êtes hors ligne : les données affichées peuvent ne pas être à jour.', 'info');
     });
+
+    // --- RECHERCHE GLOBALE (Ctrl + K) ---
+    // Le catalogue (data.js) n'est chargé qu'à la première ouverture ; même version que celle importée par la page.
+    let catalogPromise = null;
+    function loadCatalog() {
+        if (!catalogPromise) {
+            const m = [...document.scripts].map(s => s.textContent || '').join('').match(/data\.js\?v=([\w.-]+)/);
+            catalogPromise = import('/data.js' + (m ? '?v=' + m[1] : '')).then(mod => mod.baseData || []).catch(() => []);
+        }
+        return catalogPromise;
+    }
+    const norm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    function searchDialog() {
+        let d = document.getElementById('global-search');
+        if (d) return d;
+        const en = isEnLang();
+        d = document.createElement('dialog');
+        d.id = 'global-search';
+        d.className = 'hrn-dialog gsearch';
+        d.setAttribute('aria-label', en ? 'Search a figure' : 'Rechercher une figurine');
+        d.innerHTML = '<div class="gsearch-box"><form method="dialog" class="gsearch-form" role="search">' +
+            '<label for="gsearch-input" class="sr-only">' + (en ? 'Search a figure' : 'Rechercher une figurine') + '</label>' +
+            '<input type="search" id="gsearch-input" autocomplete="off" spellcheck="false" enterkeyhint="go" placeholder="' + (en ? 'Figure or series name…' : 'Nom d\'une figurine ou d\'une série…') + '">' +
+            '<button type="button" class="gsearch-close" aria-label="' + (en ? 'Close' : 'Fermer') + '">✕</button></form>' +
+            '<ul class="gsearch-results" id="gsearch-results" aria-live="polite"></ul>' +
+            '<p class="gsearch-hint">' + (en ? 'Enter: open the first result · Esc: close' : 'Entrée : ouvrir le premier résultat · Échap : fermer') + '</p></div>';
+        document.body.appendChild(d);
+        const input = d.querySelector('#gsearch-input');
+        const list = d.querySelector('#gsearch-results');
+        d.querySelector('.gsearch-close').addEventListener('click', () => d.close());
+        const render = async () => {
+            const q = norm(input.value.trim());
+            if (!q) { list.innerHTML = ''; return; }
+            const cat = await loadCatalog();
+            const words = q.split(/\s+/);
+            const found = cat.filter(b => { const txt = norm(b.Name + ' ' + b.Serie); return words.every(w => txt.includes(w)); })
+                .sort((a, b) => (norm(a.Name).startsWith(q) ? 0 : 1) - (norm(b.Name).startsWith(q) ? 0 : 1) || String(a.Name).localeCompare(String(b.Name)))
+                .slice(0, 12);
+            list.innerHTML = found.length ? found.map(b => '<li><a href="/dashboard.html?focus=' + encodeURIComponent(b.ID) + '">' +
+                '<img src="' + escHtml(b.Image) + '" alt="" loading="lazy" decoding="async"><span><strong>' + escHtml(b.Name) + '</strong><small>' + escHtml(b.Serie) +
+                (String(b['Secret Rare']).toLowerCase() === 'yes' ? ' · ★ Secret' : '') + '</small></span></a></li>').join('')
+                : '<li class="gsearch-empty">' + (isEnLang() ? 'No figure matches.' : 'Aucune figurine ne correspond.') + '</li>';
+        };
+        input.addEventListener('input', render);
+        // Entrée : ouvre le premier résultat
+        d.querySelector('form').addEventListener('submit', (e) => {
+            const first = list.querySelector('a');
+            if (first) { e.preventDefault(); location.href = first.href; }
+        });
+        // Flèches haut / bas entre le champ et les résultats
+        d.addEventListener('keydown', (e) => {
+            if (e.key !== 'ArrowDown' && e.key !== 'ArrowUp') return;
+            const links = [...list.querySelectorAll('a')];
+            if (!links.length) return;
+            const i = links.indexOf(document.activeElement);
+            e.preventDefault();
+            if (e.key === 'ArrowDown') (links[i + 1] || links[0]).focus();
+            else if (i <= 0) input.focus(); else links[i - 1].focus();
+        });
+        return d;
+    }
+    function isEnLang() { try { return localStorage.getItem('HRN_LANG') === 'en'; } catch (e) { return false; } }
+    window.openGlobalSearch = function () {
+        const d = searchDialog();
+        if (!d.open) d.showModal();
+        const input = d.querySelector('#gsearch-input');
+        input.focus();
+        input.select();
+        loadCatalog();
+    };
+    document.addEventListener('keydown', function (e) {
+        if ((e.ctrlKey || e.metaKey) && !e.altKey && (e.key === 'k' || e.key === 'K')) {
+            e.preventDefault();
+            window.openGlobalSearch();
+        }
+    });
 })();

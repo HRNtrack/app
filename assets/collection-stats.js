@@ -12,6 +12,8 @@ export const RANKS = [
 const OWNED = new Set(['possédé', 'possédée', 'owned']);
 const WISH = new Set(['recherché', 'recherche', 'wishlist']);
 export const isSpecialSerie = (serie) => /special|limited/i.test(serie);
+/** Priorités de wishlist (champ Priority d'une figurine recherchée). */
+export const PRIORITIES = ['high', 'medium', 'low'];
 
 /** Rang selon le score : +10 / figurine, +100 / secret, +50 / série complète. */
 export function rankFor(score) {
@@ -37,7 +39,9 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
         spentEur: 0, pricedQty: 0, marketValue: 0, valuedQty: 0,
         dealPaid: 0, dealMarket: 0,
         timeline: {}, monthly: {}, thisMonthQty: 0, thisMonthSpent: 0, lastPurchase: null,
-        conditions: {}, topItems: [], seriesMap: {}
+        conditions: {}, topItems: [], seriesMap: {},
+        wishCost: 0, wishPriced: 0,
+        wishByPriority: Object.fromEntries([...PRIORITIES, 'none'].map(p => [p, { count: 0, cost: 0, priced: 0 }]))
     };
 
     for (const item of items) {
@@ -49,7 +53,17 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
         const status = String(item.Status || '').toLowerCase();
 
         if (!OWNED.has(status)) {
-            if (WISH.has(status)) s.wish++; else s.missing++;
+            // Coût pour compléter : cote communautaire des figurines manquantes (quand elle est connue)
+            const missingCote = Number(cotes[item.ID]) || 0;
+            sm.missingCount = (sm.missingCount || 0) + 1;
+            if (missingCote > 0) { sm.missingCost = (sm.missingCost || 0) + missingCote; sm.missingPriced = (sm.missingPriced || 0) + 1; }
+            if (WISH.has(status)) {
+                s.wish++;
+                const prio = PRIORITIES.includes(item.Priority) ? item.Priority : 'none';
+                const w = s.wishByPriority[prio];
+                w.count++;
+                if (missingCote > 0) { w.cost += missingCote; w.priced++; s.wishCost += missingCote; s.wishPriced++; }
+            } else s.missing++;
             sm.missingNames.push(item.Name);
             continue;
         }
@@ -84,7 +98,7 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
         }
     }
 
-    s.series = Object.values(s.seriesMap).map(x => ({ ...x, pct: x.total ? Math.round((x.owned / x.total) * 100) : 0 }));
+    s.series = Object.values(s.seriesMap).map(x => ({ missingCount: 0, missingCost: 0, missingPriced: 0, ...x, missingCost: Math.round(x.missingCost || 0), pct: x.total ? Math.round((x.owned / x.total) * 100) : 0 }));
     const regular = s.series.filter(x => !x.special);
     s.seriesCountable = regular.length;
     s.seriesComplete = regular.filter(x => x.owned === x.total).length;
@@ -101,6 +115,7 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
     s.topItems = s.topItems.filter(x => x.cote || x.paid).sort((a, b) => Math.max(b.cote, b.paid) - Math.max(a.cote, a.paid)).slice(0, 5);
     s.rank = rankFor(s.totalQty * 10 + s.secretsOwned * 100 + s.seriesComplete * 50);
     s.statusCounts = { owned: s.ownedUnique, wish: s.wish, missing: s.missing };
+    s.wishCost = Math.round(s.wishCost);
     delete s.seriesMap;
     return s;
 }

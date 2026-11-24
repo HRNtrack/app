@@ -15,7 +15,7 @@
         { page: 'dashboard', key: 'navCollection', label: 'Collection' },
         { page: 'statistiques', key: 'navStats', label: 'Stats' },
         { page: 'echanges', key: 'navTrade', label: 'Échanges' },
-        { page: 'donateurs', key: 'navDonors', label: 'Dons' },
+        { page: 'marche', key: 'navMarket', label: 'Marché' },
         { page: 'contact', key: 'navContact', label: 'Contact' }
     ];
     const navLinks = links.map(l =>
@@ -40,6 +40,12 @@
             <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
         </button>`;
 
+    // Recherche globale (Ctrl + K) : la fenêtre est créée par assets/site.js
+    const searchButton = `
+        <button type="button" class="theme-toggle search-trigger" onclick="window.openGlobalSearch && window.openGlobalSearch()" aria-label="Rechercher une figurine (Ctrl + K)" title="Rechercher une figurine (Ctrl + K)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
+        </button>`;
+
     script.insertAdjacentHTML('beforebegin', `
     <nav class="top-nav" aria-label="Navigation principale">
         <div class="nav-logo-group">
@@ -54,6 +60,7 @@
 
         <div class="nav-right">
             ${supportLink}
+            ${searchButton}
             ${themeToggle}
             ${langToggle('')}
             <button id="auth-trigger" class="btn-auth-trigger" onclick="window.toggleAuthModal()">
@@ -81,6 +88,7 @@
                 <span style="font-size:0.82rem; font-weight:600; text-transform:uppercase; color:var(--color-text-sub);">Thème / Theme</span>
                 ${themeToggle}
             </div>
+            <button type="button" class="btn-auth-trigger" onclick="window.toggleMobileMenu(false); window.openGlobalSearch && window.openGlobalSearch();"><span data-t="searchOpen">🔎 Rechercher une figurine</span></button>
             ${supportLink}
             <button type="button" class="btn-auth-trigger pwa-install" hidden onclick="window.installApp(); window.toggleMobileMenu();">
                 <span data-t="installApp">📲 Installer l'appli</span>
