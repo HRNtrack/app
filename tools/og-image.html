@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- Modèle de l'image d'aperçu des liens (assets/img/og-image.png, 1200 × 630).
+     Pour la refaire : voir le cerveau, Technique > Référencement et aperçus de liens. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../assets/fonts.css">
+<style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 1200px; height: 630px; overflow: hidden; }
+    body {
+        background: #161615;
+        background-image: radial-gradient(circle at 85% 20%, rgba(198,168,117,0.18), transparent 55%);
+        color: #ECE9E2; font-family: 'Poppins', sans-serif;
+        display: flex; align-items: center; padding: 0 64px; gap: 48px;
+    }
+    .left { flex: 1; }
+    .logo { height: 96px; filter: brightness(0) invert(1); margin-bottom: 26px; }
+    h1 { font-size: 54px; line-height: 1.08; font-weight: 700; letter-spacing: -0.02em; }
+    h1 em { font-style: normal; color: #C6A875; }
+    p { margin-top: 20px; font-size: 23px; line-height: 1.45; color: #A8A49B; max-width: 640px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+    .chips span { border: 1px solid #3A3833; background: #24231F; padding: 7px 12px; font-size: 16px; font-weight: 500; }
+    .foot { margin-top: 30px; font-family: 'JetBrains Mono', monospace; font-size: 18px; color: #C6A875; letter-spacing: 0.04em; }
+    .frame { width: 340px; height: 470px; background: #232220; border: 1px solid #3A3833; padding: 16px 16px 54px; position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.55); transform: rotate(2deg); }
+    .frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .frame .cap { position: absolute; left: 16px; right: 16px; bottom: 16px; display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 14px; color: #A8A49B; }
+</style>
+</head>
+<body>
+    <div class="left">
+        <img class="logo" src="../assets/img/logo-noir.png" alt="">
+        <h1>Your Hirono collection,<br><em>all in one place.</em></h1>
+        <p>Track your figures, see community market values and find trade partners. <span style="white-space:nowrap">Free &amp; fan-made.</span></p>
+        <div class="chips"><span>📦 Collection</span><span>📈 Market values</span><span>🔁 Trading board</span><span>📲 Insta story</span></div>
+        <div class="foot">HRNTRACK.APP · FR · EN · ES · DE · 中文</div>
+    </div>
+    <div class="frame">
+        <img src="../assets/img/lost-in-the-night.webp" alt="">
+        <div class="cap"><span>HIRONO Nº 01</span><span>HRN-TRACK-01</span></div>
+    </div>
+</body>
+</html>

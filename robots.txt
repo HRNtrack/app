@@ -1,0 +1,8 @@
+# HRNtrack : toutes les pages publiques peuvent être indexées.
+User-agent: *
+Disallow: /admin.html
+Disallow: /offline.html
+Disallow: /footer.html
+Disallow: /tools/
+
+Sitemap: https://www.hrntrack.app/sitemap.xml
