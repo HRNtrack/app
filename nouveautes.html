@@ -86,7 +86,7 @@
         .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; width: 100%; box-sizing: border-box; flex: 1; }
 
         .hero-title {
-            font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 6px;
+            font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin: 0 0 6px; line-height: inherit;
             text-transform: uppercase; letter-spacing: 0.05em;
         }
         .hero-subtitle { color: var(--text-sub); margin-bottom: 16px; font-size: 0.88rem; }
@@ -246,7 +246,7 @@
     <script src="assets/header.js" data-auth-label="navAccount"></script>
 
     <div class="container">
-        <div class="hero-title" data-t="pageTitle">Dernières Sorties</div>
+        <h1 class="hero-title" data-t="pageTitle">Dernières Sorties</h1>
         <div class="hero-subtitle" data-t="pageSub">Les nouveautés Hirono les plus récentes.</div>
         <div class="push-box">
             <button type="button" class="push-btn" id="push-btn" aria-pressed="false" hidden>🔔 <span id="push-label">Me prévenir des nouveautés</span></button>
