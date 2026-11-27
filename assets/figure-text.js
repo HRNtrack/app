@@ -27,7 +27,7 @@ export const FIG_TEXT = {
         seriesOpen: "See the series in my collection →", secretSr: "Secret:",
         tagSecret: "★ Secret", tagSerie: "Series", tagSpecial: "Special edition", tagAccessory: "Accessory",
         coteLabel: "Current value", coteNone: "No value yet",
-        coteHint: "Median price paid by HRNtrack collectors, in euros.",
+        coteHint: "Median price paid by HRNtrack collectors, in US dollars at today's rate.",
         trend: "{s}{n}% over {m} months",
         ownedBy: "Owned by {p}% of collectors", wantedBy: "Wanted by {p}% of collectors",
         rarityNone: "This figure's rarity isn't known yet.",
@@ -41,7 +41,7 @@ export const FIG_TEXT = {
         aboutSerie: "{name} is a{secret} Hirono figure from the {serie} series by POP MART. The series has {n} figures, including {k} secret(s). With HRNtrack, add it to your collection or wishlist, follow its community market value and find collectors to trade with.",
         aboutSpecial: "{name} is a Hirono edition from the {serie} category{secret}, by POP MART. With HRNtrack, add it to your collection or wishlist, follow its community market value and find collectors to trade with.",
         secretWord: " secret", secretSpecial: " (secret version)",
-        method: "Value: median price paid by HRNtrack collectors who entered a price, outliers excluded, converted to euros. Rarity: share of HRNtrack collectors who own or want the figure. No personal data is published."
+        method: "Value: median price paid by HRNtrack collectors who entered a price, outliers excluded, converted to US dollars. Rarity: share of HRNtrack collectors who own or want the figure. No personal data is published."
     }
 };
 

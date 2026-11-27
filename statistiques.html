@@ -698,6 +698,7 @@
         import { computeCollectionStats, isSpecialSerie, computeValueHistory, computeJournal } from './assets/collection-stats.js';
         import { drawStory, canvasToBlob } from './assets/story.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
+        import { formatMoney, refreshRates, fromEur, toEur } from './assets/money.js';
 
         const db = sharedDb;   // base avec cache local (assets/db.js)
 
@@ -803,7 +804,7 @@
                 valueNone: "No market value for your figures yet", dealGood: "▲ bought {n}% below market", dealBad: "▼ bought {n}% above market",
                 costFinish: "≈ {c} to complete it", costFinishPartial: "≈ {c} for {p} of the {n} missing (known value)", costNone: "No market value yet for the missing ones",
                 kWishCost: "≈ {c} at market value", seriesCostTitle: "≈ {c} to finish the series (known values)",
-                myGoalsTitle: "My goals", budgetLabel: "Monthly budget (€)", goalSave: "Save", serieGoalLabel: "Finish a series", goalAdd: "Add",
+                myGoalsTitle: "My goals", budgetLabel: "Monthly budget ($)", goalSave: "Save", serieGoalLabel: "Finish a series", goalAdd: "Add",
                 serieGoalBy: "Deadline (optional)", budgetView: "This month: {s} of {b}", budgetLeft: "{r} left to spend", budgetOver: "Budget exceeded by {r}",
                 budgetNone: "Set a budget to track this month's spending.", goalsNone: "Pick a series to complete, with a date if you like.",
                 goalDone: "✓ Goal reached!", goalLeft: "{n} figure(s) missing", goalBy: "by end of {d}", goalDaysLeft: "({n} days)", goalLate: "deadline passed",
@@ -837,7 +838,8 @@
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
         const fmt = (key, vars = {}) => String(t(key)).replace(/\{(\w+)\}/g, (m, k) => vars[k] ?? m);
         const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const eur = (n, digits = 0) => (n || 0).toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR'), { style: 'currency', currency: 'EUR', maximumFractionDigits: digits });
+        // Montants en euros affichés dans la devise de la langue (anglais → dollars US, voir assets/money.js)
+        const eur = (n, digits = 0) => formatMoney(n || 0, currentLang, window.HRN_LOCALES[currentLang], digits);
         const ink = () => getComputedStyle(document.documentElement).getPropertyValue('--color-dark').trim() || '#1A1A1A';
         const muted = () => getComputedStyle(document.documentElement).getPropertyValue('--color-border').trim() || '#D8D2C5';
 
@@ -859,6 +861,7 @@
         let rates = { ...FALLBACK_RATES };
         let seriesFilter = 'started';
         fetchRates().then(r => { rates = r.rates; if (myCollection.length) renderStats(myCollection); });
+        refreshRates(currentLang).then(changed => { if (changed && myCollection.length) renderStats(myCollection); });
 
         // --- BADGES ---
         // Trophées généraux + un badge « Série complète » par série régulière (icône définie dans data.js → seriesBadges)
@@ -1088,7 +1091,8 @@
             const loc = (window.HRN_LOCALES[currentLang] || 'fr-FR');
             // Budget du mois
             const bv = document.getElementById('budget-view');
-            document.getElementById('budget-input').value = myGoals.budget || '';
+            // Budget enregistré en euros, saisi et affiché dans la devise de la langue
+            document.getElementById('budget-input').value = myGoals.budget ? Math.round(fromEur(myGoals.budget, currentLang)) : '';
             if (myGoals.budget > 0) {
                 const spent = s.thisMonthSpent || 0, ratio = Math.min(100, Math.round(spent / myGoals.budget * 100)), over = spent > myGoals.budget;
                 bv.innerHTML = `<div class="mygoal${over ? ' late' : ''}"><div class="mygoal-head"><strong>${esc(fmt('budgetView', { s: eur(spent), b: eur(myGoals.budget) }))}</strong><span>${ratio} %</span></div>
@@ -1121,7 +1125,7 @@
         }
         document.getElementById('budget-form').addEventListener('submit', (e) => {
             e.preventDefault();
-            const v = Math.max(0, Math.round(Number(document.getElementById('budget-input').value) || 0));
+            const v = Math.max(0, Math.round(toEur(Number(document.getElementById('budget-input').value) || 0, currentLang)));
             myGoals.budget = v;
             if (lastStats) renderGoals(lastStats);
             saveGoals();

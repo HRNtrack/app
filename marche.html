@@ -300,6 +300,7 @@
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { computeMarket } from './assets/market.js';
         import { figureSlugs, figureHref } from './assets/figure-url.js';
+        import { formatMoney, refreshRates } from './assets/money.js';
         import { baseData } from './data.js?v=2026-11-27-1';
 
         const translations = withCommon({
@@ -318,7 +319,7 @@
             },
             en: {
                 kicker: "Market", title: "Hirono market values", loading: "Loading market values…",
-                subtitle: "Values computed from the purchase prices reported by HRNtrack collectors (median price, outliers excluded, in euros). Updated every month.",
+                subtitle: "Values computed from the purchase prices reported by HRNtrack collectors (median price, outliers excluded), shown in US dollars at today's exchange rate. Updated every month.",
                 sumPriced: "Priced figures", sumAvg: "Average value", sumCollectors: "Collectors", sumUpdated: "Updated",
                 findTitle: "Find a figure", findPh: "Name or series…",
                 topTitle: "🏆 Most valuable", upTitle: "📈 Biggest rises", downTitle: "📉 Biggest drops",
@@ -327,7 +328,7 @@
                 period: "over {n} months", ownedBy: "{p}% own it", wantedBy: "{p}% want it", noCote: "no value yet",
                 emptyTrend: "Not enough history yet to compute trends.", emptyRare: "Rarity isn't published yet.",
                 none: "No figure matches.", errLoad: "Market values are not available right now.",
-                method: "Method: each value is the median price paid by collectors who entered a price, outliers excluded, converted to euros at the ECB rate. Rarity is the share of HRNtrack collectors who own (or want) the figure. No personal data is published."
+                method: "Method: each value is the median price paid by collectors who entered a price, outliers excluded, converted at the ECB rate (shown in US dollars). Rarity is the share of HRNtrack collectors who own (or want) the figure. No personal data is published."
             }
         });
 
@@ -336,7 +337,8 @@
         const fmt = (k, v) => t(k).replace(/\{(\w+)\}/g, (_, n) => v[n] ?? '');
         const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         const loc = () => (window.HRN_LOCALES[currentLang] || 'fr-FR');
-        const eur = (n) => (n || 0).toLocaleString(loc(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+        // Cotes en euros affichées dans la devise de la langue (anglais → dollars US, voir assets/money.js)
+        const eur = (n) => formatMoney(n || 0, currentLang, loc());
         const pct = (n) => Number(n).toLocaleString(loc());
         let market = null, rarity = null, updatedAt = null;
 
@@ -419,6 +421,7 @@
         }).catch(e => console.error('Erreur Footer:', e));
         updateUIText();
         load();
+        refreshRates(currentLang).then(changed => { if (changed) render(); });
     </script>
 </body>
 </html>

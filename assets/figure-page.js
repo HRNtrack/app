@@ -9,6 +9,7 @@ import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-
 import { coteValue, trendOf } from './market.js';
 import { coteChartSvg } from './cote-chart.js';
 import { FIG_TEXT, figureKind, fill, aboutText } from './figure-text.js';
+import { formatMoney, refreshRates } from './money.js';
 
 // Même version de data.js que la page (le générateur écrit figure-page.js?v=<version de data.js>)
 const dataVersion = new URL(import.meta.url).searchParams.get('v') || '';
@@ -19,7 +20,8 @@ const currentLang = (() => { try { return localStorage.getItem('HRN_LANG') || 'f
 const T = translations[currentLang] || translations.fr;
 const t = (k) => T[k] ?? translations.fr[k] ?? k;
 const loc = () => (window.HRN_LOCALES && window.HRN_LOCALES[currentLang]) || 'fr-FR';
-const eur = (n) => (n || 0).toLocaleString(loc(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 });
+// Cotes en euros affichées dans la devise de la langue (anglais → dollars US, voir assets/money.js)
+const eur = (n) => formatMoney(n || 0, currentLang, loc());
 const num = (n) => Number(n).toLocaleString(loc());
 const $ = (id) => document.getElementById(id);
 
@@ -131,3 +133,4 @@ const get = async (id) => { try { const s = await getDoc(doc(db, 'market_prices'
 const [community, history, rarity] = await Promise.all([get('community'), get('history'), get('rarity')]);
 market = { community, history, rarity };
 renderCote(); renderChart(); renderRarity();
+if (await refreshRates(currentLang)) { renderCote(); renderChart(); }
