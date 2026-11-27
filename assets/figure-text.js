@@ -2,6 +2,14 @@
 // et par la page (assets/figure-page.js). es / de / zh : assets/lang/*.js → pages.figurine.
 export const FIG_TEXT = {
     fr: {
+        mineTitle: "Ma collection", stNone: "Pas à moi", stOwned: "Je l'ai", stWish: "Je la cherche", stLegend: "Statut",
+        lblQty: "Quantité", lblCondition: "État", condUnknown: "Inconnu", condMint: "Neuf", condGood: "Bon", condFair: "Moyen", condDamaged: "Abîmé",
+        lblPrice: "Prix payé", lblCurrency: "Devise", lblDate: "Date d'achat", lblPriority: "Priorité",
+        prioNone: "Sans priorité", prioHigh: "🔴 Haute", prioMedium: "🟠 Moyenne", prioLow: "🟡 Basse",
+        lblNotes: "Notes", notesPh: "Où l'avez-vous trouvée ? Un détail ?", btnSaveMine: "Enregistrer", saving: "Enregistrement…",
+        saved: "Enregistré dans votre collection ✓", saveErr: "Impossible d'enregistrer pour le moment. Réessayez.",
+        openInCollection: "Voir dans ma collection",
+        mineOwned: "dans votre collection", mineWish: "dans votre wishlist",
         crumbHome: "Accueil", crumbMarket: "Marché", crumbCollection: "Collection", crumbsAria: "Fil d'Ariane",
         seriesOpen: "Voir la série dans ma collection →", secretSr: "Secrète :",
         tagSecret: "★ Secrète", tagSerie: "Série", tagSpecial: "Édition spéciale", tagAccessory: "Accessoire",
@@ -23,6 +31,14 @@ export const FIG_TEXT = {
         method: "Cote : prix médian payé par les collectionneurs HRNtrack qui ont renseigné un prix, hors valeurs aberrantes, converti en euros. Rareté : part des collectionneurs HRNtrack qui possèdent ou recherchent la figurine. Aucune donnée personnelle n'est publiée."
     },
     en: {
+        mineTitle: "My collection", stNone: "Not mine", stOwned: "I have it", stWish: "I want it", stLegend: "Status",
+        lblQty: "Quantity", lblCondition: "Condition", condUnknown: "Unknown", condMint: "Mint", condGood: "Good", condFair: "Fair", condDamaged: "Damaged",
+        lblPrice: "Price paid", lblCurrency: "Currency", lblDate: "Purchase date", lblPriority: "Priority",
+        prioNone: "No priority", prioHigh: "🔴 High", prioMedium: "🟠 Medium", prioLow: "🟡 Low",
+        lblNotes: "Notes", notesPh: "Where did you find it? Any detail?", btnSaveMine: "Save", saving: "Saving…",
+        saved: "Saved to your collection ✓", saveErr: "Couldn't save right now. Please try again.",
+        openInCollection: "Open in my collection",
+        mineOwned: "in your collection", mineWish: "in your wishlist",
         crumbHome: "Home", crumbMarket: "Market", crumbCollection: "Collection", crumbsAria: "Breadcrumb",
         seriesOpen: "See the series in my collection →", secretSr: "Secret:",
         tagSecret: "★ Secret", tagSerie: "Series", tagSpecial: "Special edition", tagAccessory: "Accessory",

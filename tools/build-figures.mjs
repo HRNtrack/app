@@ -188,8 +188,10 @@ function page(f, i, list) {
                 <div class="fig-rarity" id="rarity">${owned === null && wanted === null ? `<p class="hint">${T.rarityNone}</p>` :
                     (owned !== null ? `<div class="meter owned"><span>${fill(T.ownedBy, { p: String(owned).replace('.', ',') })}</span><i aria-hidden="true" style="--p:${Math.min(100, owned)}%"></i></div>` : '') +
                     (wanted !== null ? `<div class="meter wanted"><span>${fill(T.wantedBy, { p: String(wanted).replace('.', ',') })}</span><i aria-hidden="true" style="--p:${Math.min(100, wanted)}%"></i></div>` : '')}</div>
+                <!-- Connecté : « Ma collection » (statut, quantité, prix…) rempli par assets/figure-page.js -->
+                <section class="fig-mine" id="mine" aria-labelledby="h-mine" hidden></section>
                 <div class="fig-actions">
-                    <a class="btn" href="dashboard.html?focus=${encodeURIComponent(id)}" data-t="btnAdd">${T.btnAdd}</a>
+                    <a class="btn" id="btn-add" href="dashboard.html?focus=${encodeURIComponent(id)}" data-t="btnAdd">${T.btnAdd}</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">${T.btnTrade}</a>
                     <button type="button" class="btn ghost" id="btn-share" data-t="btnShare">${T.btnShare}</button>
                 </div>

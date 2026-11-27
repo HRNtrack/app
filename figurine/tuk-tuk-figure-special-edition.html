@@ -87,8 +87,10 @@
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
                 <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 7,1 % des collectionneurs</span><i aria-hidden="true" style="--p:7.1%"></i></div><div class="meter wanted"><span>Recherchée par 3,8 % des collectionneurs</span><i aria-hidden="true" style="--p:3.8%"></i></div></div>
+                <!-- Connecté : « Ma collection » (statut, quantité, prix…) rempli par assets/figure-page.js -->
+                <section class="fig-mine" id="mine" aria-labelledby="h-mine" hidden></section>
                 <div class="fig-actions">
-                    <a class="btn" href="dashboard.html?focus=SPE-TUKTUK" data-t="btnAdd">Ajouter à ma collection</a>
+                    <a class="btn" id="btn-add" href="dashboard.html?focus=SPE-TUKTUK" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
                     <button type="button" class="btn ghost" id="btn-share" data-t="btnShare">Partager</button>
                 </div>

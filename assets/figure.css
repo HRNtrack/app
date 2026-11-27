@@ -62,6 +62,44 @@ body {
 .meter.wanted i::after { background: var(--color-red); }
 
 .fig-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.fig-actions [hidden] { display: none; }
+
+/* « Ma collection » (connecté) */
+.fig-mine { background: var(--surface); border: 1px solid var(--color-border); box-shadow: var(--shadow); padding: 16px 18px; margin-bottom: 14px; }
+.fig-mine h2 { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 12px; }
+.fig-mine form { display: grid; gap: 12px; }
+.seg { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--color-border); margin: 0; padding: 0; min-width: 0; }
+.seg label { position: relative; text-align: center; cursor: pointer; }
+.seg label + label { border-left: 1px solid var(--color-border); }
+.seg input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+.seg span { display: block; padding: 9px 6px; font-size: 0.75rem; font-weight: 600; transition: background 0.15s ease, color 0.15s ease; }
+.seg input:checked + span { background: var(--color-dark); color: var(--color-light); }
+.seg input[value="Possédé"]:checked + span { background: var(--color-green); color: #fff; }
+.seg input[value="Recherché"]:checked + span { background: #E67E22; color: #fff; }
+.seg input:focus-visible + span { outline: 2px solid var(--color-dark); outline-offset: -4px; }
+.mine-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mine-fields[hidden] { display: none; }
+.fig-mine label { display: grid; gap: 4px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-sub); min-width: 0; }
+.fig-mine .seg label { display: block; }
+.fig-mine input:not([type=radio]), .fig-mine select, .fig-mine textarea {
+    width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid var(--color-border); background: var(--bg-body); color: var(--text-main);
+    font: 400 0.85rem var(--font-sans); text-transform: none; letter-spacing: 0; outline: none;
+}
+.fig-mine input:focus, .fig-mine select:focus, .fig-mine textarea:focus { border-color: var(--color-dark); }
+.price-row { display: flex; gap: 6px; }
+.price-row select { width: 74px !important; flex-shrink: 0; }
+.mine-notes textarea { resize: vertical; }
+.mine-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.mine-foot a { font-size: 0.78rem; font-weight: 600; color: var(--text-main); }
+.mine-msg { flex-basis: 100%; margin: 0; font-size: 0.78rem; color: var(--text-sub); min-height: 1em; }
+.mine-msg:empty { display: none; }
+
+/* Vignettes de la série : mes figurines */
+.series-grid a { position: relative; }
+.series-grid a.owned { border-color: var(--color-green); }
+.series-grid a.wish { border-color: #E67E22; }
+.mine-tag { position: absolute; top: 6px; left: 6px; padding: 1px 6px; font-size: 0.62rem; font-weight: 700; color: #fff; background: var(--color-green); }
+.series-grid a.wish .mine-tag { background: #E67E22; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 16px; font: 600 0.75rem var(--font-sans); letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; cursor: pointer; border: 1px solid var(--color-dark); background: var(--color-dark); color: var(--color-light); transition: background 0.2s ease, color 0.2s ease; }
 .btn:hover { background: transparent; color: var(--text-main); }
 .btn.ghost { background: transparent; color: var(--text-main); border-color: var(--color-border); }

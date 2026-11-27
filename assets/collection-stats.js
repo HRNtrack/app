@@ -86,7 +86,7 @@ export function computeCollectionStats(items, cotes = {}, rates = { EUR: 1 }, no
             s.marketValue += cote * qty; s.valuedQty += qty;
             if (paidEur) { s.dealPaid += paidEur * qty; s.dealMarket += cote * qty; }
         }
-        s.topItems.push({ name: item.Name, serie, image: item.Image, secret, paid: paidEur, cote });
+        s.topItems.push({ id: String(item.ID), name: item.Name, serie, image: item.Image, secret, paid: paidEur, cote });
 
         const d = item['Purchase date'] ? new Date(item['Purchase date']) : null;
         if (d && !isNaN(d) && d.getFullYear() >= 2019 && d <= now) {

@@ -209,6 +209,11 @@
         .value-trend.flat { color: var(--text-sub); }
         .chart-note { margin: 10px 0 0; font-size: 0.72rem; color: var(--text-sub); }
         .rare-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+        /* Vignettes cliquables (pépites, journal, plus rares) : lien vers la page de la figurine */
+        a.rare-card, a.journal-fig, a.top-list-item { color: inherit; text-decoration: none; transition: border-color 0.2s ease, background 0.2s ease; }
+        a.rare-card, a.journal-fig { display: block; }
+        a.rare-card:hover, a.journal-fig:hover { border-color: var(--color-dark); }
+        a.top-list-item:hover .top-name { text-decoration: underline; }
         .rare-card { border: 1px solid var(--color-border); background: var(--surface); padding: 8px 8px 10px; text-align: center; min-width: 0; }
         .rare-card img { width: 100%; aspect-ratio: 1; object-fit: contain; background: var(--color-sand); display: block; }
         .rare-card strong { display: block; font-size: 0.72rem; margin-top: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -699,6 +704,10 @@
         import { drawStory, canvasToBlob } from './assets/story.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
         import { formatMoney, refreshRates, fromEur, toEur } from './assets/money.js';
+        import { figureSlugs, figureHref } from './assets/figure-url.js';
+        let ficheSlugs = null;
+        // Adresse de la page publique d'une figurine (les vignettes des Stats y mènent)
+        const ficheOf = (id) => { ficheSlugs = ficheSlugs || figureSlugs(baseData); const sl = ficheSlugs.get(String(id)); return sl ? figureHref(sl) : '#'; };
 
         const db = sharedDb;   // base avec cache local (assets/db.js)
 
@@ -1029,12 +1038,12 @@
             const top = document.getElementById('top-expensive-list');
             top.innerHTML = s.topItems.length ? s.topItems.map((x, i) => {
                 const useCote = x.cote >= x.paid;
-                return `<div class="top-list-item">
+                return `<a class="top-list-item" href="${esc(ficheOf(x.id))}">
                     <span class="top-rank">${i + 1}</span>
                     <img class="top-img" src="${esc(x.image)}" alt="" loading="lazy">
                     <div class="top-info"><span class="top-name">${x.secret ? '✨ ' : ''}${esc(x.name)}</span><span class="top-serie">${esc(x.serie)}</span></div>
                     <span class="top-price"><small>${esc(t(useCote ? 'topCote' : 'topPaid'))}</small>${eur(useCote ? x.cote : x.paid)}</span>
-                </div>`;
+                </a>`;
             }).join('') : `<div class="empty-note">${esc(t('txtNoPrice'))}</div>`;
 
             renderSeries();
@@ -1064,8 +1073,8 @@
             list.innerHTML = shown.map((m, i) => {
                 // « 3 Lost Paradise, 1 Monsters » : 3 séries au plus dans la ligne
                 const line = m.bySerie.slice(0, 3).map(s => `${s.qty} ${esc(s.serie)}`).join(', ') + (m.bySerie.length > 3 ? '…' : '');
-                const figs = m.items.map(it => `<div class="journal-fig${it.secret ? ' secret' : ''}" title="${esc(it.name)} · ${esc(it.serie)}">
-                        ${it.qty > 1 ? `<i>×${it.qty}</i>` : ''}<img src="${esc(it.image)}" alt="" loading="lazy" decoding="async"><span>${esc(it.name)}</span><small>${esc(dayLabel(it.day))}</small></div>`).join('');
+                const figs = m.items.map(it => `<a href="${esc(ficheOf(it.id))}" class="journal-fig${it.secret ? ' secret' : ''}" title="${esc(it.name)} · ${esc(it.serie)}">
+                        ${it.qty > 1 ? `<i>×${it.qty}</i>` : ''}<img src="${esc(it.image)}" alt="" loading="lazy" decoding="async"><span>${esc(it.name)}</span><small>${esc(dayLabel(it.day))}</small></a>`).join('');
                 return `<details class="journal-month"${i === 0 ? ' open' : ''}>
                     <summary><span class="journal-date">${esc(monthLabel(m.key))}</span><span class="journal-line">${line}</span>
                         <span class="journal-meta">${esc(fmt('journalQty', { n: m.qty }))}${m.spent ? ` · <b>${esc(eur(m.spent))}</b>` : ''}</span></summary>
@@ -1157,9 +1166,9 @@
             const top = owned.sort((a, b) => rarity.owned[String(a.ID)] - rarity.owned[String(b.ID)]).slice(0, 5);
             section.hidden = !top.length;
             document.getElementById('rare-sum').textContent = fmt('rareSum', { n: rarity.collectors });
-            document.getElementById('rare-list').innerHTML = top.map(i => `<div class="rare-card" title="${esc(i.Name)} · ${esc(i.Serie)}">
+            document.getElementById('rare-list').innerHTML = top.map(i => `<a class="rare-card" href="${esc(ficheOf(i.ID))}" title="${esc(i.Name)} · ${esc(i.Serie)}">
                 <img src="${esc(i.Image)}" alt="" loading="lazy" decoding="async"><strong>${esc(i.Name)}</strong>
-                <span>💎 ${esc(fmt('rarePct', { p: Number(rarity.owned[String(i.ID)]).toLocaleString(loc) }))}</span></div>`).join('');
+                <span>💎 ${esc(fmt('rarePct', { p: Number(rarity.owned[String(i.ID)]).toLocaleString(loc) }))}</span></a>`).join('');
         }
 
         // --- WISHLIST PAR PRIORITÉ ---
