@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
+    <script src="assets/transitions.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Coche tes figurines Hirono, ta wishlist et tes doublons, série par série, avec la cote de chaque figurine.">
     <meta name="robots" content="noindex">
@@ -80,10 +81,6 @@
             width: 100%;
         }
 
-        .tooltip-container { position: relative; display: inline-block; cursor: help; margin-left: 5px; }
-        .info-icon { display: inline-block; width: 14px; height: 14px; background: #ccc; color: white; border-radius: 50%; text-align: center; line-height: 14px; font-size: 10px; }
-        .tooltip-text { display: none; position: absolute; background: var(--color-dark); color: var(--color-light); padding: 10px; border-radius: 6px; font-size: 11px; width: 220px; z-index: 3100; bottom: 120%; left: 50%; transform: translateX(-50%); box-shadow: 0 4px 15px rgba(0,0,0,0.2); pointer-events: none; line-height: 1.4; text-align: left; text-transform: none; font-weight: normal; }
-        .tooltip-container:hover .tooltip-text { display: block; }
 
         @media (min-width: 993px) { body { padding-bottom: 0; } }
         @media (max-width: 992px) {
@@ -222,18 +219,20 @@
         .secret-badge { position: absolute; top: 6px; right: 6px; background: var(--color-gold); color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2; }
         /* Carte : un bouton invisible couvre la carte (ouvre la fenêtre de modification) ;
            le lien ↗ vers la page publique de la figurine est un élément à part (pas de lien dans un bouton) */
-        .card-open { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; }
+        .card-open { position: absolute; inset: 0; z-index: 1; }
         .card-open:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 2px; }
-        .card-fiche {
-            position: absolute; right: 6px; bottom: 6px; z-index: 3; width: 30px; height: 30px;
-            display: inline-flex; align-items: center; justify-content: center;
-            background: var(--surface); color: var(--text-main); border: 1px solid var(--color-border);
-            text-decoration: none; font-size: 0.85rem; font-weight: 700; line-height: 1;
-            opacity: 0; transition: opacity 0.2s ease, border-color 0.2s ease;
-        }
-        .card:hover .card-fiche, .card-fiche:focus-visible { opacity: 1; }
-        .card-fiche:hover { border-color: var(--color-dark); }
-        @media (hover: none) { .card-fiche { opacity: 0.9; } }
+        /* Boutons rapides ✓ (je l'ai) / ♥ (je la cherche) : au-dessus du lien de la carte */
+        .card-quick { position: absolute; right: 6px; bottom: 6px; z-index: 3; display: flex; gap: 4px; }
+        .q-btn { width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; padding: 0; cursor: pointer;
+            background: var(--surface); color: var(--text-sub); border: 1px solid var(--color-border); font-size: 0.9rem; font-weight: 700; line-height: 1;
+            transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease; }
+        .q-btn:hover { border-color: var(--color-dark); color: var(--text-main); }
+        .q-btn:active { transform: scale(0.92); }
+        .q-btn:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 2px; }
+        .q-own[aria-pressed="true"] { background: var(--color-green); border-color: var(--color-green); color: #fff; }
+        .q-wish[aria-pressed="true"] { background: #E67E22; border-color: #E67E22; color: #fff; }
+        .card.flash { animation: card-flash 2s ease; }
+        @keyframes card-flash { 0%, 60% { box-shadow: 0 0 0 3px var(--color-dark); } 100% { box-shadow: var(--shadow); } }
 
         .card-info { padding-top: 10px; text-align: center; flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .card-name { font-weight: 600; font-size: 0.8rem; margin: 0; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -247,19 +246,7 @@
         .trend-up { color: var(--primary); }
         .trend-down { color: var(--color-red); }
         .trend-neutral { color: #9CA3AF; }
-        .rarity-line { margin: -6px 0 14px; font-size: 0.75rem; font-weight: 600; color: var(--color-gold); }
-        .rarity-line::before { content: '💎 '; }
-        .fiche-link { display: inline-block; margin: -4px 0 14px; font-size: 0.75rem; font-weight: 600; color: var(--text-sub); }
-        .fiche-link:hover { color: var(--text-main); }
         .pill.wish.prio-high { background: #C0392B; }
-        .cote-history { margin: 0 0 15px; padding: 10px 12px 6px; border: 1px solid var(--color-border); background: var(--surface); }
-        .cote-history-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
-        .cote-history-head .form-label { margin: 0; }
-        .cote-history-trend { font-size: 0.75rem; font-weight: 700; }
-        .cote-history-trend.up { color: var(--color-green); }
-        .cote-history-trend.down { color: var(--color-red); }
-        .cote-history-trend.flat { color: var(--color-text-sub); }
-        .cote-history-empty { font-size: 0.75rem; color: var(--color-text-sub); padding: 6px 0 8px; }
         .market-diff { display: block; font-size: 0.7rem; font-weight: 600; margin-top: 3px; }
         .market-diff.good { color: var(--color-green); }
         .market-diff.bad { color: var(--color-red); }
@@ -320,32 +307,9 @@
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-        .modal-header-info { 
-            display: flex; 
-            gap: 20px; 
-            align-items: center; 
-            margin-bottom: 20px; 
-            padding-bottom: 18px; 
-            border-bottom: 1px solid var(--color-border); 
-        }
         
-        .modal-header-img-wrapper { 
-            position: relative; 
-            flex-shrink: 0; 
-            background: var(--surface);
-            padding: 6px 6px 12px 6px;
-            border: 1px solid var(--color-border);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .modal-header-img-wrapper img { width: 80px; height: 80px; object-fit: cover; display: block; }
         
-        .modal-header-text { text-align: left; flex: 1; }
-        .modal-header-text h2 { margin: 0; font-size: 1.25rem; font-weight: 700; color: var(--color-dark); }
-        .modal-header-text p { margin: 4px 0 0; color: var(--primary); font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        .form-label { font-size: 0.72rem; color: var(--color-text-sub); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; display: block; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
-        @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; gap: 10px; margin-bottom: 10px;} } 
         
         input, select, textarea { 
             width: 100%; 
@@ -361,14 +325,6 @@
         }
         input:focus, select:focus, textarea:focus { border-color: var(--color-dark); }
         
-        .read-only-field { 
-            background: var(--color-sand); 
-            padding: 10px 12px; 
-            border: 1px solid var(--color-border); 
-            color: var(--color-dark); 
-            font-weight: 700; 
-            font-size: 0.88rem; 
-        }
         
         .btn-save { 
             width: 100%; 
@@ -516,94 +472,6 @@
     <button id="btn-back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</button>
 
     <!-- MODAL D'ÉDITION D'UNE FIGURINE (SANS HISTORIQUE DE PRIX) -->
-    <dialog id="modal" class="modal-overlay hrn-dialog" aria-labelledby="edit-title">
-        <div class="modal-content">
-            <div class="modal-header-info">
-                <div class="modal-header-img-wrapper">
-                    <img id="edit-img" src="" alt="Figurine">
-                    <span id="edit-secret-badge" style="display:none; position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); background:var(--color-gold); color:white; font-size:8px; font-weight:800; padding:2px 6px; text-transform:uppercase; border:1px solid white;">Secret</span>
-                </div>
-                <div class="modal-header-text">
-                    <h2 id="edit-title"></h2>
-                    <p id="edit-subtitle"></p>
-                </div>
-            </div>
-
-            <label class="form-label" data-t="lblStatus">Statut</label>
-            <select id="input-status" style="margin-bottom:15px;">
-                <option value="No status" data-t="optNone">Non possédé</option>
-                <option value="Possédé" data-t="optOwned">Dans ma collection</option>
-                <option value="Recherché" data-t="optWish">Wishlist</option>
-            </select>
-            <div id="priority-row" hidden>
-                <label class="form-label" for="input-priority" data-t="lblPriority">Priorité dans la wishlist</label>
-                <select id="input-priority" style="margin-bottom:15px;">
-                    <option value="" data-t="prioNone">Sans priorité</option>
-                    <option value="high" data-t="prioHigh">🔴 Haute</option>
-                    <option value="medium" data-t="prioMedium">🟠 Moyenne</option>
-                    <option value="low" data-t="prioLow">🟡 Basse</option>
-                </select>
-            </div>
-            <p class="rarity-line" id="modal-rarity" hidden></p>
-            <a class="fiche-link" id="modal-fiche" href="marche.html" data-t="ficheLink">Voir sa fiche publique ↗</a>
-
-            <div class="form-row">
-                <div>
-                    <label class="form-label" data-t="lblCondition">Condition</label>
-                    <select id="input-condition">
-                        <option value="Inconnu" data-t="condUnknown">Inconnu</option>
-                        <option value="Neuf" data-t="condMint">Neuf (Mint)</option>
-                        <option value="Bon" data-t="condGood">Bon</option>
-                        <option value="Moyen" data-t="condFair">Moyen</option>
-                        <option value="Abimé" data-t="condDamaged">Abimé</option>
-                    </select>
-                </div>
-                <div><label class="form-label" data-t="lblQty">Quantité</label><input type="number" id="input-qty" min="0"></div>
-            </div>
-
-            <div class="form-row">
-                <div>
-                    <label class="form-label">
-                        <span data-t="lblMarketPrice">Cote Moyenne</span>
-                        <div class="tooltip-container">
-                            <span class="info-icon">?</span>
-                            <div class="tooltip-text" data-t="priceTooltip"></div>
-                        </div>
-                    </label>
-                    <div id="modal-market-price" class="read-only-field">-</div>
-                </div>
-
-                <div>
-                    <label class="form-label" data-t="lblPurchasePrice">Prix d'achat</label>
-                    <div style="display:flex; gap:5px;">
-                        <input type="number" id="modal-price" placeholder="0" step="0.01" style="flex:1;">
-                        <select id="modal-currency" style="width:75px;">
-                            <option value="EUR">€</option>
-                            <option value="USD">$</option>
-                            <option value="CAD">CA$</option>
-                            <option value="GBP">£</option>
-                            <option value="CNY">¥</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Évolution de la cote sur 6 mois (données : market_prices/history, calculées par la page admin) -->
-            <div id="modal-history" class="cote-history" hidden></div>
-
-            <div class="form-row">
-                <div style="grid-column: 1 / -1;">
-                    <label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date">
-                </div>
-            </div>
-             
-            <label class="form-label" data-t="lblNotes">Notes</label>
-            <textarea id="input-note" rows="2" placeholder="Où l'avez-vous acheté ? Un détail ?"></textarea>
-
-            <button class="btn-save" onclick="window.sauvegarder()" data-t="btnSave">Enregistrer</button>
-            <button class="btn-cancel" onclick="window.fermer()" data-t="btnClose">Fermer</button>
-        </div>
-    </dialog>
 
     <!-- MODAL D'AUTHENTIFICATION -->
     <dialog id="auth-modal" class="modal-overlay hrn-dialog" aria-labelledby="auth-modal-title">
@@ -660,8 +528,8 @@
         import { computeCollectionStats } from './assets/collection-stats.js';
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
         import { formatMoney, refreshRates } from './assets/money.js';
+        import { saveCollection, toggleStatus } from './assets/collection-save.js';
         import { buildIndex, search } from './assets/search.js';
-        import { coteChartSvg, coteTrend } from './assets/cote-chart.js';
         import { figureSlugs, figureHref } from './assets/figure-url.js';
         let ficheSlugs = null;           // ID → adresse de la fiche publique (calculé une fois, à la demande)
         const ficheHrefOf = (id) => {
@@ -736,7 +604,7 @@
                 rarityLine: "Possédée par {p} % des collectionneurs", rarityWanted: "recherchée par {p} %",
                 sortRarity: "Les plus rares d'abord", sortPriority: "Priorité de wishlist",
                 histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum).",
-                ficheLink: "Voir sa fiche publique ↗", ficheAria: "Page publique de {name}"
+                ficheLink: "Voir sa fiche publique ↗", ficheAria: "Page publique de {name}", quickOwn: "Je l'ai : {name}", quickWish: "Je la cherche : {name}"
             },
             en: {
                 kpiValue: "Estimated value", kpiCollection: "Figures", kpiDoubles: "Duplicates", kpiDoublesSub: "to trade",
@@ -753,7 +621,7 @@
                 rarityLine: "Owned by {p}% of collectors", rarityWanted: "wanted by {p}%",
                 sortRarity: "Rarest first", sortPriority: "Wishlist priority",
                 histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum).",
-                ficheLink: "See its public page ↗", ficheAria: "Public page of {name}"
+                ficheLink: "See its public page ↗", ficheAria: "Public page of {name}", quickOwn: "I have it: {name}", quickWish: "I want it: {name}"
             }
         };
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
@@ -852,10 +720,26 @@
             const focusId = urlParams.get('focus');
             if (focusId) {
                 const item = myCollection.find(i => String(i.ID) === focusId);
-                if (item) { window.openModal(item); history.replaceState(null, '', location.pathname); }
+                if (item) {
+                    if (state.filter !== 'all' || state.q || (state.serie !== 'all' && state.serie !== item.Serie)) window.resetFilters();
+                    const el = cards.get(item.ID);
+                    if (el) { el.scrollIntoView({ block: 'center' }); el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 2200); el.querySelector('.card-open')?.focus({ preventScroll: true }); }
+                    history.replaceState(null, '', location.pathname);
+                }
             } else if (urlParams.get('serie')) {
                 saveState();
                 history.replaceState(null, '', location.pathname);
+            } else {
+                // Retour (bouton Précédent) depuis une fiche : même position dans la grille
+                let y = null;
+                try { y = sessionStorage.getItem('HRN_DASH_SCROLL'); sessionStorage.removeItem('HRN_DASH_SCROLL'); } catch (e) { /* stockage indisponible */ }
+                const nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+                if (y !== null && nav && nav.type === 'back_forward') {
+                    // La grille vient d'être dessinée : on y retourne (deux essais, le temps que les cartes prennent leur place)
+                    const target = Number(y) || 0;
+                    const go = () => { if (Math.abs(window.scrollY - target) > 40) window.scrollTo(0, target); };
+                    requestAnimationFrame(go); setTimeout(go, 150); setTimeout(go, 500);
+                }
             }
         }
 
@@ -897,6 +781,8 @@
         const STATE_KEY = 'HRN_DASH_STATE';
         const DEFAULT_STATE = { filter: 'all', q: '', serie: 'all', sort: 'serie_asc' };
         let state = (() => { try { return { ...DEFAULT_STATE, ...JSON.parse(sessionStorage.getItem(STATE_KEY) || '{}') }; } catch (e) { return { ...DEFAULT_STATE }; } })();
+        // La position dans la grille est gérée par la page (retour depuis une fiche) : le navigateur ne la remet pas à 0
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
         // Venant d'une page figurine (fil d'Ariane, « Voir la série dans ma collection ») : ouverte sur cette série
         if (urlParams.get('serie')) state = { ...state, serie: urlParams.get('serie'), filter: 'all', q: '' };
         const saveState = () => { try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) { /* stockage indisponible */ } };
@@ -925,12 +811,16 @@
                 cote ? `<span class="price-cote">${esc(t('lblCardCote'))} <b>${eur(cote)}</b></span>` : '',
                 paid ? `<span class="price-paid">${esc(t('lblCardPaid'))} <b>${paid.toFixed(paid % 1 ? 2 : 0)}${currencySymbols[item.Currency] || '€'}</b></span>` : ''
             ].join('') || '<span class="none">—</span>';
-            const fiche = ficheHrefOf(item.ID);
-            return `<button type="button" class="card-open" aria-label="${esc(item.Name)}"></button>
+            const fiche = ficheHrefOf(item.ID) || '#';
+            const quick = isReadOnly ? '' : `<div class="card-quick">
+                            <button type="button" class="q-btn q-own" data-act="own" aria-pressed="${owned}" aria-label="${esc(fmtT('quickOwn', { name: item.Name }))}" title="${esc(t('optOwned'))}"><span aria-hidden="true">✓</span></button>
+                            <button type="button" class="q-btn q-wish" data-act="wish" aria-pressed="${wish}" aria-label="${esc(fmtT('quickWish', { name: item.Name }))}" title="${esc(t('optWish'))}"><span aria-hidden="true">♥</span></button>
+                        </div>`;
+            return `<a class="card-open" href="${esc(fiche)}" aria-label="${esc(item.Name)}"></a>
                     <div class="card-media">
                         <img src="${esc(item.Image)}" loading="lazy" decoding="async" alt="">
                         ${pill}${secret ? '<span class="secret-badge" title="Secret">★</span>' : ''}
-                        ${fiche ? `<a class="card-fiche" href="${esc(fiche)}" title="${esc(fmtT('ficheAria', { name: item.Name }))}" aria-label="${esc(fmtT('ficheAria', { name: item.Name }))}"><span aria-hidden="true">↗</span></a>` : ''}
+                        ${quick}
                     </div>
                     <div class="card-info">
                         <p class="card-name">${esc(item.Name)}</p>
@@ -949,8 +839,7 @@
             if (!el) {
                 el = document.createElement('div');
                 el.dataset.id = item.ID;
-                // Clic n'importe où sur la carte (sauf le lien ↗) ; au clavier, le bouton .card-open (Entrée / Espace)
-                el.addEventListener('click', (e) => { if (e.target.closest('a')) return; window.openModal(byId(item.ID)); });
+                // La carte entière est un lien vers la page de la figurine (.card-open) ; ✓ / ♥ : voir plus bas
                 cards.set(item.ID, el);
             }
             fillCard(el, item);
@@ -1086,157 +975,44 @@
             e.preventDefault(); searchBar.focus(); searchBar.select();
         });
 
-        // --- Évolution de la cote (fiche) ---
-        let coteHistory = null;          // { months: [...], items: { ID: [cotes] } }, chargé une seule fois
-        let coteHistoryPromise = null;
-        function loadCoteHistory() {
-            if (!coteHistoryPromise) {
-                coteHistoryPromise = getDoc(doc(db, "market_prices", "history"))
-                    .then(snap => { coteHistory = snap.exists() ? snap.data() : { months: [], items: {} }; })
-                    .catch(() => { coteHistory = { months: [], items: {} }; });
-            }
-            return coteHistoryPromise;
+        // ================================================================
+        // BOUTONS RAPIDES ✓ / ♥ (plus de fenêtre : le détail se modifie sur la page de la figurine)
+        // Enregistrement groupé : plusieurs appuis rapides = une seule écriture, 600 ms après le dernier.
+        // ================================================================
+        let saveTimer = null;
+        function flushSave() {
+            if (!saveTimer) return;
+            clearTimeout(saveTimer); saveTimer = null;
+            if (!auth.currentUser) return;
+            saveCollection(db, auth.currentUser.uid, myCollection)
+                .catch(err => { console.error("Erreur de sauvegarde :", err); hrnNotify(t('alertErr') + err.message); });
         }
-        async function renderCoteHistory(item) {
-            const box = document.getElementById('modal-history');
-            await loadCoteHistory();
-            if (!currentItem || currentItem.ID !== item.ID) return;   // une autre fiche a été ouverte entre-temps
-            const months = coteHistory.months || [];
-            const values = [...((coteHistory.items || {})[item.ID] || [])];
-            // Le dernier point (mois en cours) = la cote affichée au-dessus, pour que les deux chiffres concordent
-            if (values.length && coteOf(item.ID) > 0) values[values.length - 1] = coteOf(item.ID);
-            const locale = (window.HRN_LOCALES[currentLang] || 'fr-FR');
-            const labels = months.map(m => new Date(m + '-01T12:00:00').toLocaleDateString(locale, { month: 'short' }));
-            const svg = values.length ? coteChartSvg(values, labels, { format: eur }) : '';
-            if (!svg && !coteOf(item.ID)) { box.hidden = true; return; }   // ni cote ni historique : rien à montrer
-            const trend = coteTrend(values);
-            const cls = trend > 0 ? 'up' : trend < 0 ? 'down' : 'flat';
-            const trendHtml = trend === null ? '' : `<span class="cote-history-trend ${cls}">${trend > 0 ? '▲ +' : trend < 0 ? '▼ ' : ''}${trend} %</span>`;
-            box.innerHTML = `<div class="cote-history-head"><span class="form-label">${esc(t('histTitle'))}</span>${trendHtml}</div>` +
-                (svg || `<div class="cote-history-empty">${esc(t('histNone'))}</div>`);
-            box.hidden = false;
-        }
+        function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(() => { saveTimer = 1; flushSave(); }, 600); }
+        // On quitte la page (vers une fiche…) : on enregistre tout de suite
+        window.addEventListener('pagehide', flushSave);
 
-        // La priorité n'a de sens que pour une figurine recherchée
-        function syncPriorityRow() {
-            document.getElementById('priority-row').hidden = document.getElementById('input-status').value !== 'Recherché';
-        }
-        document.getElementById('input-status').addEventListener('change', syncPriorityRow);
+        document.getElementById('hirono-grid').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-act]');
+            if (!btn) return;
+            e.preventDefault();
+            if (isReadOnly) return;
+            const card = btn.closest('.card');
+            const id = card && card.dataset.id;
+            if (!id) return;
+            const res = toggleStatus(myCollection, id, btn.dataset.act);
+            const idx = myCollection.findIndex(i => String(i.ID) === String(id));
+            if (idx >= 0) myCollection[idx] = { ...myCollection[idx], ...res.item };
+            refreshItem(myCollection[idx].ID);
+            // La carte est redessinée : on remet le focus sur le même bouton (clavier)
+            const again = cards.get(myCollection[idx].ID);
+            if (again && again.isConnected) again.querySelector('[data-act="' + btn.dataset.act + '"]')?.focus();
+            scheduleSave();
+        });
 
-        window.openModal = (item) => {
-            currentItem = item;
-            document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
-            document.getElementById('edit-subtitle').innerText = item.Serie;
-            const ficheUrl = ficheHrefOf(item.ID);
-            const ficheEl = document.getElementById('modal-fiche');
-            ficheEl.hidden = !ficheUrl;
-            if (ficheUrl) ficheEl.href = ficheUrl;
-            document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
-            document.getElementById('edit-secret-badge').style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
-
-            document.getElementById('input-status').value = item.Status || "No status";
-            document.getElementById('input-priority').value = ['high', 'medium', 'low'].includes(item.Priority) ? item.Priority : '';
-            syncPriorityRow();
-            const rar = rarityOf(item.ID), rarEl = document.getElementById('modal-rarity');
-            rarEl.hidden = rar === null;
-            if (rar !== null) {
-                const wanted = rarity.wanted && rarity.wanted[String(item.ID)];
-                rarEl.textContent = fmtT('rarityLine', { p: rar.toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR')) }) + (wanted ? ' · ' + fmtT('rarityWanted', { p: Number(wanted).toLocaleString((window.HRN_LOCALES[currentLang] || 'fr-FR')) }) : '');
-            }
-            document.getElementById('input-condition').value = item.Condition || "Inconnu";
-            document.getElementById('input-qty').value = item.Quantity || 0;
-            document.getElementById('modal-price').value = item["Purchase price"] || "";
-            document.getElementById('modal-currency').value = item.Currency || "EUR"; 
-
-            const avgBaseEur = coteOf(item.ID);
-            const marketEl = document.getElementById('modal-market-price');
-            if (avgBaseEur > 0) {
-                const paidEur = isOwned(item) ? toEur(paidOf(item), item.Currency) : 0;
-                let diff = '';
-                if (paidEur > 0) {
-                    const pct = Math.round(((avgBaseEur - paidEur) / avgBaseEur) * 100);
-                    diff = `<span class="market-diff ${pct >= 0 ? 'good' : 'bad'}">${esc(fmtT(pct >= 0 ? 'marketBelow' : 'marketAbove', { n: Math.abs(pct) }))}</span>`;
-                }
-                marketEl.innerHTML = `${eur(avgBaseEur)}${diff}`;
-            } else {
-                marketEl.innerText = "-";
-            }
-            document.getElementById('modal-history').hidden = true;
-            renderCoteHistory(item);
-
-            document.getElementById('input-date').value = item["Purchase date"] || "";
-            document.getElementById('input-note').value = item.Note || "";
-             
-            if(isReadOnly) {
-                document.querySelector('.btn-save').style.display = 'none';
-                document.querySelectorAll('#modal input, #modal select, #modal textarea').forEach(el => el.disabled = true);
-            } else {
-                document.querySelector('.btn-save').style.display = 'block';
-                document.querySelectorAll('#modal input, #modal select, #modal textarea').forEach(el => el.disabled = false);
-            }
-            document.getElementById('modal').showModal();
-        };
-
-        window.sauvegarder = async () => {
-            if(isReadOnly) return;
-            try {
-                if (!currentItem) return;
-                const newStatus = document.getElementById('input-status').value;
-                const newCond = document.getElementById('input-condition').value;
-                let newQty = parseInt(document.getElementById('input-qty').value) || 0;
-                if (newStatus === 'Possédé' && newQty < 1) newQty = 1;   // une figurine possédée compte au moins 1 exemplaire
-                const rawPrice = document.getElementById('modal-price').value;
-                const newPrice = rawPrice ? parseFloat(rawPrice) : 0;
-                const newCurrency = document.getElementById('modal-currency').value;
-                const newDate = document.getElementById('input-date').value || "";
-                const newNote = document.getElementById('input-note').value || "";
-                const newPriority = newStatus === 'Recherché' ? document.getElementById('input-priority').value : '';
-
-                const index = myCollection.findIndex(i => i.ID === currentItem.ID);
-                if (index !== -1) {
-                    myCollection[index].Status = newStatus;
-                    myCollection[index].Condition = newCond;
-                    myCollection[index].Quantity = newQty;
-                    myCollection[index]["Purchase price"] = newPrice;
-                    myCollection[index].Currency = newCurrency;
-                    myCollection[index]["Purchase date"] = newDate;
-                    myCollection[index].Note = newNote;
-                    myCollection[index].Priority = newPriority;
-                }
-                const saveBtn = document.querySelector('.btn-save');
-                saveBtn.innerText = t('btnSaving'); saveBtn.disabled = true;
-
-                const collectionPropre = myCollection.map(item => {
-                    return {
-                        ID: item.ID,
-                        Status: item.Status || "No status", 
-                        Condition: item.Condition || "Inconnu", 
-                        Quantity: item.Quantity || 0,
-                        "Purchase price": item["Purchase price"] || 0, 
-                        Currency: item.Currency || "EUR", 
-                        "Purchase date": item["Purchase date"] || "",
-                        Note: item.Note || "",
-                        Priority: item.Priority || ""
-                    };
-                });
-
-                if (auth.currentUser) { 
-                    // merge: true = on ne remplace que la collection, sans effacer le profil (pseudo, avatar) ni les dates
-                    await setDoc(doc(db, "users", auth.currentUser.uid), { collection: collectionPropre }, { merge: true });
-                    syncPublicProfile(db, auth.currentUser.uid);
-                } else { 
-                    localStorage.setItem('HRN_ULTIMATE', JSON.stringify(collectionPropre)); 
-                }
-
-                saveBtn.innerText = t('btnSave'); saveBtn.disabled = false;
-                window.fermer(); refreshItem(currentItem.ID);
-            } catch (error) {
-                console.error("Erreur de sauvegarde :", error); hrnNotify(t('alertErr') + error.message);
-                const saveBtn = document.querySelector('.btn-save'); if(saveBtn) { saveBtn.innerText = t('btnSave'); saveBtn.disabled = false; }
-            }
-        };
-
-        window.fermer = () => document.getElementById('modal').close();
+        // Retour depuis une fiche : on revient au même endroit de la grille
+        document.getElementById('hirono-grid').addEventListener('click', (e) => {
+            if (e.target.closest('a.card-open')) { try { sessionStorage.setItem('HRN_DASH_SCROLL', String(Math.round(scrollY))); } catch (err) { /* stockage indisponible */ } }
+        });
         window.onclick = function(event) { if (event.target.classList.contains('modal-overlay')) { event.target.close ? event.target.close() : (event.target.style.display = "none"); } }
         
         fetch('footer.html').then(response => { if (!response.ok) throw new Error("Erreur"); return response.text(); }).then(data => { document.getElementById('footer-placeholder').innerHTML = data; if(window.updateUIText) window.updateUIText(); if(window.initCookieLogic) window.initCookieLogic(); }).catch(error => console.error('Erreur Footer:', error));

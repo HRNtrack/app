@@ -344,6 +344,17 @@
         }
         return catalogPromise;
     }
+    // Chaque résultat ouvre la page publique de la figurine (/figurine/…) ; à défaut, la Collection
+    let ficheHrefPromise = null;
+    function loadFicheHref(cat) {
+        if (!ficheHrefPromise) {
+            ficheHrefPromise = import('/assets/figure-url.js').then(m => {
+                const slugs = m.figureSlugs(cat);
+                return (id) => { const sl = slugs.get(String(id)); return sl ? '/' + m.figureHref(sl) : '/dashboard.html?focus=' + encodeURIComponent(id); };
+            }).catch(() => (id) => '/dashboard.html?focus=' + encodeURIComponent(id));
+        }
+        return ficheHrefPromise;
+    }
     const norm = (s) => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
     const escHtml = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
     function searchDialog() {
@@ -367,11 +378,12 @@
             const q = norm(input.value.trim());
             if (!q) { list.innerHTML = ''; return; }
             const cat = await loadCatalog();
+            const fiche = await loadFicheHref(cat);
             const words = q.split(/\s+/);
             const found = cat.filter(b => { const txt = norm(b.Name + ' ' + b.Serie); return words.every(w => txt.includes(w)); })
                 .sort((a, b) => (norm(a.Name).startsWith(q) ? 0 : 1) - (norm(b.Name).startsWith(q) ? 0 : 1) || String(a.Name).localeCompare(String(b.Name)))
                 .slice(0, 12);
-            list.innerHTML = found.length ? found.map(b => '<li><a href="/dashboard.html?focus=' + encodeURIComponent(b.ID) + '">' +
+            list.innerHTML = found.length ? found.map(b => '<li><a href="' + escHtml(fiche(b.ID)) + '">' +
                 '<img src="' + escHtml(b.Image) + '" alt="" loading="lazy" decoding="async"><span><strong>' + escHtml(b.Name) + '</strong><small>' + escHtml(b.Serie) +
                 (String(b['Secret Rare']).toLowerCase() === 'yes' ? ' · ★ Secret' : '') + '</small></span></a></li>').join('')
                 : '<li class="gsearch-empty">' + st('noMatch') + '</li>';

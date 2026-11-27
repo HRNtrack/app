@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://api.frankfurter.dev https://formsubmit.co; frame-src https://hrntrack-1cfe3.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <script src="assets/theme.js"></script>
+    <script src="assets/transitions.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Les dernières figurines Hirono POP MART et le calendrier des prochaines sorties, à ajouter à ta collection en un clic.">
     <link rel="canonical" href="https://www.hrntrack.app/nouveautes.html">
@@ -150,12 +151,15 @@
         }
 
         /* Carte : bouton invisible qui la couvre (ouvre la fenêtre, ou la page publique si déconnecté) + lien ↗ à part */
-        .card-open { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; }
+        .card-open { position: absolute; inset: 0; z-index: 1; }
         .card-open:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 2px; }
-        .card-fiche { position: absolute; right: 6px; bottom: 6px; z-index: 3; width: 30px; height: 30px; display: inline-flex; align-items: center; justify-content: center; background: var(--surface); color: var(--text-main); border: 1px solid var(--color-border); text-decoration: none; font-size: 0.85rem; font-weight: 700; line-height: 1; opacity: 0; transition: opacity 0.2s ease, border-color 0.2s ease; }
-        .card:hover .card-fiche, .card-fiche:focus-visible { opacity: 1; }
-        .card-fiche:hover { border-color: var(--color-dark); }
-        @media (hover: none) { .card-fiche { opacity: 0.9; } }
+        .card-quick { position: relative; z-index: 3; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; width: 100%; margin-top: 10px; }
+        .q-btn { padding: 8px 4px; border: 1px solid var(--color-border); background: var(--color-sand); color: var(--text-sub); cursor: pointer;
+            font: 600 0.7rem var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; transition: all 0.15s ease; }
+        .q-btn:hover { border-color: var(--color-dark); color: var(--text-main); }
+        .q-btn:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 2px; }
+        .q-own[aria-pressed="true"] { background: var(--color-green); border-color: var(--color-green); color: #fff; }
+        .q-wish[aria-pressed="true"] { background: #E67E22; border-color: #E67E22; color: #fff; }
         .card-img-wrapper {
             position: relative; width: 100%; aspect-ratio: 1/1; overflow: hidden; margin-bottom: 12px;
             background: var(--color-sand); display: flex; align-items: center; justify-content: center;
@@ -209,7 +213,7 @@
             display: block; margin-bottom: 6px; color: var(--color-dark); font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
         }
 
-        #modal select, #modal input, #modal textarea, #auth-modal input {
+        #auth-modal input {
             width: 100%;
             background: var(--surface);
             border: 1px solid var(--color-border);
@@ -221,7 +225,7 @@
             outline: none;
             transition: border-color 0.25s ease;
         }
-        #modal select:focus, #modal input:focus, #modal textarea:focus, #auth-modal input:focus {
+        #auth-modal input:focus {
             border-color: var(--color-dark);
         }
 
@@ -270,51 +274,6 @@
         <div id="release-sections"></div>
     </div>
 
-    <!-- MODAL D'ÉDITION D'ITEM -->
-    <dialog id="modal" class="modal-overlay hrn-dialog" aria-labelledby="edit-title">
-        <div class="modal-content">
-            <div style="text-align:center; margin-bottom:15px;">
-                <img id="edit-img" src="" alt="" style="height:120px; object-fit:contain; border:1px solid var(--color-border); background:var(--color-sand);">
-                <br>
-                <span id="edit-secret-badge" style="display:none; background:var(--color-gold); color:white; font-size:10px; font-weight:800; padding:2px 8px; margin-top:8px; text-transform:uppercase; letter-spacing:0.08em;">Secret Rare</span>
-            </div>
-
-            <h2 id="edit-title" style="margin:0; font-size:1.1rem; font-weight:700; text-transform:uppercase;"></h2>
-            <p id="edit-subtitle" style="margin:2px 0 20px; color:var(--text-sub); font-size:0.75rem; text-transform:uppercase; letter-spacing:0.05em;"></p>
-            
-            <label class="form-label" data-t="lblStatus">Statut</label>
-            <select id="input-status" style="margin-bottom:15px;">
-                <option value="No status" data-t="optNone">Non possédé</option>
-                <option value="Possédé" data-t="optOwned">Dans ma collection</option>
-                <option value="Recherché" data-t="optWish">Wishlist</option>
-            </select>
-
-            <div class="form-row">
-                <div>
-                    <label class="form-label" data-t="lblCondition">Condition</label>
-                    <select id="input-condition">
-                        <option value="Inconnu" data-t="condUnknown">Inconnu</option>
-                        <option value="Neuf" data-t="condMint">Neuf (Mint)</option>
-                        <option value="Bon" data-t="condGood">Bon</option>
-                        <option value="Moyen" data-t="condFair">Moyen</option>
-                        <option value="Abimé" data-t="condDamaged">Abimé</option>
-                    </select>
-                </div>
-                <div><label class="form-label" data-t="lblQty">Quantité</label><input type="number" id="input-qty" min="0"></div>
-            </div>
-
-            <div class="form-row">
-                <div><label class="form-label" data-t="lblPrice">Prix</label><input type="number" id="input-price" step="0.01"></div>
-                <div><label class="form-label" data-t="lblDate">Date</label><input type="date" id="input-date"></div>
-            </div>
-            
-            <label class="form-label" data-t="lblNotes">Notes</label>
-            <textarea id="input-note" rows="2"></textarea>
-
-            <button class="btn-save" onclick="window.sauvegarder()" data-t="btnSave">Enregistrer</button>
-            <button class="btn-cancel" onclick="window.fermer()" data-t="btnClose">Fermer</button>
-        </div>
-    </dialog>
 
     <!-- MODAL D'AUTHENTIFICATION -->
     <dialog id="auth-modal" class="modal-overlay hrn-dialog" aria-labelledby="auth-modal-title">
@@ -365,11 +324,12 @@
         import { pushStatus, enablePush, disablePush } from './assets/push.js';
         import { UPCOMING } from './assets/upcoming.js';
         import { figureSlugs, figureHref } from './assets/figure-url.js';
+        import { saveCollection, toggleStatus } from './assets/collection-save.js';
         // Page publique de chaque figurine (bouton ↗ des cartes)
         let ficheSlugs = null;
         const ficheOf = (id) => { ficheSlugs = ficheSlugs || figureSlugs(baseData); const sl = ficheSlugs.get(String(id)); return sl ? figureHref(sl) : ''; };
         const escAttr = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-        const fmtFiche = (name) => String(translations[currentLang].ficheAria || translations.fr.ficheAria).replace('{name}', name);
+        const fmtQuick = (key, name) => String(translations[currentLang][key] || translations.fr[key]).replace('{name}', name);
         import { auth, setupAuthModal, updateAuthButtons } from './assets/auth.js';
         import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -408,10 +368,9 @@
 
         let userCollection = [];
         let currentUser = null;
-        let currentModalItem = null;
 
         const translations = withCommon({
-            fr: {                 navAccount: "Mon Compte",                navNew: "Nouveautés",                pageTitle: "Dernières Sorties",                pageSub: "Les nouveautés Hirono les plus récentes.",                btnAdd: "Ajouter",                 btnOwned: "Possédé",                 btnWish: "Recherché",                 btnSave: "Enregistrer",                btnClose: "Fermer",                lblStatus: "Statut",                optNone: "Non possédé",                optOwned: "Dans ma collection",                optWish: "Wishlist",                lblCondition: "Condition",                condUnknown: "Inconnu",                condMint: "Neuf (Mint)",                condGood: "Bon",                condFair: "Moyen",                condDamaged: "Abimé",                lblQty: "Quantité",                lblPrice: "Prix",                lblDate: "Date d'achat",                lblNotes: "Notes", ficheAria: "Page publique de {name}"                },            en: {                 navAccount: "My Account",                navNew: "New Releases",                pageTitle: "Latest Releases",                pageSub: "The most recent Hirono releases.",                btnAdd: "Add",                 btnOwned: "Owned",                 btnWish: "Wishlist",                 btnSave: "Save",                btnClose: "Close",                lblStatus: "Status",                optNone: "Not owned",                optOwned: "In collection",                optWish: "Wishlist",                lblCondition: "Condition",                condUnknown: "Unknown",                condMint: "Mint",                condGood: "Good",                condFair: "Fair",                condDamaged: "Damaged",                lblQty: "Quantity",                lblPrice: "Price",                lblDate: "Purchase Date",                lblNotes: "Notes", ficheAria: "Public page of {name}"                }        });
+            fr: {                 navAccount: "Mon Compte",                navNew: "Nouveautés",                pageTitle: "Dernières Sorties",                pageSub: "Les nouveautés Hirono les plus récentes.",                btnAdd: "Ajouter",                 btnOwned: "Possédé",                 btnWish: "Recherché",                 btnSave: "Enregistrer",                btnClose: "Fermer",                lblStatus: "Statut",                optNone: "Non possédé",                optOwned: "Dans ma collection",                optWish: "Wishlist",                lblCondition: "Condition",                condUnknown: "Inconnu",                condMint: "Neuf (Mint)",                condGood: "Bon",                condFair: "Moyen",                condDamaged: "Abimé",                lblQty: "Quantité",                lblPrice: "Prix",                lblDate: "Date d'achat",                lblNotes: "Notes", ficheAria: "Page publique de {name}", quickOwn: "Je l'ai : {name}", quickWish: "Je la cherche : {name}", alertErr: "Erreur : "                },            en: {                 navAccount: "My Account",                navNew: "New Releases",                pageTitle: "Latest Releases",                pageSub: "The most recent Hirono releases.",                btnAdd: "Add",                 btnOwned: "Owned",                 btnWish: "Wishlist",                 btnSave: "Save",                btnClose: "Close",                lblStatus: "Status",                optNone: "Not owned",                optOwned: "In collection",                optWish: "Wishlist",                lblCondition: "Condition",                condUnknown: "Unknown",                condMint: "Mint",                condGood: "Good",                condFair: "Fair",                condDamaged: "Damaged",                lblQty: "Quantity",                lblPrice: "Price",                lblDate: "Purchase Date",                lblNotes: "Notes", ficheAria: "Public page of {name}", quickOwn: "I have it: {name}", quickWish: "I want it: {name}", alertErr: "Error: "                }        });
         
         let currentLang = localStorage.getItem('HRN_LANG') || 'fr';
         function t(key) { return translations[currentLang]?.[key] || key; }
@@ -591,20 +550,22 @@
                 const secretStyle = item.isSecret ? 'color:var(--color-gold); font-weight:700;' : '';
                 const badge = 'NEW';
 
-                // Étiquette visible du statut (le clic passe par le bouton .card-open qui couvre la carte)
+                // Connecté : boutons rapides ✓ (je l'ai) / ♥ (je la cherche) ; le détail se remplit sur la page de la figurine
                 let actionBtnHtml = '';
                 if (currentUser) {
-                    actionBtnHtml = `<span class="${btnClass}" aria-hidden="true">${btnText}</span>`;
+                    actionBtnHtml = `<div class="card-quick">
+                        <button type="button" class="q-btn q-own" data-act="own" data-id="${escAttr(item.id)}" aria-pressed="${!!isOwned}" aria-label="${escAttr(fmtQuick('quickOwn', item.name))}">✓ ${esc(t('btnOwned'))}</button>
+                        <button type="button" class="q-btn q-wish" data-act="wish" data-id="${escAttr(item.id)}" aria-pressed="${!!isWished}" aria-label="${escAttr(fmtQuick('quickWish', item.name))}">♥ ${esc(t('btnWish'))}</button>
+                    </div>`;
                 }
-                const fiche = ficheOf(item.id);
+                const fiche = ficheOf(item.id) || '#';
 
                 return `
-                <div class="${cardClass}">
-                    <button type="button" class="card-open" aria-label="${escAttr(item.name)}" onclick="window.ouvrir('${item.id}')"></button>
+                <div class="${cardClass}" data-id="${escAttr(item.id)}">
+                    <a class="card-open" href="${escAttr(fiche)}" aria-label="${escAttr(item.name)}"></a>
                     <span class="card-badge">${badge}</span>
                     <div class="card-img-wrapper">
                         <img src="${item.img}" class="card-img" alt="" loading="lazy">
-                        ${fiche ? `<a class="card-fiche" href="${escAttr(fiche)}" title="${escAttr(fmtFiche(item.name))}" aria-label="${escAttr(fmtFiche(item.name))}"><span aria-hidden="true">↗</span></a>` : ''}
                     </div>
                     <div class="card-name" style="${secretStyle}">${item.name}</div>
                     <div class="card-serie">${item.serie}</div>
@@ -613,122 +574,29 @@
             }).join('');
         }
 
-        window.ouvrir = function(id) {
-            // Déconnecté : on ouvre la page publique de la figurine (cote, série…)
-            if(!currentUser) {
-                const fiche = ficheOf(id);
-                if (fiche) { location.href = fiche; return; }
-                hrnNotify("Vous devez être connecté pour gérer votre collection !");
-                return;
-            }
-
-            const item = newReleases.find(i => i.id === id);
-            if(!item) return;
-
-            currentModalItem = item;
-            const existing = userCollection.find(i => i.ID === id);
-
-            document.getElementById('edit-img').src = item.img;
-            document.getElementById('edit-title').innerText = item.name;
-            document.getElementById('edit-subtitle').innerText = item.serie;
-
-            const badge = document.getElementById('edit-secret-badge');
-            if(badge) badge.style.display = item.isSecret ? 'inline-block' : 'none';
-
-            if (existing) {
-                document.getElementById('input-status').value = existing.Status || 'No status';
-                document.getElementById('input-condition').value = existing.Condition || 'Inconnu';
-                document.getElementById('input-qty').value = existing.Quantity || 1;
-                document.getElementById('input-price').value = existing["Purchase price"] || '';
-                document.getElementById('input-date').value = existing["Purchase date"] || '';
-                document.getElementById('input-note').value = existing.Notes || existing.Note || '';
-            } else {
-                document.getElementById('input-status').value = 'No status';
-                document.getElementById('input-condition').value = 'Inconnu';
-                document.getElementById('input-qty').value = 1;
-                document.getElementById('input-price').value = '';
-                document.getElementById('input-date').value = new Date().toISOString().split('T')[0];
-                document.getElementById('input-note').value = '';
-            }
-
-            document.getElementById('modal').showModal();
-        };
-
-        window.fermer = function() {
-            document.getElementById('modal').close();
-        };
-
-        window.sauvegarder = async function() {
-            if (!currentUser) {
-                hrnNotify("Erreur : Vous avez été déconnecté. Veuillez rafraîchir la page.");
-                return;
-            }
-            if (!currentModalItem) {
-                hrnNotify("Erreur : Aucun objet sélectionné.");
-                return;
-            }
-
-            const status = document.getElementById('input-status').value;
-            
-            if(status === 'No status') {
-                const idx = userCollection.findIndex(i => i.ID === currentModalItem.id);
-                if(idx > -1) {
-                    if(confirm("Voulez-vous retirer cet objet de votre collection ?")) {
-                        userCollection.splice(idx, 1);
-                    } else {
-                        return;
-                    }
-                }
-            } else {
-                const newItem = {
-                    ID: currentModalItem.id,
-                    Status: status,
-                    Condition: document.getElementById('input-condition').value,
-                    Quantity: parseInt(document.getElementById('input-qty').value) || 1,
-                    "Purchase price": parseFloat(document.getElementById('input-price').value) || 0,
-                    "Purchase date": document.getElementById('input-date').value || "",
-                    Note: document.getElementById('input-note').value || ""
-                };
-                const previous = userCollection.find(i => i.ID === newItem.ID);
-                newItem.Currency = previous?.Currency || "EUR";
-
-                const idx = userCollection.findIndex(i => i.ID === newItem.ID);
-                if(idx > -1) {
-                    userCollection[idx] = newItem;
-                } else {
-                    userCollection.push(newItem);
-                }
-            }
-
-            // Mêmes champs que la page Collection (dashboard.html) : on garde la devise et la note existantes
-            const collectionPropre = userCollection.map(item => ({
-                ID: item.ID,
-                Status: item.Status || "No status",
-                Condition: item.Condition || "Inconnu",
-                Quantity: item.Quantity || 0,
-                "Purchase price": item["Purchase price"] || 0,
-                Currency: item.Currency || "EUR",
-                "Purchase date": item["Purchase date"] || "",
-                Note: item.Note ?? item.Notes ?? "",
-                Priority: item.Priority || ""
-            }));
-
-            try {
-                await setDoc(doc(db, "users", currentUser.uid), { collection: collectionPropre }, { merge: true });
-                syncPublicProfile(db, currentUser.uid);
-                userCollection = collectionPropre;
-                renderGrids();
-                window.fermer();
-            } catch(e) {
-                console.error("Erreur Firebase:", e);
-                hrnNotify("Une erreur est survenue lors de la sauvegarde : " + e.message);
-            }
-        };
+        // Boutons rapides : même enregistrement que la Collection (assets/collection-save.js), fiche publique comprise
+        let saveTimer = null;
+        function flushSave() {
+            if (!saveTimer) return;
+            clearTimeout(saveTimer); saveTimer = null;
+            if (!currentUser) return;
+            saveCollection(db, currentUser.uid, userCollection)
+                .catch(e => { console.error("Erreur Firebase:", e); hrnNotify(t('alertErr') + e.message); });
+        }
+        window.addEventListener('pagehide', flushSave);
+        document.getElementById('release-sections').addEventListener('click', (e) => {
+            const btn = e.target.closest('[data-act]');
+            if (!btn || !currentUser) return;
+            e.preventDefault();
+            userCollection = toggleStatus(userCollection, btn.dataset.id, btn.dataset.act).list;
+            const act = btn.dataset.act, id = btn.dataset.id;
+            renderGrids();
+            document.querySelector('.card[data-id="' + CSS.escape(id) + '"] [data-act="' + act + '"]')?.focus();
+            clearTimeout(saveTimer); saveTimer = setTimeout(() => { saveTimer = 1; flushSave(); }, 600);
+        });
 
         window.onclick = function(event) {
-            const modal = document.getElementById('modal');
             const authModal = document.getElementById('auth-modal');
-            if (event.target == modal) window.fermer();
             if (event.target == authModal) window.toggleAuthModal();
         }
 

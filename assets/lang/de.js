@@ -146,7 +146,7 @@ export default {
             sortRarity: "Seltenste zuerst", sortPriority: "Priorität auf der Wunschliste",
             histTitle: "Wertentwicklung (6 Monate)",
             histNone: "Noch nicht genug datierte Käufe, um diese Figur darzustellen (mindestens 3 Preise).",
-            ficheLink: "Öffentliche Seite ansehen ↗", ficheAria: "Öffentliche Seite von {name}"
+            ficheLink: "Öffentliche Seite ansehen ↗", ficheAria: "Öffentliche Seite von {name}", quickOwn: "Habe ich: {name}", quickWish: "Suche ich: {name}"
         },
         donateurs: {
             footerAbout: "Über uns", lblGoalTitle: "Aktuelles Ziel", lblGoalTarget: "von", lblGoalDesc: "Danke für deine Unterstützung!",

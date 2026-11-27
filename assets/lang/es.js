@@ -146,7 +146,7 @@ export default {
             sortRarity: "Las más raras primero", sortPriority: "Prioridad en la wishlist",
             histTitle: "Evolución del valor (6 meses)",
             histNone: "Aún no hay suficientes compras con fecha para dibujar esta figura (mínimo 3 precios).",
-            ficheLink: "Ver su ficha pública ↗", ficheAria: "Página pública de {name}"
+            ficheLink: "Ver su ficha pública ↗", ficheAria: "Página pública de {name}", quickOwn: "La tengo: {name}", quickWish: "La busco: {name}"
         },
         donateurs: {
             footerAbout: "Acerca de", lblGoalTitle: "Objetivo actual", lblGoalTarget: "de", lblGoalDesc: "¡Gracias por tu apoyo!",

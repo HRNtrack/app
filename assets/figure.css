@@ -6,6 +6,7 @@
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 .fig-photo img { view-transition-name: fig-photo; }
 .fig-title { view-transition-name: fig-title; }
+.top-nav { view-transition-name: top-nav; }   /* le menu reste immobile pendant les transitions */
 ::view-transition-group(fig-photo), ::view-transition-group(fig-title) { animation-duration: 0.35s; animation-timing-function: cubic-bezier(.2, .7, .2, 1); }
 /* Précédente / suivante : le contenu glisse dans le sens de la navigation */
 @keyframes fig-out-left { to { transform: translateX(-40px); opacity: 0; } }

@@ -146,7 +146,7 @@ export default {
             sortRarity: "最稀有优先", sortPriority: "心愿单优先级",
             histTitle: "行情走势（6 个月）",
             histNone: "带日期的购买记录还不够，暂时无法绘制（至少需要 3 个价格）。",
-            ficheLink: "查看公开页面 ↗", ficheAria: "{name} 的公开页面"
+            ficheLink: "查看公开页面 ↗", ficheAria: "{name} 的公开页面", quickOwn: "已拥有：{name}", quickWish: "想要：{name}"
         },
         donateurs: {
             footerAbout: "关于", lblGoalTitle: "当前目标", lblGoalTarget: "/", lblGoalDesc: "感谢你的支持！",
