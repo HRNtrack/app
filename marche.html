@@ -165,8 +165,10 @@
         .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
         .two .block { margin-bottom: 0; }
         .rows { list-style: none; margin: 0; padding: 0; }
-        .row { display: grid; grid-template-columns: 28px 44px 1fr auto; gap: 10px; align-items: center; padding: 7px 0; border-bottom: 1px solid var(--color-sand); }
-        .row:last-child { border-bottom: none; }
+        .row { display: grid; grid-template-columns: 28px 44px 1fr auto; gap: 10px; align-items: center; padding: 7px 4px; border-bottom: 1px solid var(--color-sand); color: inherit; text-decoration: none; transition: background 0.15s ease; }
+        a.row:hover { background: var(--color-sand); }
+        .rows li:last-child .row { border-bottom: none; }
+        table.series a { color: inherit; }
         .row .rank { font-weight: 800; color: var(--text-sub); font-size: 0.8rem; text-align: center; }
         .row img { width: 44px; height: 44px; object-fit: contain; background: var(--color-sand); }
         .row .who { min-width: 0; }
@@ -297,6 +299,7 @@
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { computeMarket } from './assets/market.js';
+        import { figureSlugs, figureHref } from './assets/figure-url.js';
         import { baseData } from './data.js?v=2026-11-27-1';
 
         const translations = withCommon({
@@ -338,9 +341,12 @@
         let market = null, rarity = null, updatedAt = null;
 
         const trendHtml = (tr) => tr === null ? '' : `<small class="${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${tr > 0 ? '▲ +' : tr < 0 ? '▼ ' : ''}${tr} %</small>`;
-        const row = (i, n, val) => `<li class="row"><span class="rank">${n ?? ''}</span><img src="${esc(i.image)}" alt="" loading="lazy" decoding="async">
+        // Chaque figurine ouvre sa fiche publique (/figurine/…)
+        const slugs = figureSlugs(baseData);
+        const ficheOf = (id) => figureHref(slugs.get(String(id)));
+        const row = (i, n, val) => `<li><a class="row" href="${esc(ficheOf(i.id))}"><span class="rank">${n ?? ''}</span><img src="${esc(i.image)}" alt="" loading="lazy" decoding="async">
             <span class="who"><strong>${i.secret ? '<span class="secret-dot" title="Secret">★</span> ' : ''}${esc(i.name)}</strong><span>${esc(i.serie)}</span></span>
-            <span class="val">${val}</span></li>`;
+            <span class="val">${val}</span></a></li>`;
         const list = (id, items, val, emptyKey) => {
             document.getElementById(id).innerHTML = items.length ? items.map((i, k) => row(i, k + 1, val(i))).join('') : `<li class="empty">${esc(t(emptyKey))}</li>`;
         };
@@ -373,7 +379,7 @@
             document.getElementById('series-table').innerHTML = `<thead><tr><th>${esc(t('colSerie'))}</th><th class="num">${esc(t('colCount'))}</th><th class="num">${esc(t('colAvg'))}</th><th class="num">${esc(t('colTrend'))}</th><th>${esc(t('colMax'))}</th></tr></thead><tbody>` +
                 market.series.map(s => `<tr><td>${esc(s.serie)}</td><td class="num">${s.count}</td><td class="num"><strong>${eur(s.avg)}</strong></td>
                     <td class="num">${s.trend === null ? '–' : `<span class="${s.trend > 0 ? 'up' : s.trend < 0 ? 'down' : 'flat'}">${s.trend > 0 ? '+' : ''}${s.trend} %</span>`}</td>
-                    <td>${esc(s.max.name)} · ${eur(s.max.cote)}</td></tr>`).join('') + '</tbody>';
+                    <td><a href="${esc(ficheOf(s.max.id))}">${esc(s.max.name)}</a> · ${eur(s.max.cote)}</td></tr>`).join('') + '</tbody>';
             renderFinder();
         }
 

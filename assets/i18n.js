@@ -91,8 +91,10 @@ if (EXTRA_LANGS.includes(siteLang)) {
     try { pack = (await import('./lang/' + siteLang + '.js')).default; } catch (e) { console.warn('Traduction indisponible :', siteLang, e); }
 }
 globalThis.HRN_PACK = pack;
-// Identifiant de la page (nom du fichier sans .html) : choisit la partie « pages » du paquet de traduction
-const pageId = (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '') || 'index';
+// Identifiant de la page (nom du fichier sans .html) : choisit la partie « pages » du paquet de traduction.
+// Les pages générées (fiches figurines) le donnent elles-mêmes : <html data-page="figurine">.
+const pageId = document.documentElement.dataset.page
+    || (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '') || 'index';
 
 export function syncLangToggle(lang) {
     // Langue déclarée de la page : utilisée par les lecteurs d'écran et la traduction automatique

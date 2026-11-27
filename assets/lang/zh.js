@@ -15,6 +15,41 @@ export default {
         cookieDecline: "不用了", cookieAccept: "接受"
     },
     pages: {
+        figurine: {
+            crumbHome: "首页",
+            crumbMarket: "行情",
+            tagSecret: "★ 隐藏款",
+            tagSerie: "系列",
+            tagSpecial: "特别版",
+            tagAccessory: "周边",
+            coteLabel: "当前行情",
+            coteNone: "暂无行情",
+            coteHint: "HRNtrack 收藏家实际支付的中位价，单位欧元。",
+            trend: "{m} 个月内 {s}{n}%",
+            ownedBy: "{p}% 的收藏家拥有",
+            wantedBy: "{p}% 的收藏家在寻找",
+            rarityNone: "这款手办的稀有度暂未公布。",
+            btnAdd: "加入我的收藏",
+            btnTrade: "寻找交换",
+            btnShare: "分享",
+            copied: "链接已复制！",
+            copyPrompt: "复制此链接：",
+            histTitle: "行情走势",
+            histSub: "近 6 个月",
+            histNone: "带日期的购买记录还不够，暂时无法绘制这款手办的走势。",
+            seriesTitle: "整个系列",
+            seriesSum: "{n} 款手办 · {k} 款隐藏款",
+            seriesAvg: "平均行情：{c}",
+            noCote: "暂无行情",
+            prev: "上一款",
+            next: "下一款",
+            aboutTitle: "简介",
+            aboutSerie: "{name} 是 POP MART 出品的 Hirono {serie} 系列{secret}手办。该系列共有 {n} 款，其中隐藏款 {k} 款。在 HRNtrack 上，你可以把它加入收藏或心愿单，查看社区计算的行情，并找到收藏家进行交换。",
+            aboutSpecial: "{name} 是 POP MART 出品的 Hirono {serie}{secret}。在 HRNtrack 上，你可以把它加入收藏或心愿单，查看社区计算的行情，并找到收藏家进行交换。",
+            secretWord: "隐藏款",
+            secretSpecial: "（隐藏款）",
+            method: "行情：填写了价格的 HRNtrack 收藏家所付价格的中位数，剔除异常值，换算为欧元。稀有度：拥有或寻找该手办的 HRNtrack 收藏家比例。不会公开任何个人数据。"
+        },
         "404": {
             title: "哎呀！在夜里迷路了？",
             msg: "这个页面好像不存在……<br>也可能它藏得太好了。",
@@ -80,7 +115,8 @@ export default {
             rarityLine: "{p}% 的收藏家拥有", rarityWanted: "{p}% 在寻找",
             sortRarity: "最稀有优先", sortPriority: "心愿单优先级",
             histTitle: "行情走势（6 个月）",
-            histNone: "带日期的购买记录还不够，暂时无法绘制（至少需要 3 个价格）。"
+            histNone: "带日期的购买记录还不够，暂时无法绘制（至少需要 3 个价格）。",
+            ficheLink: "查看公开页面 ↗"
         },
         donateurs: {
             footerAbout: "关于", lblGoalTitle: "当前目标", lblGoalTarget: "/", lblGoalDesc: "感谢你的支持！",

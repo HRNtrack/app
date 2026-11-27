@@ -15,6 +15,41 @@ export default {
         cookieDecline: "Nein, danke", cookieAccept: "Akzeptieren"
     },
     pages: {
+        figurine: {
+            crumbHome: "Startseite",
+            crumbMarket: "Markt",
+            tagSecret: "★ Secret",
+            tagSerie: "Serie",
+            tagSpecial: "Sonderedition",
+            tagAccessory: "Zubehör",
+            coteLabel: "Aktueller Wert",
+            coteNone: "Noch kein Wert",
+            coteHint: "Medianpreis, den HRNtrack-Sammler bezahlt haben, in Euro.",
+            trend: "{s}{n} % in {m} Monaten",
+            ownedBy: "{p} % der Sammler besitzen sie",
+            wantedBy: "{p} % der Sammler suchen sie",
+            rarityNone: "Die Seltenheit dieser Figur ist noch nicht bekannt.",
+            btnAdd: "Zu meiner Sammlung hinzufügen",
+            btnTrade: "Tauschpartner finden",
+            btnShare: "Teilen",
+            copied: "Link kopiert!",
+            copyPrompt: "Kopiere diesen Link:",
+            histTitle: "Wertentwicklung",
+            histSub: "letzte 6 Monate",
+            histNone: "Noch nicht genug datierte Käufe, um die Entwicklung dieser Figur darzustellen.",
+            seriesTitle: "Die ganze Serie",
+            seriesSum: "{n} Figuren · {k} Secret(s)",
+            seriesAvg: "Durchschnittswert: {c}",
+            noCote: "kein Wert",
+            prev: "Vorherige",
+            next: "Nächste",
+            aboutTitle: "Über diese Figur",
+            aboutSerie: "{name} ist eine Hirono-Figur{secret} aus der Serie {serie} von POP MART. Die Serie umfasst {n} Figuren, davon {k} Secret(s). Mit HRNtrack fügst du sie deiner Sammlung oder Wunschliste hinzu, verfolgst ihren Community-Marktwert und findest Sammler zum Tauschen.",
+            aboutSpecial: "{name} ist eine Hirono-Edition aus der Kategorie {serie}{secret} von POP MART. Mit HRNtrack fügst du sie deiner Sammlung oder Wunschliste hinzu, verfolgst ihren Community-Marktwert und findest Sammler zum Tauschen.",
+            secretWord: " (Secret)",
+            secretSpecial: " (Secret-Version)",
+            method: "Wert: Medianpreis, den HRNtrack-Sammler mit Preisangabe bezahlt haben, ohne Ausreißer, in Euro umgerechnet. Seltenheit: Anteil der HRNtrack-Sammler, die die Figur besitzen oder suchen. Es werden keine persönlichen Daten veröffentlicht."
+        },
         "404": {
             title: "Hoppla! Verlaufen in der Nacht?",
             msg: "Diese Seite scheint es nicht zu geben…<br>Oder sie versteckt sich sehr gut.",
@@ -80,7 +115,8 @@ export default {
             rarityLine: "{p} % der Sammler besitzen sie", rarityWanted: "{p} % suchen sie",
             sortRarity: "Seltenste zuerst", sortPriority: "Priorität auf der Wunschliste",
             histTitle: "Wertentwicklung (6 Monate)",
-            histNone: "Noch nicht genug datierte Käufe, um diese Figur darzustellen (mindestens 3 Preise)."
+            histNone: "Noch nicht genug datierte Käufe, um diese Figur darzustellen (mindestens 3 Preise).",
+            ficheLink: "Öffentliche Seite ansehen ↗"
         },
         donateurs: {
             footerAbout: "Über uns", lblGoalTitle: "Aktuelles Ziel", lblGoalTarget: "von", lblGoalDesc: "Danke für deine Unterstützung!",

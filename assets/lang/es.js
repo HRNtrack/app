@@ -15,6 +15,41 @@ export default {
         cookieDecline: "No, gracias", cookieAccept: "Aceptar"
     },
     pages: {
+        figurine: {
+            crumbHome: "Inicio",
+            crumbMarket: "Mercado",
+            tagSecret: "★ Secreta",
+            tagSerie: "Serie",
+            tagSpecial: "Edición especial",
+            tagAccessory: "Accesorio",
+            coteLabel: "Valor actual",
+            coteNone: "Aún sin valor",
+            coteHint: "Precio mediano pagado por los coleccionistas de HRNtrack, en euros.",
+            trend: "{s}{n} % en {m} meses",
+            ownedBy: "La tiene el {p} % de los coleccionistas",
+            wantedBy: "La busca el {p} % de los coleccionistas",
+            rarityNone: "Aún no se conoce la rareza de esta figura.",
+            btnAdd: "Añadir a mi colección",
+            btnTrade: "Buscar un intercambio",
+            btnShare: "Compartir",
+            copied: "¡Enlace copiado!",
+            copyPrompt: "Copia este enlace:",
+            histTitle: "Evolución del valor",
+            histSub: "últimos 6 meses",
+            histNone: "Aún no hay suficientes compras con fecha para dibujar la evolución de esta figura.",
+            seriesTitle: "Toda la serie",
+            seriesSum: "{n} figuras · {k} secreta(s)",
+            seriesAvg: "Valor medio: {c}",
+            noCote: "sin valor",
+            prev: "Anterior",
+            next: "Siguiente",
+            aboutTitle: "Acerca de",
+            aboutSerie: "{name} es una figura Hirono{secret} de la serie {serie}, de POP MART. La serie tiene {n} figuras, incluidas {k} secreta(s). Con HRNtrack, añádela a tu colección o a tu wishlist, sigue su valor calculado por la comunidad y encuentra coleccionistas para intercambiarla.",
+            aboutSpecial: "{name} es una edición Hirono de la categoría {serie}{secret}, de POP MART. Con HRNtrack, añádela a tu colección o a tu wishlist, sigue su valor calculado por la comunidad y encuentra coleccionistas para intercambiarla.",
+            secretWord: " secreta",
+            secretSpecial: " (versión secreta)",
+            method: "Valor: precio mediano pagado por los coleccionistas de HRNtrack que indicaron un precio, sin valores atípicos, convertido a euros. Rareza: porcentaje de coleccionistas de HRNtrack que tienen o buscan la figura. No se publica ningún dato personal."
+        },
         "404": {
             title: "¡Uy! ¿Perdido en la noche?",
             msg: "Parece que esta página no existe…<br>O quizá se esconde muy bien.",
@@ -80,7 +115,8 @@ export default {
             rarityLine: "La tiene el {p} % de los coleccionistas", rarityWanted: "la busca el {p} %",
             sortRarity: "Las más raras primero", sortPriority: "Prioridad en la wishlist",
             histTitle: "Evolución del valor (6 meses)",
-            histNone: "Aún no hay suficientes compras con fecha para dibujar esta figura (mínimo 3 precios)."
+            histNone: "Aún no hay suficientes compras con fecha para dibujar esta figura (mínimo 3 precios).",
+            ficheLink: "Ver su ficha pública ↗"
         },
         donateurs: {
             footerAbout: "Acerca de", lblGoalTitle: "Objetivo actual", lblGoalTarget: "de", lblGoalDesc: "¡Gracias por tu apoyo!",

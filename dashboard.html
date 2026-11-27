@@ -235,6 +235,8 @@
         .trend-neutral { color: #9CA3AF; }
         .rarity-line { margin: -6px 0 14px; font-size: 0.75rem; font-weight: 600; color: var(--color-gold); }
         .rarity-line::before { content: '💎 '; }
+        .fiche-link { display: inline-block; margin: -4px 0 14px; font-size: 0.75rem; font-weight: 600; color: var(--text-sub); }
+        .fiche-link:hover { color: var(--text-main); }
         .pill.wish.prio-high { background: #C0392B; }
         .cote-history { margin: 0 0 15px; padding: 10px 12px 6px; border: 1px solid var(--color-border); background: var(--surface); }
         .cote-history-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 4px; }
@@ -529,6 +531,7 @@
                 </select>
             </div>
             <p class="rarity-line" id="modal-rarity" hidden></p>
+            <a class="fiche-link" id="modal-fiche" href="marche.html" data-t="ficheLink">Voir sa fiche publique ↗</a>
 
             <div class="form-row">
                 <div>
@@ -644,6 +647,8 @@
         import { fetchRates, FALLBACK_RATES } from './assets/admin-stats.js';
         import { buildIndex, search } from './assets/search.js';
         import { coteChartSvg, coteTrend } from './assets/cote-chart.js';
+        import { figureSlugs, figureHref } from './assets/figure-url.js';
+        let ficheSlugs = null;           // ID → adresse de la fiche publique (calculé à la première ouverture)
         
         let baseData = [];
         try {
@@ -710,7 +715,8 @@
                 lblPriority: "Priorité dans la wishlist", prioNone: "Sans priorité", prioHigh: "🔴 Haute", prioMedium: "🟠 Moyenne", prioLow: "🟡 Basse",
                 rarityLine: "Possédée par {p} % des collectionneurs", rarityWanted: "recherchée par {p} %",
                 sortRarity: "Les plus rares d'abord", sortPriority: "Priorité de wishlist",
-                histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum)."
+                histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum).",
+                ficheLink: "Voir sa fiche publique ↗"
             },
             en: {
                 kpiValue: "Estimated value", kpiCollection: "Figures", kpiDoubles: "Duplicates", kpiDoublesSub: "to trade",
@@ -726,7 +732,8 @@
                 lblPriority: "Wishlist priority", prioNone: "No priority", prioHigh: "🔴 High", prioMedium: "🟠 Medium", prioLow: "🟡 Low",
                 rarityLine: "Owned by {p}% of collectors", rarityWanted: "wanted by {p}%",
                 sortRarity: "Rarest first", sortPriority: "Wishlist priority",
-                histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum)."
+                histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum).",
+                ficheLink: "See its public page ↗"
             }
         };
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
@@ -1093,6 +1100,11 @@
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
+            ficheSlugs = ficheSlugs || figureSlugs(baseData);
+            const ficheSlug = ficheSlugs.get(String(item.ID));
+            const ficheEl = document.getElementById('modal-fiche');
+            ficheEl.hidden = !ficheSlug;
+            if (ficheSlug) ficheEl.href = figureHref(ficheSlug);
             document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
             document.getElementById('edit-secret-badge').style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
 
