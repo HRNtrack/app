@@ -3,7 +3,7 @@
 export default {
     common: {
         navHome: "首页", navCollection: "收藏", navStats: "统计", navTrade: "交换", navMarket: "行情",
-        searchOpen: "🔎 搜索手办", navDonors: "捐赠", navContact: "联系", navSupport: "支持我们", navReleases: "网站更新",
+        searchOpen: "🔎 搜索手办", navDonors: "捐赠", navContact: "联系", navSupport: "支持我们", navReleases: "网站更新", skipLink: "跳到主要内容",
         authLogin: "登录", authAccount: "我的账户", authDesc: "把你的收藏保存到云端。",
         btnLogin: "登录", btnRegister: "创建账户（邮箱）", btnCancel: "取消", btnGoogle: "使用 Google 继续", btnForgot: "忘记密码？",
         footerDesc: "管理、估值并集齐你的 Hirono 手办收藏的好帮手。",
@@ -18,6 +18,7 @@ export default {
         figurine: {
             crumbHome: "首页",
             crumbMarket: "行情",
+            crumbCollection: "收藏", crumbsAria: "面包屑导航", seriesOpen: "在我的收藏中查看该系列 →", secretSr: "隐藏款：",
             tagSecret: "★ 隐藏款",
             tagSerie: "系列",
             tagSpecial: "特别版",
@@ -116,7 +117,7 @@ export default {
             sortRarity: "最稀有优先", sortPriority: "心愿单优先级",
             histTitle: "行情走势（6 个月）",
             histNone: "带日期的购买记录还不够，暂时无法绘制（至少需要 3 个价格）。",
-            ficheLink: "查看公开页面 ↗"
+            ficheLink: "查看公开页面 ↗", ficheAria: "{name} 的公开页面"
         },
         donateurs: {
             footerAbout: "关于", lblGoalTitle: "当前目标", lblGoalTarget: "/", lblGoalDesc: "感谢你的支持！",

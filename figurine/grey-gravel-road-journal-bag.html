@@ -20,7 +20,7 @@
     <meta property="og:image:alt" content="Grey Gravel">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content="https://www.hrntrack.app/image/BROA-GREYG.png">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Marché","item":"https://www.hrntrack.app/marche.html"},{"@type":"ListItem","position":3,"name":"Grey Gravel","item":"https://www.hrntrack.app/figurine/grey-gravel-road-journal-bag.html"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Collection","item":"https://www.hrntrack.app/dashboard.html"},{"@type":"ListItem","position":3,"name":"Road Journal Bag","item":"https://www.hrntrack.app/dashboard.html?serie=Road%20Journal%20Bag"},{"@type":"ListItem","position":4,"name":"Grey Gravel","item":"https://www.hrntrack.app/figurine/grey-gravel-road-journal-bag.html"}]}</script>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -58,12 +58,13 @@
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="Fil d'Ariane" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">Accueil</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">Marché</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">Collection</a></li>
+            <li><a href="dashboard.html?serie=Road%20Journal%20Bag">Road Journal Bag</a></li>
             <li><span aria-current="page">Grey Gravel</span></li>
         </ol></nav>
 
@@ -85,7 +86,7 @@
                     <div class="val none" id="cote-val">Pas encore de cote</div>
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
-                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 0,5 % des collectionneurs</span><i style="--p:0.5%"></i></div></div>
+                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 0,5 % des collectionneurs</span><i aria-hidden="true" style="--p:0.5%"></i></div></div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=BROA-GREY%20G" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
@@ -114,6 +115,7 @@
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">Toute la série</span> · Road Journal Bag</span> <small><span id="series-sum">7 figurines · 1 secrète(s)</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="dashboard.html?serie=Road%20Journal%20Bag" data-t="seriesOpen">Voir la série dans ma collection →</a></p>
             <ul class="series-grid">
                 <li><a href="figurine/city-dust-afloat-road-journal-bag.html" data-id="BROA-CITY D">
                     <img src="image/BROA-CITYD.png" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -129,7 +131,7 @@
                 </a></li>
                 <li><a href="figurine/highway-imprint-road-journal-bag.html" data-id="BROA-HIGHWA">
                     <img src="image/BROA-HIGHWA.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Highway Imprint</strong><small>pas de cote</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Highway Imprint</strong><small>pas de cote</small>
                 </a></li>
                 <li><a href="figurine/into-fogwild-road-journal-bag.html" data-id="BROA-INTO F">
                     <img src="image/BROA-INTOF.png" alt="" loading="lazy" decoding="async" width="120" height="120">

@@ -84,11 +84,14 @@ function page(f, i, list) {
                 ${dir === 'prev' ? `<img src="${esc(imgPath(g))}" alt="" loading="lazy" decoding="async">` : ''}<span><small data-t="${dir}">${dir === 'prev' ? T.prev : T.next}</small><strong>${esc(g.Name)}</strong></span>${dir === 'next' ? `<img src="${esc(imgPath(g))}" alt="" loading="lazy" decoding="async">` : ''}
             </a>` : '';
 
+    const serieHref = 'dashboard.html?serie=' + encodeURIComponent(f.Serie);
     const breadcrumb = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'HRNtrack', item: SITE },
-        { '@type': 'ListItem', position: 2, name: T.crumbMarket, item: SITE + 'marche.html' },
-        { '@type': 'ListItem', position: 3, name: f.Name, item: url }
+        { '@type': 'ListItem', position: 2, name: T.crumbCollection, item: SITE + 'dashboard.html' },
+        { '@type': 'ListItem', position: 3, name: f.Serie, item: SITE + serieHref },
+        { '@type': 'ListItem', position: 4, name: f.Name, item: url }
     ] };
+    const arrow = (n) => n > 0 ? '<span aria-hidden="true">▲ </span>' : n < 0 ? '<span aria-hidden="true">▼ </span>' : '';
     const speculation = { prefetch: [{ where: { href_matches: '/figurine/*' }, eagerness: 'moderate' }],
         prerender: [{ where: { selector_matches: '.pager a' }, eagerness: 'moderate' }] };
 
@@ -152,12 +155,13 @@ function page(f, i, list) {
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="${T.crumbsAria}" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">${T.crumbHome}</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">${T.crumbMarket}</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">${T.crumbCollection}</a></li>
+            <li><a href="${esc(serieHref)}">${esc(f.Serie)}</a></li>
             <li><span aria-current="page">${esc(f.Name)}</span></li>
         </ol></nav>
 
@@ -177,13 +181,13 @@ function page(f, i, list) {
                 <div class="fig-cote">
                     <span class="lbl" data-t="coteLabel">${T.coteLabel}</span>
                     <div class="val${c > 0 ? '' : ' none'}" id="cote-val">${c > 0
-                        ? `<span>${eur(c)}</span>` + (tr === null ? '' : `<span class="trend ${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${tr > 0 ? '▲ ' : tr < 0 ? '▼ ' : ''}${fill(T.trend, { s: tr > 0 ? '+' : '', n: tr, m: months })}</span>`)
+                        ? `<span>${eur(c)}</span>` + (tr === null ? '' : `<span class="trend ${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${arrow(tr)}${fill(T.trend, { s: tr > 0 ? '+' : '', n: tr, m: months })}</span>`)
                         : T.coteNone}</div>
                     <p class="hint" data-t="coteHint">${T.coteHint}</p>
                 </div>
                 <div class="fig-rarity" id="rarity">${owned === null && wanted === null ? `<p class="hint">${T.rarityNone}</p>` :
-                    (owned !== null ? `<div class="meter owned"><span>${fill(T.ownedBy, { p: String(owned).replace('.', ',') })}</span><i style="--p:${Math.min(100, owned)}%"></i></div>` : '') +
-                    (wanted !== null ? `<div class="meter wanted"><span>${fill(T.wantedBy, { p: String(wanted).replace('.', ',') })}</span><i style="--p:${Math.min(100, wanted)}%"></i></div>` : '')}</div>
+                    (owned !== null ? `<div class="meter owned"><span>${fill(T.ownedBy, { p: String(owned).replace('.', ',') })}</span><i aria-hidden="true" style="--p:${Math.min(100, owned)}%"></i></div>` : '') +
+                    (wanted !== null ? `<div class="meter wanted"><span>${fill(T.wantedBy, { p: String(wanted).replace('.', ',') })}</span><i aria-hidden="true" style="--p:${Math.min(100, wanted)}%"></i></div>` : '')}</div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=${encodeURIComponent(id)}" data-t="btnAdd">${T.btnAdd}</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">${T.btnTrade}</a>
@@ -208,12 +212,13 @@ function page(f, i, list) {
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">${T.seriesTitle}</span> · ${esc(f.Serie)}</span> <small><span id="series-sum">${fill(T.seriesSum, { n: list.length, k: secrets })}</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="${esc(serieHref)}" data-t="seriesOpen">${T.seriesOpen}</a></p>
             <ul class="series-grid">
 ${list.map(g => {
     const gc = cote(g);
     return `                <li><a href="${figureHref(slugs.get(String(g.ID)))}" data-id="${esc(g.ID)}"${g === f ? ' aria-current="page"' : ''}>
                     <img src="${esc(imgPath(g))}" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong>${isSecret(g) ? '<span class="star" aria-label="Secrète">★</span> ' : ''}${esc(g.Name)}</strong><small>${gc > 0 ? eur(gc) : T.noCote}</small>
+                    <strong>${isSecret(g) ? `<span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">${T.secretSr}</span> ` : ''}${esc(g.Name)}</strong><small>${gc > 0 ? eur(gc) : T.noCote}</small>
                 </a></li>`;
 }).join('\n')}
             </ul>

@@ -220,6 +220,20 @@
         .pill.owned { background: var(--color-green); }
         .pill.wish { background: #E67E22; }
         .secret-badge { position: absolute; top: 6px; right: 6px; background: var(--color-gold); color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; z-index: 2; }
+        /* Carte : un bouton invisible couvre la carte (ouvre la fenêtre de modification) ;
+           le lien ↗ vers la page publique de la figurine est un élément à part (pas de lien dans un bouton) */
+        .card-open { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; padding: 0; margin: 0; border: 0; background: transparent; cursor: pointer; }
+        .card-open:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 2px; }
+        .card-fiche {
+            position: absolute; right: 6px; bottom: 6px; z-index: 3; width: 30px; height: 30px;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: var(--surface); color: var(--text-main); border: 1px solid var(--color-border);
+            text-decoration: none; font-size: 0.85rem; font-weight: 700; line-height: 1;
+            opacity: 0; transition: opacity 0.2s ease, border-color 0.2s ease;
+        }
+        .card:hover .card-fiche, .card-fiche:focus-visible { opacity: 1; }
+        .card-fiche:hover { border-color: var(--color-dark); }
+        @media (hover: none) { .card-fiche { opacity: 0.9; } }
 
         .card-info { padding-top: 10px; text-align: center; flex: 1; display: flex; flex-direction: column; min-width: 0; }
         .card-name { font-weight: 600; font-size: 0.8rem; margin: 0; color: var(--color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -648,7 +662,12 @@
         import { buildIndex, search } from './assets/search.js';
         import { coteChartSvg, coteTrend } from './assets/cote-chart.js';
         import { figureSlugs, figureHref } from './assets/figure-url.js';
-        let ficheSlugs = null;           // ID → adresse de la fiche publique (calculé à la première ouverture)
+        let ficheSlugs = null;           // ID → adresse de la fiche publique (calculé une fois, à la demande)
+        const ficheHrefOf = (id) => {
+            if (!ficheSlugs && baseData.length) ficheSlugs = figureSlugs(baseData);
+            const s = ficheSlugs && ficheSlugs.get(String(id));
+            return s ? figureHref(s) : '';
+        };
         
         let baseData = [];
         try {
@@ -716,7 +735,7 @@
                 rarityLine: "Possédée par {p} % des collectionneurs", rarityWanted: "recherchée par {p} %",
                 sortRarity: "Les plus rares d'abord", sortPriority: "Priorité de wishlist",
                 histTitle: "Évolution de la cote (6 mois)", histNone: "Pas encore assez d'achats datés pour tracer l'évolution de cette figurine (3 prix minimum).",
-                ficheLink: "Voir sa fiche publique ↗"
+                ficheLink: "Voir sa fiche publique ↗", ficheAria: "Page publique de {name}"
             },
             en: {
                 kpiValue: "Estimated value", kpiCollection: "Figures", kpiDoubles: "Duplicates", kpiDoublesSub: "to trade",
@@ -733,7 +752,7 @@
                 rarityLine: "Owned by {p}% of collectors", rarityWanted: "wanted by {p}%",
                 sortRarity: "Rarest first", sortPriority: "Wishlist priority",
                 histTitle: "Market value trend (6 months)", histNone: "Not enough dated purchases yet to chart this figure (3 prices minimum).",
-                ficheLink: "See its public page ↗"
+                ficheLink: "See its public page ↗", ficheAria: "Public page of {name}"
             }
         };
         for (const lang of ['fr', 'en']) Object.assign(translations[lang], MORE_TEXT[lang]);
@@ -833,6 +852,9 @@
             if (focusId) {
                 const item = myCollection.find(i => String(i.ID) === focusId);
                 if (item) { window.openModal(item); history.replaceState(null, '', location.pathname); }
+            } else if (urlParams.get('serie')) {
+                saveState();
+                history.replaceState(null, '', location.pathname);
             }
         }
 
@@ -872,6 +894,8 @@
         const STATE_KEY = 'HRN_DASH_STATE';
         const DEFAULT_STATE = { filter: 'all', q: '', serie: 'all', sort: 'serie_asc' };
         let state = (() => { try { return { ...DEFAULT_STATE, ...JSON.parse(sessionStorage.getItem(STATE_KEY) || '{}') }; } catch (e) { return { ...DEFAULT_STATE }; } })();
+        // Venant d'une page figurine (fil d'Ariane, « Voir la série dans ma collection ») : ouverte sur cette série
+        if (urlParams.get('serie')) state = { ...state, serie: urlParams.get('serie'), filter: 'all', q: '' };
         const saveState = () => { try { sessionStorage.setItem(STATE_KEY, JSON.stringify(state)); } catch (e) { /* stockage indisponible */ } };
         const byId = (id) => myCollection.find(i => i.ID === id);
 
@@ -898,9 +922,12 @@
                 cote ? `<span class="price-cote">${esc(t('lblCardCote'))} <b>${eur(cote)}</b></span>` : '',
                 paid ? `<span class="price-paid">${esc(t('lblCardPaid'))} <b>${paid.toFixed(paid % 1 ? 2 : 0)}${currencySymbols[item.Currency] || '€'}</b></span>` : ''
             ].join('') || '<span class="none">—</span>';
-            return `<div class="card-media">
+            const fiche = ficheHrefOf(item.ID);
+            return `<button type="button" class="card-open" aria-label="${esc(item.Name)}"></button>
+                    <div class="card-media">
                         <img src="${esc(item.Image)}" loading="lazy" decoding="async" alt="">
                         ${pill}${secret ? '<span class="secret-badge" title="Secret">★</span>' : ''}
+                        ${fiche ? `<a class="card-fiche" href="${esc(fiche)}" title="${esc(fmtT('ficheAria', { name: item.Name }))}" aria-label="${esc(fmtT('ficheAria', { name: item.Name }))}"><span aria-hidden="true">↗</span></a>` : ''}
                     </div>
                     <div class="card-info">
                         <p class="card-name">${esc(item.Name)}</p>
@@ -911,7 +938,6 @@
 
         function fillCard(el, item) {
             el.className = 'card' + (isOwned(item) ? ' owned' : '') + (isWish(item) ? ' wish' : '') + (item["Secret Rare"] === "Yes" ? ' secret' : '');
-            el.setAttribute('aria-label', item.Name);
             el.innerHTML = cardMarkup(item);
         }
 
@@ -919,11 +945,9 @@
             let el = cards.get(item.ID);
             if (!el) {
                 el = document.createElement('div');
-                el.tabIndex = 0;
-                el.setAttribute('role', 'button');
                 el.dataset.id = item.ID;
-                el.addEventListener('click', () => window.openModal(byId(item.ID)));
-                el.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.openModal(byId(item.ID)); } });
+                // Clic n'importe où sur la carte (sauf le lien ↗) ; au clavier, le bouton .card-open (Entrée / Espace)
+                el.addEventListener('click', (e) => { if (e.target.closest('a')) return; window.openModal(byId(item.ID)); });
                 cards.set(item.ID, el);
             }
             fillCard(el, item);
@@ -1100,11 +1124,10 @@
             currentItem = item;
             document.getElementById('edit-title').innerText = item.Name + (isReadOnly ? " (Lecture seule)" : "");
             document.getElementById('edit-subtitle').innerText = item.Serie;
-            ficheSlugs = ficheSlugs || figureSlugs(baseData);
-            const ficheSlug = ficheSlugs.get(String(item.ID));
+            const ficheUrl = ficheHrefOf(item.ID);
             const ficheEl = document.getElementById('modal-fiche');
-            ficheEl.hidden = !ficheSlug;
-            if (ficheSlug) ficheEl.href = figureHref(ficheSlug);
+            ficheEl.hidden = !ficheUrl;
+            if (ficheUrl) ficheEl.href = ficheUrl;
             document.getElementById('edit-img').src = item.Image || "https://via.placeholder.com/150";
             document.getElementById('edit-secret-badge').style.display = (item["Secret Rare"] === "Yes") ? "inline-block" : "none";
 

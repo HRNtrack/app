@@ -2,7 +2,8 @@
 // et par la page (assets/figure-page.js). es / de / zh : assets/lang/*.js → pages.figurine.
 export const FIG_TEXT = {
     fr: {
-        crumbHome: "Accueil", crumbMarket: "Marché",
+        crumbHome: "Accueil", crumbMarket: "Marché", crumbCollection: "Collection", crumbsAria: "Fil d'Ariane",
+        seriesOpen: "Voir la série dans ma collection →", secretSr: "Secrète :",
         tagSecret: "★ Secrète", tagSerie: "Série", tagSpecial: "Édition spéciale", tagAccessory: "Accessoire",
         coteLabel: "Cote actuelle", coteNone: "Pas encore de cote",
         coteHint: "Prix médian payé par les collectionneurs HRNtrack, en euros.",
@@ -22,7 +23,8 @@ export const FIG_TEXT = {
         method: "Cote : prix médian payé par les collectionneurs HRNtrack qui ont renseigné un prix, hors valeurs aberrantes, converti en euros. Rareté : part des collectionneurs HRNtrack qui possèdent ou recherchent la figurine. Aucune donnée personnelle n'est publiée."
     },
     en: {
-        crumbHome: "Home", crumbMarket: "Market",
+        crumbHome: "Home", crumbMarket: "Market", crumbCollection: "Collection", crumbsAria: "Breadcrumb",
+        seriesOpen: "See the series in my collection →", secretSr: "Secret:",
         tagSecret: "★ Secret", tagSerie: "Series", tagSpecial: "Special edition", tagAccessory: "Accessory",
         coteLabel: "Current value", coteNone: "No value yet",
         coteHint: "Median price paid by HRNtrack collectors, in euros.",

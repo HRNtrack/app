@@ -20,7 +20,7 @@
     <meta property="og:image:alt" content="Upside Down">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content="https://www.hrntrack.app/image/ADC-UPDO.webp">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Marché","item":"https://www.hrntrack.app/marche.html"},{"@type":"ListItem","position":3,"name":"Upside Down","item":"https://www.hrntrack.app/figurine/upside-down-after-dark-charm.html"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Collection","item":"https://www.hrntrack.app/dashboard.html"},{"@type":"ListItem","position":3,"name":"After Dark Charm","item":"https://www.hrntrack.app/dashboard.html?serie=After%20Dark%20Charm"},{"@type":"ListItem","position":4,"name":"Upside Down","item":"https://www.hrntrack.app/figurine/upside-down-after-dark-charm.html"}]}</script>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -58,12 +58,13 @@
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="Fil d'Ariane" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">Accueil</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">Marché</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">Collection</a></li>
+            <li><a href="dashboard.html?serie=After%20Dark%20Charm">After Dark Charm</a></li>
             <li><span aria-current="page">Upside Down</span></li>
         </ol></nav>
 
@@ -85,7 +86,7 @@
                     <div class="val none" id="cote-val">Pas encore de cote</div>
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
-                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 0,9 % des collectionneurs</span><i style="--p:0.9%"></i></div></div>
+                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 0,9 % des collectionneurs</span><i aria-hidden="true" style="--p:0.9%"></i></div></div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=ADC-UPDO" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
@@ -112,6 +113,7 @@
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">Toute la série</span> · After Dark Charm</span> <small><span id="series-sum">7 figurines · 1 secrète(s)</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="dashboard.html?serie=After%20Dark%20Charm" data-t="seriesOpen">Voir la série dans ma collection →</a></p>
             <ul class="series-grid">
                 <li><a href="figurine/drifting-by-after-dark-charm.html" data-id="ADC-DRBY">
                     <img src="image/ADC-DRBY.webp" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -131,7 +133,7 @@
                 </a></li>
                 <li><a href="figurine/old-dream-after-dark-charm.html" data-id="ADC-OLDD">
                     <img src="image/ADC-OLDD.webp" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Old Dream</strong><small>pas de cote</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Old Dream</strong><small>pas de cote</small>
                 </a></li>
                 <li><a href="figurine/runaway-after-dark-charm.html" data-id="ADC-RUNA">
                     <img src="image/ADC-RUNA.webp" alt="" loading="lazy" decoding="async" width="120" height="120">

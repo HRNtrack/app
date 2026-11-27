@@ -3,7 +3,7 @@
 export default {
     common: {
         navHome: "Startseite", navCollection: "Sammlung", navStats: "Statistiken", navTrade: "Tauschbörse", navMarket: "Markt",
-        searchOpen: "🔎 Figur suchen", navDonors: "Spenden", navContact: "Kontakt", navSupport: "Unterstützen", navReleases: "Neues auf der Seite",
+        searchOpen: "🔎 Figur suchen", navDonors: "Spenden", navContact: "Kontakt", navSupport: "Unterstützen", navReleases: "Neues auf der Seite", skipLink: "Zum Inhalt springen",
         authLogin: "Anmelden", authAccount: "Mein Konto", authDesc: "Speichere deine Sammlung in der Cloud.",
         btnLogin: "Anmelden", btnRegister: "Konto erstellen (E-Mail)", btnCancel: "Abbrechen", btnGoogle: "Weiter mit Google", btnForgot: "Passwort vergessen?",
         footerDesc: "Das Tool, um deine Hirono-Figurensammlung zu verwalten, zu bewerten und zu vervollständigen.",
@@ -18,6 +18,7 @@ export default {
         figurine: {
             crumbHome: "Startseite",
             crumbMarket: "Markt",
+            crumbCollection: "Sammlung", crumbsAria: "Brotkrumen-Navigation", seriesOpen: "Serie in meiner Sammlung ansehen →", secretSr: "Secret:",
             tagSecret: "★ Secret",
             tagSerie: "Serie",
             tagSpecial: "Sonderedition",
@@ -116,7 +117,7 @@ export default {
             sortRarity: "Seltenste zuerst", sortPriority: "Priorität auf der Wunschliste",
             histTitle: "Wertentwicklung (6 Monate)",
             histNone: "Noch nicht genug datierte Käufe, um diese Figur darzustellen (mindestens 3 Preise).",
-            ficheLink: "Öffentliche Seite ansehen ↗"
+            ficheLink: "Öffentliche Seite ansehen ↗", ficheAria: "Öffentliche Seite von {name}"
         },
         donateurs: {
             footerAbout: "Über uns", lblGoalTitle: "Aktuelles Ziel", lblGoalTarget: "von", lblGoalDesc: "Danke für deine Unterstützung!",

@@ -41,7 +41,7 @@ function renderCote() {
         const months = Math.max(1, ((history && history.months) || []).length - 1);
         box.classList.remove('none');
         box.innerHTML = `<span>${eur(cote)}</span>` + (tr === null ? '' :
-            `<span class="trend ${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${tr > 0 ? '▲ ' : tr < 0 ? '▼ ' : ''}${fill(t('trend'), { s: tr > 0 ? '+' : '', n: num(tr), m: months })}</span>`);
+            `<span class="trend ${tr > 0 ? 'up' : tr < 0 ? 'down' : 'flat'}">${tr > 0 ? '<span aria-hidden="true">▲ </span>' : tr < 0 ? '<span aria-hidden="true">▼ </span>' : ''}${fill(t('trend'), { s: tr > 0 ? '+' : '', n: num(tr), m: months })}</span>`);
     } else {
         box.classList.add('none');
         box.textContent = t('coteNone');
@@ -75,7 +75,7 @@ function renderRarity() {
     if (!r) return;
     const owned = r.owned && r.owned[figId] != null ? Number(r.owned[figId]) : null;
     const wanted = r.wanted && r.wanted[figId] != null ? Number(r.wanted[figId]) : null;
-    const meter = (cls, label, p) => `<div class="meter ${cls}"><span>${label}</span><i style="--p:${Math.min(100, p)}%"></i></div>`;
+    const meter = (cls, label, p) => `<div class="meter ${cls}"><span>${label}</span><i aria-hidden="true" style="--p:${Math.min(100, p)}%"></i></div>`;
     $('rarity').innerHTML = (owned === null && wanted === null) ? `<p class="hint">${t('rarityNone')}</p>` :
         (owned !== null ? meter('owned', fill(t('ownedBy'), { p: num(owned) }), owned) : '') +
         (wanted !== null ? meter('wanted', fill(t('wantedBy'), { p: num(wanted) }), wanted) : '');
@@ -85,6 +85,7 @@ function updateUIText() {
     syncLangToggle(currentLang);
     if (currentLang !== 'fr') {
         document.querySelectorAll('[data-t]').forEach(el => { const v = T[el.getAttribute('data-t')]; if (v) el.textContent = v; });
+        document.querySelectorAll('[data-t-aria]').forEach(el => { const v = T[el.getAttribute('data-t-aria')]; if (v) el.setAttribute('aria-label', v); });
         if (fig) {
             const kind = figureKind(fig.Serie);
             $('about').textContent = aboutText(T, { name: fig.Name, serie: fig.Serie, secret: isSecret(fig), kind, count: serieItems.length, secrets: serieItems.filter(isSecret).length });

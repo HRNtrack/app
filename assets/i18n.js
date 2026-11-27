@@ -13,7 +13,7 @@ export const commonTranslations = {
         navDonors: "Dons",
         navContact: "Contact",
         navSupport: "Soutenir",
-        navReleases: "Mises à jour",
+        navReleases: "Mises à jour", skipLink: "Aller au contenu",
         // Connexion
         authLogin: "Connexion",
         authAccount: "Mon Compte",
@@ -50,7 +50,7 @@ export const commonTranslations = {
         navDonors: "Donations",
         navContact: "Contact",
         navSupport: "Support",
-        navReleases: "Updates",
+        navReleases: "Updates", skipLink: "Skip to content",
         // Connexion
         authLogin: "Login",
         authAccount: "My Account",

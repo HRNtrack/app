@@ -20,7 +20,7 @@
     <meta property="og:image:alt" content="Luck on the Way">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content="https://www.hrntrack.app/image/SPE-LUCKON.png">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Marché","item":"https://www.hrntrack.app/marche.html"},{"@type":"ListItem","position":3,"name":"Luck on the Way","item":"https://www.hrntrack.app/figurine/luck-on-the-way-special-blind-box.html"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Collection","item":"https://www.hrntrack.app/dashboard.html"},{"@type":"ListItem","position":3,"name":"Special Blind Box","item":"https://www.hrntrack.app/dashboard.html?serie=Special%20Blind%20Box"},{"@type":"ListItem","position":4,"name":"Luck on the Way","item":"https://www.hrntrack.app/figurine/luck-on-the-way-special-blind-box.html"}]}</script>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -58,12 +58,13 @@
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="Fil d'Ariane" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">Accueil</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">Marché</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">Collection</a></li>
+            <li><a href="dashboard.html?serie=Special%20Blind%20Box">Special Blind Box</a></li>
             <li><span aria-current="page">Luck on the Way</span></li>
         </ol></nav>
 
@@ -82,10 +83,10 @@
                 </ul>
                 <div class="fig-cote">
                     <span class="lbl" data-t="coteLabel">Cote actuelle</span>
-                    <div class="val" id="cote-val"><span>17 €</span><span class="trend down">▼ -6 % sur 5 mois</span></div>
+                    <div class="val" id="cote-val"><span>17 €</span><span class="trend down"><span aria-hidden="true">▼ </span>-6 % sur 5 mois</span></div>
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
-                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 14,6 % des collectionneurs</span><i style="--p:14.6%"></i></div><div class="meter wanted"><span>Recherchée par 4,7 % des collectionneurs</span><i style="--p:4.7%"></i></div></div>
+                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 14,6 % des collectionneurs</span><i aria-hidden="true" style="--p:14.6%"></i></div><div class="meter wanted"><span>Recherchée par 4,7 % des collectionneurs</span><i aria-hidden="true" style="--p:4.7%"></i></div></div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=SPE-LUCKON" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
@@ -114,6 +115,7 @@
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">Toute la série</span> · Special Blind Box</span> <small><span id="series-sum">18 figurines · 4 secrète(s)</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="dashboard.html?serie=Special%20Blind%20Box" data-t="seriesOpen">Voir la série dans ma collection →</a></p>
             <ul class="series-grid">
                 <li><a href="figurine/3-2-1-boom-special-blind-box.html" data-id="SPE-3, 2,">
                     <img src="image/SPE-32.png" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -137,7 +139,7 @@
                 </a></li>
                 <li><a href="figurine/luck-on-the-way-special-edition-special-blind-box.html" data-id="SPE-LUCKSP">
                     <img src="image/SPE-LUCKSP.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Luck on the Way (Special edition)</strong><small>38 €</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Luck on the Way (Special edition)</strong><small>38 €</small>
                 </a></li>
                 <li><a href="figurine/popmart-spotlight-hirono-misfit-special-blind-box.html" data-id="SPE-POPMAR">
                     <img src="image/SPE-POPMAR.png" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -145,7 +147,7 @@
                 </a></li>
                 <li><a href="figurine/prankster-loong-green-variant-special-blind-box.html" data-id="SPE-PRANGR">
                     <img src="image/SPE-PRANGR.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Prankster Loong Green Variant</strong><small>35 €</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Prankster Loong Green Variant</strong><small>35 €</small>
                 </a></li>
                 <li><a href="figurine/prankster-loong-special-blind-box.html" data-id="SPE-PRANKS">
                     <img src="image/SPE-PRANKS.png" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -169,7 +171,7 @@
                 </a></li>
                 <li><a href="figurine/wishes-come-true-special-blind-box.html" data-id="SPE-Wishes">
                     <img src="image/SPE-WISHL.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Wishes Come True</strong><small>34 €</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Wishes Come True</strong><small>34 €</small>
                 </a></li>
                 <li><a href="figurine/wish-list-pendant-special-blind-box.html" data-id="SPE-WISHPE">
                     <img src="image/SPE-WISHPE.webp" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -185,7 +187,7 @@
                 </a></li>
                 <li><a href="figurine/more-than-words-special-blind-box.html" data-id="SPEB-MORE">
                     <img src="image/SPEB-MORE.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> More Than Words</strong><small>pas de cote</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> More Than Words</strong><small>pas de cote</small>
                 </a></li>
             </ul>
         </section>

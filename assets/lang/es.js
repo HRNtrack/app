@@ -3,7 +3,7 @@
 export default {
     common: {
         navHome: "Inicio", navCollection: "Colección", navStats: "Estadísticas", navTrade: "Intercambios", navMarket: "Mercado",
-        searchOpen: "🔎 Buscar una figura", navDonors: "Donaciones", navContact: "Contacto", navSupport: "Apoyar", navReleases: "Novedades del sitio",
+        searchOpen: "🔎 Buscar una figura", navDonors: "Donaciones", navContact: "Contacto", navSupport: "Apoyar", navReleases: "Novedades del sitio", skipLink: "Ir al contenido",
         authLogin: "Iniciar sesión", authAccount: "Mi cuenta", authDesc: "Guarda tu colección en la nube.",
         btnLogin: "Iniciar sesión", btnRegister: "Crear una cuenta (email)", btnCancel: "Cancelar", btnGoogle: "Continuar con Google", btnForgot: "¿Olvidaste tu contraseña?",
         footerDesc: "La herramienta de referencia para gestionar, valorar y completar tu colección de figuras Hirono.",
@@ -18,6 +18,7 @@ export default {
         figurine: {
             crumbHome: "Inicio",
             crumbMarket: "Mercado",
+            crumbCollection: "Colección", crumbsAria: "Ruta de navegación", seriesOpen: "Ver la serie en mi colección →", secretSr: "Secreta:",
             tagSecret: "★ Secreta",
             tagSerie: "Serie",
             tagSpecial: "Edición especial",
@@ -116,7 +117,7 @@ export default {
             sortRarity: "Las más raras primero", sortPriority: "Prioridad en la wishlist",
             histTitle: "Evolución del valor (6 meses)",
             histNone: "Aún no hay suficientes compras con fecha para dibujar esta figura (mínimo 3 precios).",
-            ficheLink: "Ver su ficha pública ↗"
+            ficheLink: "Ver su ficha pública ↗", ficheAria: "Página pública de {name}"
         },
         donateurs: {
             footerAbout: "Acerca de", lblGoalTitle: "Objetivo actual", lblGoalTarget: "de", lblGoalDesc: "¡Gracias por tu apoyo!",

@@ -47,7 +47,19 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path></svg>
         </button>`;
 
+    // Lien « Aller au contenu » (clavier, lecteur d'écran) : il n'apparaît qu'au premier Tab.
+    // Cible : <main id="main">, sinon le premier <main> ou titre <h1> de la page.
+    window.hrnSkipToContent = function (e) {
+        const target = document.getElementById('main') || document.querySelector('main, #main-container, h1');
+        if (!target) return true;
+        e.preventDefault();
+        if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+        target.focus();
+        target.scrollIntoView({ block: 'start' });
+        return false;
+    };
     script.insertAdjacentHTML('beforebegin', `
+    <a class="skip-link" href="#main" data-t="skipLink" onclick="return window.hrnSkipToContent(event)">Aller au contenu</a>
     <nav class="top-nav" aria-label="Navigation principale">
         <div class="nav-logo-group">
             <a href="index.html" aria-label="HRNtrack Accueil" style="text-decoration:none; display:flex; align-items:center;">

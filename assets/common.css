@@ -310,6 +310,14 @@ dialog.hrn-dialog::backdrop {
 }
 
 /* Texte lu par les lecteurs d'écran mais invisible à l'écran (libellés des champs) */
+/* Lien « Aller au contenu » : caché jusqu'au premier Tab */
+.skip-link {
+    position: absolute; left: 8px; top: -60px; z-index: 5000;
+    background: var(--color-dark); color: var(--color-light); padding: 10px 14px;
+    font: 600 0.8rem var(--font-sans); text-decoration: none; transition: top 0.15s ease;
+}
+.skip-link:focus { top: 8px; }
+[tabindex="-1"]:focus { outline: none; }
 .sr-only {
     position: absolute !important;
     width: 1px; height: 1px;

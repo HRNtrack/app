@@ -20,7 +20,7 @@
     <meta property="og:image:alt" content="Journey in the Rain">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content="https://www.hrntrack.app/image/ECH-JOURNE.webp">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Marché","item":"https://www.hrntrack.app/marche.html"},{"@type":"ListItem","position":3,"name":"Journey in the Rain","item":"https://www.hrntrack.app/figurine/journey-in-the-rain-echo.html"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Collection","item":"https://www.hrntrack.app/dashboard.html"},{"@type":"ListItem","position":3,"name":"Echo","item":"https://www.hrntrack.app/dashboard.html?serie=Echo"},{"@type":"ListItem","position":4,"name":"Journey in the Rain","item":"https://www.hrntrack.app/figurine/journey-in-the-rain-echo.html"}]}</script>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -58,12 +58,13 @@
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="Fil d'Ariane" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">Accueil</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">Marché</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">Collection</a></li>
+            <li><a href="dashboard.html?serie=Echo">Echo</a></li>
             <li><span aria-current="page">Journey in the Rain</span></li>
         </ol></nav>
 
@@ -85,7 +86,7 @@
                     <div class="val" id="cote-val"><span>16 €</span><span class="trend flat">0 % sur 5 mois</span></div>
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
-                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 29,2 % des collectionneurs</span><i style="--p:29.2%"></i></div><div class="meter wanted"><span>Recherchée par 10,4 % des collectionneurs</span><i style="--p:10.4%"></i></div></div>
+                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 29,2 % des collectionneurs</span><i aria-hidden="true" style="--p:29.2%"></i></div><div class="meter wanted"><span>Recherchée par 10,4 % des collectionneurs</span><i aria-hidden="true" style="--p:10.4%"></i></div></div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=ECH-JOURNE" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
@@ -114,6 +115,7 @@
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">Toute la série</span> · Echo</span> <small><span id="series-sum">13 figurines · 1 secrète(s)</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="dashboard.html?serie=Echo" data-t="seriesOpen">Voir la série dans ma collection →</a></p>
             <ul class="series-grid">
                 <li><a href="figurine/back-off-echo.html" data-id="ECH-BACK O">
                     <img src="image/ECH-BACKO.webp" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -153,7 +155,7 @@
                 </a></li>
                 <li><a href="figurine/never-growing-up-echo.html" data-id="ECH-NEVER">
                     <img src="image/ECH-NEVER.webp" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> Never Growing Up</strong><small>36 €</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> Never Growing Up</strong><small>36 €</small>
                 </a></li>
                 <li><a href="figurine/pieces-of-memory-echo.html" data-id="ECH-PIECES">
                     <img src="image/ECH-PIECES.webp" alt="" loading="lazy" decoding="async" width="120" height="120">

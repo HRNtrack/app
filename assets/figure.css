@@ -87,6 +87,9 @@ body {
 .series-grid small { display: block; font-size: 0.68rem; color: var(--text-sub); margin-top: 2px; }
 .series-grid .star { color: var(--color-gold); }
 
+.series-open { margin: -4px 0 12px; font-size: 0.78rem; }
+.series-open a { color: var(--text-main); font-weight: 600; }
+
 /* Précédente / suivante */
 .pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 0 0 18px; }
 .pager a { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--text-main); background: var(--surface); border: 1px solid var(--color-border); padding: 10px 12px; min-width: 0; transition: border-color 0.2s ease; }

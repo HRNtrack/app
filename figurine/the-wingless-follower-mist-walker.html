@@ -20,7 +20,7 @@
     <meta property="og:image:alt" content="The Wingless Follower">
     <meta name="twitter:card" content="summary">
     <meta name="twitter:image" content="https://www.hrntrack.app/image/MIST-FOLLOW.png">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Marché","item":"https://www.hrntrack.app/marche.html"},{"@type":"ListItem","position":3,"name":"The Wingless Follower","item":"https://www.hrntrack.app/figurine/the-wingless-follower-mist-walker.html"}]}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"HRNtrack","item":"https://www.hrntrack.app/"},{"@type":"ListItem","position":2,"name":"Collection","item":"https://www.hrntrack.app/dashboard.html"},{"@type":"ListItem","position":3,"name":"Mist Walker","item":"https://www.hrntrack.app/dashboard.html?serie=Mist%20Walker"},{"@type":"ListItem","position":4,"name":"The Wingless Follower","item":"https://www.hrntrack.app/figurine/the-wingless-follower-mist-walker.html"}]}</script>
     <link rel="icon" type="image/png" href="assets/img/favicon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -58,12 +58,13 @@
 </head>
 <body>
 
-    <script src="assets/header.js" data-active="marche"></script>
+    <script src="assets/header.js" data-active="dashboard"></script>
 
-    <main class="fig-wrap">
-        <nav aria-label="Fil d'Ariane"><ol class="crumbs">
+    <main class="fig-wrap" id="main">
+        <nav aria-label="Fil d'Ariane" data-t-aria="crumbsAria"><ol class="crumbs">
             <li><a href="index.html" data-t="crumbHome">Accueil</a></li>
-            <li><a href="marche.html" data-t="crumbMarket">Marché</a></li>
+            <li><a href="dashboard.html" data-t="crumbCollection">Collection</a></li>
+            <li><a href="dashboard.html?serie=Mist%20Walker">Mist Walker</a></li>
             <li><span aria-current="page">The Wingless Follower</span></li>
         </ol></nav>
 
@@ -82,10 +83,10 @@
                 </ul>
                 <div class="fig-cote">
                     <span class="lbl" data-t="coteLabel">Cote actuelle</span>
-                    <div class="val" id="cote-val"><span>27 €</span><span class="trend up">▲ +17 % sur 5 mois</span></div>
+                    <div class="val" id="cote-val"><span>27 €</span><span class="trend up"><span aria-hidden="true">▲ </span>+17 % sur 5 mois</span></div>
                     <p class="hint" data-t="coteHint">Prix médian payé par les collectionneurs HRNtrack, en euros.</p>
                 </div>
-                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 5,2 % des collectionneurs</span><i style="--p:5.2%"></i></div><div class="meter wanted"><span>Recherchée par 3,3 % des collectionneurs</span><i style="--p:3.3%"></i></div></div>
+                <div class="fig-rarity" id="rarity"><div class="meter owned"><span>Possédée par 5,2 % des collectionneurs</span><i aria-hidden="true" style="--p:5.2%"></i></div><div class="meter wanted"><span>Recherchée par 3,3 % des collectionneurs</span><i aria-hidden="true" style="--p:3.3%"></i></div></div>
                 <div class="fig-actions">
                     <a class="btn" href="dashboard.html?focus=MIST-FOLLOW" data-t="btnAdd">Ajouter à ma collection</a>
                     <a class="btn ghost" href="echanges.html" data-t="btnTrade">Trouver un échange</a>
@@ -112,6 +113,7 @@
 
         <section class="block" aria-labelledby="h-series">
             <h2 id="h-series"><span><span data-t="seriesTitle">Toute la série</span> · Mist Walker</span> <small><span id="series-sum">7 figurines · 1 secrète(s)</span> <span id="series-avg"></span></small></h2>
+            <p class="series-open"><a href="dashboard.html?serie=Mist%20Walker" data-t="seriesOpen">Voir la série dans ma collection →</a></p>
             <ul class="series-grid">
                 <li><a href="figurine/the-wingless-follower-mist-walker.html" data-id="MIST-FOLLOW" aria-current="page">
                     <img src="image/MIST-FOLLOW.png" alt="" loading="lazy" decoding="async" width="120" height="120">
@@ -135,7 +137,7 @@
                 </a></li>
                 <li><a href="figurine/the-tempered-aegis-mist-walker.html" data-id="MIST-TEMPE">
                     <img src="image/MIST-TEMPE.png" alt="" loading="lazy" decoding="async" width="120" height="120">
-                    <strong><span class="star" aria-label="Secrète">★</span> The Tempered Aegis</strong><small>pas de cote</small>
+                    <strong><span class="star" aria-hidden="true">★</span> <span class="sr-only" data-t="secretSr">Secrète :</span> The Tempered Aegis</strong><small>pas de cote</small>
                 </a></li>
                 <li><a href="figurine/the-unfallen-wing-mist-walker.html" data-id="MIST-UNFALL">
                     <img src="image/MIST-UNFALL.png" alt="" loading="lazy" decoding="async" width="120" height="120">
